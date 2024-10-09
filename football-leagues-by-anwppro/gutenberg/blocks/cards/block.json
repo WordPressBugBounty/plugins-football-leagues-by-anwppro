@@ -1,0 +1,81 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "anwp-fl/cards",
+  "title": "Cards",
+  "category": "anwp-fl",
+  "description": "",
+  "textdomain": "football-leagues",
+  "attributes": {
+    "competition_id": {
+      "type": "string",
+      "default": ""
+    },
+    "join_secondary": {
+      "type": "boolean",
+      "default": false
+    },
+    "season_id": {
+      "type": "string",
+      "default": ""
+    },
+    "league_id": {
+      "type": "string",
+      "default": ""
+    },
+    "club_id": {
+      "type": "string",
+      "default": ""
+    },
+    "type": {
+      "type": "string",
+      "default": "players"
+    },
+    "limit": {
+      "type": "number",
+      "default": 10
+    },
+    "soft_limit": {
+      "type": "boolean",
+      "default": true
+    },
+    "show_photo": {
+      "type": "boolean",
+      "default": true
+    },
+    "points_r": {
+      "type": "number",
+      "default": 5
+    },
+    "points_yr": {
+      "type": "number",
+      "default": 2
+    },
+    "hide_zero": {
+      "type": "boolean",
+      "default": false
+    },
+    "sort_by_point": {
+      "type": "string",
+      "default": ""
+    },
+    "layout": {
+      "type": "string",
+      "default": ""
+    },
+    "preview": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "example": {
+    "attributes": {
+      "preview": true
+    }
+  },
+  "supports": {
+    "className": false,
+    "customClassName": true,
+    "html": false
+  }
+}
