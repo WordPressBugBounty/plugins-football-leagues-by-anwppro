@@ -1213,7 +1213,7 @@ class AnWPFL_Player extends AnWPFL_DB {
 					'quicktags'     => true, // load Quicktags, can be used to pass settings directly to Quicktags using an array()
 				],
 				'show_names'      => false,
-				'sanitization_cb' => false,
+				'sanitization_cb' => [ anwp_fl()->helper, 'sanitize_cmb2_fl_text' ],
 				'before_row'      => '<div id="anwp-tabs-desc-player_metabox" class="anwp-metabox-tabs__content-item d-none">',
 				'after_row'       => '</div>',
 			]
@@ -1760,7 +1760,10 @@ class AnWPFL_Player extends AnWPFL_DB {
 			}
 
 			if ( absint( $options['club_id'] ) ) {
-				$query .= $wpdb->prepare( ' AND team_id = %d ', absint( $options['club_id'] ) );
+				$clubs  = wp_parse_id_list( $options['club_id'] );
+				$format = implode( ', ', array_fill( 0, count( $clubs ), '%d' ) );
+
+				$query .= $wpdb->prepare( " AND team_id IN ({$format}) ", $clubs ); // phpcs:ignore
 			}
 
 			// filter by date
@@ -1973,7 +1976,7 @@ class AnWPFL_Player extends AnWPFL_DB {
 				$data[ $competition_index ]['totals']['goals_penalty']  += (int) $match->goals_penalty;
 				$data[ $competition_index ]['totals']['goals_conceded'] += (int) $match->goals_conceded;
 
-				if ( '1' === $match->appearance && 0 === (int) $match->goals_conceded ) {
+				if ( ( 1 === absint( $match->appearance ) || ( 2 === absint( $match->appearance ) && absint( $match->time_out ) > 59 ) ) && 0 === (int) $match->goals_conceded ) {
 					$data[ $competition_index ]['totals']['clean_sheets'] ++;
 				}
 

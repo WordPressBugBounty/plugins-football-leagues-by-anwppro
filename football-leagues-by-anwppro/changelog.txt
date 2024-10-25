@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 0.16.9 - 2024-10-25 =
+* added: custom squad status
+* fixed: Safari 18 conflict with WordPress classic editor layout
+
 = 0.16.8 - 2024-09-18 =
 * fixed: security fix
 * fixed: minor fixes

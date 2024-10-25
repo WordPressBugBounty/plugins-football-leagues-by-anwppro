@@ -940,6 +940,19 @@ class AnWPFL_Options {
 			]
 		);
 
+		// Referee Custom Fields
+		$cmb->add_field(
+			[
+				'name'       => esc_html__( 'Custom Squad Status', 'anwp-football-leagues' ),
+				'id'         => 'custom_squad_status',
+				'type'       => 'text',
+				'repeatable' => true,
+				'text'       => [
+					'add_row_text' => esc_html__( 'Add field', 'anwp-football-leagues' ),
+				],
+			]
+		);
+
 		$group_field_id = $cmb->add_field(
 			[
 				'id'          => 'custom_countries',

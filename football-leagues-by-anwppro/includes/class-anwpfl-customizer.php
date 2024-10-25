@@ -1096,7 +1096,7 @@ class AnWPFL_Customizer {
 		);
 
 		$wp_customize->add_setting(
-			'anwp-fl-customizer[club][show_default_club_logo][notice]',
+			'anwp-fl-customizer[club][show_default_club_logo__notice]',
 			[
 				'default' => '',
 				'type'    => 'option',
@@ -1106,7 +1106,7 @@ class AnWPFL_Customizer {
 		$wp_customize->add_control(
 			new AnWPFL_Simple_HTML_Custom_Control(
 				$wp_customize,
-				'anwp-fl-customizer[club][show_default_club_logo][notice]',
+				'anwp-fl-customizer[club][show_default_club_logo__notice]',
 				[
 					'description' => '<img style="height: 20px; margin-right: 5px; margin-bottom: -5px" src="' . AnWP_Football_Leagues::url( 'public/img/empty_logo.png' ) . '">' . esc_html__( 'will be visible if club logo is not set', 'anwp-football-leagues' ),
 					'section'     => 'fl_club',

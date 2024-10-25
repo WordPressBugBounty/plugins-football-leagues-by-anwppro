@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.5.0
  *
- * @version       0.14.14
+ * @version       0.16.9
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -123,6 +123,11 @@ $positions_l10n = [
 
 							<?php if ( 'on loan' === $player['status'] ) : ?>
 								<span class="squad-blocks__status-badge anwp-bg-info anwp-text-white anwp-leading-1 anwp-text-sm anwp-text-center position-absolute"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__on_loan', __( 'On Loan', 'anwp-football-leagues' ) ) ); ?></span>
+							<?php elseif ( $player['status'] && ! in_array( $player['status'], [ 'on loan', 'left', 'on trial' ], true ) ) : ?>
+								<span class="anwp-bg-secondary squad-blocks__status-badge anwp-text-white anwp-leading-1 anwp-text-sm anwp-text-center position-absolute"
+										data-fl-status="<?php echo esc_attr( $player['status'] ); ?>">
+									<?php echo esc_html( $player['status'] ); ?>
+								</span>
 							<?php endif; ?>
 
 							<div class="squad-blocks__name mb-auto anwp-text-lg anwp-font-semibold"><?php echo esc_html( $player['name'] ); ?></div>

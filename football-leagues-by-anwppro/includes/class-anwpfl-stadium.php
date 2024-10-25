@@ -306,7 +306,7 @@ class AnWPFL_Stadium extends CPT_Core {
 					'quicktags'     => true, // load Quicktags, can be used to pass settings directly to Quicktags using an array()
 				],
 				'show_names'      => false,
-				'sanitization_cb' => false,
+				'sanitization_cb' => [ anwp_fl()->helper, 'sanitize_cmb2_fl_text' ],
 				'before_row'      => '<div id="anwp-tabs-desc-stadium_metabox" class="anwp-metabox-tabs__content-item d-none">',
 				'after_row'       => '</div>',
 			]

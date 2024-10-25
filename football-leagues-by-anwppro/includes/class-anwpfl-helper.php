@@ -2485,4 +2485,20 @@ class AnWPFL_Helper {
 
 		return $image_ids[ $image_url ];
 	}
+
+	/**
+	 * Handles sanitization for text field.
+	 *
+	 * @param mixed $value The unsanitized value from the form.
+	 *
+	 * @return mixed                  Sanitized value to be stored.
+	 */
+	public function sanitize_cmb2_fl_text( $value ) {
+
+		if ( current_user_can( 'manage_options' ) || apply_filters( 'anwpfl/cmb2_text_content/allow_unsanitized', false ) ) {
+			return $value;
+		}
+
+		return wp_kses_post( $value );
+	}
 }

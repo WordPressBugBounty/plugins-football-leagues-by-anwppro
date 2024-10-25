@@ -7625,14 +7625,14 @@ var __forAwait = (obj, it, method) => (it = obj[__knownSymbol("asyncIterator")])
     useStore.$id = id;
     return useStore;
   }
-  function tryOnScopeDispose(fn) {
+  function tryOnScopeDispose$1(fn) {
     if (getCurrentScope()) {
       onScopeDispose(fn);
       return true;
     }
     return false;
   }
-  function toValue(r2) {
+  function toValue$1(r2) {
     return typeof r2 === "function" ? r2() : unref(r2);
   }
   const isClient = typeof window !== "undefined" && typeof document !== "undefined";
@@ -7641,9 +7641,9 @@ var __forAwait = (obj, it, method) => (it = obj[__knownSymbol("asyncIterator")])
   const isObject$2 = (val) => toString$1.call(val) === "[object Object]";
   const noop$1 = () => {
   };
-  function unrefElement(elRef) {
+  function unrefElement$1(elRef) {
     var _a2;
-    const plain = toValue(elRef);
+    const plain = toValue$1(elRef);
     return (_a2 = plain == null ? void 0 : plain.$el) != null ? _a2 : plain;
   }
   const defaultWindow = isClient ? window : void 0;
@@ -7674,7 +7674,7 @@ var __forAwait = (obj, it, method) => (it = obj[__knownSymbol("asyncIterator")])
       return () => el.removeEventListener(event, listener, options2);
     };
     const stopWatch = watch(
-      () => [unrefElement(target), toValue(options)],
+      () => [unrefElement$1(target), toValue$1(options)],
       ([el, options2]) => {
         cleanup();
         if (!el)
@@ -7692,8 +7692,24 @@ var __forAwait = (obj, it, method) => (it = obj[__knownSymbol("asyncIterator")])
       stopWatch();
       cleanup();
     };
-    tryOnScopeDispose(stop);
+    tryOnScopeDispose$1(stop);
     return stop;
+  }
+  function tryOnScopeDispose(fn) {
+    if (getCurrentScope()) {
+      onScopeDispose(fn);
+      return true;
+    }
+    return false;
+  }
+  function toValue(r2) {
+    return typeof r2 === "function" ? r2() : unref(r2);
+  }
+  typeof WorkerGlobalScope !== "undefined" && globalThis instanceof WorkerGlobalScope;
+  function unrefElement(elRef) {
+    var _a2;
+    const plain = toValue(elRef);
+    return (_a2 = plain == null ? void 0 : plain.$el) != null ? _a2 : plain;
   }
   /*!
   * tabbable 6.2.0
@@ -15347,11 +15363,11 @@ This will fail in production.`
   const _hoisted_63$2 = ["onUpdate:modelValue"];
   const _hoisted_64$2 = { class: "p-2 anwp-w-10 anwp-text-center align-top" };
   const _hoisted_65$2 = ["onClick"];
-  const _hoisted_66$1 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-red-600" }, [
+  const _hoisted_66$2 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-red-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
   const _hoisted_67$1 = [
-    _hoisted_66$1
+    _hoisted_66$2
   ];
   const _hoisted_68$1 = /* @__PURE__ */ createBaseVNode("tfoot", null, [
     /* @__PURE__ */ createBaseVNode("tr", { class: "anwp-border anwp-border-gray-400 anwp-bg-gray-200" }, [
@@ -21849,7 +21865,7 @@ This will fail in production.`
   ], -1);
   const _hoisted_64$1 = { class: "anwp-vfm-admin-modal__content d-sm-flex flex-wrap" };
   const _hoisted_65$1 = { class: "d-flex flex-column mb-4 m-sm-2 px-2" };
-  const _hoisted_66 = { class: "mb-1 anwp-text-gray-800" };
+  const _hoisted_66$1 = { class: "mb-1 anwp-text-gray-800" };
   const _hoisted_67 = ["value"];
   const _hoisted_68 = {
     key: 0,
@@ -22105,7 +22121,7 @@ This will fail in production.`
                     (openBlock(true), createElementBlock(Fragment, null, renderList(unref(gameStore).matchEvents, (gameEvent, index2) => {
                       return openBlock(), createElementBlock("tr", {
                         class: "anwp-border anwp-border-gray-400 anwp-bg-gray-100",
-                        key: index2
+                        key: gameEvent.id
                       }, [
                         _hoisted_5$o,
                         createBaseVNode("td", _hoisted_6$n, [
@@ -22276,7 +22292,7 @@ This will fail in production.`
               _hoisted_63$1,
               createBaseVNode("div", _hoisted_64$1, [
                 createBaseVNode("div", _hoisted_65$1, [
-                  createBaseVNode("label", _hoisted_66, toDisplayString(unref(l10n).select_event), 1),
+                  createBaseVNode("label", _hoisted_66$1, toDisplayString(unref(l10n).select_event), 1),
                   withDirectives(createBaseVNode("select", {
                     class: "anwp-w-min-150",
                     "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => unref(gameStore).modalData.eventInModal.type = $event)
@@ -25078,8 +25094,8 @@ This will fail in production.`
     };
   });
   const _hoisted_1$a = {
-    class: "anwp-border anwp-border-gray-500",
-    id: "anwp-fl-squad-metabox"
+    id: "anwp-fl-squad-metabox",
+    class: "anwp-border anwp-border-gray-500"
   };
   const _hoisted_2$9 = { class: "p-3 d-flex align-items-center flex-wrap bg-white" };
   const _hoisted_3$9 = {
@@ -25141,44 +25157,46 @@ This will fail in production.`
   const _hoisted_41$1 = { value: "on loan" };
   const _hoisted_42$1 = { value: "left" };
   const _hoisted_43$1 = { value: "on trial" };
-  const _hoisted_44$1 = { class: "anwp-w-10 py-1 px-2 anwp-text-center" };
-  const _hoisted_45$1 = ["onClick"];
-  const _hoisted_46$1 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current" }, [
+  const _hoisted_44$1 = ["value"];
+  const _hoisted_45$1 = { class: "anwp-w-10 py-1 px-2 anwp-text-center" };
+  const _hoisted_46$1 = ["onClick"];
+  const _hoisted_47$1 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-person-outline" })
   ], -1);
-  const _hoisted_47$1 = [
-    _hoisted_46$1
+  const _hoisted_48 = [
+    _hoisted_47$1
   ];
-  const _hoisted_48 = { class: "anwp-w-10 py-1 px-2 anwp-text-center" };
-  const _hoisted_49 = ["onClick"];
-  const _hoisted_50 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-red-600" }, [
+  const _hoisted_49 = { class: "anwp-w-10 py-1 px-2 anwp-text-center" };
+  const _hoisted_50 = ["onClick"];
+  const _hoisted_51 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-red-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_51 = [
-    _hoisted_50
+  const _hoisted_52 = [
+    _hoisted_51
   ];
-  const _hoisted_52 = { class: "anwp-border anwp-border-gray-400 anwp-bg-gray-200" };
-  const _hoisted_53 = /* @__PURE__ */ createBaseVNode("td", null, null, -1);
+  const _hoisted_53 = { class: "anwp-border anwp-border-gray-400 anwp-bg-gray-200" };
   const _hoisted_54 = /* @__PURE__ */ createBaseVNode("td", null, null, -1);
   const _hoisted_55 = /* @__PURE__ */ createBaseVNode("td", null, null, -1);
   const _hoisted_56 = /* @__PURE__ */ createBaseVNode("td", null, null, -1);
-  const _hoisted_57 = { class: "py-1 px-2" };
+  const _hoisted_57 = /* @__PURE__ */ createBaseVNode("td", null, null, -1);
   const _hoisted_58 = { class: "py-1 px-2" };
   const _hoisted_59 = { class: "py-1 px-2" };
   const _hoisted_60 = { class: "py-1 px-2" };
   const _hoisted_61 = { class: "py-1 px-2" };
   const _hoisted_62 = { class: "py-1 px-2" };
-  const _hoisted_63 = {
+  const _hoisted_63 = { class: "py-1 px-2" };
+  const _hoisted_64 = {
     key: 1,
     class: "d-flex justify-content-end align-items-center flex-wrap mt-2"
   };
-  const _hoisted_64 = ["value"];
   const _hoisted_65 = ["value"];
+  const _hoisted_66 = ["value"];
   const _sfc_main$a = {
     __name: "AppPlayers",
     setup(__props) {
       const squadStore = useSquadStore();
       const l10n = window._AnWP_FL_Squad_Data.l10n;
+      const squadStatuses = window._AnWP_FL_Squad_Data.squad_status;
       const openAttachToSquadPlayersModal = () => {
         squadStore.modalPlayers.pageNumber = 1;
         squadStore.modalPlayers.search = "";
@@ -25204,7 +25222,19 @@ This will fail in production.`
         if (squadStore.clubSquad) {
           Object.keys(squadStore.clubSquad).forEach((key) => {
             output[key] = squadStore.clubSquad[key].map((_a2) => {
-              var _b2 = _a2, { name, photo, country, birthdate, club_id } = _b2, pl = __objRest(_b2, ["name", "photo", "country", "birthdate", "club_id"]);
+              var _b2 = _a2, {
+                name,
+                photo,
+                country,
+                birthdate,
+                club_id
+              } = _b2, pl = __objRest(_b2, [
+                "name",
+                "photo",
+                "country",
+                "birthdate",
+                "club_id"
+              ]);
               return pl;
             });
           });
@@ -25226,14 +25256,14 @@ This will fail in production.`
             createBaseVNode("label", _hoisted_3$9, toDisplayString(unref(l10n).season), 1),
             withDirectives(createBaseVNode("select", {
               id: "anwpfl-input-season",
-              onChange: _cache[0] || (_cache[0] = (...args) => unref(squadStore).changeActiveSeason && unref(squadStore).changeActiveSeason(...args)),
+              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(squadStore).active.season = $event),
               class: "mr-4",
-              "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(squadStore).active.season = $event)
+              onChange: _cache[1] || (_cache[1] = (...args) => unref(squadStore).changeActiveSeason && unref(squadStore).changeActiveSeason(...args))
             }, [
               (openBlock(true), createElementBlock(Fragment, null, renderList(unref(squadStore).appConfig.seasons, (s2) => {
                 return openBlock(), createElementBlock("option", {
-                  value: s2.id,
-                  key: s2.id
+                  key: s2.id,
+                  value: s2.id
                 }, toDisplayString(s2.title), 9, _hoisted_4$9);
               }), 128))
             ], 544), [
@@ -25287,8 +25317,8 @@ This will fail in production.`
                   default: withCtx(() => [
                     (openBlock(true), createElementBlock(Fragment, null, renderList(unref(squadStore).activeSquad, (player, index2) => {
                       return openBlock(), createElementBlock("tr", {
-                        class: "anwp-border anwp-border-gray-400",
-                        key: player.id
+                        key: player.id,
+                        class: "anwp-border anwp-border-gray-400"
                       }, [
                         _hoisted_25$4,
                         createBaseVNode("td", {
@@ -25314,11 +25344,11 @@ This will fail in production.`
                         ]),
                         createBaseVNode("td", _hoisted_32$1, [
                           withDirectives(createBaseVNode("input", {
+                            "onUpdate:modelValue": ($event) => player.number = $event,
                             class: "my-1 anwp-border-gray-300 anwp-w-80",
                             type: "number",
                             min: "0",
-                            step: "1",
-                            "onUpdate:modelValue": ($event) => player.number = $event
+                            step: "1"
                           }, null, 8, _hoisted_33$1), [
                             [
                               vModelText,
@@ -25330,14 +25360,14 @@ This will fail in production.`
                         ]),
                         createBaseVNode("td", _hoisted_34$1, [
                           withDirectives(createBaseVNode("select", {
-                            class: "anwp-w-120 my-1",
-                            "onUpdate:modelValue": ($event) => player.position = $event
+                            "onUpdate:modelValue": ($event) => player.position = $event,
+                            class: "anwp-w-120 my-1"
                           }, [
                             createBaseVNode("option", _hoisted_36$1, "- " + toDisplayString(unref(l10n).select) + " -", 1),
                             (openBlock(true), createElementBlock(Fragment, null, renderList(unref(squadStore).appConfig.positions, (positionTitle, positionCode) => {
                               return openBlock(), createElementBlock("option", {
-                                value: positionCode,
-                                key: positionCode
+                                key: positionCode,
+                                value: positionCode
                               }, toDisplayString(positionTitle), 9, _hoisted_37$1);
                             }), 128))
                           ], 8, _hoisted_35$1), [
@@ -25346,30 +25376,36 @@ This will fail in production.`
                         ]),
                         createBaseVNode("td", _hoisted_38$1, [
                           withDirectives(createBaseVNode("select", {
-                            class: "anwp-w-120 my-1",
-                            "onUpdate:modelValue": ($event) => player.status = $event
+                            "onUpdate:modelValue": ($event) => player.status = $event,
+                            class: "anwp-w-120 my-1"
                           }, [
                             createBaseVNode("option", _hoisted_40$1, toDisplayString(unref(l10n).in_club), 1),
                             createBaseVNode("option", _hoisted_41$1, toDisplayString(unref(l10n).on_loan), 1),
                             createBaseVNode("option", _hoisted_42$1, toDisplayString(unref(l10n).left_club), 1),
-                            createBaseVNode("option", _hoisted_43$1, toDisplayString(unref(l10n).on_trial), 1)
+                            createBaseVNode("option", _hoisted_43$1, toDisplayString(unref(l10n).on_trial), 1),
+                            unref(squadStatuses) && unref(squadStatuses).length ? (openBlock(true), createElementBlock(Fragment, { key: 0 }, renderList(unref(squadStatuses), (sStatus) => {
+                              return openBlock(), createElementBlock("option", {
+                                key: sStatus,
+                                value: sStatus
+                              }, toDisplayString(sStatus), 9, _hoisted_44$1);
+                            }), 128)) : createCommentVNode("", true)
                           ], 8, _hoisted_39$1), [
                             [vModelSelect, player.status]
                           ])
                         ]),
-                        createBaseVNode("td", _hoisted_44$1, [
+                        createBaseVNode("td", _hoisted_45$1, [
                           createBaseVNode("button", {
                             type: "button",
                             class: normalizeClass(["anwp-cursor-pointer d-flex align-items-center justify-content-center my-1 anwp-w-50 button", Number(player.club_id) !== Number(unref(squadStore).active.club) ? "anwp-bg-orange-200" : ""]),
                             onClick: withModifiers(($event) => openActionsModaal(index2, player), ["prevent"])
-                          }, _hoisted_47$1, 10, _hoisted_45$1)
+                          }, _hoisted_48, 10, _hoisted_46$1)
                         ]),
-                        createBaseVNode("td", _hoisted_48, [
+                        createBaseVNode("td", _hoisted_49, [
                           createBaseVNode("button", {
                             type: "button",
                             class: "anwp-cursor-pointer d-flex align-items-center justify-content-center my-1 anwp-w-50 button anwp-border-red-600",
                             onClick: withModifiers(($event) => openDeletePlayerModaal(index2, player), ["prevent"])
-                          }, _hoisted_51, 8, _hoisted_49)
+                          }, _hoisted_52, 8, _hoisted_50)
                         ])
                       ]);
                     }), 128))
@@ -25377,17 +25413,17 @@ This will fail in production.`
                   _: 1
                 }, 8, ["modelValue"]),
                 createBaseVNode("tfoot", null, [
-                  createBaseVNode("tr", _hoisted_52, [
-                    _hoisted_53,
+                  createBaseVNode("tr", _hoisted_53, [
                     _hoisted_54,
                     _hoisted_55,
                     _hoisted_56,
-                    createBaseVNode("td", _hoisted_57, toDisplayString(unref(l10n).player_name), 1),
-                    createBaseVNode("td", _hoisted_58, toDisplayString(unref(l10n).number), 1),
-                    createBaseVNode("td", _hoisted_59, toDisplayString(unref(l10n).position), 1),
-                    createBaseVNode("td", _hoisted_60, toDisplayString(unref(l10n).status), 1),
-                    createBaseVNode("td", _hoisted_61, toDisplayString(unref(l10n).actions), 1),
-                    createBaseVNode("td", _hoisted_62, toDisplayString(unref(l10n).remove), 1)
+                    _hoisted_57,
+                    createBaseVNode("td", _hoisted_58, toDisplayString(unref(l10n).player_name), 1),
+                    createBaseVNode("td", _hoisted_59, toDisplayString(unref(l10n).number), 1),
+                    createBaseVNode("td", _hoisted_60, toDisplayString(unref(l10n).position), 1),
+                    createBaseVNode("td", _hoisted_61, toDisplayString(unref(l10n).status), 1),
+                    createBaseVNode("td", _hoisted_62, toDisplayString(unref(l10n).actions), 1),
+                    createBaseVNode("td", _hoisted_63, toDisplayString(unref(l10n).remove), 1)
                   ])
                 ])
               ], 512), [
@@ -25396,7 +25432,7 @@ This will fail in production.`
             ], 512), [
               [vShow, !unref(squadStore).active.loading]
             ]),
-            unref(squadStore).clubSquadDisplay[unref(squadStore).active.season] ? (openBlock(), createElementBlock("div", _hoisted_63, [
+            unref(squadStore).clubSquadDisplay[unref(squadStore).active.season] ? (openBlock(), createElementBlock("div", _hoisted_64, [
               createTextVNode(toDisplayString(unref(l10n).group_player_ignore_without) + " ", 1),
               createVNode(_component_toggle, {
                 modelValue: unref(squadStore).clubSquadDisplay[unref(squadStore).active.season].group,
@@ -25411,12 +25447,12 @@ This will fail in production.`
             type: "hidden",
             name: "_anwpfl_squad",
             value: JSON.stringify(clubSquadCompact.value)
-          }, null, 8, _hoisted_64),
+          }, null, 8, _hoisted_65),
           createBaseVNode("input", {
             type: "hidden",
             name: "_anwpfl_squad_display",
             value: JSON.stringify(unref(squadStore).clubSquadDisplay)
-          }, null, 8, _hoisted_65)
+          }, null, 8, _hoisted_66)
         ]);
       };
     }

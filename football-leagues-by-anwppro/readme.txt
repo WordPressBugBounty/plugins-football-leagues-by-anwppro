@@ -5,7 +5,7 @@ Tags:              football, soccer, sport, football league, football club
 Requires at least: 5.7
 Requires PHP:      7.0
 Tested up to:      6.6
-Stable tag:        0.16.8
+Stable tag:        0.16.9
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,7 @@ Want more? Football Leagues has also a [Premium Addon](https://anwp.pro/football
 = PREMIUM FEATURES =
 &#128310; Live Scores and Match Live Commentary with Events
 &#128310; Match Timeline
+&#128310; LIVE Search
 &#128310; Club match formation
 &#128310; Layout Builder (with tabs)
 &#128310; Match scoreboard with image background
@@ -148,6 +149,10 @@ Yes! The plugin works with most themes out of the box. If you have any CSS styli
 17. Admin >> Edit Match (Events)
 
 == Changelog ==
+
+= 0.16.9 - 2024-10-25 =
+* added: custom squad status
+* fixed: Safari 18 conflict with WordPress classic editor layout
 
 = 0.16.8 - 2024-09-18 =
 * fixed: security fix

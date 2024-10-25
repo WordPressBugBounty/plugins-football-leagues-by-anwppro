@@ -2713,6 +2713,10 @@
 /*--------------------------------------------------------------
 # Modules
 --------------------------------------------------------------*/
+.anwp-fl-hover-effect:hover {
+  background-color: rgba(228, 229, 230, 0.2);
+}
+
 .anwp-fl-btn {
   -webkit-appearance: none;
           appearance: none;

@@ -69,7 +69,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * @var    string
 	 * @since  0.1.0
 	 */
-	const VERSION = '0.16.8';
+	const VERSION = '0.16.9';
 
 	/**
 	 * Current DB structure version.

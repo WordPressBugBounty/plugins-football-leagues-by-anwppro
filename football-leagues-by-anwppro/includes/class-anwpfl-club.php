@@ -477,6 +477,7 @@ class AnWPFL_Club extends CPT_Core {
 							'loader'             => includes_url( 'js/tinymce/skins/lightgray/img/loader.gif' ),
 							'rest_root'          => esc_url_raw( rest_url() ),
 							'rest_nonce'         => wp_create_nonce( 'wp_rest' ),
+							'squad_status'       => AnWPFL_Options::get_value( 'custom_squad_status' ) ? : [],
 						];
 
 						?>
@@ -1009,7 +1010,7 @@ class AnWPFL_Club extends CPT_Core {
 					'quicktags'     => true, // load Quicktags, can be used to pass settings directly to Quicktags using an array()
 				],
 				'show_names'      => false,
-				'sanitization_cb' => false,
+				'sanitization_cb' => [ anwp_fl()->helper, 'sanitize_cmb2_fl_text' ],
 				'before_row'      => '</div></div>' . anwp_football_leagues()->helper->create_metabox_header(
 					[
 						'icon'  => 'note',
@@ -1138,7 +1139,7 @@ class AnWPFL_Club extends CPT_Core {
 	 * Get list of club objects.
 	 *
 	 * @since 0.2.0 (2017-11-29)
-	 * @return array $output_data - Array of clubs data (id, title)
+	 * @return array $output_data - Array of clubs data (id, title, logo)
 	 */
 	public function get_clubs_list() {
 
@@ -1362,7 +1363,7 @@ class AnWPFL_Club extends CPT_Core {
 	 *
 	 * @return array
 	 */
-	private function get_all_clubs_data() {
+	public function get_all_clubs_data() {
 
 		static $output = null;
 

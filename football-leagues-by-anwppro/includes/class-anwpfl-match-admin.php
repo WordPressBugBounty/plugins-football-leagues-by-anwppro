@@ -554,7 +554,7 @@ class AnWPFL_Match_Admin {
 				'name'            => esc_html__( 'Text 1', 'anwp-football-leagues' ) . '<br>' . esc_html__( 'Match Preview or Summary', 'anwp-football-leagues' ),
 				'id'              => $prefix . 'summary',
 				'type'            => 'wysiwyg',
-				'sanitization_cb' => false,
+				'sanitization_cb' => [ anwp_fl()->helper, 'sanitize_cmb2_fl_text' ],
 				'options'         => [
 					'wpautop'       => true,
 					'media_buttons' => true, // show insert/upload button(s)

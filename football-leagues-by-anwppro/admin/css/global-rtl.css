@@ -9,6 +9,11 @@ body > .vs__dropdown-menu {
 	display: flex;
 }
 
+/* Update - 2024-09-29 - Temp Safari 18 fix //////////////////////////////////////////// */
+:root #post-body #postbox-container-2 {
+	clear: right;
+}
+
 /* Update - 2022-03-13 ///////////////////////////////////////////////////////////////// */
 #sub-accordion-section-fl_club .customize-control-image img.attachment-thumb {
 	width: 80px;

@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.5.0
  *
- * @version       0.16.5
+ * @version       0.16.9
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -129,6 +129,11 @@ $positions_l10n = [
 						<img loading="lazy" width="60" height="60" class="squad-rows__photo anwp-object-contain m-2 anwp-w-60 anwp-h-60" src="<?php echo esc_url( $player['photo'] ? $photo_dir . $player['photo'] : $default_photo ); ?>" alt="<?php echo esc_attr( $player['name'] ); ?>">
 						<?php if ( 'on loan' === $player['status'] ) : ?>
 							<span class="anwp-bg-info anwp-text-white anwp-leading-1 anwp-text-xs text-uppercase anwp-text-center squad-rows__status-badge position-absolute"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__on_loan', __( 'On Loan', 'anwp-football-leagues' ) ) ); ?></span>
+						<?php elseif ( $player['status'] && ! in_array( $player['status'], [ 'on loan', 'left', 'on trial' ], true ) ) : ?>
+							<span class="anwp-bg-secondary anwp-text-white anwp-leading-1 anwp-text-xs text-uppercase anwp-text-center squad-rows__status-badge position-absolute"
+									data-fl-status="<?php echo esc_attr( $player['status'] ); ?>">
+								<?php echo esc_html( $player['status'] ); ?>
+							</span>
 						<?php endif; ?>
 					</div>
 					<div class="squad-rows__name d-flex flex-column align-items-start justify-content-center anwp-text-base anwp-text-left anwp-font-semibold">
