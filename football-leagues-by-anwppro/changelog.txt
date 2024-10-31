@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 0.16.10 - 2024-10-31 =
+* fixed: inline search on Standing Setup in "Select Competition Group"
+* added: Admin Club - players per page option in Attach Player to Squad
+
 = 0.16.9 - 2024-10-25 =
 * added: custom squad status
 * fixed: Safari 18 conflict with WordPress classic editor layout

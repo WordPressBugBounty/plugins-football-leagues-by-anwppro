@@ -5,7 +5,7 @@ Tags:              football, soccer, sport, football league, football club
 Requires at least: 5.7
 Requires PHP:      7.0
 Tested up to:      6.6
-Stable tag:        0.16.9
+Stable tag:        0.16.10
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,10 @@ Yes! The plugin works with most themes out of the box. If you have any CSS styli
 17. Admin >> Edit Match (Events)
 
 == Changelog ==
+
+= 0.16.10 - 2024-10-31 =
+* fixed: inline search on Standing Setup in "Select Competition Group"
+* added: Admin Club - players per page option in Attach Player to Squad
 
 = 0.16.9 - 2024-10-25 =
 * added: custom squad status

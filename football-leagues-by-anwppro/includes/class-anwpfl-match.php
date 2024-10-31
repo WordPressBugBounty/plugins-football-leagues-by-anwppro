@@ -323,16 +323,16 @@ class AnWPFL_Match extends AnWPFL_DB {
 					<?php endif; ?>
 				</div>
 
-				<div class="d-flex mt-2" id="anwp-fl-metabox-page-nav">
-					<div class="anwp-fl-menu-wrapper mr-3 d-block sticky-top align-self-start anwp-flex-none <?php echo esc_attr( $is_menu_collapsed ? 'anwp-fl-collapsed-menu' : '' ); ?>" style="top: 50px;">
+				<div class="d-sm-flex mt-2" id="anwp-fl-metabox-page-nav">
+					<div class="anwp-fl-menu-wrapper mr-3 d-block align-self-start anwp-flex-none <?php echo esc_attr( $is_menu_collapsed ? 'anwp-fl-collapsed-menu' : '' ); ?>" style="top: 50px;">
 
 						<button class="w-100 button button-primary py-2 mb-4 d-flex align-items-center justify-content-center" type="submit">
 							<svg class="anwp-icon anwp-icon--feather anwp-icon--s16 anwp-flex-none"><use xlink:href="#icon-save"></use></svg>
-							<span class="ml-2 anwp-fl-save-label d-none d-sm-block"><?php echo esc_html__( 'Save', 'anwp-football-leagues' ); ?></span>
+							<span class="ml-2 anwp-fl-save-label"><?php echo esc_html__( 'Save', 'anwp-football-leagues' ); ?></span>
 							<span class="spinner m-0"></span>
 						</button>
 
-						<ul class="m-0 p-0 list-unstyled">
+						<ul class="m-0 p-0 list-unstyled d-none d-sm-block">
 							<?php
 							$nav_items = [
 								[

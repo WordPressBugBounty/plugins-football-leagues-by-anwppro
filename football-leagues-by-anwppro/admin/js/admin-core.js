@@ -11280,17 +11280,17 @@ This will fail in production.`
     class: "small d-block mb-1",
     for: "anwp-modaal-team-country-filter"
   }, "Country", -1);
-  const _hoisted_27$g = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
-  const _hoisted_28$e = ["onClick"];
-  const _hoisted_29$d = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--s18 anwp-icon--octi anwp-fill-current anwp-text-blue-700" }, [
+  const _hoisted_27$h = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
+  const _hoisted_28$f = ["onClick"];
+  const _hoisted_29$e = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--s18 anwp-icon--octi anwp-fill-current anwp-text-blue-700" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-plus" })
   ], -1);
-  const _hoisted_30$b = [
-    _hoisted_29$d
+  const _hoisted_30$c = [
+    _hoisted_29$e
   ];
-  const _hoisted_31$b = ["src"];
-  const _hoisted_32$b = { class: "mr-2 anwp-leading-1" };
-  const _hoisted_33$b = { class: "anwp-vfm-admin-modal__actions" };
+  const _hoisted_31$c = ["src"];
+  const _hoisted_32$c = { class: "mr-2 anwp-leading-1" };
+  const _hoisted_33$c = { class: "anwp-vfm-admin-modal__actions" };
   const _hoisted_34$b = { class: "d-flex" };
   const _hoisted_35$b = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
@@ -11500,7 +11500,7 @@ This will fail in production.`
                             }, null, 8, ["modelValue", "options", "reduce"])
                           ])
                         ]),
-                        _hoisted_27$g,
+                        _hoisted_27$h,
                         teamsInModal.value.length ? (openBlock(), createBlock(unref(Paginate), {
                           key: 0,
                           class: "anwp-user-select-none mb-2 mb-0",
@@ -11525,21 +11525,21 @@ This will fail in production.`
                             createBaseVNode("div", {
                               class: "anwp-cursor-pointer anwp-w-30 anwp-h-30 anwp-rounded mx-3 d-flex align-items-center justify-content-center anwp-border anwp-border-gray-500",
                               onClick: withModifiers(($event) => addTeamToGroup(team.id), ["prevent"])
-                            }, _hoisted_30$b, 8, _hoisted_28$e),
+                            }, _hoisted_30$c, 8, _hoisted_28$f),
                             team.logo ? (openBlock(), createElementBlock("img", {
                               key: 0,
                               src: team.logo,
                               alt: "team logo",
                               class: "mr-2 anwp-h-30 anwp-w-30 anwp-object-contain p-1 bg-white border rounded"
-                            }, null, 8, _hoisted_31$b)) : createCommentVNode("", true),
-                            createBaseVNode("span", _hoisted_32$b, toDisplayString(team.title), 1)
+                            }, null, 8, _hoisted_31$c)) : createCommentVNode("", true),
+                            createBaseVNode("span", _hoisted_32$c, toDisplayString(team.title), 1)
                           ]);
                         }), 128))
                       ], 64))
                     ])
                   ])
                 ]),
-                createBaseVNode("div", _hoisted_33$b, [
+                createBaseVNode("div", _hoisted_33$c, [
                   createBaseVNode("div", _hoisted_34$b, [
                     unref(trStore).modalData.teamsRound.groups.length > 1 ? (openBlock(), createElementBlock("a", {
                       key: 0,
@@ -13966,19 +13966,19 @@ This will fail in production.`
   ];
   const _hoisted_25$j = { value: "" };
   const _hoisted_26$i = { value: "friendly" };
-  const _hoisted_27$f = {
+  const _hoisted_27$g = {
     key: 2,
     class: "d-flex w-100 mr-sm-2 px-2"
   };
-  const _hoisted_28$d = { class: "ml-auto anwp-border anwp-border-orange-600 anwp-bg-orange-100 p-3 d-flex" };
-  const _hoisted_29$c = { class: "flex-grow-1 w-100" };
-  const _hoisted_30$a = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
-  const _hoisted_31$a = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
-  const _hoisted_32$a = {
+  const _hoisted_28$e = { class: "ml-auto anwp-border anwp-border-orange-600 anwp-bg-orange-100 p-3 d-flex" };
+  const _hoisted_29$d = { class: "flex-grow-1 w-100" };
+  const _hoisted_30$b = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
+  const _hoisted_31$b = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
+  const _hoisted_32$b = {
     key: 0,
     class: "spinner ml-2 is-active"
   };
-  const _hoisted_33$a = /* @__PURE__ */ createBaseVNode("div", { class: "w-100 my-3" }, null, -1);
+  const _hoisted_33$b = /* @__PURE__ */ createBaseVNode("div", { class: "w-100 my-3" }, null, -1);
   const _hoisted_34$a = /* @__PURE__ */ createBaseVNode("div", { class: "anwp-font-semibold anwp-text-sm w-100 py-2 px-3 anwp-bg-gray-400 mx-sm-3" }, "Stage Rounds", -1);
   const _hoisted_35$a = {
     key: 0,
@@ -14170,15 +14170,15 @@ This will fail in production.`
                 [vModelSelect, unref(trStore).stages[unref(trStore).activeStageIndex].competitionStatus]
               ])
             ]),
-            unref(trStore).activeStageGamesFixStatusNeeded ? (openBlock(), createElementBlock("div", _hoisted_27$f, [
-              createBaseVNode("div", _hoisted_28$d, [
-                createBaseVNode("div", _hoisted_29$c, [
+            unref(trStore).activeStageGamesFixStatusNeeded ? (openBlock(), createElementBlock("div", _hoisted_27$g, [
+              createBaseVNode("div", _hoisted_28$e, [
+                createBaseVNode("div", _hoisted_29$d, [
                   createTextVNode(" You have Games with incorrect status " + toDisplayString(unref(trStore).appConfig.stageGames[unref(trStore).activeStage.stageId]), 1),
-                  _hoisted_30$a,
+                  _hoisted_30$b,
                   createTextVNode(" Change your Stage Status or click the Fix button to change status of all Games to "),
                   createBaseVNode("b", null, '"' + toDisplayString("friendly" === unref(trStore).activeStage.competitionStatusSaved ? unref(l10n).friendly : unref(l10n).official) + '"', 1),
                   createTextVNode("."),
-                  _hoisted_31$a
+                  _hoisted_31$b
                 ]),
                 createBaseVNode("div", null, [
                   createBaseVNode("button", {
@@ -14187,12 +14187,12 @@ This will fail in production.`
                     onClick: _cache[5] || (_cache[5] = withModifiers(($event) => fixStageGameStatuses(unref(trStore).activeStage.stageId), ["prevent"]))
                   }, [
                     createTextVNode(" Fix "),
-                    "fix-game-status" === unref(trStore).activeRequest ? (openBlock(), createElementBlock("span", _hoisted_32$a)) : createCommentVNode("", true)
+                    "fix-game-status" === unref(trStore).activeRequest ? (openBlock(), createElementBlock("span", _hoisted_32$b)) : createCommentVNode("", true)
                   ])
                 ])
               ])
             ])) : createCommentVNode("", true),
-            _hoisted_33$a,
+            _hoisted_33$b,
             _hoisted_34$a,
             (openBlock(true), createElementBlock(Fragment, null, renderList(unref(trStore).stages[unref(trStore).activeStageIndex].rounds, (round, roundIndex) => {
               return openBlock(), createElementBlock("div", {
@@ -14529,8 +14529,8 @@ This will fail in production.`
   const _hoisted_24$j = /* @__PURE__ */ createBaseVNode("div", { class: "w-100 my-2" }, null, -1);
   const _hoisted_25$i = ["value"];
   const _hoisted_26$h = ["value"];
-  const _hoisted_27$e = ["value"];
-  const _hoisted_28$c = ["value"];
+  const _hoisted_27$f = ["value"];
+  const _hoisted_28$d = ["value"];
   const _sfc_main$K = {
     __name: "AppTournamentSetup",
     setup(__props) {
@@ -14679,12 +14679,12 @@ This will fail in production.`
                 type: "hidden",
                 name: "_anwpfl_logo",
                 value: unref(trStore).logo
-              }, null, 8, _hoisted_27$e),
+              }, null, 8, _hoisted_27$f),
               createBaseVNode("input", {
                 type: "hidden",
                 name: "_anwpfl_logo_id",
                 value: unref(trStore).logo_id
-              }, null, 8, _hoisted_28$c)
+              }, null, 8, _hoisted_28$d)
             ])
           ])
         ], 64);
@@ -15324,13 +15324,13 @@ This will fail in production.`
       /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-grabber" })
     ])
   ], -1);
-  const _hoisted_27$d = { class: "py-1 anwp-w-10" };
-  const _hoisted_28$b = ["onUpdate:modelValue"];
-  const _hoisted_29$b = { value: "" };
-  const _hoisted_30$9 = ["value"];
-  const _hoisted_31$9 = { class: "py-1 anwp-w-10" };
-  const _hoisted_32$9 = ["onUpdate:modelValue"];
-  const _hoisted_33$9 = { value: "new" };
+  const _hoisted_27$e = { class: "py-1 anwp-w-10" };
+  const _hoisted_28$c = ["onUpdate:modelValue"];
+  const _hoisted_29$c = { value: "" };
+  const _hoisted_30$a = ["value"];
+  const _hoisted_31$a = { class: "py-1 anwp-w-10" };
+  const _hoisted_32$a = ["onUpdate:modelValue"];
+  const _hoisted_33$a = { value: "new" };
   const _hoisted_34$9 = { value: "id" };
   const _hoisted_35$9 = ["onUpdate:modelValue"];
   const _hoisted_36$9 = ["onUpdate:modelValue"];
@@ -15463,30 +15463,30 @@ This will fail in production.`
                         key: rowData.id
                       }, [
                         _hoisted_26$g,
-                        createBaseVNode("td", _hoisted_27$d, [
+                        createBaseVNode("td", _hoisted_27$e, [
                           withDirectives(createBaseVNode("select", {
                             class: normalizeClass(["anwp-border-gray-500 anwp-w-130 mt-1 mx-2", rowData.season_id ? "" : "anwp-border-red-600 anwp-text-red-600"]),
                             "onUpdate:modelValue": ($event) => rowData.season_id = $event
                           }, [
-                            createBaseVNode("option", _hoisted_29$b, "- " + toDisplayString(unref(l10n).select_season) + " -", 1),
+                            createBaseVNode("option", _hoisted_29$c, "- " + toDisplayString(unref(l10n).select_season) + " -", 1),
                             (openBlock(true), createElementBlock(Fragment, null, renderList(appOptions.seasons, (season) => {
                               return openBlock(), createElementBlock("option", {
                                 value: season.id,
                                 key: season.id
-                              }, toDisplayString(season.title), 9, _hoisted_30$9);
+                              }, toDisplayString(season.title), 9, _hoisted_30$a);
                             }), 128))
-                          ], 10, _hoisted_28$b), [
+                          ], 10, _hoisted_28$c), [
                             [vModelSelect, rowData.season_id]
                           ])
                         ]),
-                        createBaseVNode("td", _hoisted_31$9, [
+                        createBaseVNode("td", _hoisted_31$a, [
                           withDirectives(createBaseVNode("select", {
                             class: "anwp-border-gray-500 anwp-w-200 mx-2 mb-2 mt-1",
                             "onUpdate:modelValue": ($event) => rowData.competition_type = $event
                           }, [
-                            createBaseVNode("option", _hoisted_33$9, toDisplayString(unref(l10n).new_competition), 1),
+                            createBaseVNode("option", _hoisted_33$a, toDisplayString(unref(l10n).new_competition), 1),
                             createBaseVNode("option", _hoisted_34$9, toDisplayString(unref(l10n).existing_competition), 1)
-                          ], 8, _hoisted_32$9), [
+                          ], 8, _hoisted_32$a), [
                             [vModelSelect, rowData.competition_type]
                           ]),
                           "new" === rowData.competition_type ? withDirectives((openBlock(), createElementBlock("input", {
@@ -15774,17 +15774,17 @@ This will fail in production.`
   const _hoisted_24$h = { class: "d-flex align-items-center py-1" };
   const _hoisted_25$g = { class: "ml-1" };
   const _hoisted_26$f = { class: "d-flex align-items-center" };
-  const _hoisted_27$c = { class: "ml-1" };
-  const _hoisted_28$a = { class: "d-sm-flex flex-wrap p-3 bg-light align-items-center" };
-  const _hoisted_29$a = ["disabled"];
-  const _hoisted_30$8 = { class: "ml-auto d-flex align-items-center" };
-  const _hoisted_31$8 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi anwp-icon--s14" }, [
+  const _hoisted_27$d = { class: "ml-1" };
+  const _hoisted_28$b = { class: "d-sm-flex flex-wrap p-3 bg-light align-items-center" };
+  const _hoisted_29$b = ["disabled"];
+  const _hoisted_30$9 = { class: "ml-auto d-flex align-items-center" };
+  const _hoisted_31$9 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi anwp-icon--s14" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-info" })
   ], -1);
-  const _hoisted_32$8 = [
-    _hoisted_31$8
+  const _hoisted_32$9 = [
+    _hoisted_31$9
   ];
-  const _hoisted_33$8 = { class: "mx-2 mb-0" };
+  const _hoisted_33$9 = { class: "mx-2 mb-0" };
   const _hoisted_34$8 = ["value"];
   const _hoisted_35$8 = ["value"];
   const _hoisted_36$8 = ["value"];
@@ -16099,25 +16099,25 @@ This will fail in production.`
                       }, null, 4), [
                         [vShow, logo]
                       ]),
-                      createBaseVNode("span", _hoisted_27$c, toDisplayString(title), 1)
+                      createBaseVNode("span", _hoisted_27$d, toDisplayString(title), 1)
                     ])
                   ]),
                   _: 1
                 }, 8, ["modelValue", "options", "disabled", "reduce"])
               ])
             ]),
-            createBaseVNode("div", _hoisted_28$a, [
+            createBaseVNode("div", _hoisted_28$b, [
               createBaseVNode("button", {
                 class: normalizeClass(["button button-large mx-2 px-5 my-2 mr-3", { "button-primary": readyToSave.value }]),
                 disabled: !readyToSave.value,
                 id: "anwp-match-setup-save-proxy",
                 type: "submit"
-              }, toDisplayString(unref(l10n).save_continue), 11, _hoisted_29$a),
-              createBaseVNode("div", _hoisted_30$8, [
-                withDirectives((openBlock(), createElementBlock("span", null, _hoisted_32$8)), [
+              }, toDisplayString(unref(l10n).save_continue), 11, _hoisted_29$b),
+              createBaseVNode("div", _hoisted_30$9, [
+                withDirectives((openBlock(), createElementBlock("span", null, _hoisted_32$9)), [
                   [_directive_tooltip, unref(l10n).show_all_clubs_ignoring_structure]
                 ]),
-                createBaseVNode("label", _hoisted_33$8, toDisplayString(unref(l10n).ignore_group_structure), 1),
+                createBaseVNode("label", _hoisted_33$9, toDisplayString(unref(l10n).ignore_group_structure), 1),
                 createVNode(_component_toggle, {
                   modelValue: ignoreStructure.value,
                   "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => ignoreStructure.value = $event),
@@ -19285,7 +19285,7 @@ This will fail in production.`
   const _hoisted_26$e = [
     _hoisted_25$f
   ];
-  const _hoisted_27$b = ["value"];
+  const _hoisted_27$c = ["value"];
   const _sfc_main$D = {
     __name: "AppGeneral",
     setup(__props) {
@@ -19442,7 +19442,7 @@ This will fail in production.`
             type: "hidden",
             name: "_anwpfl_stadium",
             value: unref(gameStore).stadium
-          }, null, 8, _hoisted_27$b)
+          }, null, 8, _hoisted_27$c)
         ]);
       };
     }
@@ -19552,31 +19552,31 @@ This will fail in production.`
     scope: "row",
     colspan: "2"
   };
-  const _hoisted_27$a = {
+  const _hoisted_27$b = {
     scope: "row",
     class: "table-secondary"
   };
-  const _hoisted_28$9 = {
+  const _hoisted_28$a = {
     scope: "row",
     class: "table-secondary"
   };
-  const _hoisted_29$9 = {
+  const _hoisted_29$a = {
     scope: "row",
     class: "table-secondary"
   };
-  const _hoisted_30$7 = {
+  const _hoisted_30$8 = {
     scope: "row",
     class: "table-secondary"
   };
-  const _hoisted_31$7 = {
+  const _hoisted_31$8 = {
     scope: "row",
     class: "table-secondary"
   };
-  const _hoisted_32$7 = {
+  const _hoisted_32$8 = {
     scope: "row",
     class: "table-secondary"
   };
-  const _hoisted_33$7 = {
+  const _hoisted_33$8 = {
     scope: "row",
     class: "table-secondary"
   };
@@ -19836,7 +19836,7 @@ This will fail in production.`
                     createBaseVNode("th", _hoisted_26$d, toDisplayString(unref(l10n).stats), 1)
                   ]),
                   createBaseVNode("tr", null, [
-                    createBaseVNode("th", _hoisted_27$a, toDisplayString(unref(l10n).yellow_cards), 1),
+                    createBaseVNode("th", _hoisted_27$b, toDisplayString(unref(l10n).yellow_cards), 1),
                     createBaseVNode("td", null, [
                       withDirectives(createBaseVNode("input", {
                         type: "number",
@@ -19867,7 +19867,7 @@ This will fail in production.`
                     ])
                   ]),
                   createBaseVNode("tr", null, [
-                    createBaseVNode("th", _hoisted_28$9, toDisplayString(unref(l10n).yellow_reds), 1),
+                    createBaseVNode("th", _hoisted_28$a, toDisplayString(unref(l10n).yellow_reds), 1),
                     createBaseVNode("td", null, [
                       withDirectives(createBaseVNode("input", {
                         type: "number",
@@ -19898,7 +19898,7 @@ This will fail in production.`
                     ])
                   ]),
                   createBaseVNode("tr", null, [
-                    createBaseVNode("th", _hoisted_29$9, toDisplayString(unref(l10n).red_cards), 1),
+                    createBaseVNode("th", _hoisted_29$a, toDisplayString(unref(l10n).red_cards), 1),
                     createBaseVNode("td", null, [
                       withDirectives(createBaseVNode("input", {
                         type: "number",
@@ -19929,7 +19929,7 @@ This will fail in production.`
                     ])
                   ]),
                   createBaseVNode("tr", null, [
-                    createBaseVNode("th", _hoisted_30$7, toDisplayString(unref(l10n).corner_kicks), 1),
+                    createBaseVNode("th", _hoisted_30$8, toDisplayString(unref(l10n).corner_kicks), 1),
                     createBaseVNode("td", null, [
                       withDirectives(createBaseVNode("input", {
                         type: "number",
@@ -19960,7 +19960,7 @@ This will fail in production.`
                     ])
                   ]),
                   createBaseVNode("tr", null, [
-                    createBaseVNode("th", _hoisted_31$7, toDisplayString(unref(l10n).fouls), 1),
+                    createBaseVNode("th", _hoisted_31$8, toDisplayString(unref(l10n).fouls), 1),
                     createBaseVNode("td", null, [
                       withDirectives(createBaseVNode("input", {
                         type: "number",
@@ -19991,7 +19991,7 @@ This will fail in production.`
                     ])
                   ]),
                   createBaseVNode("tr", null, [
-                    createBaseVNode("th", _hoisted_32$7, toDisplayString(unref(l10n).offsides), 1),
+                    createBaseVNode("th", _hoisted_32$8, toDisplayString(unref(l10n).offsides), 1),
                     createBaseVNode("td", null, [
                       withDirectives(createBaseVNode("input", {
                         type: "number",
@@ -20022,7 +20022,7 @@ This will fail in production.`
                     ])
                   ]),
                   createBaseVNode("tr", null, [
-                    createBaseVNode("th", _hoisted_33$7, toDisplayString(unref(l10n).ball_possession), 1),
+                    createBaseVNode("th", _hoisted_33$8, toDisplayString(unref(l10n).ball_possession), 1),
                     createBaseVNode("td", null, [
                       withDirectives(createBaseVNode("input", {
                         type: "number",
@@ -20503,19 +20503,19 @@ This will fail in production.`
   const _hoisted_24$e = { class: "table table-sm anwp-border-collapse w-100 anwp-overflow-scroll anwp-user-select-none anwp-leading-1" };
   const _hoisted_25$d = { class: "mb-2 py-1 px-2 anwp-text-base d-flex anwp-border anwp-border-gray-400 anwp-bg-gray-300 anwp-text-gray-900" };
   const _hoisted_26$c = { class: "ml-auto" };
-  const _hoisted_27$9 = { class: "table-responsive" };
-  const _hoisted_28$8 = { class: "table table-sm anwp-border-collapse w-100 anwp-overflow-scroll anwp-user-select-none anwp-leading-1" };
-  const _hoisted_29$8 = { class: "mb-2 py-1 px-2 anwp-text-base d-flex anwp-border anwp-border-gray-400 anwp-bg-gray-300 anwp-text-gray-900" };
-  const _hoisted_30$6 = { class: "mb-2 mt-3 py-1 px-2 anwp-text-base d-flex anwp-border anwp-border-gray-400 anwp-bg-gray-300 anwp-text-gray-900" };
-  const _hoisted_31$6 = {
+  const _hoisted_27$a = { class: "table-responsive" };
+  const _hoisted_28$9 = { class: "table table-sm anwp-border-collapse w-100 anwp-overflow-scroll anwp-user-select-none anwp-leading-1" };
+  const _hoisted_29$9 = { class: "mb-2 py-1 px-2 anwp-text-base d-flex anwp-border anwp-border-gray-400 anwp-bg-gray-300 anwp-text-gray-900" };
+  const _hoisted_30$7 = { class: "mb-2 mt-3 py-1 px-2 anwp-text-base d-flex anwp-border anwp-border-gray-400 anwp-bg-gray-300 anwp-text-gray-900" };
+  const _hoisted_31$7 = {
     key: 0,
     class: "d-flex flex-wrap align-items-start"
   };
-  const _hoisted_32$6 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-red-600" }, [
+  const _hoisted_32$7 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-red-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_33$6 = [
-    _hoisted_32$6
+  const _hoisted_33$7 = [
+    _hoisted_32$7
   ];
   const _hoisted_34$6 = ["value"];
   const _hoisted_35$6 = ["value"];
@@ -20710,8 +20710,8 @@ This will fail in production.`
                   createTextVNode(toDisplayString(unref(l10n).substitutes) + " ", 1),
                   createBaseVNode("span", _hoisted_26$c, "(" + toDisplayString(((_f = (_e2 = unref(gameStore).active) == null ? void 0 : _e2.playersAwaySubs) == null ? void 0 : _f.length) || 0) + ")", 1)
                 ]),
-                createBaseVNode("div", _hoisted_27$9, [
-                  createBaseVNode("table", _hoisted_28$8, [
+                createBaseVNode("div", _hoisted_27$a, [
+                  createBaseVNode("table", _hoisted_28$9, [
                     createVNode(_component_draggable, {
                       modelValue: unref(gameStore).active.playersAwaySubs,
                       "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => unref(gameStore).active.playersAwaySubs = $event),
@@ -20738,7 +20738,7 @@ This will fail in production.`
                     }, 8, ["modelValue"])
                   ])
                 ]),
-                createBaseVNode("div", _hoisted_29$8, toDisplayString(unref(l10n).coach), 1),
+                createBaseVNode("div", _hoisted_29$9, toDisplayString(unref(l10n).coach), 1),
                 createVNode(_sfc_main$y, {
                   l10n: unref(l10n),
                   "default-photo": unref(gameStore).appConfig.default_photo,
@@ -20746,8 +20746,8 @@ This will fail in production.`
                   onOpenModalCoachSelector: _cache[11] || (_cache[11] = ($event) => unref(gameStore).openModalCoachSelector("coachAway")),
                   onClickRemove: _cache[12] || (_cache[12] = ($event) => unref(gameStore).coachAway = null)
                 }, null, 8, ["l10n", "default-photo", "coach"]),
-                createBaseVNode("div", _hoisted_30$6, toDisplayString(unref(l10n).captain), 1),
-                ((_g = unref(gameStore).captainAway) == null ? void 0 : _g.id) ? (openBlock(), createElementBlock("div", _hoisted_31$6, [
+                createBaseVNode("div", _hoisted_30$7, toDisplayString(unref(l10n).captain), 1),
+                ((_g = unref(gameStore).captainAway) == null ? void 0 : _g.id) ? (openBlock(), createElementBlock("div", _hoisted_31$7, [
                   createVNode(_sfc_main$x, {
                     onClickPlayer: _cache[13] || (_cache[13] = ($event) => unref(gameStore).openModalCaptainSelector("away")),
                     player: unref(gameStore).captainAway,
@@ -20761,7 +20761,7 @@ This will fail in production.`
                     onClick: _cache[14] || (_cache[14] = withModifiers(($event) => {
                       unref(gameStore).captainAway = "";
                     }, ["prevent"]))
-                  }, _hoisted_33$6)
+                  }, _hoisted_33$7)
                 ])) : (openBlock(), createElementBlock("button", {
                   key: 1,
                   type: "button",
@@ -20865,16 +20865,16 @@ This will fail in production.`
   const _hoisted_24$d = { class: "ml-auto" };
   const _hoisted_25$c = { class: "px-3 anwp-text-base" };
   const _hoisted_26$b = { class: "px-3 anwp-text-base" };
-  const _hoisted_27$8 = { class: "px-3 anwp-text-base" };
-  const _hoisted_28$7 = { class: "col-md-6 py-0 anwp-h-min-300" };
-  const _hoisted_29$7 = {
+  const _hoisted_27$9 = { class: "px-3 anwp-text-base" };
+  const _hoisted_28$8 = { class: "col-md-6 py-0 anwp-h-min-300" };
+  const _hoisted_29$8 = {
     key: 0,
     class: "d-flex mb-4 anwp-fl-tabs-wrapper"
   };
-  const _hoisted_30$5 = { class: "anwp-text-base" };
-  const _hoisted_31$5 = { class: "anwp-text-xs mt-2" };
-  const _hoisted_32$5 = { class: "anwp-text-base" };
-  const _hoisted_33$5 = { class: "anwp-text-xs mt-2" };
+  const _hoisted_30$6 = { class: "anwp-text-base" };
+  const _hoisted_31$6 = { class: "anwp-text-xs mt-2" };
+  const _hoisted_32$6 = { class: "anwp-text-base" };
+  const _hoisted_33$6 = { class: "anwp-text-xs mt-2" };
   const _hoisted_34$5 = { class: "d-flex flex-column mt-4" };
   const _hoisted_35$5 = /* @__PURE__ */ createBaseVNode("label", {
     class: "mb-1 anwp-text-gray-800",
@@ -21123,25 +21123,25 @@ This will fail in production.`
                         createBaseVNode("div", {
                           class: normalizeClass(["anwp-w-30 anwp-text-center text-uppercase anwp-text-base text-white anwp-font-bold", missing.playerObj.position ? unref(gameStore).appConfig.classPosition[missing.playerObj.position] : ""])
                         }, toDisplayString(missing.playerObj.position ? missing.playerObj.position.charAt(0) : ""), 3),
-                        createBaseVNode("div", _hoisted_27$8, toDisplayString(missing.playerObj.name), 1)
+                        createBaseVNode("div", _hoisted_27$9, toDisplayString(missing.playerObj.name), 1)
                       ]);
                     }), 128)) : createCommentVNode("", true)
                   ]),
-                  createBaseVNode("div", _hoisted_28$7, [
-                    "home" === unref(gameStore).modalData.playerContext || "away" === unref(gameStore).modalData.playerContext ? (openBlock(), createElementBlock("div", _hoisted_29$7, [
+                  createBaseVNode("div", _hoisted_28$8, [
+                    "home" === unref(gameStore).modalData.playerContext || "away" === unref(gameStore).modalData.playerContext ? (openBlock(), createElementBlock("div", _hoisted_29$8, [
                       createBaseVNode("div", {
                         class: normalizeClass(["anwp-tab-item anwp-flex-1 mr-1", unref(gameStore).modalData.modalPlayerMode === "saved" ? "anwp-tab-item--active" : ""]),
                         onClick: _cache[2] || (_cache[2] = withModifiers(($event) => unref(gameStore).modalData.modalPlayerMode = "saved", ["prevent"]))
                       }, [
-                        createBaseVNode("div", _hoisted_30$5, toDisplayString(unref(l10n).saved_players), 1),
-                        createBaseVNode("div", _hoisted_31$5, toDisplayString(unref(l10n).select_saved_players), 1)
+                        createBaseVNode("div", _hoisted_30$6, toDisplayString(unref(l10n).saved_players), 1),
+                        createBaseVNode("div", _hoisted_31$6, toDisplayString(unref(l10n).select_saved_players), 1)
                       ], 2),
                       createBaseVNode("div", {
                         class: normalizeClass(["anwp-tab-item anwp-flex-1 ml-1", unref(gameStore).modalData.modalPlayerMode === "temp" ? "anwp-tab-item--active" : ""]),
                         onClick: _cache[3] || (_cache[3] = withModifiers(($event) => unref(gameStore).modalData.modalPlayerMode = "temp", ["prevent"]))
                       }, [
-                        createBaseVNode("div", _hoisted_32$5, toDisplayString(unref(l10n).temporary_players), 1),
-                        createBaseVNode("div", _hoisted_33$5, toDisplayString(unref(l10n).add_player_as_text), 1)
+                        createBaseVNode("div", _hoisted_32$6, toDisplayString(unref(l10n).temporary_players), 1),
+                        createBaseVNode("div", _hoisted_33$6, toDisplayString(unref(l10n).add_player_as_text), 1)
                       ], 2)
                     ])) : createCommentVNode("", true),
                     "temp" === unref(gameStore).modalData.modalPlayerMode ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [
@@ -21798,18 +21798,18 @@ This will fail in production.`
     class: "anwp-text-xs text-nowrap anwp-text-gray-600"
   };
   const _hoisted_26$a = { class: "anwp-w-80 anwp-text-center py-2 pl-3 pr-0 align-top" };
-  const _hoisted_27$7 = ["src"];
-  const _hoisted_28$6 = ["src"];
-  const _hoisted_29$6 = { class: "py-2 px-1 anwp-w-10 anwp-text-center align-top" };
-  const _hoisted_30$4 = {
+  const _hoisted_27$8 = ["src"];
+  const _hoisted_28$7 = ["src"];
+  const _hoisted_29$7 = { class: "py-2 px-1 anwp-w-10 anwp-text-center align-top" };
+  const _hoisted_30$5 = {
     key: 0,
     class: "position-relative anwp-cursor-pointer ml-2 anwp-w-50"
   };
-  const _hoisted_31$4 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-fl-icon--shirt" }, [
+  const _hoisted_31$5 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-fl-icon--shirt" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-shirt" })
   ], -1);
-  const _hoisted_32$4 = { class: "anwp-fl-icon--shirt-number" };
-  const _hoisted_33$4 = { class: "p-2 anwp-text-base anwp-leading-1 align-top" };
+  const _hoisted_32$5 = { class: "anwp-fl-icon--shirt-number" };
+  const _hoisted_33$5 = { class: "p-2 anwp-text-base anwp-leading-1 align-top" };
   const _hoisted_34$4 = { class: "anwp-text-gray-600 anwp-text-xs anwp-leading-1 mb-1" };
   const _hoisted_35$4 = { class: "py-2 px-1 anwp-w-10 anwp-text-center align-top" };
   const _hoisted_36$4 = {
@@ -22159,20 +22159,20 @@ This will fail in production.`
                             src: unref(gameStore).clubHome.logo,
                             alt: "club logo",
                             class: "anwp-h-35 anwp-w-35 anwp-object-contain my-0 anwp-border anwp-border-gray-400 mt-1 bg-white p-1 rounded"
-                          }, null, 8, _hoisted_27$7)) : Number(gameEvent.club) === Number(unref(gameStore).clubAway.id) && unref(gameStore).clubAway.logo ? (openBlock(), createElementBlock("img", {
+                          }, null, 8, _hoisted_27$8)) : Number(gameEvent.club) === Number(unref(gameStore).clubAway.id) && unref(gameStore).clubAway.logo ? (openBlock(), createElementBlock("img", {
                             key: 1,
                             src: unref(gameStore).clubAway.logo,
                             alt: "club logo",
                             class: "anwp-h-35 anwp-w-35 anwp-object-contain my-0 anwp-border anwp-border-gray-400 mt-1 bg-white p-1 rounded"
-                          }, null, 8, _hoisted_28$6)) : createCommentVNode("", true)
+                          }, null, 8, _hoisted_28$7)) : createCommentVNode("", true)
                         ]),
-                        createBaseVNode("td", _hoisted_29$6, [
-                          gameEvent.playerObj && gameEvent.playerObj.id ? (openBlock(), createElementBlock("div", _hoisted_30$4, [
-                            _hoisted_31$4,
-                            createBaseVNode("div", _hoisted_32$4, toDisplayString(unref(gameStore).playerNumber[gameEvent.player] > 0 ? unref(gameStore).playerNumber[gameEvent.player] : ""), 1)
+                        createBaseVNode("td", _hoisted_29$7, [
+                          gameEvent.playerObj && gameEvent.playerObj.id ? (openBlock(), createElementBlock("div", _hoisted_30$5, [
+                            _hoisted_31$5,
+                            createBaseVNode("div", _hoisted_32$5, toDisplayString(unref(gameStore).playerNumber[gameEvent.player] > 0 ? unref(gameStore).playerNumber[gameEvent.player] : ""), 1)
                           ])) : createCommentVNode("", true)
                         ]),
-                        createBaseVNode("td", _hoisted_33$4, [
+                        createBaseVNode("td", _hoisted_33$5, [
                           gameEvent.playerObj && gameEvent.playerObj.id ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
                             createBaseVNode("div", _hoisted_34$4, toDisplayString("substitute" === gameEvent.type ? "In:" : "Player:"), 1),
                             createTextVNode(" " + toDisplayString(gameEvent.playerObj.name), 1)
@@ -22957,15 +22957,15 @@ This will fail in production.`
   const _hoisted_26$8 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_27$6 = [
+  const _hoisted_27$7 = [
     _hoisted_26$8
   ];
-  const _hoisted_28$5 = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_29$5 = { class: "my-0" };
-  const _hoisted_30$3 = { class: "anwp-vfm-admin-modal__content" };
-  const _hoisted_31$3 = { class: "d-flex mb-4 anwp-fl-tabs-wrapper" };
-  const _hoisted_32$3 = { class: "anwp-text-base" };
-  const _hoisted_33$3 = { class: "anwp-text-xs mt-2" };
+  const _hoisted_28$6 = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_29$6 = { class: "my-0" };
+  const _hoisted_30$4 = { class: "anwp-vfm-admin-modal__content" };
+  const _hoisted_31$4 = { class: "d-flex mb-4 anwp-fl-tabs-wrapper" };
+  const _hoisted_32$4 = { class: "anwp-text-base" };
+  const _hoisted_33$4 = { class: "anwp-text-xs mt-2" };
   const _hoisted_34$3 = { class: "anwp-text-base" };
   const _hoisted_35$3 = { class: "anwp-text-xs mt-2" };
   const _hoisted_36$3 = { class: "d-flex flex-column" };
@@ -23236,18 +23236,18 @@ This will fail in production.`
                 class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
                 type: "button",
                 onClick: _cache[9] || (_cache[9] = ($event) => unref(gameStore).modals.addReferee = false)
-              }, _hoisted_27$6),
-              createBaseVNode("div", _hoisted_28$5, [
-                createBaseVNode("h4", _hoisted_29$5, toDisplayString(unref(gameStore).select_referee), 1)
+              }, _hoisted_27$7),
+              createBaseVNode("div", _hoisted_28$6, [
+                createBaseVNode("h4", _hoisted_29$6, toDisplayString(unref(gameStore).select_referee), 1)
               ]),
-              createBaseVNode("div", _hoisted_30$3, [
-                createBaseVNode("div", _hoisted_31$3, [
+              createBaseVNode("div", _hoisted_30$4, [
+                createBaseVNode("div", _hoisted_31$4, [
                   createBaseVNode("div", {
                     class: normalizeClass(["anwp-tab-item anwp-flex-1 mr-1", unref(gameStore).modalData.modalRefereeMode === "saved" ? "anwp-tab-item--active" : ""]),
                     onClick: _cache[10] || (_cache[10] = withModifiers(($event) => unref(gameStore).modalData.modalRefereeMode = "saved", ["prevent"]))
                   }, [
-                    createBaseVNode("div", _hoisted_32$3, toDisplayString(unref(l10n).saved_referees), 1),
-                    createBaseVNode("div", _hoisted_33$3, toDisplayString(unref(l10n).select_saved_site), 1)
+                    createBaseVNode("div", _hoisted_32$4, toDisplayString(unref(l10n).saved_referees), 1),
+                    createBaseVNode("div", _hoisted_33$4, toDisplayString(unref(l10n).select_saved_site), 1)
                   ], 2),
                   createBaseVNode("div", {
                     class: normalizeClass(["anwp-tab-item anwp-flex-1 ml-1", unref(gameStore).modalData.modalRefereeMode === "temp" ? "anwp-tab-item--active" : ""]),
@@ -23412,7 +23412,7 @@ This will fail in production.`
     value: "yes"
   }, null, -1);
   const _hoisted_26$7 = ["value"];
-  const _hoisted_27$5 = ["value"];
+  const _hoisted_27$6 = ["value"];
   const _sfc_main$l = {
     __name: "AppStandingSetup",
     setup(__props) {
@@ -23458,11 +23458,12 @@ This will fail in production.`
               createBaseVNode("div", _hoisted_4$j, [
                 createBaseVNode("label", _hoisted_5$j, toDisplayString(unref(l10n).competition), 1),
                 createVNode(_component_v_select, {
-                  class: "anwp-w-400 anwp-max-width-100",
                   id: "anwpfl-input-competition",
                   modelValue: competitionId.value,
                   "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => competitionId.value = $event),
+                  class: "anwp-w-400 anwp-max-width-100",
                   options: options.competitions,
+                  label: "title_full",
                   clearable: true,
                   filterable: true,
                   searchable: true,
@@ -23504,24 +23505,25 @@ This will fail in production.`
               createBaseVNode("div", _hoisted_14$b, [
                 createBaseVNode("label", _hoisted_15$b, toDisplayString(unref(l10n).group), 1),
                 createVNode(_component_v_select, {
-                  class: "anwp-w-400 anwp-max-width-100",
                   id: "anwpfl-input-competition-group",
                   modelValue: competitionGroup.value,
                   "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => competitionGroup.value = $event),
+                  class: "anwp-w-400 anwp-max-width-100",
                   options: groupOptions.value,
                   disabled: !groupOptions.value.length,
+                  label: "title",
                   clearable: true,
                   filterable: true,
                   searchable: true,
                   reduce: (o2) => o2.id
                 }, {
-                  option: withCtx(({ id, title, clubs }) => [
+                  option: withCtx(({ title, clubs }) => [
                     createBaseVNode("div", _hoisted_16$b, [
                       createBaseVNode("div", _hoisted_17$b, toDisplayString(title), 1),
                       (openBlock(true), createElementBlock(Fragment, null, renderList(clubs, (club) => {
                         return openBlock(), createElementBlock("div", {
-                          class: "d-flex align-items-center mb-1",
-                          key: club.id
+                          key: club.id,
+                          class: "d-flex align-items-center mb-1"
                         }, [
                           club.logo ? (openBlock(), createElementBlock("img", {
                             key: 0,
@@ -23534,13 +23536,13 @@ This will fail in production.`
                       }), 128))
                     ])
                   ]),
-                  "selected-option": withCtx(({ id, title, clubs }) => [
+                  "selected-option": withCtx(({ title, clubs }) => [
                     createBaseVNode("div", _hoisted_19$b, [
                       createBaseVNode("div", _hoisted_20$b, toDisplayString(title), 1),
                       (openBlock(true), createElementBlock(Fragment, null, renderList(clubs, (club) => {
                         return openBlock(), createElementBlock("div", {
-                          class: "d-flex align-items-center mb-1",
-                          key: club.id
+                          key: club.id,
+                          class: "d-flex align-items-center mb-1"
                         }, [
                           club.logo ? (openBlock(), createElementBlock("img", {
                             key: 0,
@@ -23572,7 +23574,7 @@ This will fail in production.`
             type: "hidden",
             name: "_anwpfl_competition_group",
             value: competitionGroup.value
-          }, null, 8, _hoisted_27$5)
+          }, null, 8, _hoisted_27$6)
         ]);
       };
     }
@@ -23694,13 +23696,13 @@ This will fail in production.`
   const _hoisted_24$8 = { class: "text-left px-2" };
   const _hoisted_25$7 = { class: "p-1" };
   const _hoisted_26$6 = ["onUpdate:modelValue"];
-  const _hoisted_27$4 = { class: "p-1" };
-  const _hoisted_28$4 = ["onUpdate:modelValue"];
-  const _hoisted_29$4 = { class: "p-1" };
-  const _hoisted_30$2 = ["onUpdate:modelValue"];
-  const _hoisted_31$2 = { class: "p-1" };
-  const _hoisted_32$2 = ["onUpdate:modelValue"];
-  const _hoisted_33$2 = { class: "p-1" };
+  const _hoisted_27$5 = { class: "p-1" };
+  const _hoisted_28$5 = ["onUpdate:modelValue"];
+  const _hoisted_29$5 = { class: "p-1" };
+  const _hoisted_30$3 = ["onUpdate:modelValue"];
+  const _hoisted_31$3 = { class: "p-1" };
+  const _hoisted_32$3 = ["onUpdate:modelValue"];
+  const _hoisted_33$3 = { class: "p-1" };
   const _hoisted_34$2 = ["onUpdate:modelValue"];
   const _hoisted_35$2 = { class: "p-1" };
   const _hoisted_36$2 = ["onUpdate:modelValue"];
@@ -23805,12 +23807,12 @@ This will fail in production.`
                           ]
                         ])
                       ]),
-                      createBaseVNode("td", _hoisted_27$4, [
+                      createBaseVNode("td", _hoisted_27$5, [
                         withDirectives(createBaseVNode("input", {
                           class: "text-center anwp-w-70",
                           type: "number",
                           "onUpdate:modelValue": ($event) => row.won = $event
-                        }, null, 8, _hoisted_28$4), [
+                        }, null, 8, _hoisted_28$5), [
                           [
                             vModelText,
                             row.won,
@@ -23819,12 +23821,12 @@ This will fail in production.`
                           ]
                         ])
                       ]),
-                      createBaseVNode("td", _hoisted_29$4, [
+                      createBaseVNode("td", _hoisted_29$5, [
                         withDirectives(createBaseVNode("input", {
                           class: "text-center anwp-w-70",
                           type: "number",
                           "onUpdate:modelValue": ($event) => row.drawn = $event
-                        }, null, 8, _hoisted_30$2), [
+                        }, null, 8, _hoisted_30$3), [
                           [
                             vModelText,
                             row.drawn,
@@ -23833,12 +23835,12 @@ This will fail in production.`
                           ]
                         ])
                       ]),
-                      createBaseVNode("td", _hoisted_31$2, [
+                      createBaseVNode("td", _hoisted_31$3, [
                         withDirectives(createBaseVNode("input", {
                           class: "text-center anwp-w-70",
                           type: "number",
                           "onUpdate:modelValue": ($event) => row.lost = $event
-                        }, null, 8, _hoisted_32$2), [
+                        }, null, 8, _hoisted_32$3), [
                           [
                             vModelText,
                             row.lost,
@@ -23847,7 +23849,7 @@ This will fail in production.`
                           ]
                         ])
                       ]),
-                      createBaseVNode("td", _hoisted_33$2, [
+                      createBaseVNode("td", _hoisted_33$3, [
                         withDirectives(createBaseVNode("input", {
                           class: "text-center anwp-w-70",
                           type: "number",
@@ -24762,11 +24764,11 @@ This will fail in production.`
   const _hoisted_24$6 = { key: 1 };
   const _hoisted_25$5 = ["onClick"];
   const _hoisted_26$5 = /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-chevron-bottom" }, null, -1);
-  const _hoisted_27$3 = [
+  const _hoisted_27$4 = [
     _hoisted_26$5
   ];
-  const _hoisted_28$3 = ["value"];
-  const _hoisted_29$3 = ["value"];
+  const _hoisted_28$4 = ["value"];
+  const _hoisted_29$4 = ["value"];
   const _sfc_main$c = {
     __name: "AppTableMain",
     setup(__props) {
@@ -24871,7 +24873,7 @@ This will fail in production.`
                           }, [
                             (openBlock(), createElementBlock("svg", {
                               class: normalizeClass(["anwp-icon anwp-icon--s14", { "text-secondary": index2 === unref(stStore).tableMain.length - 1 }])
-                            }, _hoisted_27$3, 2))
+                            }, _hoisted_27$4, 2))
                           ], 8, _hoisted_25$5)
                         ])) : createCommentVNode("", true)
                       ]);
@@ -24886,12 +24888,12 @@ This will fail in production.`
             type: "hidden",
             name: "_anwpfl_manual_ordering",
             value: unref(stStore).manualOrdering
-          }, null, 8, _hoisted_28$3),
+          }, null, 8, _hoisted_28$4),
           createBaseVNode("input", {
             type: "hidden",
             name: "_anwpfl_table_main",
             value: JSON.stringify(unref(stStore).tableMain)
-          }, null, 8, _hoisted_29$3)
+          }, null, 8, _hoisted_29$4)
         ]);
       };
     }
@@ -25134,19 +25136,19 @@ This will fail in production.`
     ])
   ], -1);
   const _hoisted_26$4 = { class: "py-1 px-3 align-middle anwp-w-10" };
-  const _hoisted_27$2 = ["src"];
-  const _hoisted_28$2 = { class: "py-1 align-middle anwp-w-10" };
-  const _hoisted_29$2 = {
+  const _hoisted_27$3 = ["src"];
+  const _hoisted_28$3 = { class: "py-1 align-middle anwp-w-10" };
+  const _hoisted_29$3 = {
     class: "options__flag f32 align-middle",
     style: { "line-height": "12px" }
   };
-  const _hoisted_30$1 = { class: "px-3 align-middle anwp-text-base anwp-leading-1" };
-  const _hoisted_31$1 = {
+  const _hoisted_30$2 = { class: "px-3 align-middle anwp-text-base anwp-leading-1" };
+  const _hoisted_31$2 = {
     key: 0,
     class: "d-block anwp-text-xs anwp-text-gray-600"
   };
-  const _hoisted_32$1 = { class: "py-1 px-2 anwp-w-10" };
-  const _hoisted_33$1 = ["onUpdate:modelValue"];
+  const _hoisted_32$2 = { class: "py-1 px-2 anwp-w-10" };
+  const _hoisted_33$2 = ["onUpdate:modelValue"];
   const _hoisted_34$1 = { class: "py-1 px-2 anwp-w-10" };
   const _hoisted_35$1 = ["onUpdate:modelValue"];
   const _hoisted_36$1 = { value: "" };
@@ -25329,27 +25331,27 @@ This will fail in production.`
                             class: "anwp-h-40 anwp-w-40 anwp-object-contain",
                             src: player.photo ? player.photo : unref(squadStore).appConfig.default_photo,
                             alt: "player photo"
-                          }, null, 8, _hoisted_27$2)
+                          }, null, 8, _hoisted_27$3)
                         ]),
-                        createBaseVNode("td", _hoisted_28$2, [
-                          createBaseVNode("span", _hoisted_29$2, [
+                        createBaseVNode("td", _hoisted_28$3, [
+                          createBaseVNode("span", _hoisted_29$3, [
                             createBaseVNode("span", {
                               class: normalizeClass(["flag", player.country])
                             }, null, 2)
                           ])
                         ]),
-                        createBaseVNode("td", _hoisted_30$1, [
+                        createBaseVNode("td", _hoisted_30$2, [
                           createTextVNode(toDisplayString(player.name) + " ", 1),
-                          player.birthdate ? (openBlock(), createElementBlock("span", _hoisted_31$1, toDisplayString(player.birthdate), 1)) : createCommentVNode("", true)
+                          player.birthdate ? (openBlock(), createElementBlock("span", _hoisted_31$2, toDisplayString(player.birthdate), 1)) : createCommentVNode("", true)
                         ]),
-                        createBaseVNode("td", _hoisted_32$1, [
+                        createBaseVNode("td", _hoisted_32$2, [
                           withDirectives(createBaseVNode("input", {
                             "onUpdate:modelValue": ($event) => player.number = $event,
                             class: "my-1 anwp-border-gray-300 anwp-w-80",
                             type: "number",
                             min: "0",
                             step: "1"
-                          }, null, 8, _hoisted_33$1), [
+                          }, null, 8, _hoisted_33$2), [
                             [
                               vModelText,
                               player.number,
@@ -25549,45 +25551,78 @@ This will fail in production.`
   const _hoisted_11$5 = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
   const _hoisted_12$5 = { class: "d-flex flex-column" };
   const _hoisted_13$5 = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
-  const _hoisted_14$5 = ["onClick"];
-  const _hoisted_15$5 = {
+  const _hoisted_14$5 = {
+    key: 0,
+    class: "d-flex align-items-start"
+  };
+  const _hoisted_15$5 = /* @__PURE__ */ createBaseVNode("option", { value: "5" }, "5", -1);
+  const _hoisted_16$5 = /* @__PURE__ */ createBaseVNode("option", { value: "10" }, "10", -1);
+  const _hoisted_17$5 = /* @__PURE__ */ createBaseVNode("option", { value: "20" }, "20", -1);
+  const _hoisted_18$5 = /* @__PURE__ */ createBaseVNode("option", { value: "30" }, "30", -1);
+  const _hoisted_19$5 = /* @__PURE__ */ createBaseVNode("option", { value: "50" }, "50", -1);
+  const _hoisted_20$5 = [
+    _hoisted_15$5,
+    _hoisted_16$5,
+    _hoisted_17$5,
+    _hoisted_18$5,
+    _hoisted_19$5
+  ];
+  const _hoisted_21$5 = ["onClick"];
+  const _hoisted_22$5 = {
     key: 1,
     class: "anwp-w-30 anwp-text-center text-uppercase anwp-text-base text-white anwp-font-bold anwp-bg-gray-300"
   };
-  const _hoisted_16$5 = { class: "pl-3 align-middle" };
-  const _hoisted_17$5 = {
+  const _hoisted_23$4 = { class: "pl-3 align-middle" };
+  const _hoisted_24$4 = {
     class: "options__flag f32 align-middle",
     style: { "line-height": "12px" }
   };
-  const _hoisted_18$5 = { class: "pl-3 d-flex flex-column" };
-  const _hoisted_19$5 = { class: "anwp-text-base anwp-leading-1" };
-  const _hoisted_20$5 = { class: "anwp-text-gray-600 d-flex align-items-center anwp-text-xs" };
-  const _hoisted_21$5 = {
+  const _hoisted_25$3 = { class: "pl-3 d-flex flex-column" };
+  const _hoisted_26$3 = { class: "anwp-text-base anwp-leading-1" };
+  const _hoisted_27$2 = { class: "anwp-text-gray-600 d-flex align-items-center anwp-text-xs" };
+  const _hoisted_28$2 = {
     key: 0,
     class: "mx-2"
   };
-  const _hoisted_22$5 = { class: "anwp-vfm-admin-modal__actions" };
-  const _hoisted_23$4 = { class: "d-flex align-items-center" };
-  const _hoisted_24$4 = { class: "mr-2" };
-  const _hoisted_25$3 = { value: true };
-  const _hoisted_26$3 = { value: false };
+  const _hoisted_29$2 = { class: "anwp-vfm-admin-modal__actions" };
+  const _hoisted_30$1 = { class: "d-flex align-items-center" };
+  const _hoisted_31$1 = { class: "mr-2" };
+  const _hoisted_32$1 = { value: true };
+  const _hoisted_33$1 = { value: false };
   const _sfc_main$8 = {
     __name: "AppModalPlayerAttachToSquad",
     setup(__props) {
       const squadStore = useSquadStore();
       const l10n = window._AnWP_FL_Squad_Data.l10n;
       const modalPlayerAttachToSquadSearch = ref(null);
+      const lsPlayersPerPage = ref(localStorage.getItem("anwp-fl-admin/players-per-page") || 10);
+      const updateLSPlayerPerPage = (e) => {
+        localStorage.setItem("anwp-fl-admin/players-per-page", e.target.value);
+      };
       const modalPlayersActions = computed(() => {
         let actions = [
-          { name: l10n.club_players, value: "club_players" },
-          { name: l10n.search_by_name, value: "search_by_name" }
+          {
+            name: l10n.club_players,
+            value: "club_players"
+          },
+          {
+            name: l10n.search_by_name,
+            value: "search_by_name"
+          }
         ];
         let seasons = Object.keys(squadStore.clubSquad).filter((k2) => k2 !== "s:" + squadStore.active.season);
         if (seasons.length) {
-          actions.push({ group: l10n.other_seasons, name: null, value: "" });
+          actions.push({
+            group: l10n.other_seasons,
+            name: null,
+            value: ""
+          });
           squadStore.appConfig.seasons.forEach((s2) => {
             if (seasons.includes("s:" + s2.id) && squadStore.clubSquad["s:" + s2.id].length) {
-              actions.push({ name: s2.title, value: "s:" + s2.id });
+              actions.push({
+                name: s2.title,
+                value: "s:" + s2.id
+              });
             }
           });
         }
@@ -25617,13 +25652,13 @@ This will fail in production.`
         return players;
       });
       const playersInModalPages = computed(() => {
-        return playersInModal.value.length ? Math.ceil(playersInModal.value.length / 10) : 0;
+        return playersInModal.value.length ? Math.ceil(playersInModal.value.length / lsPlayersPerPage.value) : 0;
       });
       const playersInModalPaginated = computed(() => {
         if (!playersInModal.value.length) {
           return [];
         }
-        return playersInModal.value.slice((squadStore.modalPlayers.pageNumber - 1) * 10, squadStore.modalPlayers.pageNumber * 10);
+        return playersInModal.value.slice((squadStore.modalPlayers.pageNumber - 1) * lsPlayersPerPage.value, squadStore.modalPlayers.pageNumber * lsPlayersPerPage.value);
       });
       const changeModalPlayersActivePage = (pageNumber) => {
         squadStore.modalPlayers.pageNumber = pageNumber;
@@ -25646,7 +25681,7 @@ This will fail in production.`
         const _component_v_select = resolveComponent("v-select");
         return openBlock(), createBlock(unref(Ro), {
           modelValue: unref(squadStore).modals.playerAttachToSquad,
-          "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => unref(squadStore).modals.playerAttachToSquad = $event),
+          "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => unref(squadStore).modals.playerAttachToSquad = $event),
           "z-index-fn": () => 100060,
           "focus-trap": false,
           "teleport-to": false,
@@ -25667,8 +25702,8 @@ This will fail in production.`
                 createBaseVNode("div", _hoisted_7$7, [
                   (openBlock(true), createElementBlock(Fragment, null, renderList(unref(squadStore).activeSquad, (player) => {
                     return openBlock(), createElementBlock("div", {
-                      class: "py-1 px-2 mb-1 anwp-border anwp-border-gray-200 d-flex align-items-center bg-white",
-                      key: player.id
+                      key: player.id,
+                      class: "py-1 px-2 mb-1 anwp-border anwp-border-gray-200 d-flex align-items-center bg-white"
                     }, [
                       createBaseVNode("div", {
                         class: normalizeClass(["anwp-w-30 anwp-text-center text-uppercase anwp-text-base text-white anwp-font-bold", player.position ? unref(squadStore).appConfig.classPosition[player.position] : ""])
@@ -25679,16 +25714,16 @@ This will fail in production.`
                 ]),
                 createBaseVNode("div", _hoisted_9$6, [
                   createVNode(_component_v_select, {
-                    label: "name",
                     modelValue: unref(squadStore).modalPlayers.activeAction,
                     "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(squadStore).modalPlayers.activeAction = $event),
+                    label: "name",
                     options: modalPlayersActions.value,
                     clearable: false,
                     filterable: false,
                     searchable: false,
-                    "onOption:selected": onSelectedModalPlayersActions,
                     selectable: (option) => !option.hasOwnProperty("group"),
-                    reduce: (o2) => o2.value
+                    reduce: (o2) => o2.value,
+                    "onOption:selected": onSelectedModalPlayersActions
                   }, {
                     option: withCtx(({ group, name }) => [
                       group ? (openBlock(), createElementBlock("div", _hoisted_10$6, toDisplayString(group), 1)) : createCommentVNode("", true),
@@ -25700,12 +25735,12 @@ This will fail in production.`
                     _hoisted_11$5,
                     createBaseVNode("div", _hoisted_12$5, [
                       withDirectives(createBaseVNode("input", {
-                        type: "text",
-                        "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => unref(squadStore).modalPlayers.search = $event),
-                        onInput: _cache[3] || (_cache[3] = ($event) => unref(squadStore).modalPlayers.pageNumber = 1),
-                        class: "w-100",
                         ref_key: "modalPlayerAttachToSquadSearch",
-                        ref: modalPlayerAttachToSquadSearch
+                        ref: modalPlayerAttachToSquadSearch,
+                        "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => unref(squadStore).modalPlayers.search = $event),
+                        type: "text",
+                        class: "w-100",
+                        onInput: _cache[3] || (_cache[3] = ($event) => unref(squadStore).modalPlayers.pageNumber = 1)
                       }, null, 544), [
                         [vModelText, unref(squadStore).modalPlayers.search]
                       ])
@@ -25714,49 +25749,58 @@ This will fail in production.`
                     [vShow, "search_by_name" === unref(squadStore).modalPlayers.activeAction]
                   ]),
                   _hoisted_13$5,
-                  playersInModal.value.length ? (openBlock(), createBlock(unref(Paginate), {
-                    key: 0,
-                    class: "anwp-user-select-none mb-2 mb-0",
-                    modelValue: unref(squadStore).modalPlayers.pageNumber,
-                    "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(squadStore).modalPlayers.pageNumber = $event),
-                    "page-count": playersInModalPages.value,
-                    "click-handler": changeModalPlayersActivePage,
-                    "prev-text": unref(l10n).prev,
-                    "next-text": unref(l10n).next,
-                    "container-class": "anwp-pagination",
-                    "page-class": "anwp-page-item",
-                    "prev-class": "anwp-page-item",
-                    "next-class": "anwp-page-item",
-                    "next-link-class": "anwp-page-link",
-                    "prev-link-class": "anwp-page-link",
-                    "page-link-class": "anwp-page-link"
-                  }, null, 8, ["modelValue", "page-count", "prev-text", "next-text"])) : createCommentVNode("", true),
+                  playersInModal.value.length ? (openBlock(), createElementBlock("div", _hoisted_14$5, [
+                    playersInModal.value.length ? (openBlock(), createBlock(unref(Paginate), {
+                      key: 0,
+                      modelValue: unref(squadStore).modalPlayers.pageNumber,
+                      "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(squadStore).modalPlayers.pageNumber = $event),
+                      class: "anwp-user-select-none mb-2 mb-0",
+                      "page-count": playersInModalPages.value,
+                      "click-handler": changeModalPlayersActivePage,
+                      "prev-text": unref(l10n).prev,
+                      "next-text": unref(l10n).next,
+                      "container-class": "anwp-pagination",
+                      "page-class": "anwp-page-item",
+                      "prev-class": "anwp-page-item",
+                      "next-class": "anwp-page-item",
+                      "next-link-class": "anwp-page-link",
+                      "prev-link-class": "anwp-page-link",
+                      "page-link-class": "anwp-page-link"
+                    }, null, 8, ["modelValue", "page-count", "prev-text", "next-text"])) : createCommentVNode("", true),
+                    withDirectives(createBaseVNode("select", {
+                      "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => lsPlayersPerPage.value = $event),
+                      class: "ml-auto mt-3",
+                      onChange: _cache[6] || (_cache[6] = ($event) => updateLSPlayerPerPage($event))
+                    }, _hoisted_20$5, 544), [
+                      [vModelSelect, lsPlayersPerPage.value]
+                    ])
+                  ])) : createCommentVNode("", true),
                   (openBlock(true), createElementBlock(Fragment, null, renderList(playersInModalPaginated.value, (player) => {
                     return openBlock(), createElementBlock("div", {
-                      class: "py-1 px-2 mb-1 anwp-border anwp-border-gray-200 d-flex align-items-center bg-white",
-                      key: player.id
+                      key: player.id,
+                      class: "py-1 px-2 mb-1 anwp-border anwp-border-gray-200 d-flex align-items-center bg-white"
                     }, [
                       createBaseVNode("button", {
                         class: "button d-flex align-items-center mr-3",
                         type: "button",
                         onClick: withModifiers(($event) => addToSquad(player), ["prevent"])
-                      }, "+", 8, _hoisted_14$5),
+                      }, "+", 8, _hoisted_21$5),
                       player.position ? (openBlock(), createElementBlock("div", {
                         key: 0,
                         class: normalizeClass(["anwp-w-30 anwp-text-center text-uppercase anwp-text-base text-white anwp-font-bold", unref(squadStore).appConfig.classPosition[player.position]])
-                      }, toDisplayString(player.position ? player.position.charAt(0) : ""), 3)) : (openBlock(), createElementBlock("div", _hoisted_15$5, " ? ")),
-                      createBaseVNode("div", _hoisted_16$5, [
-                        createBaseVNode("span", _hoisted_17$5, [
+                      }, toDisplayString(player.position ? player.position.charAt(0) : ""), 3)) : (openBlock(), createElementBlock("div", _hoisted_22$5, " ? ")),
+                      createBaseVNode("div", _hoisted_23$4, [
+                        createBaseVNode("span", _hoisted_24$4, [
                           createBaseVNode("span", {
                             class: normalizeClass(["flag", player.country])
                           }, null, 2)
                         ])
                       ]),
-                      createBaseVNode("div", _hoisted_18$5, [
-                        createBaseVNode("div", _hoisted_19$5, toDisplayString(player.name), 1),
-                        createBaseVNode("div", _hoisted_20$5, [
+                      createBaseVNode("div", _hoisted_25$3, [
+                        createBaseVNode("div", _hoisted_26$3, toDisplayString(player.name), 1),
+                        createBaseVNode("div", _hoisted_27$2, [
                           createBaseVNode("div", null, toDisplayString(unref(squadStore).appConfig.clubsMap[player.club_id] || ""), 1),
-                          unref(squadStore).appConfig.clubsMap[player.club_id] && player.birthdate ? (openBlock(), createElementBlock("div", _hoisted_21$5, " - ")) : createCommentVNode("", true),
+                          unref(squadStore).appConfig.clubsMap[player.club_id] && player.birthdate ? (openBlock(), createElementBlock("div", _hoisted_28$2, " -")) : createCommentVNode("", true),
                           createBaseVNode("div", null, toDisplayString(player.birthdate), 1)
                         ])
                       ])
@@ -25765,21 +25809,21 @@ This will fail in production.`
                 ])
               ])
             ]),
-            createBaseVNode("div", _hoisted_22$5, [
-              createBaseVNode("div", _hoisted_23$4, [
-                createBaseVNode("div", _hoisted_24$4, toDisplayString(unref(l10n).append_to_the), 1),
+            createBaseVNode("div", _hoisted_29$2, [
+              createBaseVNode("div", _hoisted_30$1, [
+                createBaseVNode("div", _hoisted_31$1, toDisplayString(unref(l10n).append_to_the), 1),
                 withDirectives(createBaseVNode("select", {
-                  "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(squadStore).modalPlayers.appendToTop = $event)
+                  "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => unref(squadStore).modalPlayers.appendToTop = $event)
                 }, [
-                  createBaseVNode("option", _hoisted_25$3, toDisplayString(unref(l10n).top), 1),
-                  createBaseVNode("option", _hoisted_26$3, toDisplayString(unref(l10n).bottom), 1)
+                  createBaseVNode("option", _hoisted_32$1, toDisplayString(unref(l10n).top), 1),
+                  createBaseVNode("option", _hoisted_33$1, toDisplayString(unref(l10n).bottom), 1)
                 ], 512), [
                   [vModelSelect, unref(squadStore).modalPlayers.appendToTop]
                 ]),
                 createBaseVNode("button", {
                   type: "button",
                   class: "button button-secondary btn-sm text-capitalize ml-auto",
-                  onClick: _cache[6] || (_cache[6] = ($event) => unref(squadStore).modals.playerAttachToSquad = false)
+                  onClick: _cache[8] || (_cache[8] = ($event) => unref(squadStore).modals.playerAttachToSquad = false)
                 }, toDisplayString(unref(l10n).close), 1)
               ])
             ])
