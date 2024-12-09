@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.8.3
  *
- * @version       0.14.11
+ * @version       0.16.11
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -83,13 +83,13 @@ $col_span = 'g' === $data->position_code ? 8 : 9;
 				</svg>
 			</div>
 			<div class="anwp-grid-table__th anwp-bg-white anwp-text-center" data-toggle="anwp-tooltip" data-tippy-content="<?php echo esc_html( AnWPFL_Text::get_value( 'player__matches__assists', __( 'Assists', 'anwp-football-leagues' ) ) ); ?>">
-				<svg class="icon__ball anwp-opacity-50">
-					<use xlink:href="#icon-ball"></use>
+				<svg class="anwp-w-25 anwp-h-25">
+					<use xlink:href="#icon-assist"></use>
 				</svg>
 			</div>
 		<?php endif; ?>
 
-		<div class="anwp-grid-table__th anwp-bg-white anwp-text-center" data-toggle=" anwp-tooltip" data-tippy-content="<?php echo esc_html( AnWPFL_Text::get_value( 'player__matches__cards', __( 'Cards', 'anwp-football-leagues' ) ) ); ?>">
+		<div class="anwp-grid-table__th anwp-bg-white anwp-text-center" data-toggle="anwp-tooltip" data-tippy-content="<?php echo esc_html( AnWPFL_Text::get_value( 'player__matches__cards', __( 'Cards', 'anwp-football-leagues' ) ) ); ?>">
 			<svg class="icon__card">
 				<use xlink:href="#icon-card_yr"></use>
 			</svg>
@@ -185,18 +185,18 @@ $col_span = 'g' === $data->position_code ? 8 : 9;
 							$minutes = $match->time_out - $match->time_in + 1;
 						}
 
-						echo intval( $minutes ) . '′';
+						echo absint( $minutes ) ? ( absint( $minutes ) . '`' ) : ''; // phpcs:ignore
 						?>
 					</div>
 
 					<?php if ( 'g' === $data->position_code ) : ?>
-						<div class="player-matches__goals_conceded anwp-grid-table__td anwp-text-center"><?php echo (int) $match->goals_conceded; ?></div>
+						<div class="player-matches__goals_conceded anwp-grid-table__td anwp-text-center"><?php echo (int) $match->goals_conceded ?: ''; ?></div>
 					<?php else : ?>
 						<div class="player-matches__goals anwp-grid-table__td anwp-text-center">
-							<?php echo (int) $match->goals; ?>
+							<?php echo (int) $match->goals ? : ''; ?>
 						</div>
 						<div class="player-matches__assists anwp-grid-table__td anwp-text-center">
-							<?php echo (int) $match->assist; ?>
+							<?php echo (int) $match->assist ? : ''; ?>
 						</div>
 					<?php endif; ?>
 

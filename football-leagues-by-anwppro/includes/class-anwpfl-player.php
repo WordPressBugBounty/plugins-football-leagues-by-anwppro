@@ -1859,7 +1859,7 @@ class AnWPFL_Player extends AnWPFL_DB {
 					"
 					SELECT p.*, m.competition_id, m.season_id, m.league_id, m.kickoff, m.main_stage_id, m.home_club, m.away_club, m.home_goals, m.away_goals
 					FROM {$wpdb->prefix}anwpfl_players AS p
-					INNER JOIN {$wpdb->prefix}anwpfl_matches AS m ON m.match_id = p.match_id
+					INNER JOIN {$wpdb->prefix}anwpfl_matches AS m ON m.match_id = p.match_id AND m.finished = 1
 					WHERE p.player_id = %d
 					ORDER BY m.kickoff DESC
 					",
@@ -1872,7 +1872,7 @@ class AnWPFL_Player extends AnWPFL_DB {
 					"
 					SELECT p.*, m.competition_id, m.season_id, m.league_id, m.kickoff, m.main_stage_id, m.home_club, m.away_club, m.home_goals, m.away_goals
 					FROM {$wpdb->prefix}anwpfl_players AS p
-					INNER JOIN {$wpdb->prefix}anwpfl_matches AS m ON m.match_id = p.match_id
+					INNER JOIN {$wpdb->prefix}anwpfl_matches AS m ON m.match_id = p.match_id AND m.finished = 1
 					WHERE p.player_id = %d
 						AND m.season_id = %d
 					ORDER BY m.kickoff DESC
@@ -2048,7 +2048,7 @@ class AnWPFL_Player extends AnWPFL_DB {
 
 		$query .= "
 		FROM {$wpdb->prefix}anwpfl_players p
-		INNER JOIN {$wpdb->prefix}anwpfl_matches AS m ON m.match_id = p.match_id
+		INNER JOIN {$wpdb->prefix}anwpfl_matches AS m ON m.match_id = p.match_id AND m.finished = 1
 		WHERE m.game_status = 1 
 		";
 
@@ -2071,7 +2071,10 @@ class AnWPFL_Player extends AnWPFL_DB {
 
 		// filter by club
 		if ( (int) $options['club_id'] ) {
-			$query .= $wpdb->prepare( ' AND p.club_id = %d ', $options['club_id'] );
+			$clubs  = wp_parse_id_list( $options['club_id'] );
+			$format = implode( ', ', array_fill( 0, count( $clubs ), '%d' ) );
+
+			$query .= $wpdb->prepare( " AND p.club_id IN ({$format}) ", $clubs ); // phpcs:ignore
 		}
 
 		// hide with zero
@@ -2163,7 +2166,7 @@ class AnWPFL_Player extends AnWPFL_DB {
 		$query = "
 		SELECT p.player_id, {$select_extra}, GROUP_CONCAT(DISTINCT p.club_id) as clubs
 		FROM {$wpdb->prefix}anwpfl_players p
-		INNER JOIN {$wpdb->prefix}anwpfl_matches AS m ON m.match_id = p.match_id
+		INNER JOIN {$wpdb->prefix}anwpfl_matches AS m ON m.match_id = p.match_id AND m.finished = 1
 		WHERE m.game_status = 1
 		";
 

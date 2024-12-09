@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.8.3
  *
- * @version       0.14.10
+ * @version       0.16.11
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -122,8 +122,8 @@ $col_span = 'g' === $data->position_code ? 9 : 10;
 			</div>
 			<div class="anwp-grid-table__th" data-toggle="anwp-tooltip"
 				data-tippy-content="<?php echo esc_html( AnWPFL_Text::get_value( 'player__stats__assists', __( 'Assists', 'anwp-football-leagues' ) ) ); ?>">
-				<svg class="icon__ball anwp-opacity-50">
-					<use xlink:href="#icon-ball"></use>
+				<svg class="anwp-w-25 anwp-h-25">
+					<use xlink:href="#icon-assist"></use>
 				</svg>
 			</div>
 			<div class="anwp-grid-table__th" data-toggle="anwp-tooltip" data-tippy-content="<?php echo esc_html( AnWPFL_Text::get_value( 'player__stats__own_goals', __( 'Own Goals', 'anwp-football-leagues' ) ) ); ?>">
@@ -144,37 +144,37 @@ $col_span = 'g' === $data->position_code ? 9 : 10;
 				<?php echo (int) $competition['totals']['started']; ?>
 			</div>
 			<div class="anwp-grid-table__td player-stats__sub_in">
-				<?php echo (int) $competition['totals']['sub_in']; ?>
+				<?php echo absint( $competition['totals']['sub_in'] ) ?: ''; ?>
 			</div>
 			<div class="anwp-grid-table__td player-stats__minutes">
 				<?php echo (int) $competition['totals']['minutes']; ?>′
 			</div>
 			<div class="anwp-grid-table__td player-stats__card_y">
-				<?php echo (int) $competition['totals']['card_y']; ?>
+				<?php echo absint( $competition['totals']['card_y'] ) ?: ''; ?>
 			</div>
 			<div class="anwp-grid-table__td player-stats__card_yr">
-				<?php echo (int) $competition['totals']['card_yr']; ?>
+				<?php echo absint( $competition['totals']['card_yr'] ) ?: ''; ?>
 			</div>
 			<div class="anwp-grid-table__td player-stats__card_r">
-				<?php echo (int) $competition['totals']['card_r']; ?>
+				<?php echo absint( $competition['totals']['card_r'] ) ?: ''; ?>
 			</div>
 
 			<?php if ( 'g' === $data->position_code ) : ?>
 				<div class="anwp-grid-table__td player-stats__goals_conceded">
-					<?php echo (int) $competition['totals']['goals_conceded']; ?>
+					<?php echo absint( $competition['totals']['goals_conceded'] ); ?>
 				</div>
 				<div class="anwp-grid-table__td player-stats__clean_sheets">
 					<?php echo (int) $competition['totals']['clean_sheets']; ?>
 				</div>
 			<?php else : ?>
 				<div class="anwp-grid-table__td player-stats__goals">
-					<?php echo (int) $competition['totals']['goals']; ?> (<?php echo (int) $competition['totals']['goals_penalty']; ?>)
+					<?php echo absint( $competition['totals']['goals'] ) ? ( absint( $competition['totals']['goals'] ) . ' (' . absint( $competition['totals']['goals_penalty'] ) . ')' ) : ''; //phpcs:ignore ?>
 				</div>
 				<div class="anwp-grid-table__td player-stats__assist">
-					<?php echo (int) $competition['totals']['assist']; ?>
+					<?php echo absint( $competition['totals']['assist'] ) ?: ''; ?>
 				</div>
 				<div class="anwp-grid-table__td player-stats__goals_own">
-					<?php echo (int) $competition['totals']['goals_own']; ?>
+					<?php echo absint( $competition['totals']['goals_own'] ) ?: ''; ?>
 				</div>
 			<?php endif; ?>
 		<?php endforeach; ?>

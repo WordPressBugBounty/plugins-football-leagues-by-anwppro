@@ -385,6 +385,7 @@ CREATE TABLE {$wpdb->prefix}anwpfl_matches (
   match_events longtext NOT NULL,
   stats_home_club text NOT NULL,
   stats_away_club text NOT NULL,
+  extra_info longtext NOT NULL,
   PRIMARY KEY  (match_id),
   KEY competition_id (competition_id),
   KEY main_stage_id (main_stage_id),

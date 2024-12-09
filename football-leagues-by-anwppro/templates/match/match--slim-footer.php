@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.6.1
  *
- * @version       0.16.4
+ * @version       0.16.11
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -146,17 +146,17 @@ switch ( intval( $data['extra'] ) ) {
 		break;
 	case 2:
 	case 3:
-		$time_result = esc_html( AnWPFL_Text::get_value( 'match__match__penalties', _x( 'Penalties', 'on penalties', 'anwp-football-leagues' ) ) );
+		$time_result  = esc_html( AnWPFL_Text::get_value( 'match__match__penalties', _x( 'Penalties', 'on penalties', 'anwp-football-leagues' ) ) );
 		$time_result .= ' ' . $data['home_goals_p'] . '-' . $data['away_goals_p'];
 		break;
 }
 
-if ( empty( $data['extra_actions_html'] ) && empty( $data['outcome_id'] ) && empty( $stadium_title ) && empty( $bottom_line_ref_only && $data['referee'] ) && empty( $match_slim_bottom_hook ) && empty( $bottom_line_html ) && empty( $time_result ) && empty( $data['aggtext'] ) && ! in_array( $data['special_status'], [ 'PST', 'CANC' ], true ) ) {
+if ( empty( $data['extra_actions_html'] ) && empty( $stadium_title ) && empty( $bottom_line_ref_only && $data['referee'] ) && empty( $match_slim_bottom_hook ) && empty( $bottom_line_html ) && empty( $time_result ) && empty( $data['aggtext'] ) && ! in_array( $data['special_status'], [ 'PST', 'CANC' ], true ) ) {
 	return;
 }
 ?>
 <div class="match-slim__footer d-sm-flex mt-1 mt-sm-0 anwp-opacity-80 anwp-leading-1">
-	<?php if ( $data['extra_actions_html'] || $data['outcome_id'] ) : ?>
+	<?php if ( $data['extra_actions_html'] ) : ?>
 		<div class="anwp-flex-1 d-none d-sm-block">&nbsp;</div>
 	<?php endif; ?>
 
@@ -218,15 +218,9 @@ if ( empty( $data['extra_actions_html'] ) && empty( $data['outcome_id'] ) && emp
 		<?php echo $match_slim_bottom_hook; // phpcs:ignore ?>
 	</div>
 
-	<?php if ( $data['extra_actions_html'] || $data['outcome_id'] ) : ?>
+	<?php if ( $data['extra_actions_html'] ) : ?>
 		<div class="anwp-flex-sm-1 d-flex flex-row align-items-end justify-content-end mt-1 mt-sm-0">
 			<?php echo $data['extra_actions_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-
-			<?php if ( $data['outcome_id'] ) : ?>
-				<div class="match-slim__outcome anwp-leading-1">
-					<?php echo anwp_football_leagues()->match->get_match_outcome_label( $data );  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				</div>
-			<?php endif; ?>
 		</div>
 	<?php endif; ?>
 </div>

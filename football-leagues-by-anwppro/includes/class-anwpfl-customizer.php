@@ -1781,6 +1781,34 @@ class AnWPFL_Customizer {
 
 		/*
 		|--------------------------------------------------------------------
+		| current_team Staff
+		|--------------------------------------------------------------------
+		*/
+		$wp_customize->add_setting(
+			'anwp-fl-customizer[player][staff_current_team]',
+			[
+				'default' => '',
+				'type'    => 'option',
+			]
+		);
+
+		$wp_customize->add_control(
+			'anwp-fl-customizer[player][staff_current_team]',
+			[
+				'type'     => 'select',
+				'label'    => esc_html__( 'Staff - Current Team', 'anwp-football-leagues' ),
+				'section'  => 'fl_player',
+				'settings' => 'anwp-fl-customizer[player][staff_current_team]',
+				'choices'  => [
+					''     => __( 'Show (by value)', 'anwp-football-leagues' ),
+					'hide' => __( 'Hide', 'anwp-football-leagues' ),
+					'last' => __( 'Show (by last game)', 'anwp-football-leagues' ),
+				],
+			]
+		);
+
+		/*
+		|--------------------------------------------------------------------
 		| player_opposite_club_name
 		|--------------------------------------------------------------------
 		*/

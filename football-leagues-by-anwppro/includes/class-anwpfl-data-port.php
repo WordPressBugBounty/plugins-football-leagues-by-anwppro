@@ -1615,7 +1615,7 @@ class AnWPFL_Data_Port {
 			if ( $insert_mode ) {
 				$table_player_data['player_id'] = $post_id;
 				anwp_fl()->player->insert( $table_player_data );
-			} else {
+			} elseif ( ! empty( $table_player_data ) ) {
 				anwp_fl()->player->update( $post_id, $table_player_data );
 			}
 
@@ -1739,7 +1739,7 @@ class AnWPFL_Data_Port {
 
 			$last_temp_id = $temp_players ? mb_substr( end( $temp_players )->id, 6 ) : 1;
 			$player_temp  = mb_substr( $temp_players, 6 );
-			$player_id    = 'temp__' . ( ++ $last_temp_id );
+			$player_id    = 'temp__' . ( ++$last_temp_id );
 
 			$temp_players[] = [
 				'id'       => $player_id,
@@ -1758,7 +1758,7 @@ class AnWPFL_Data_Port {
 
 			$last_temp_id  = $temp_players ? mb_substr( end( $temp_players )->id, 6 ) : 1;
 			$player_temp   = mb_substr( $temp_players, 6 );
-			$player_out_id = 'temp__' . ( ++ $last_temp_id );
+			$player_out_id = 'temp__' . ( ++$last_temp_id );
 
 			$temp_players[] = [
 				'id'       => $player_out_id,

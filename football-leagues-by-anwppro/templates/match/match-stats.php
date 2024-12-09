@@ -4,13 +4,13 @@
  *
  * This template can be overridden by copying it to yourtheme/anwp-football-leagues/match/match-stats.php.
  *
- * @var object $data - Object with args.
+ * @since         0.9.0
  *
  * @author        Andrei Strekozov <anwp.pro>
  * @package       AnWP-Football-Leagues/Templates
- * @since         0.9.0
+ * @var object $data - Object with args.
  *
- * @version       0.14.4
+ * @version       0.16.11
  */
 // phpcs:disable WordPress.NamingConventions.ValidVariableName
 
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$data = (object) wp_parse_args(
+$data = wp_parse_args(
 	$data,
 	[
 		'kickoff'         => '',
@@ -52,8 +52,8 @@ $data = (object) wp_parse_args(
 	]
 );
 
-$color_home = get_post_meta( $data->home_club, '_anwpfl_main_color', true );
-$color_away = get_post_meta( $data->away_club, '_anwpfl_main_color', true );
+$color_home = get_post_meta( $data['home_club'], '_anwpfl_main_color', true );
+$color_away = get_post_meta( $data['away_club'], '_anwpfl_main_color', true );
 
 if ( empty( $color_home ) ) {
 	$color_home = '#0085ba';
@@ -141,23 +141,23 @@ $stats_array = [
 ob_start();
 
 foreach ( $stats_array as $stats_value ) :
-	if ( ! empty( $data->{$stats_value['h']} ) && ! empty( $data->{$stats_value['a']} ) ) :
+	if ( ! empty( $data[ $stats_value['h'] ] ) || ! empty( $data[ $stats_value['a'] ] ) ) :
 		?>
 		<div class="match-stats__stat-wrapper anwp-fl-border-bottom anwp-border-light p-2 club-stats__<?php echo esc_attr( $stats_value['stat'] ); ?>">
 			<div class="match-stats__stat-name anwp-text-center anwp-text-base"><?php echo esc_html( $stats_value['text'] ); ?></div>
 			<div class="d-flex mt-1 match-stats__stat-row">
-				<div class="match-stats__stat-value anwp-flex-none match__stats-number mx-1 anwp-text-base"><?php echo (int) $data->{$stats_value['h']}; ?></div>
+				<div class="match-stats__stat-value anwp-flex-none match__stats-number mx-1 anwp-text-base"><?php echo (int) ( $data[ $stats_value['h'] ] ?? 0 ); ?></div>
 				<div class="anwp-flex-1 mx-1">
 					<div class="match-stats__stat-bar d-flex anwp-overflow-hidden anwp-h-20 flex-row-reverse">
-						<div class="match-stats__stat-bar-inner" style="width: <?php echo (int) $data->{$stats_value['h']} * $stats_value['multi']; ?>%; background-color: <?php echo esc_attr( $color_home ); ?>"></div>
+						<div class="match-stats__stat-bar-inner" style="width: <?php echo (int) ( $data[ $stats_value['h'] ] ?? 0 ) * $stats_value['multi']; ?>%; background-color: <?php echo esc_attr( $color_home ); ?>"></div>
 					</div>
 				</div>
 				<div class="anwp-flex-1 mx-1">
 					<div class="match-stats__stat-bar d-flex anwp-overflow-hidden anwp-h-20">
-						<div class="match-stats__stat-bar-inner" style="width: <?php echo (int) $data->{$stats_value['a']} * $stats_value['multi']; ?>%; background-color: <?php echo esc_attr( $color_away ); ?>"></div>
+						<div class="match-stats__stat-bar-inner" style="width: <?php echo (int) ( $data[ $stats_value['a'] ] ?? 0 ) * $stats_value['multi']; ?>%; background-color: <?php echo esc_attr( $color_away ); ?>"></div>
 					</div>
 				</div>
-				<div class="match-stats__stat-value anwp-flex-none match__stats-number mx-1 anwp-text-base"><?php echo (int) $data->{$stats_value['a']}; ?></div>
+				<div class="match-stats__stat-value anwp-flex-none match__stats-number mx-1 anwp-text-base"><?php echo (int) ( $data[ $stats_value['a'] ] ?? 0 ); ?></div>
 			</div>
 		</div>
 		<?php
@@ -178,43 +178,23 @@ if ( empty( $stats_output ) ) {
 	| Block Header
 	|--------------------------------------------------------------------
 	*/
-	if ( AnWP_Football_Leagues::string_to_bool( $data->header ) ) {
-		anwp_football_leagues()->load_partial(
+	if ( AnWP_Football_Leagues::string_to_bool( $data['header'] ) ) {
+		anwp_fl()->load_partial(
 			[
 				'text' => AnWPFL_Text::get_value( 'match__stats__match_statistics', __( 'Match Statistics', 'anwp-football-leagues' ) ),
 			],
 			'general/header'
 		);
 	}
-	?>
 
-	<div class="d-sm-flex match-stats__teams">
-		<div class="anwp-flex-1 pr-2">
-			<?php
-			anwp_football_leagues()->load_partial(
-				[
-					'club_id' => $data->home_club,
-					'class'   => 'mb-1',
-				],
-				'club/club-title'
-			);
-			?>
-		</div>
-		<div class="anwp-flex-1 pl-2">
-			<?php
-			anwp_football_leagues()->load_partial(
-				[
-					'club_id' => $data->away_club,
-					'class'   => 'mb-1',
-					'is_home' => false,
-				],
-				'club/club-title'
-			);
-			?>
-		</div>
-	</div>
+	anwp_fl()->load_partial(
+		[
+			'home_club' => $data['home_club'],
+			'away_club' => $data['away_club'],
+		],
+		'club/clubs-title-line'
+	);
 
-	<?php
 	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo $stats_output;
 	?>

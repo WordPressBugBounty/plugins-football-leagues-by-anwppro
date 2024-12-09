@@ -69,7 +69,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * @var    string
 	 * @since  0.1.0
 	 */
-	const VERSION = '0.16.10';
+	const VERSION = '0.16.11';
 
 	/**
 	 * Current DB structure version.
@@ -77,7 +77,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * @var    int
 	 * @since  0.3.0
 	 */
-	const DB_VERSION = 41;
+	const DB_VERSION = 42;
 
 	/**
 	 * Menu Icon.

@@ -40,6 +40,19 @@ $nationality = maybe_unserialize( get_post_meta( $staff_id, '_anwpfl_nationality
 
 // Birth Date
 $birth_date = get_post_meta( $staff_id, '_anwpfl_date_of_birth', true );
+
+/*
+|--------------------------------------------------------------------
+| Get Coach Team ID
+|--------------------------------------------------------------------
+*/
+$club_id = absint( get_post_meta( $staff_id, '_anwpfl_current_club', true ) );
+
+if ( 'hide' === anwp_fl()->customizer->get_value( 'player', 'staff_current_team' ) ) {
+	$club_id = '';
+} elseif ( 'last' === anwp_fl()->customizer->get_value( 'player', 'staff_current_team' ) ) {
+	$club_id = anwp_fl()->staff->get_coach_last_team( $staff_id );
+}
 ?>
 <div class="staff-header anwp-section d-sm-flex anwp-bg-light p-3">
 
@@ -73,7 +86,6 @@ $birth_date = get_post_meta( $staff_id, '_anwpfl_date_of_birth', true );
 
 			<?php
 			// Current Club data
-			$club_id  = absint( get_post_meta( $staff_id, '_anwpfl_current_club', true ) );
 			$club_ids = get_post_meta( $staff_id, '_anwpfl_current_clubs', true );
 
 			if ( $club_id ) :

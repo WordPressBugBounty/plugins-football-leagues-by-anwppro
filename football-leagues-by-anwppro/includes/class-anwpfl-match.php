@@ -616,12 +616,13 @@ class AnWPFL_Match extends AnWPFL_DB {
 						/**
 						 * Filters a match data to localize.
 						 *
-						 * @since 0.7.4
-						 *
 						 * @param array $data    Match data
 						 * @param int   $post_id Match Post ID
+						 * @param array $game_data
+						 *
+						 * @since 0.7.4
 						 */
-						$data = apply_filters( 'anwpfl/match/data_to_localize', $data, $post_id );
+						$data = apply_filters( 'anwpfl/match/data_to_localize', $data, $post_id, $game_data );
 						?>
 
 						<script type="text/javascript">
@@ -1797,19 +1798,19 @@ class AnWPFL_Match extends AnWPFL_DB {
 	 * Get match outcome label
 	 *
 	 * @param object $data
-	 * @param string $class
+	 * @param string $css_class
 	 *
 	 * @since 0.10.23
-	 *@return string
+	 * @return string
 	 */
-	public function get_match_outcome_label( $data, string $class = '' ) {
+	public function get_match_outcome_label( $data, string $css_class = '' ) {
 
 		$outcome_id = absint( $data['outcome_id'] );
 		$home_id    = absint( $data['home_club'] );
 		$away_id    = absint( $data['away_club'] );
 
 		if ( ! absint( $data['finished'] ) || ( $outcome_id !== $home_id && $outcome_id !== $away_id ) ) {
-			return '<span class="anwp-fl-outcome-label ' . esc_attr( $class ) . '"></span>';
+			return '<span class="anwp-fl-outcome-label ' . esc_attr( $css_class ) . '"></span>';
 		}
 
 		$labels_l10n = anwp_fl()->data->get_series();
@@ -1825,7 +1826,41 @@ class AnWPFL_Match extends AnWPFL_DB {
 			$result_code  = $labels_l10n['l'] ?? 'l';
 		}
 
-		return '<span class="anwp-fl-outcome-label ' . $result_class . ' ' . esc_attr( $class ) . '">' . $result_code . '</span>';
+		return '<span class="anwp-fl-outcome-label ' . $result_class . ' ' . esc_attr( $css_class ) . '">' . $result_code . '</span>';
+	}
+
+	/**
+	 * Get match outcome label
+	 *
+	 * @param array $data
+	 * @param bool  $is_home
+	 *
+	 * @since 0.16.11
+	 * @return string
+	 */
+	public function get_outcome_color( array $data, bool $is_home = true ): string {
+
+		$outcome_id = absint( $data['outcome_id'] );
+		$home_id    = absint( $data['home_club'] );
+		$away_id    = absint( $data['away_club'] );
+
+		if ( ! absint( $data['finished'] ) ) {
+			return '';
+		}
+
+		if ( ( $is_home && $outcome_id === $home_id ) || ( ! $is_home && $outcome_id === $away_id ) ) {
+			$result_class = 'anwp-bg-success-light';
+
+			if ( $data['home_goals'] === $data['away_goals'] ) {
+				$result_class = 'anwp-bg-warning-light';
+			} elseif ( ( $home_id === $outcome_id && $data['home_goals'] < $data['away_goals'] ) || ( $outcome_id === $away_id && $data['home_goals'] > $data['away_goals'] ) ) {
+				$result_class = 'anwp-bg-danger-light';
+			}
+
+			return $result_class;
+		}
+
+		return '';
 	}
 
 	/**

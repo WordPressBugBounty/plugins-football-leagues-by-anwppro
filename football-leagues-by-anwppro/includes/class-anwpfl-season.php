@@ -307,4 +307,35 @@ class AnWPFL_Season extends Taxonomy_Core {
 
 		return $options;
 	}
+
+	/**
+	 * Combine several seasons into one.
+	 *
+	 * @param array $season_titles
+	 *
+	 * @since 0.16.11
+	 * @return string
+	 */
+	public function combine_season_text( array $season_titles ): string {
+
+		if ( count( $season_titles ) > 1 ) {
+			$seasons = [];
+
+			foreach ( $season_titles as $season_title ) {
+				$seasons = wp_parse_id_list( array_merge( $seasons, explode( '-', $season_title ) ) );
+			}
+
+			sort( $seasons, SORT_NUMERIC );
+
+			if ( count( $seasons ) > 1 ) {
+				return $seasons[0] . '-' . $seasons[ count( $seasons ) - 1 ];
+			} elseif ( count( $seasons ) > 0 ) {
+				return $seasons[0];
+			} else {
+				return '';
+			}
+		}
+
+		return $season_titles[0];
+	}
 }

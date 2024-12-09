@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.6.1
  *
- * @version       0.16.4
+ * @version       0.16.11
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -46,12 +46,16 @@ $data = (object) wp_parse_args(
 		'outcome_id'          => '',
 		'special_status'      => '',
 		'extra_actions_html'  => '',
+		'home_cards_yr'       => '',
+		'home_cards_r'        => '',
+		'away_cards_yr'       => '',
+		'away_cards_r'        => '',
 		'load_footer'         => true,
 		'datetime_tz'         => true,
 	]
 );
 
-$competition = anwp_football_leagues()->competition->get_competition( $data->competition_id );
+$competition = anwp_fl()->competition->get_competition( $data->competition_id );
 
 // Wrapper classes
 $render_competition = AnWP_Football_Leagues::string_to_bool( $data->competition_logo );
@@ -102,6 +106,7 @@ $render_match_time  = AnWP_Football_Leagues::string_to_bool( $data->show_match_d
 
 				<div class="match-slim__team-wrapper match-slim__team-home anwp-flex-1 d-flex flex-column flex-column-reverse flex-sm-row justify-content-center justify-content-sm-end align-items-center">
 					<div class="match-slim__team-home-title anwp-text-sm anwp-text-center anwp-text-sm-right anwp-break-word mr-sm-3 anwp-leading-1">
+						<?php echo str_repeat( '<svg class="icon__card"><use xlink:href="#icon-card_r"></use></svg>', absint( $data->home_cards_yr ) + absint( $data->home_cards_r ) ); //phpcs:ignore ?>
 						<?php echo esc_html( $data->club_home_title ); ?>
 					</div>
 					<?php if ( $data->club_home_logo ) : ?>
@@ -111,10 +116,10 @@ $render_match_time  = AnWP_Football_Leagues::string_to_bool( $data->show_match_d
 				</div>
 
 				<div class="match-slim__scores-wrapper d-flex anwp-text-base mt-n3 mt-sm-0">
-					<span class="match-slim__scores-number match-slim__scores-home anwp-fl-game__scores-home mr-1 match-slim__scores-number-status-<?php echo (int) $data->finished; ?>">
+					<span class="match-slim__scores-number match-slim__scores-home anwp-fl-game__scores-home mr-1 match-slim__scores-number-status-<?php echo (int) $data->finished; ?> <?php echo esc_attr( anwp_fl()->match->get_outcome_color( (array) $data ) ); ?>">
 						<?php echo (int) $data->finished ? (int) $data->home_goals : '-'; ?>
 					</span>
-					<span class="match-slim__scores-number match-slim__scores-away anwp-fl-game__scores-away match-slim__scores-number-status-<?php echo (int) $data->finished; ?>">
+					<span class="match-slim__scores-number match-slim__scores-away anwp-fl-game__scores-away match-slim__scores-number-status-<?php echo (int) $data->finished; ?> <?php echo esc_attr( anwp_fl()->match->get_outcome_color( (array) $data, false ) ); ?>">
 						<?php echo (int) $data->finished ? (int) $data->away_goals : '-'; ?>
 					</span>
 				</div>
@@ -126,6 +131,7 @@ $render_match_time  = AnWP_Football_Leagues::string_to_bool( $data->show_match_d
 					<?php endif; ?>
 					<div class="match-slim__team-away-title anwp-text-sm anwp-text-center anwp-text-sm-left anwp-break-word ml-sm-3 anwp-leading-1">
 						<?php echo esc_html( $data->club_away_title ); ?>
+						<?php echo str_repeat( '<svg class="icon__card"><use xlink:href="#icon-card_r"></use></svg>', absint( $data->away_cards_yr ) + absint( $data->away_cards_r ) ); //phpcs:ignore ?>
 					</div>
 				</div>
 			</div>

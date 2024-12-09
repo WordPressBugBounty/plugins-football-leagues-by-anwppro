@@ -836,4 +836,35 @@ class AnWPFL_Staff extends CPT_Core {
 
 		return $output;
 	}
+
+	/**
+	 * Get Coach Last Team ID
+	 *
+	 * @param int $coach_id
+	 *
+	 * @return int
+	 */
+	public function get_coach_last_team( int $coach_id ): int {
+		global $wpdb;
+
+		$game_data = $wpdb->get_row(
+			$wpdb->prepare(
+				"
+				SELECT *
+				FROM $wpdb->anwpfl_matches
+				WHERE coach_home = %d OR coach_away = %d
+				ORDER BY kickoff DESC
+				",
+				$coach_id,
+				$coach_id
+			),
+			ARRAY_A
+		) ?: [];
+
+		if ( empty( $game_data ) ) {
+			return 0;
+		}
+
+		return absint( $game_data['coach_home'] ) === $coach_id ? absint( $game_data['home_club'] ) : absint( $game_data['away_club'] );
+	}
 }

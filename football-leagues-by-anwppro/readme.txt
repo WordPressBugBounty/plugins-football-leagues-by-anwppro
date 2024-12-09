@@ -4,8 +4,8 @@ Donate link:       https://anwppro.userecho.com/communities/1-football-leagues
 Tags:              football, soccer, sport, football league, football club
 Requires at least: 5.7
 Requires PHP:      7.0
-Tested up to:      6.6
-Stable tag:        0.16.10
+Tested up to:      6.7
+Stable tag:        0.16.11
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,18 @@ Yes! The plugin works with most themes out of the box. If you have any CSS styli
 17. Admin >> Edit Match (Events)
 
 == Changelog ==
+
+= 0.16.11 - 2024-12-09 =
+* added: Player - All Season - season combine options if many seasons
+* fixed: duplicated stage title
+* fixed: game team stats with 0 is not shown
+* fixed: not finished games affect player statistics
+* fixed: Data Import - error on Player update with custom fields only
+* improved: game outcome label (highlighted score)
+* added: red card in game slim layout (right after team name)
+* added: Staff - Current Team display options (by value, hide, last game)
+* improved: Cards Shortcode - added support for several club IDs in club_id argument
+* improved: Player Statistics - removed zeros for better readability
 
 = 0.16.10 - 2024-10-31 =
 * fixed: inline search on Standing Setup in "Select Competition Group"

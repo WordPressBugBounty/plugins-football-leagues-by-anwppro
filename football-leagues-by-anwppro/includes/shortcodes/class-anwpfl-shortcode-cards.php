@@ -157,7 +157,7 @@ class AnWPFL_Shortcode_Cards {
 				</th>
 				<td>
 					<input name="club_id" data-fl-type="text" type="text" id="fl-form-shortcode-club_id" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="club" data-single="yes">
+					<button type="button" class="button anwp-fl-selector" data-context="club" data-single="no">
 						<span class="dashicons dashicons-search"></span>
 					</button>
 				</td>

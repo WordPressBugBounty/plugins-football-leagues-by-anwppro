@@ -1604,7 +1604,7 @@ class AnWPFL_Competition extends CPT_Core {
 				$obj->logo              = '';
 
 				// Set full title in multistage competitions
-				if ( '' !== $obj->multistage && $obj->stage_title ) {
+				if ( '' !== $obj->multistage && $obj->stage_title && ! str_contains( $obj->title_full, $obj->stage_title ) ) {
 					$obj->title_full .= ' - ' . $obj->stage_title;
 				}
 
@@ -2212,25 +2212,13 @@ class AnWPFL_Competition extends CPT_Core {
 	/**
 	 * Get competition title.
 	 *
-	 * @return string
+	 * @param int $post_id
+	 *
 	 * @since 0.12.3
+	 * @return string
 	 */
-	public function get_competition_title( $post_id ) {
-
-		$competition_title = '';
-		$competition_post  = get_post( $post_id );
-
-		if ( ! is_a( $competition_post, 'WP_Post' ) ) {
-			return $competition_title;
-		}
-
-		$competition_title = $competition_post->post_title;
-
-		if ( in_array( get_post_meta( $post_id, '_anwpfl_multistage', true ), [ 'secondary', 'main' ], true ) ) {
-			$competition_title = ( $competition_title ? ( $competition_title . ' - ' ) : '' ) . get_post_meta( $post_id, '_anwpfl_stage_title', true );
-		}
-
-		return $competition_title;
+	public function get_competition_title( int $post_id ): string {
+		return ltrim( anwp_fl()->competition->get_competition_data( $post_id )['title_full'] ?? '', ' -' );
 	}
 
 	/**
@@ -2420,6 +2408,7 @@ class AnWPFL_Competition extends CPT_Core {
 	 *       'title_full'      => '',
 	 *       'stage_title'     => '',
 	 *       'logo'            => '',
+	 *       'competition_order' => 0,
 	 *   ]
 	 */
 	public function get_competition_data( int $competition_id ): array {

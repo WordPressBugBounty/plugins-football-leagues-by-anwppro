@@ -74,11 +74,9 @@ class AnWPFL_Data {
 	/**
 	 * Constructor.
 	 *
-	 * @since  0.1.0
-	 *
-	 * @param  AnWP_Football_Leagues $plugin Main plugin object.
+	 * @param AnWP_Football_Leagues $plugin Main plugin object.
 	 */
-	public function __construct( $plugin ) {
+	public function __construct( AnWP_Football_Leagues $plugin ) {
 
 		$this->plugin = $plugin;
 
