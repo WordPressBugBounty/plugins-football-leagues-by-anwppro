@@ -6494,6 +6494,10 @@ section: Utilities
   transform: rotate(180deg);
 }
 
+.anwp-fl-disable-link a {
+  display: none !important;
+}
+
 .anwp-fl-outcome-label {
   width: 25px;
   text-align: center;

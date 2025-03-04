@@ -194,6 +194,7 @@ class AnWPFL_Cache {
 			'FL-CLUBS-LIST'                      => WEEK_IN_SECONDS,
 			'FL-STANDINGS-LIST'                  => MONTH_IN_SECONDS,
 			'FL-COMPETITIONS-LIST'               => WEEK_IN_SECONDS,
+			'FL-COMPETITIONS-DATA'               => WEEK_IN_SECONDS,
 			'FL-PLAYER_tmpl_get_latest_matches'  => WEEK_IN_SECONDS,
 			'FL-PLAYER_tmpl_get_players_by_type' => WEEK_IN_SECONDS,
 			'FL-SHORTCODE_players'               => WEEK_IN_SECONDS,
@@ -297,6 +298,7 @@ class AnWPFL_Cache {
 		// On modify COMPETITION
 		if ( 'anwp_competition' === $post_type ) {
 			$this->delete( 'FL-COMPETITIONS-LIST' );
+			$this->delete( 'FL-COMPETITIONS-DATA' );
 		}
 
 		// On modify STANDING
@@ -415,6 +417,7 @@ class AnWPFL_Cache {
 		$this->delete( 'FL-STADIUMS-LIST' );
 		$this->delete( 'FL-CLUBS-LIST' );
 		$this->delete( 'FL-COMPETITIONS-LIST' );
+		$this->delete( 'FL-COMPETITIONS-DATA' );
 		$this->delete( 'FL-STANDINGS-LIST' );
 		$this->delete( 'FL-REFEREES-GAME-MAP' );
 		$this->delete( 'FL-PRO-REFEREES-NAME-LIST' );

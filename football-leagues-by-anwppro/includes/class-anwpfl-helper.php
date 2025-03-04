@@ -876,7 +876,7 @@ class AnWPFL_Helper {
 			]
 		);
 
-		if ( ! in_array( $search_data['context'], [ 'player', 'staff', 'referee', 'club', 'match', 'competition', 'season', 'league' ], true ) ) {
+		if ( ! in_array( $search_data['context'], [ 'player', 'staff', 'referee', 'club', 'match', 'competition', 'main_stage', 'stage', 'season', 'league' ], true ) ) {
 			wp_send_json_error();
 		}
 
@@ -905,6 +905,11 @@ class AnWPFL_Helper {
 
 			case 'competition':
 				$html_output = $this->get_selector_competition_data( $search_data );
+				break;
+
+			case 'main_stage':
+			case 'stage':
+				$html_output = $this->get_selector_stage_data( $search_data );
 				break;
 
 			case 'season':
@@ -980,6 +985,11 @@ class AnWPFL_Helper {
 
 			case 'competition':
 				$output = $this->get_selector_competition_initial( $data_initial );
+				break;
+
+			case 'main_stage':
+			case 'stage':
+				$output = $this->get_selector_stage_initial( $data_initial );
 				break;
 
 			case 'season':
@@ -1657,6 +1667,60 @@ class AnWPFL_Helper {
 	}
 
 	/**
+	 * Get selector competition initial data.
+	 *
+	 * @param array $data_initial
+	 *
+	 * @return array
+	 * @since 0.16.13
+	 */
+	private function get_selector_stage_initial( $data_initial ) {
+
+		$query_args = [
+			'post_type'               => [ 'anwp_competition' ],
+			'posts_per_page'          => 50,
+			'include'                 => $data_initial,
+			'cache_results'           => false,
+			'update_post_meta_cache'  => false,
+			'update_post_term_cache ' => false,
+			'post_status'             => [ 'publish', 'stage_secondary' ],
+		];
+
+		$results = get_posts( $query_args );
+
+		if ( empty( $results ) || ! is_array( $results ) ) {
+			return [];
+		}
+
+		$output = [];
+
+		foreach ( $results as $result_item ) {
+
+			$title_full = $result_item->post_title;
+			$multistage = get_post_meta( $result_item->ID, '_anwpfl_multistage', true );
+
+			if ( $multistage ) {
+				$stage_title = get_post_meta( $result_item->ID, '_anwpfl_stage_title', true );
+
+				if ( $stage_title ) {
+					$title_full .= ' - ' . $stage_title;
+				}
+
+				if ( 'stage_secondary' === $result_item->post_status ) {
+					$title_full = '- ' . $title_full;
+				}
+			}
+
+			$output[] = [
+				'id'   => $result_item->ID,
+				'name' => $title_full,
+			];
+		}
+
+		return $output;
+	}
+
+	/**
 	 * Get selector Season initial data.
 	 *
 	 * @param array $data_initial
@@ -1888,10 +1952,114 @@ class AnWPFL_Helper {
 	 *
 	 * @param array $search_data
 	 *
+	 * @since 0.16.13
 	 * @return false|string
-	 * @since 0.11.15
 	 */
-	private function get_selector_competition_data( $search_data ) {
+	private function get_selector_stage_data( array $search_data ) {
+
+		$search_data = wp_parse_args(
+			$search_data,
+			[
+				's'       => '',
+				'season'  => '',
+				'league'  => '',
+				'context' => '',
+			]
+		);
+
+		$competitions = array_filter(
+			anwp_fl()->competition->get_competitions_data(),
+			function ( $competition ) use ( $search_data ) {
+
+				if ( 'main_stage' === $search_data['context'] && 'secondary' === $competition['multistage'] ) {
+					return false;
+				}
+
+				if ( trim( $search_data['s'] ) && ! str_contains( mb_strtolower( $competition['title_full'] ), mb_strtolower( $search_data['s'] ) ) ) {
+					return false;
+				}
+
+				if ( absint( $search_data['league'] ) && absint( $search_data['league'] ) !== absint( $competition['league_id'] ) ) {
+					return false;
+				}
+
+				if ( absint( $search_data['season'] ) && absint( $search_data['season'] ) !== absint( $competition['season_ids'] ) ) {
+					return false;
+				}
+
+				return true;
+			}
+		);
+
+		$competitions = array_slice( wp_list_sort( $competitions, 'c_index' ), 0, 30 );
+
+		$competitions = array_map(
+			function ( $competition ) use ( $search_data ) {
+
+				if ( 'main_stage' === $search_data['context'] && 'secondary' !== $competition['multistage'] ) {
+					$competition['title_full'] = $competition['title'];
+				}
+
+				return $competition;
+			},
+			$competitions
+		);
+
+		ob_start();
+
+		if ( ! empty( $competitions ) ) :
+			?>
+			<table class="wp-list-table widefat striped table-view-list">
+				<thead>
+				<tr>
+					<td class="manage-column check-column"></td>
+					<td class="manage-column"><?php echo esc_html__( 'Competition', 'anwp-football-leagues' ); ?></td>
+					<td class="manage-column"><?php echo esc_html__( 'Season', 'anwp-football-leagues' ); ?></td>
+					<td class="manage-column"><?php echo esc_html__( 'ID', 'anwp-football-leagues' ); ?></td>
+				</tr>
+				</thead>
+
+				<tbody>
+				<?php foreach ( $competitions as $competition ) : ?>
+					<tr data-id="<?php echo absint( $competition['id'] ); ?>" data-name="<?php echo esc_html( $competition['title_full'] ); ?>">
+						<td>
+							<button type="button" class="button button-small anwp-fl-selector-action">
+								<span class="dashicons dashicons-plus"></span>
+							</button>
+						</td>
+						<td><?php echo esc_html( $competition['title_full'] ); ?></td>
+						<td><?php echo esc_html( $competition['season_text'] ); ?></td>
+						<td><?php echo esc_html( $competition['id'] ); ?></td>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+
+				<tfoot>
+				<tr>
+					<td class="manage-column check-column"></td>
+					<td class="manage-column"><?php echo esc_html__( 'Competition', 'anwp-football-leagues' ); ?></td>
+					<td class="manage-column"><?php echo esc_html__( 'Season', 'anwp-football-leagues' ); ?></td>
+					<td class="manage-column"><?php echo esc_html__( 'ID', 'anwp-football-leagues' ); ?></td>
+				</tr>
+				</tfoot>
+			</table>
+		<?php else : ?>
+			<div class="anwp-alert-warning">- <?php echo esc_html__( 'nothing found', 'anwp-football-leagues' ); ?> -</div>
+			<?php
+		endif;
+
+		return ob_get_clean();
+	}
+
+	/**
+	 * Get selector competition data.
+	 *
+	 * @param array $search_data
+	 *
+	 * @since 0.11.15
+	 * @return false|string
+	 */
+	private function get_selector_competition_data( array $search_data ) {
 
 		$query_args = [
 			'post_type'   => [ 'anwp_competition' ],

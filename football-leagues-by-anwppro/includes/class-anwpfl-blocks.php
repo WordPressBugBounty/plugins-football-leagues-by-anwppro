@@ -43,6 +43,7 @@ class AnWPFL_Blocks {
 			$this->blocks['game_countdown']     = AnWP_Football_Leagues::include_file( 'includes/blocks/class-anwpfl-block-game-countdown' );
 			$this->blocks['teams']              = AnWP_Football_Leagues::include_file( 'includes/blocks/class-anwpfl-block-teams' );
 			$this->blocks['cards']              = AnWP_Football_Leagues::include_file( 'includes/blocks/class-anwpfl-block-cards' );
+			$this->blocks['games']              = AnWP_Football_Leagues::include_file( 'includes/blocks/class-anwpfl-block-games' );
 
 			// Run Hooks
 			$this->hooks();
@@ -109,6 +110,7 @@ class AnWPFL_Blocks {
 			'AnWP_FL_Blocks_Data',
 			[
 				'preview_cards' => AnWP_Football_Leagues::url( 'admin/img/block-preview/preview_cards.png' ),
+				'preview_games' => AnWP_Football_Leagues::url( 'admin/img/block-preview/preview_games.png' ),
 			]
 		);
 	}

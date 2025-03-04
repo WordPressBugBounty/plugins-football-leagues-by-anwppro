@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.6.1
  *
- * @version       0.16.3
+ * @version       0.16.12
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -79,8 +79,7 @@ $data = wp_parse_args(
 		<div class="anwp-text-center match-header__competition">
 			<a class="match-header__competition-link anwp-link anwp-link-without-effects"
 				href="<?php echo esc_url( get_permalink( (int) $data['main_stage_id'] ) ); ?>">
-				<?php echo esc_html( $data['stage_title'] ? ( $data['stage_title'] . ' - ' ) : '' ); ?>
-				<?php echo esc_html( get_the_title( (int) $data['competition_id'] ) ); ?>
+				<?php echo esc_html( anwp_fl()->competition->get_competition_title( (int) $data['competition_id'] ) ); ?>
 			</a>
 			<?php echo esc_html( anwp_football_leagues()->competition->tmpl_get_matchweek_round_text( $data['match_week'], $data['competition_id'], ' | ' ) ); ?>
 		</div>
@@ -198,6 +197,17 @@ $data = wp_parse_args(
 	<?php endif; ?>
 
 	<?php
+	/*
+	|--------------------------------------------------------------------
+	| Advanced Buttons
+	|--------------------------------------------------------------------
+	*/
+	if ( ! empty( $data['extra_info'] ? json_decode( $data['extra_info'], true )['buttons'] ?? [] : '' ) ) :
+		do_action( 'anwpfl/show-advanced-buttons', $data, 'game-header', '' );
+	endif;
+
+	do_action( 'anwpfl/game-actions', $data, 'game-header' );
+
 	if ( '0' === $data['finished'] ) :
 		anwp_football_leagues()->load_partial( $data, 'match/match-countdown', 'modern' );
 

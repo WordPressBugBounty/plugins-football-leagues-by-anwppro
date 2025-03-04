@@ -10,7 +10,7 @@
  * @package        AnWP-Football-Leagues/Templates
  * @since          0.7.4
  *
- * @version        0.16.4
+ * @version        0.16.12
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -111,6 +111,17 @@ $data = (object) wp_parse_args(
 	</div>
 
 	<?php
+	/*
+	|--------------------------------------------------------------------
+	| Advanced Buttons
+	|--------------------------------------------------------------------
+	*/
+	if ( ! empty( $data->extra_info ? json_decode( $data->extra_info, true )['buttons'] ?? [] : '' ) ) :
+		do_action( 'anwpfl/show-advanced-buttons', (array) $data, 'game-simple', '' );
+	endif;
+
+	do_action( 'anwpfl/game-actions', (array) $data, 'game-simple' );
+
 	$time_result = '';
 
 	switch ( intval( $data->extra ) ) {

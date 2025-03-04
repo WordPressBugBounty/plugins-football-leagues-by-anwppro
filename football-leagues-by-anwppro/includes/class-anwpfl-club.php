@@ -576,6 +576,11 @@ class AnWPFL_Club extends CPT_Core {
 
 		// Prepare data & Encode with some WP sanitization
 		foreach ( [ '_anwpfl_squad', '_anwpfl_staff', '_anwpfl_squad_display' ] as $field_slug ) {
+
+			if ( ! isset( $_POST[ $field_slug ] ) ) {
+				continue;
+			}
+
 			$field_data = wp_json_encode( json_decode( wp_unslash( $_POST[ $field_slug ] ) ) );
 
 			if ( $field_data ) {
@@ -1712,9 +1717,10 @@ class AnWPFL_Club extends CPT_Core {
 	public function columns( $columns ) {
 		// Add new columns
 		$new_columns = [
-			'anwpfl_club_logo' => esc_html__( 'Logo', 'anwp-football-leagues' ),
-			'club_id'          => esc_html__( 'ID', 'anwp-football-leagues' ),
-			'club_games'       => esc_html__( 'Games', 'anwp-football-leagues' ),
+			'anwpfl_club_logo'  => esc_html__( 'Logo', 'anwp-football-leagues' ),
+			'club_id'           => esc_html__( 'ID', 'anwp-football-leagues' ),
+			'club_games'        => esc_html__( 'Games', 'anwp-football-leagues' ),
+			'anwpfl_club_color' => esc_html__( 'Club Color', 'anwp-football-leagues' ),
 		];
 
 		// Merge old and new columns
@@ -1725,6 +1731,7 @@ class AnWPFL_Club extends CPT_Core {
 			'cb',
 			'title',
 			'anwpfl_club_logo',
+			'anwpfl_club_color',
 			'club_games',
 			'comments',
 			'date',
@@ -1763,6 +1770,13 @@ class AnWPFL_Club extends CPT_Core {
 
 			case 'club_id':
 				echo (int) $post_id;
+				break;
+
+			case 'anwpfl_club_color':
+				$team_color = get_post_meta( $post_id, '_anwpfl_main_color', true );
+				if ( $team_color ) {
+					echo '<div style="background-color: ' . esc_attr( $team_color ) . '; width: 30px; height: 50px;">&nbsp;</div>';
+				}
 				break;
 
 			case 'club_games':

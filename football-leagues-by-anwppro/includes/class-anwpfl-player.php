@@ -171,8 +171,12 @@ class AnWPFL_Player extends AnWPFL_DB {
 	 * @param int $post_ID Post ID.
 	 */
 	public function on_player_delete( int $post_ID ) {
+
+		global $wpdb;
+
 		if ( 'anwp_player' === get_post_type( $post_ID ) ) {
 			$this->delete( $post_ID );
+			$wpdb->delete( $wpdb->prefix . 'anwpfl_players', [ 'player_id' => $post_ID ] );
 		}
 	}
 

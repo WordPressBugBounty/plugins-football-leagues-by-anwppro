@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.10.6
  *
- * @version       0.14.13
+ * @version       0.16.12
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -153,7 +153,20 @@ if ( absint( $args->max_size ) ) {
 		</div>
 	</div>
 
-	<?php if ( $args->match_link_text ) : ?>
+	<?php
+	/*
+	|--------------------------------------------------------------------
+	| Advanced Buttons
+	|--------------------------------------------------------------------
+	*/
+	if ( ! empty( $data->extra_info ? json_decode( $data->extra_info, true )['buttons'] ?? [] : '' ) ) :
+		do_action( 'anwpfl/show-advanced-buttons', (array) $data, 'widget-next', '' );
+	endif;
+
+	do_action( 'anwpfl/game-actions', (array) $data, 'widget-next' );
+
+	if ( $args->match_link_text ) :
+		?>
 		<div class="anwp-text-center anwp-match-preview-link mt-2">
 			<a href="<?php echo esc_url( get_permalink( (int) $data->match_id ) ); ?>" class="anwp-link-without-effects match-widget__link-preview">
 				<span class="d-inline-block"><?php echo esc_html( $args->match_link_text ); ?></span>

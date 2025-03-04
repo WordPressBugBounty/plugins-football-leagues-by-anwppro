@@ -1,6 +1,33 @@
 /*--------------------------------------------------------------
 >>> Some Global Styles for AnWP Football Leagues Admin part:
 ----------------------------------------------------------------*/
+.anwp-fl-help-link {
+	border-radius: 50%;
+	background-color: #ededed;
+	color: #737373;
+	font-size: 11px;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+	text-decoration: none;
+	line-height: 14px;
+	border: 1px solid #eaeaea;
+}
+.anwp-fl-help-header-link {
+	border-radius: 50%;
+	background-color: #fff;
+	color: #717171;
+	font-size: 13px;
+	width: 22px;
+	height: 22px;
+	text-align: center;
+	text-decoration: none;
+	line-height: 20px;
+	border: 1px solid #d9d9d9;
+	display: inline-block;
+	margin-top: 4px;
+}
+
 body > .vs__dropdown-menu {
 	z-index: 1000000 !important;
 }
@@ -234,6 +261,8 @@ body > .vs__dropdown-menu {
 
 #anwp-fl-selector-modaal__selected {
 	padding: 10px 0;
+	max-height: 150px;
+	overflow: auto;
 }
 
 #anwp-fl-selector-modaal__selected:empty {

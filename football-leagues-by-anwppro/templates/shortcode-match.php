@@ -26,6 +26,7 @@ $args = wp_parse_args(
 		'layout'          => '',
 		'sections'        => '',
 		'show_header'     => 1,
+		'section_header'  => 1,
 		'class'           => '', // TODO add to params
 		'show_club_logos' => '1', // TODO add to params
 	]
@@ -84,6 +85,8 @@ if ( empty( $game_data ) ) {
 	if ( AnWP_Football_Leagues::string_to_bool( $args['show_header'] ) ) {
 		anwp_fl()->load_partial( $game_data, 'match/match', $args['layout'] );
 	}
+
+	$game_data['header'] = AnWP_Football_Leagues::string_to_bool( $args['section_header'] );
 
 	if ( ! empty( $args['sections'] ) && 'slim' !== $args['layout'] ) {
 		$sections = explode( ',', $args['sections'] );

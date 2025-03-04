@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.8.0
  *
- * @version       0.16.0
+ * @version       0.16.13
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -46,8 +46,8 @@ $data = (object) wp_parse_args(
 	]
 );
 
-$text_stage = $data->stage_title ?: '';
-$text_round = anwp_football_leagues()->competition->tmpl_get_matchweek_round_text( $data->match_week, $data->competition_id );
+$stage_title     = anwp_fl()->competition->get_competition_data( $data->competition_id )['stage_title'] ?? '';
+$matchweek_title = anwp_fl()->competition->tmpl_get_matchweek_round_text( $data->match_week, $data->competition_id );
 ?>
 <div class="anwp-fl-game match-card match-card--a py-1 px-2 d-flex flex-column position-relative anwp-w-min-200 anwp-w-200 game-status-<?php echo absint( $data->finished ); ?>"
 	<?php if ( AnWP_Football_Leagues::string_to_bool( $data->datetime_tz ) ) : ?>
@@ -56,13 +56,14 @@ $text_round = anwp_football_leagues()->competition->tmpl_get_matchweek_round_tex
 	data-anwp-match="<?php echo intval( $data->match_id ); ?>" data-fl-game-kickoff="<?php echo esc_attr( $data->kickoff_orig ); ?>">
 
 	<div class="match-card__header anwp-text-center anwp-text-xs">
-		<div class="match-card__header-item anwp-text-truncate anwp-text-center">
-			<?php echo esc_html( anwp_football_leagues()->competition->get_competition( $data->competition_id )->title ); ?>
+		<div class="match-card__header-item anwp-text-center">
+			<?php echo esc_html( anwp_fl()->competition->get_competition_title( (int) $data->competition_id ) ); ?>
 		</div>
-		<div class="match-card__header-item anwp-text-truncate anwp-text-center"><?php echo esc_html( $text_stage ); ?></div>
 
-		<?php if ( $text_stage !== $text_round ) : ?>
-			<div class="match-card__header-item anwp-text-truncate anwp-text-center"><?php echo esc_html( $text_round ); ?></div>
+		<?php if ( $matchweek_title && $matchweek_title !== $stage_title ) : ?>
+			<div class="match-card__header-item anwp-text-truncate anwp-text-center">
+				<?php echo esc_html( $matchweek_title ); ?>
+			</div>
 		<?php endif; ?>
 	</div>
 
@@ -101,7 +102,20 @@ $text_round = anwp_football_leagues()->competition->tmpl_get_matchweek_round_tex
 		</div>
 	</div>
 
-	<?php if ( $data->show_match_datetime && '0000-00-00 00:00:00' !== $data->kickoff ) : ?>
+	<?php
+	/*
+	|--------------------------------------------------------------------
+	| Advanced Buttons
+	|--------------------------------------------------------------------
+	*/
+	if ( ! empty( $data->extra_info ? json_decode( $data->extra_info, true )['buttons'] ?? [] : '' ) ) :
+		do_action( 'anwpfl/show-advanced-buttons', (array) $data, 'game-card-a', '' );
+	endif;
+
+	do_action( 'anwpfl/game-actions', (array) $data, 'game-card-a' );
+
+	if ( $data->show_match_datetime && '0000-00-00 00:00:00' !== $data->kickoff ) :
+		?>
 		<div class="match-card__footer anwp-bg-light anwp-text-center mt-auto d-flex justify-content-center anwp-text-xs anwp-leading-1-25">
 			<?php if ( in_array( $data->special_status, [ 'PST', 'CANC' ], true ) ) : ?>
 				<span class="match-card__time">

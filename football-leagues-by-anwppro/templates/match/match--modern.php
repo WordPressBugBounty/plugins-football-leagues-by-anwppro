@@ -10,7 +10,7 @@
  * @package          AnWP-Football-Leagues/Templates
  * @since            0.7.4
  *
- * @version          0.16.4
+ * @version          0.16.12
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -118,7 +118,21 @@ $data = (object) wp_parse_args(
 			break;
 	}
 	?>
-	<?php if ( $time_result || $data->aggtext || in_array( $data->special_status, [ 'PST', 'CANC' ], true ) ) : ?>
+
+	<?php
+	/*
+	|--------------------------------------------------------------------
+	| Advanced Buttons
+	|--------------------------------------------------------------------
+	*/
+	if ( ! empty( $data->extra_info ? json_decode( $data->extra_info, true )['buttons'] ?? [] : '' ) ) :
+		do_action( 'anwpfl/show-advanced-buttons', (array) $data, 'game-modern', '' );
+	endif;
+
+	do_action( 'anwpfl/game-actions', (array) $data, 'game-modern' );
+
+	if ( $time_result || $data->aggtext || in_array( $data->special_status, [ 'PST', 'CANC' ], true ) ) :
+		?>
 		<div class="match-modern__time-result-wrapper anwp-text-center anwp-text-xs anwp-opacity-80 anwp-leading-1-25 mb-1">
 			<?php
 			if ( $time_result ) {

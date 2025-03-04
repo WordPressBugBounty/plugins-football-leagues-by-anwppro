@@ -31,11 +31,9 @@ class AnWPFL_Block_Competition_Header {
 	/**
 	 * Register blocks.
 	 *
-	 * @param array    $attr           the block attributes
-	 * @param string   $content        the block content
-	 * @param WP_Block $block_instance The instance of the WP_Block class that represents the block being rendered
+	 * @param array $attr the block attributes
 	 */
-	public function render_tournament_header( $attr, $content, $block_instance ) {
+	public function render_tournament_header( array $attr ) {
 
 		$attr = wp_parse_args(
 			$attr,

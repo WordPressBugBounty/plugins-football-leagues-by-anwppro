@@ -53,6 +53,7 @@ class AnWPFL_Shortcode_Matches {
 
 		$defaults = [
 			'competition_id'        => '',
+			'stage_id'              => '',
 			'show_secondary'        => 0,
 			'season_id'             => '',
 			'league_id'             => '',
@@ -102,8 +103,8 @@ class AnWPFL_Shortcode_Matches {
 		$atts['show_secondary']      = (int) $atts['show_secondary'];
 		$atts['limit']               = (int) $atts['limit'];
 		$atts['competition_id']      = (int) $atts['competition_id'] ? sanitize_text_field( $atts['competition_id'] ) : '';
-		$atts['season_id']           = (int) $atts['season_id'] ? (int) $atts['season_id'] : '';
-		$atts['stadium_id']          = (int) $atts['stadium_id'] ? (int) $atts['stadium_id'] : '';
+		$atts['season_id']           = (int) $atts['season_id'] ? : '';
+		$atts['stadium_id']          = (int) $atts['stadium_id'] ? : '';
 		$atts['show_club_logos']     = (int) $atts['show_club_logos'];
 		$atts['show_match_datetime'] = (int) $atts['show_match_datetime'];
 		$atts['club_links']          = (int) $atts['club_links'];

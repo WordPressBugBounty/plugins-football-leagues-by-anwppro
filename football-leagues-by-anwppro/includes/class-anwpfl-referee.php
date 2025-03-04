@@ -975,7 +975,7 @@ class AnWPFL_Referee extends CPT_Core {
 				"
 				SELECT COUNT(*)
 				FROM $wpdb->postmeta
-				WHERE meta_key = '_anwpfl_additional_referees' AND meta_value != ''
+				WHERE meta_key = '_anwpfl_additional_referees' AND meta_value != '' AND meta_value != 'a:0:{}'
 				"
 			);
 		}

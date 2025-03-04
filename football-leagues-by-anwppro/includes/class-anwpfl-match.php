@@ -222,7 +222,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 	public function render_metabox( WP_Post $post ) {
 
 		// Error message on competition not exists
-		if ( ! $this->plugin->competition->get_competitions() ) {
+		if ( ! $this->plugin->competition->get_competitions_data() ) {
 			echo '<div class="anwp-b-wrap"><div class="my-3 alert alert-warning">' . esc_html__( 'Please, create a Competition first.', 'anwp-football-leagues' ) . '</div></div>';
 
 			return;
@@ -970,15 +970,21 @@ class AnWPFL_Match extends AnWPFL_DB {
 				] as $referee_slug
 			) {
 
-				if ( empty( $post_data[ $referee_slug ] ) ) {
+				$is_empty = empty( $post_data[ $referee_slug ] );
+
+				if ( '_anwpfl_additional_referees' === $referee_slug ) {
+					$is_empty = '[]' === ( $post_data[ $referee_slug ] ?? '' ) || empty( $post_data[ $referee_slug ] );
+				} elseif ( '_anwpfl_temp_referees' === $referee_slug ) {
+					$is_empty = '{"referee":{},"assistant_1":{},"assistant_2":{},"referee_fourth":{},"additional_referees":{}}' === ( $post_data[ $referee_slug ] ?? '' ) || '{"referee":[],"assistant_1":[],"assistant_2":[],"referee_fourth":[],"additional_referees":[]}' === ( $post_data[ $referee_slug ] ?? '' ) || empty( $post_data[ $referee_slug ] );
+				}
+
+				if ( $is_empty ) {
 					delete_post_meta( $post_id, $referee_slug );
+				} elseif ( in_array( $referee_slug, [ '_anwpfl_temp_referees', '_anwpfl_additional_referees' ], true ) ) {
+					$json_referees = json_decode( $post_data[ $referee_slug ], true );
+					update_post_meta( $post_id, $referee_slug, $json_referees ? anwp_fl()->helper->recursive_sanitize( $json_referees ) : [] );
 				} else {
-					if ( in_array( $referee_slug, [ '_anwpfl_temp_referees', '_anwpfl_additional_referees' ], true ) ) {
-						$json_referees = json_decode( $post_data[ $referee_slug ], true );
-						update_post_meta( $post_id, $referee_slug, $json_referees ? anwp_fl()->helper->recursive_sanitize( $json_referees ) : [] );
-					} else {
-						update_post_meta( $post_id, $referee_slug, sanitize_text_field( $post_data[ $referee_slug ] ) );
-					}
+					update_post_meta( $post_id, $referee_slug, sanitize_text_field( $post_data[ $referee_slug ] ) );
 				}
 			}
 
@@ -1321,7 +1327,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 					]
 				);
 			} else {
-				$wpdb->insert( $wpdb->anwpfl_players, $player_data );
+				$wpdb->replace( $wpdb->anwpfl_players, $player_data );
 			}
 
 			$posted_records[] = $record_slug;

@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.6.1
  *
- * @version       0.16.11
+ * @version       0.16.12
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -137,8 +137,19 @@ $render_match_time  = AnWP_Football_Leagues::string_to_bool( $data->show_match_d
 			</div>
 
 			<?php
+			/*
+			|--------------------------------------------------------------------
+			| Advanced Buttons
+			|--------------------------------------------------------------------
+			*/
+			if ( ! empty( $data->extra_info ? json_decode( $data->extra_info, true )['buttons'] ?? [] : '' ) ) :
+				do_action( 'anwpfl/show-advanced-buttons', (array) $data, 'game-slim-center', '' );
+			endif;
+
+			do_action( 'anwpfl/game-actions', (array) $data, 'game-slim-center' );
+
 			if ( AnWP_Football_Leagues::string_to_bool( $data->load_footer ) ) {
-				anwp_football_leagues()->load_partial( $data, 'match/match', 'slim-footer' );
+				anwp_fl()->load_partial( $data, 'match/match', 'slim-footer' );
 			}
 			?>
 		</div>

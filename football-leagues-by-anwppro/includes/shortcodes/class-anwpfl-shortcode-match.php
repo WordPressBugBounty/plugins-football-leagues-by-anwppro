@@ -52,13 +52,14 @@ class AnWPFL_Shortcode_Match {
 	public function render_shortcode( $atts ) {
 
 		$defaults = [
-			'layout'      => '',
-			'match_id'    => '',
-			'club_last'   => '',
-			'club_next'   => '',
-			'sections'    => '',
-			'show_header' => 1,
-			'class'       => 'mt-4',
+			'layout'         => '',
+			'match_id'       => '',
+			'club_last'      => '',
+			'club_next'      => '',
+			'sections'       => '',
+			'show_header'    => 1,
+			'section_header' => 1,
+			'class'          => 'mt-4',
 		];
 
 		// Parse defaults and create a shortcode.
@@ -68,7 +69,7 @@ class AnWPFL_Shortcode_Match {
 		$atts['match_id'] = (int) $atts['match_id'];
 		$atts['layout']   = in_array( $atts['layout'], [ 'full', 'slim' ], true ) ? $atts['layout'] : '';
 
-		return anwp_football_leagues()->template->shortcode_loader( 'match', $atts );
+		return anwp_fl()->template->shortcode_loader( 'match', $atts );
 	}
 
 	/**

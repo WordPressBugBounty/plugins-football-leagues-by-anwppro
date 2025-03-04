@@ -69,7 +69,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * @var    string
 	 * @since  0.1.0
 	 */
-	const VERSION = '0.16.11';
+	const VERSION = '0.16.13';
 
 	/**
 	 * Current DB structure version.
@@ -1130,7 +1130,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 				<h3 style="margin: 0">AnWP Selector: <span id="anwp-fl-selector-modaal__header-context"></span></h3>
 			</div>
 			<div class="anwpfl-shortcode-modal__content" id="anwp-fl-selector-modaal__search-bar">
-				<div class="anwp-fl-selector-modaal__bar-group d-none anwp-fl-selector-modaal__bar-group--player anwp-fl-selector-modaal__bar-group--staff anwp-fl-selector-modaal__bar-group--referee anwp-fl-selector-modaal__bar-group--club anwp-fl-selector-modaal__bar-group--competition anwp-fl-selector-modaal__bar-group--league anwp-fl-selector-modaal__bar-group--season anwp-mr-2 anwp-mt-2">
+				<div class="anwp-fl-selector-modaal__bar-group d-none anwp-fl-selector-modaal__bar-group--player anwp-fl-selector-modaal__bar-group--staff anwp-fl-selector-modaal__bar-group--referee anwp-fl-selector-modaal__bar-group--club anwp-fl-selector-modaal__bar-group--competition anwp-fl-selector-modaal__bar-group--league anwp-fl-selector-modaal__bar-group--season anwp-fl-selector-modaal__bar-group--stage anwp-fl-selector-modaal__bar-group--main_stage anwp-mr-2 anwp-mt-2">
 					<label for="anwp-fl-selector-modaal__search"><?php echo esc_html__( 'start typing name or title ...', 'anwp-football-leagues' ); ?></label>
 					<input name="s" type="text" id="anwp-fl-selector-modaal__search" value="" class="fl-shortcode-attr code">
 				</div>
@@ -1152,13 +1152,13 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 						<option value="">- select -</option>
 					</select>
 				</div>
-				<div class="anwp-fl-selector-modaal__bar-group d-none anwp-fl-selector-modaal__bar-group--match anwp-fl-selector-modaal__bar-group--competition anwp-mr-2 anwp-mt-2">
+				<div class="anwp-fl-selector-modaal__bar-group d-none anwp-fl-selector-modaal__bar-group--match anwp-fl-selector-modaal__bar-group--competition anwp-fl-selector-modaal__bar-group--stage anwp-fl-selector-modaal__bar-group--main_stage anwp-mr-2 anwp-mt-2">
 					<label for="anwp-fl-selector-modaal__search-season"><?php echo esc_html__( 'Season', 'anwp-football-leagues' ); ?></label>
 					<select name="seasons" id="anwp-fl-selector-modaal__search-season" class="anwp-selector-select2">
 						<option value="">- select -</option>
 					</select>
 				</div>
-				<div class="anwp-fl-selector-modaal__bar-group d-none anwp-fl-selector-modaal__bar-group--competition anwp-mr-2 anwp-mt-2">
+				<div class="anwp-fl-selector-modaal__bar-group d-none anwp-fl-selector-modaal__bar-group--competition anwp-fl-selector-modaal__bar-group--stage anwp-fl-selector-modaal__bar-group--main_stage anwp-mr-2 anwp-mt-2">
 					<label for="anwp-fl-selector-modaal__search-league"><?php echo esc_html__( 'League', 'anwp-football-leagues' ); ?></label>
 					<select name="leagues" id="anwp-fl-selector-modaal__search-league" class="anwp-selector-select2">
 						<option value="">- select -</option>
@@ -1861,7 +1861,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 		endif;
 	}
 
-	public static function is_editing_block_on_backend() {
+	public static function is_editing_block_on_backend(): bool {
 		return defined( 'REST_REQUEST' ) && true === REST_REQUEST && 'edit' === filter_input( INPUT_GET, 'context', FILTER_SANITIZE_SPECIAL_CHARS );
 	}
 }

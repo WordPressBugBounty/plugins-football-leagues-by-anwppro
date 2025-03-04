@@ -1,0 +1,145 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "anwp-fl/games",
+  "title": "Games",
+  "category": "anwp-fl",
+  "description": "",
+  "textdomain": "football-leagues",
+  "attributes": {
+    "competition_id": {
+      "type": "string",
+      "default": ""
+    },
+    "stage_id": {
+      "type": "string",
+      "default": ""
+    },
+    "season_id": {
+      "type": "string",
+      "default": ""
+    },
+    "league_id": {
+      "type": "string",
+      "default": ""
+    },
+    "group_id": {
+      "type": "string",
+      "default": ""
+    },
+    "type": {
+      "type": "string",
+      "default": ""
+    },
+    "limit": {
+      "type": "number",
+      "default": 10
+    },
+    "date_from": {
+      "type": "string",
+      "default": ""
+    },
+    "date_to": {
+      "type": "string",
+      "default": ""
+    },
+    "stadium_id": {
+      "type": "string",
+      "default": ""
+    },
+    "filter_by_clubs": {
+      "type": "string",
+      "default": ""
+    },
+    "filter_by_matchweeks": {
+      "type": "string",
+      "default": ""
+    },
+    "days_offset": {
+      "type": "string",
+      "default": ""
+    },
+    "days_offset_to": {
+      "type": "string",
+      "default": ""
+    },
+    "sort_by_date": {
+      "type": "string",
+      "default": ""
+    },
+    "sort_by_matchweek": {
+      "type": "string",
+      "default": ""
+    },
+    "group_by": {
+      "type": "string",
+      "default": ""
+    },
+    "group_by_header_style": {
+      "type": "string",
+      "default": ""
+    },
+    "show_club_logos": {
+      "type": "boolean",
+      "default": true
+    },
+    "show_match_datetime": {
+      "type": "boolean",
+      "default": true
+    },
+    "competition_logo": {
+      "type": "boolean",
+      "default": true
+    },
+    "exclude_ids": {
+      "type": "string",
+      "default": ""
+    },
+    "include_ids": {
+      "type": "string",
+      "default": ""
+    },
+    "outcome_id": {
+      "type": "string",
+      "default": ""
+    },
+    "no_data_text": {
+      "type": "string",
+      "default": ""
+    },
+    "home_club": {
+      "type": "string",
+      "default": ""
+    },
+    "away_club": {
+      "type": "string",
+      "default": ""
+    },
+    "header_class": {
+      "type": "string",
+      "default": ""
+    },
+    "show_load_more": {
+      "type": "boolean",
+      "default": false
+    },
+    "layout": {
+      "type": "string",
+      "default": "slim"
+    },
+    "preview": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "example": {
+    "attributes": {
+      "preview": true
+    }
+  },
+  "supports": {
+    "className": false,
+    "customClassName": true,
+    "html": false
+  }
+}

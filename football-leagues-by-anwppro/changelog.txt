@@ -1,5 +1,13 @@
 == Changelog ==
 
+= 0.16.13 - 2025-02-26 =
+* added: new Gutenberg block - FL Games
+
+= 0.16.12 - 2025-01-27 =
+* improved: Game Substitutes in mobile view
+* added: filters on selecting a league in the Competition edit page
+* fixed: incorrect and duplicated Competition title (secondary stage) in the Game header
+
 = 0.16.11 - 2024-12-09 =
 * added: Player - All Season - season combine options if many seasons
 * fixed: duplicated stage title
