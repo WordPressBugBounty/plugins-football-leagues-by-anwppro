@@ -48,8 +48,8 @@ $data = (object) wp_parse_args(
 	]
 );
 
-$stadium_title = ( anwp_football_leagues()->customizer->get_value( 'match_list', 'match_slim_bottom_line[stadium]' ) && (int) $data->stadium_id ) ? anwp_football_leagues()->stadium->get_stadium_title( $data->stadium_id ) : '';
-$competition   = anwp_football_leagues()->competition->get_competition( $data->competition_id );
+$stadium_title    = ( anwp_fl()->customizer->get_value( 'match_list', 'match_slim_bottom_line[stadium]' ) && (int) $data->stadium_id ) ? anwp_fl()->stadium->get_stadium_title( $data->stadium_id ) : '';
+$competition_data = anwp_fl()->competition->get_competition_data( $data->competition_id );
 
 // Wrapper classes
 $render_competition = AnWP_Football_Leagues::string_to_bool( $data->competition_logo );
@@ -83,13 +83,13 @@ $data->extra_actions_html = apply_filters( 'anwpfl/tmpl-match-small/extra_action
 	<div class="match-small__top-bar d-flex flex-wrap align-items-start anwp-text-xs mb-1">
 		<?php if ( $render_competition ) : ?>
 			<div class="match-small__competition-wrapper d-flex mr-auto">
-				<?php if ( $competition->logo ) : ?>
-					<img loading="lazy" width="20" height="20" class="anwp-object-contain match-small__competition-logo anwp-flex-none anwp-w-20 anwp-h-20" data-toggle="anwp-tooltip" data-tippy-content="<?php echo esc_attr( $competition->title ); ?>"
-						src="<?php echo esc_url( $competition->logo ); ?>" alt="<?php echo esc_attr( $competition->title ); ?>">
+				<?php if ( $competition_data['logo'] ) : ?>
+					<img loading="lazy" width="20" height="20" class="anwp-object-contain match-small__competition-logo anwp-flex-none anwp-w-20 anwp-h-20" data-toggle="anwp-tooltip" data-tippy-content="<?php echo esc_attr( $competition_data['title'] ); ?>"
+						src="<?php echo esc_url( $competition_data['logo'] ); ?>" alt="<?php echo esc_attr( $competition_data['title'] ); ?>">
 				<?php endif; ?>
 
 				<div class="match-small__competition-title">
-					<?php echo esc_html( $competition->title_full ); ?>
+					<?php echo esc_html( $competition_data['title_full'] ); ?>
 				</div>
 			</div>
 		<?php endif; ?>

@@ -5,7 +5,7 @@ Tags:              football, soccer, sport
 Requires at least: 5.7
 Requires PHP:      7.0
 Tested up to:      6.7
-Stable tag:        0.16.13
+Stable tag:        0.16.14
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,11 @@ Yes! The plugin works with most themes out of the box. If you have any CSS styli
 17. Admin >> Edit Match (Events)
 
 == Changelog ==
+
+= 0.16.14 - 2025-03-24 =
+* added: tool to update player's 'Current Team' based on the last game played
+* added: new option to show player's current team by last game with save/fix (if incorrect) in the Player Profile
+* added: option in Customizer to change default home/away team colors used in teams statistics
 
 = 0.16.13 - 2025-02-26 =
 * added: new Gutenberg block - FL Games

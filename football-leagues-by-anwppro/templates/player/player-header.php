@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.8.3
  *
- * @version       0.16.4
+ * @version       0.16.14
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -86,10 +86,20 @@ $has_date_of_death = $player['date_of_death'] && '0000-00-00' !== $player['date_
 | Get Player Team ID
 |--------------------------------------------------------------------
 */
-if ( 'hide' === anwp_fl()->customizer->get_value( 'player', 'current_team' ) ) {
+$current_team_option = anwp_fl()->customizer->get_value( 'player', 'current_team' );
+
+if ( 'hide' === $current_team_option ) {
 	$player['club_id'] = '';
-} elseif ( 'last' === anwp_fl()->customizer->get_value( 'player', 'current_team' ) ) {
+} elseif ( 'last' === $current_team_option ) {
 	$player['club_id'] = anwp_fl()->player->get_player_last_team( $player['player_id'] );
+} elseif ( 'last_update' === $current_team_option ) {
+	$last_team = anwp_fl()->player->get_player_last_team( $player['player_id'] );
+
+	if ( absint( $last_team ) && absint( $last_team ) !== absint( $player['club_id'] ) ) {
+		anwp_fl()->player->update( $player['player_id'], [ 'team_id' => absint( $last_team ) ] );
+	}
+
+	$player['club_id'] = $last_team;
 }
 ?>
 <div class="player-header anwp-section d-sm-flex anwp-bg-light p-3">

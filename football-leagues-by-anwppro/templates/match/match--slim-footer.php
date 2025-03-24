@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.6.1
  *
- * @version       0.16.11
+ * @version       0.16.13.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -51,7 +51,6 @@ $data = wp_parse_args(
 );
 
 $stadium_title = ( anwp_football_leagues()->customizer->get_value( 'match_list', 'match_slim_bottom_line[stadium]' ) && (int) $data['stadium_id'] ) ? anwp_football_leagues()->stadium->get_stadium_title( $data['stadium_id'] ) : '';
-$competition   = anwp_football_leagues()->competition->get_competition( $data['competition_id'] );
 
 // Wrapper classes
 $render_competition = AnWP_Football_Leagues::string_to_bool( $data['competition_logo'] );

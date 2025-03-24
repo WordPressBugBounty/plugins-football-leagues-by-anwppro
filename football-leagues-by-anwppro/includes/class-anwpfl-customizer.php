@@ -1139,6 +1139,52 @@ class AnWPFL_Customizer {
 			)
 		);
 
+		/*
+		|--------------------------------------------------------------------
+		| default_home_color
+		|--------------------------------------------------------------------
+		*/
+		$wp_customize->add_setting(
+			'anwp-fl-customizer[club][default_home_color]',
+			[
+				'default'           => '#0085ba',
+				'type'              => 'option',
+				'sanitize_callback' => 'sanitize_hex_color',
+			]
+		);
+
+		$wp_customize->add_control(
+			'anwp-fl-customizer[club][default_home_color]',
+			[
+				'label'   => esc_html__( 'Default Home Club Color', 'anwp-football-leagues' ),
+				'section' => 'fl_club',
+				'type'    => 'color',
+			]
+		);
+
+		/*
+		|--------------------------------------------------------------------
+		| default_away_color
+		|--------------------------------------------------------------------
+		*/
+		$wp_customize->add_setting(
+			'anwp-fl-customizer[club][default_away_color]',
+			[
+				'default'           => '#dc3545',
+				'type'              => 'option',
+				'sanitize_callback' => 'sanitize_hex_color',
+			]
+		);
+
+		$wp_customize->add_control(
+			'anwp-fl-customizer[club][default_away_color]',
+			[
+				'label'   => esc_html__( 'Default Away Club Color', 'anwp-football-leagues' ),
+				'section' => 'fl_club',
+				'type'    => 'color',
+			]
+		);
+
 		//=================================
 		//-- Squad --
 		//=================================
@@ -1772,9 +1818,10 @@ class AnWPFL_Customizer {
 				'section'  => 'fl_player',
 				'settings' => 'anwp-fl-customizer[player][current_team]',
 				'choices'  => [
-					''     => __( 'Show (by value)', 'anwp-football-leagues' ),
-					'hide' => __( 'Hide', 'anwp-football-leagues' ),
-					'last' => __( 'Show (by last game)', 'anwp-football-leagues' ),
+					''            => __( 'Show (by value)', 'anwp-football-leagues' ),
+					'hide'        => __( 'Hide', 'anwp-football-leagues' ),
+					'last'        => __( 'Show (by last game)', 'anwp-football-leagues' ),
+					'last_update' => __( 'Show (by last game) + Save (Fix)', 'anwp-football-leagues' ),
 				],
 			]
 		);

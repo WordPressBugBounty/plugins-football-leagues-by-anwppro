@@ -54,11 +54,12 @@ $data = wp_parse_args(
 		'referee'             => '',
 		'special_status'      => '',
 		'context'             => 'shortcode',
+		'wrapper_class'       => '',
 	]
 );
 ?>
 
-<div class="match-header match-status__<?php echo esc_attr( $data['finished'] ); ?> anwp-section anwp-bg-light p-2"
+<div class="match-header match-status__<?php echo esc_attr( $data['finished'] ); ?> anwp-section anwp-bg-light p-2 <?php echo esc_attr( $data['wrapper_class'] ); ?>"
 		data-fl-game-datetime="<?php echo esc_attr( $data['kickoff_c'] ); ?>">
 	<div class="match-header__top px-3 pb-2 anwp-leading-1-5">
 		<div class="anwp-text-center match-header__date">

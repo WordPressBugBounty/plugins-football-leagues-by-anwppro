@@ -29,7 +29,7 @@ $app_options = [
 	'rest_root'   => esc_url_raw( rest_url() ),
 	'rest_nonce'  => wp_create_nonce( 'wp_rest' ),
 	'spinner_url' => admin_url( 'images/spinner.gif' ),
-	'fl_page_num' => absint( $_GET['fl_page_num'] ?? 10 ) ?: 10,
+	'fl_page_num' => absint( $_GET['fl_page_num'] ?? 10 ) ?: 10, // phpcs:ignore
 ];
 ?>
 <script type="text/javascript">
@@ -37,8 +37,8 @@ $app_options = [
 </script>
 <div class="wrap anwp-b-wrap">
 
-	<?php if ( 'optimizer' === $active_tab ) : ?>
-		<?php // AnWP_Football_Leagues::include_file( 'admin/views/toolbox--optimizer' ); ?>
+	<?php if ( 'toolkit' === $active_tab ) : ?>
+		<?php AnWP_Football_Leagues::include_file( 'admin/views/toolbox--toolkit' ); ?>
 	<?php else : ?>
 		<?php AnWP_Football_Leagues::include_file( 'admin/views/toolbox--updater' ); ?>
 	<?php endif; ?>

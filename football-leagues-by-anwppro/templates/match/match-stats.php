@@ -56,11 +56,11 @@ $color_home = get_post_meta( $data['home_club'], '_anwpfl_main_color', true );
 $color_away = get_post_meta( $data['away_club'], '_anwpfl_main_color', true );
 
 if ( empty( $color_home ) ) {
-	$color_home = '#0085ba';
+	$color_home = anwp_fl()->customizer->get_value( 'club', 'default_home_color', '#0085ba' );
 }
 
 if ( empty( $color_away ) ) {
-	$color_away = '#dc3545';
+	$color_home = anwp_fl()->customizer->get_value( 'club', 'default_away_color', '#dc3545' );
 }
 
 /**

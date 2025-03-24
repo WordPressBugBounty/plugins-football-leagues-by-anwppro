@@ -10662,23 +10662,23 @@ This will fail in production.`
       stages
     };
   });
-  const _hoisted_1$S = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$W = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$P = [
-    _hoisted_1$S
+  const _hoisted_2$S = [
+    _hoisted_1$W
   ];
-  const _hoisted_3$N = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$N = { class: "my-0" };
-  const _hoisted_5$L = { class: "anwp-vfm-admin-modal__content" };
-  const _hoisted_6$J = {
+  const _hoisted_3$Q = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$P = { class: "my-0" };
+  const _hoisted_5$M = { class: "anwp-vfm-admin-modal__content" };
+  const _hoisted_6$K = {
     key: 0,
     class: "anwp-text-center"
   };
-  const _hoisted_7$H = { class: "anwp-text-lg anwp-font-bold" };
-  const _hoisted_8$G = { class: "anwp-vfm-admin-modal__actions" };
-  const _hoisted_9$E = { class: "d-flex flex-row-reverse" };
-  const _sfc_main$R = {
+  const _hoisted_7$I = { class: "anwp-text-lg anwp-font-bold" };
+  const _hoisted_8$H = { class: "anwp-vfm-admin-modal__actions" };
+  const _hoisted_9$F = { class: "d-flex flex-row-reverse" };
+  const _sfc_main$V = {
     __name: "AppModalRoundDelete",
     setup(__props) {
       const trStore = useTrStore();
@@ -10705,18 +10705,18 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(trStore).modals.deleteRound = false),
               type: "button"
-            }, _hoisted_2$P),
-            createBaseVNode("div", _hoisted_3$N, [
-              createBaseVNode("h4", _hoisted_4$N, toDisplayString(unref(l10n).confirm_delete), 1)
+            }, _hoisted_2$S),
+            createBaseVNode("div", _hoisted_3$Q, [
+              createBaseVNode("h4", _hoisted_4$P, toDisplayString(unref(l10n).confirm_delete), 1)
             ]),
-            createBaseVNode("div", _hoisted_5$L, [
-              unref(trStore).modalData.deleteRoundIndex ? (openBlock(), createElementBlock("div", _hoisted_6$J, [
-                createBaseVNode("div", _hoisted_7$H, toDisplayString(unref(l10n).are_you_sure), 1),
+            createBaseVNode("div", _hoisted_5$M, [
+              unref(trStore).modalData.deleteRoundIndex ? (openBlock(), createElementBlock("div", _hoisted_6$K, [
+                createBaseVNode("div", _hoisted_7$I, toDisplayString(unref(l10n).are_you_sure), 1),
                 createBaseVNode("p", null, toDisplayString(unref(l10n).want_to_delete_round), 1)
               ])) : createCommentVNode("", true)
             ]),
-            createBaseVNode("div", _hoisted_8$G, [
-              createBaseVNode("div", _hoisted_9$E, [
+            createBaseVNode("div", _hoisted_8$H, [
+              createBaseVNode("div", _hoisted_9$F, [
                 createBaseVNode("button", {
                   type: "button",
                   class: "button button-secondary text-capitalize",
@@ -10736,21 +10736,21 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$R = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$V = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$O = [
-    _hoisted_1$R
+  const _hoisted_2$R = [
+    _hoisted_1$V
   ];
-  const _hoisted_3$M = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$M = { class: "my-0" };
-  const _hoisted_5$K = { class: "anwp-vfm-admin-modal__content" };
-  const _hoisted_6$I = { class: "anwp-text-center" };
-  const _hoisted_7$G = { class: "anwp-text-lg anwp-font-bold" };
-  const _hoisted_8$F = /* @__PURE__ */ createBaseVNode("p", null, "Do you really want to delete the Competition Stage with all its rounds and groups/ties?", -1);
-  const _hoisted_9$D = { class: "anwp-vfm-admin-modal__actions" };
+  const _hoisted_3$P = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$O = { class: "my-0" };
+  const _hoisted_5$L = { class: "anwp-vfm-admin-modal__content" };
+  const _hoisted_6$J = { class: "anwp-text-center" };
+  const _hoisted_7$H = { class: "anwp-text-lg anwp-font-bold" };
+  const _hoisted_8$G = /* @__PURE__ */ createBaseVNode("p", null, "Do you really want to delete the Competition Stage with all its rounds and groups/ties?", -1);
+  const _hoisted_9$E = { class: "anwp-vfm-admin-modal__actions" };
   const _hoisted_10$C = { class: "d-flex flex-row-reverse" };
-  const _sfc_main$Q = {
+  const _sfc_main$U = {
     __name: "AppModalStageDelete",
     setup(__props) {
       const trStore = useTrStore();
@@ -10778,17 +10778,17 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(trStore).modals.deleteStage = false),
               type: "button"
-            }, _hoisted_2$O),
-            createBaseVNode("div", _hoisted_3$M, [
-              createBaseVNode("h4", _hoisted_4$M, toDisplayString(unref(l10n).confirm_delete), 1)
+            }, _hoisted_2$R),
+            createBaseVNode("div", _hoisted_3$P, [
+              createBaseVNode("h4", _hoisted_4$O, toDisplayString(unref(l10n).confirm_delete), 1)
             ]),
-            createBaseVNode("div", _hoisted_5$K, [
-              createBaseVNode("div", _hoisted_6$I, [
-                createBaseVNode("div", _hoisted_7$G, toDisplayString(unref(l10n).are_you_sure), 1),
-                _hoisted_8$F
+            createBaseVNode("div", _hoisted_5$L, [
+              createBaseVNode("div", _hoisted_6$J, [
+                createBaseVNode("div", _hoisted_7$H, toDisplayString(unref(l10n).are_you_sure), 1),
+                _hoisted_8$G
               ])
             ]),
-            createBaseVNode("div", _hoisted_9$D, [
+            createBaseVNode("div", _hoisted_9$E, [
               createBaseVNode("div", _hoisted_10$C, [
                 createBaseVNode("button", {
                   type: "button",
@@ -10815,7 +10815,7 @@ This will fail in production.`
     }
     return target;
   };
-  const _sfc_main$P = {
+  const _sfc_main$T = {
     data() {
       return {
         innerValue: 1
@@ -11035,17 +11035,17 @@ This will fail in production.`
       }
     }
   };
-  const _hoisted_1$Q = ["tabindex", "innerHTML"];
-  const _hoisted_2$N = ["tabindex", "innerHTML"];
-  const _hoisted_3$L = ["onClick", "onKeyup"];
-  const _hoisted_4$L = ["tabindex", "innerHTML"];
-  const _hoisted_5$J = ["tabindex", "innerHTML"];
-  const _hoisted_6$H = ["innerHTML"];
-  const _hoisted_7$F = ["innerHTML"];
-  const _hoisted_8$E = ["onClick", "onKeyup"];
-  const _hoisted_9$C = ["innerHTML"];
+  const _hoisted_1$U = ["tabindex", "innerHTML"];
+  const _hoisted_2$Q = ["tabindex", "innerHTML"];
+  const _hoisted_3$O = ["onClick", "onKeyup"];
+  const _hoisted_4$N = ["tabindex", "innerHTML"];
+  const _hoisted_5$K = ["tabindex", "innerHTML"];
+  const _hoisted_6$I = ["innerHTML"];
+  const _hoisted_7$G = ["innerHTML"];
+  const _hoisted_8$F = ["onClick", "onKeyup"];
+  const _hoisted_9$D = ["innerHTML"];
   const _hoisted_10$B = ["innerHTML"];
-  function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
     return !$props.noLiSurround ? (openBlock(), createElementBlock("ul", {
       key: 0,
       class: normalizeClass($props.containerClass)
@@ -11060,7 +11060,7 @@ This will fail in production.`
           class: normalizeClass($props.pageLinkClass),
           tabindex: $options.firstPageSelected() ? -1 : 0,
           innerHTML: $props.firstButtonText
-        }, null, 42, _hoisted_1$Q)
+        }, null, 42, _hoisted_1$U)
       ], 2)) : createCommentVNode("", true),
       !($options.firstPageSelected() && $props.hidePrevNext) ? (openBlock(), createElementBlock("li", {
         key: 1,
@@ -11072,7 +11072,7 @@ This will fail in production.`
           class: normalizeClass($props.prevLinkClass),
           tabindex: $options.firstPageSelected() ? -1 : 0,
           innerHTML: $props.prevText
-        }, null, 42, _hoisted_2$N)
+        }, null, 42, _hoisted_2$Q)
       ], 2)) : createCommentVNode("", true),
       (openBlock(true), createElementBlock(Fragment, null, renderList($options.pages, (page) => {
         return openBlock(), createElementBlock("li", {
@@ -11097,7 +11097,7 @@ This will fail in production.`
             onKeyup: withKeys(($event) => $options.handlePageSelected(page.index + 1), ["enter"]),
             class: normalizeClass($props.pageLinkClass),
             tabindex: "0"
-          }, toDisplayString(page.content), 43, _hoisted_3$L))
+          }, toDisplayString(page.content), 43, _hoisted_3$O))
         ], 2);
       }), 128)),
       !($options.lastPageSelected() && $props.hidePrevNext) ? (openBlock(), createElementBlock("li", {
@@ -11110,7 +11110,7 @@ This will fail in production.`
           class: normalizeClass($props.nextLinkClass),
           tabindex: $options.lastPageSelected() ? -1 : 0,
           innerHTML: $props.nextText
-        }, null, 42, _hoisted_4$L)
+        }, null, 42, _hoisted_4$N)
       ], 2)) : createCommentVNode("", true),
       $props.firstLastButton ? (openBlock(), createElementBlock("li", {
         key: 3,
@@ -11122,7 +11122,7 @@ This will fail in production.`
           class: normalizeClass($props.pageLinkClass),
           tabindex: $options.lastPageSelected() ? -1 : 0,
           innerHTML: $props.lastButtonText
-        }, null, 42, _hoisted_5$J)
+        }, null, 42, _hoisted_5$K)
       ], 2)) : createCommentVNode("", true)
     ], 2)) : (openBlock(), createElementBlock("div", {
       key: 1,
@@ -11135,7 +11135,7 @@ This will fail in production.`
         class: normalizeClass([$props.pageLinkClass, $options.firstPageSelected() ? $props.disabledClass : ""]),
         tabindex: "0",
         innerHTML: $props.firstButtonText
-      }, null, 42, _hoisted_6$H)) : createCommentVNode("", true),
+      }, null, 42, _hoisted_6$I)) : createCommentVNode("", true),
       !($options.firstPageSelected() && $props.hidePrevNext) ? (openBlock(), createElementBlock("a", {
         key: 1,
         onClick: _cache[10] || (_cache[10] = ($event) => $options.prevPage()),
@@ -11143,7 +11143,7 @@ This will fail in production.`
         class: normalizeClass([$props.prevLinkClass, $options.firstPageSelected() ? $props.disabledClass : ""]),
         tabindex: "0",
         innerHTML: $props.prevText
-      }, null, 42, _hoisted_7$F)) : createCommentVNode("", true),
+      }, null, 42, _hoisted_7$G)) : createCommentVNode("", true),
       (openBlock(true), createElementBlock(Fragment, null, renderList($options.pages, (page) => {
         return openBlock(), createElementBlock(Fragment, null, [
           page.breakView ? (openBlock(), createElementBlock("a", {
@@ -11164,7 +11164,7 @@ This will fail in production.`
             onKeyup: withKeys(($event) => $options.handlePageSelected(page.index + 1), ["enter"]),
             class: normalizeClass([$props.pageLinkClass, page.selected ? $props.activeClass : ""]),
             tabindex: "0"
-          }, toDisplayString(page.content), 43, _hoisted_8$E))
+          }, toDisplayString(page.content), 43, _hoisted_8$F))
         ], 64);
       }), 256)),
       !($options.lastPageSelected() && $props.hidePrevNext) ? (openBlock(), createElementBlock("a", {
@@ -11174,7 +11174,7 @@ This will fail in production.`
         class: normalizeClass([$props.nextLinkClass, $options.lastPageSelected() ? $props.disabledClass : ""]),
         tabindex: "0",
         innerHTML: $props.nextText
-      }, null, 42, _hoisted_9$C)) : createCommentVNode("", true),
+      }, null, 42, _hoisted_9$D)) : createCommentVNode("", true),
       $props.firstLastButton ? (openBlock(), createElementBlock("a", {
         key: 3,
         onClick: _cache[14] || (_cache[14] = ($event) => $options.selectLastPage()),
@@ -11185,20 +11185,20 @@ This will fail in production.`
       }, null, 42, _hoisted_10$B)) : createCommentVNode("", true)
     ], 2));
   }
-  var Paginate = /* @__PURE__ */ _export_sfc$1(_sfc_main$P, [["render", _sfc_render$1]]);
-  const _hoisted_1$P = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  var Paginate = /* @__PURE__ */ _export_sfc$1(_sfc_main$T, [["render", _sfc_render$2]]);
+  const _hoisted_1$T = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$M = [
-    _hoisted_1$P
+  const _hoisted_2$P = [
+    _hoisted_1$T
   ];
-  const _hoisted_3$K = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$K = { class: "d-flex flex-column" };
-  const _hoisted_5$I = { class: "anwp-text-xs anwp-font-normal anwp-opacity-60 anwp-text-nowrap" };
-  const _hoisted_6$G = { class: "anwp-text-base anwp-leading-1" };
-  const _hoisted_7$E = { class: "anwp-vfm-admin-modal__content" };
-  const _hoisted_8$D = { class: "d-md-flex" };
-  const _hoisted_9$B = { class: "col-md-6 bg-light py-3" };
+  const _hoisted_3$N = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$M = { class: "d-flex flex-column" };
+  const _hoisted_5$J = { class: "anwp-text-xs anwp-font-normal anwp-opacity-60 anwp-text-nowrap" };
+  const _hoisted_6$H = { class: "anwp-text-base anwp-leading-1" };
+  const _hoisted_7$F = { class: "anwp-vfm-admin-modal__content" };
+  const _hoisted_8$E = { class: "d-md-flex" };
+  const _hoisted_9$C = { class: "col-md-6 bg-light py-3" };
   const _hoisted_10$A = { class: "my-2" };
   const _hoisted_11$w = ["onClick"];
   const _hoisted_12$u = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--s18 anwp-icon--octi anwp-text-red-800 anwp-fill-current" }, [
@@ -11260,7 +11260,7 @@ This will fail in production.`
   const _hoisted_41$a = { class: "anwp-text-lg anwp-font-bold" };
   const _hoisted_42$a = { class: "anwp-vfm-admin-modal__actions" };
   const _hoisted_43$9 = { class: "d-flex flex-row-reverse" };
-  const _sfc_main$O = {
+  const _sfc_main$S = {
     __name: "AppModalGroupManage",
     setup(__props) {
       const trStore = useTrStore();
@@ -11367,16 +11367,16 @@ This will fail in production.`
                   class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0",
                   onClick: _cache[0] || (_cache[0] = ($event) => unref(trStore).modals.groupManage = false),
                   type: "button"
-                }, _hoisted_2$M),
-                createBaseVNode("div", _hoisted_3$K, [
-                  createBaseVNode("div", _hoisted_4$K, [
-                    createBaseVNode("span", _hoisted_5$I, toDisplayString("knockout" === unref(trStore).activeStage.type ? "Match-up" : "Group"), 1),
-                    createBaseVNode("span", _hoisted_6$G, toDisplayString(unref(trStore).modalData.teamsGroup.title), 1)
+                }, _hoisted_2$P),
+                createBaseVNode("div", _hoisted_3$N, [
+                  createBaseVNode("div", _hoisted_4$M, [
+                    createBaseVNode("span", _hoisted_5$J, toDisplayString("knockout" === unref(trStore).activeStage.type ? "Match-up" : "Group"), 1),
+                    createBaseVNode("span", _hoisted_6$H, toDisplayString(unref(trStore).modalData.teamsGroup.title), 1)
                   ])
                 ]),
-                createBaseVNode("div", _hoisted_7$E, [
-                  createBaseVNode("div", _hoisted_8$D, [
-                    createBaseVNode("div", _hoisted_9$B, [
+                createBaseVNode("div", _hoisted_7$F, [
+                  createBaseVNode("div", _hoisted_8$E, [
+                    createBaseVNode("div", _hoisted_9$C, [
                       createBaseVNode("h4", _hoisted_10$A, " Teams in " + toDisplayString("knockout" === unref(trStore).activeStage.type ? "Match-up" : "Group") + " (" + toDisplayString(unref(trStore).modalData.teamsGroup.clubs.length) + ") ", 1),
                       (openBlock(true), createElementBlock(Fragment, null, renderList(unref(trStore).modalData.teamsGroup.clubs, (teamId) => {
                         var _a3, _b2;
@@ -13941,24 +13941,24 @@ This will fail in production.`
   axios.getAdapter = adapters.getAdapter;
   axios.HttpStatusCode = HttpStatusCode;
   axios.default = axios;
-  const _hoisted_1$O = {
+  const _hoisted_1$S = {
     key: 0,
     class: "anwp-border anwp-border-gray-500 bg-white p-3 pb-4 d-sm-flex flex-wrap align-items-start anwp-fl-stage-tab__content"
   };
-  const _hoisted_2$L = { class: "d-flex flex-column mb-4 m-sm-2 px-2" };
-  const _hoisted_3$J = {
+  const _hoisted_2$O = { class: "d-flex flex-column mb-4 m-sm-2 px-2" };
+  const _hoisted_3$M = {
     class: "mb-1 anwp-text-gray-800",
     for: "stage-title"
   };
-  const _hoisted_4$J = { class: "ml-auto mt-n2" };
-  const _hoisted_5$H = /* @__PURE__ */ createBaseVNode("div", { class: "w-100" }, null, -1);
-  const _hoisted_6$F = { class: "d-flex flex-column mb-4 m-sm-2 px-2" };
-  const _hoisted_7$D = {
+  const _hoisted_4$L = { class: "ml-auto mt-n2" };
+  const _hoisted_5$I = /* @__PURE__ */ createBaseVNode("div", { class: "w-100" }, null, -1);
+  const _hoisted_6$G = { class: "d-flex flex-column mb-4 m-sm-2 px-2" };
+  const _hoisted_7$E = {
     class: "mb-1 anwp-text-gray-800",
     for: "stage-tournament-system"
   };
-  const _hoisted_8$C = { value: "round-robin" };
-  const _hoisted_9$A = { value: "knockout" };
+  const _hoisted_8$D = { value: "round-robin" };
+  const _hoisted_9$B = { value: "knockout" };
   const _hoisted_10$z = {
     key: 0,
     class: "d-flex flex-column mb-4 m-sm-2 px-2"
@@ -14058,7 +14058,7 @@ This will fail in production.`
   const _hoisted_60$4 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi anwp-icon--s16 mr-2" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-git-compare" })
   ], -1);
-  const _sfc_main$N = {
+  const _sfc_main$R = {
     __name: "AppStage",
     setup(__props) {
       const trStore = useTrStore();
@@ -14124,9 +14124,9 @@ This will fail in production.`
         const _component_draggable = resolveComponent("draggable");
         const _directive_tooltip = resolveDirective("tooltip");
         return openBlock(), createElementBlock(Fragment, null, [
-          unref(trStore).activeStage ? (openBlock(), createElementBlock("div", _hoisted_1$O, [
-            createBaseVNode("div", _hoisted_2$L, [
-              createBaseVNode("label", _hoisted_3$J, toDisplayString(unref(l10n).stage_title), 1),
+          unref(trStore).activeStage ? (openBlock(), createElementBlock("div", _hoisted_1$S, [
+            createBaseVNode("div", _hoisted_2$O, [
+              createBaseVNode("label", _hoisted_3$M, toDisplayString(unref(l10n).stage_title), 1),
               withDirectives(createBaseVNode("input", {
                 type: "text",
                 id: "stage-title",
@@ -14136,17 +14136,17 @@ This will fail in production.`
                 [vModelText, unref(trStore).stages[unref(trStore).activeStageIndex].stageTitle]
               ])
             ]),
-            createBaseVNode("div", _hoisted_4$J, "Stage ID: " + toDisplayString(unref(trStore).activeStage.stageId), 1),
-            _hoisted_5$H,
-            createBaseVNode("div", _hoisted_6$F, [
-              createBaseVNode("label", _hoisted_7$D, toDisplayString(unref(l10n).competition_type), 1),
+            createBaseVNode("div", _hoisted_4$L, "Stage ID: " + toDisplayString(unref(trStore).activeStage.stageId), 1),
+            _hoisted_5$I,
+            createBaseVNode("div", _hoisted_6$G, [
+              createBaseVNode("label", _hoisted_7$E, toDisplayString(unref(l10n).competition_type), 1),
               withDirectives(createBaseVNode("select", {
                 id: "stage-tournament-system",
                 class: "anwp-w-min-150",
                 "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(trStore).stages[unref(trStore).activeStageIndex].type = $event)
               }, [
-                createBaseVNode("option", _hoisted_8$C, toDisplayString(unref(l10n).round_robin), 1),
-                createBaseVNode("option", _hoisted_9$A, toDisplayString(unref(l10n).knockout), 1)
+                createBaseVNode("option", _hoisted_8$D, toDisplayString(unref(l10n).round_robin), 1),
+                createBaseVNode("option", _hoisted_9$B, toDisplayString(unref(l10n).knockout), 1)
               ], 512), [
                 [vModelSelect, unref(trStore).stages[unref(trStore).activeStageIndex].type]
               ])
@@ -14344,44 +14344,44 @@ This will fail in production.`
               }, " Delete Stage ")) : createCommentVNode("", true)
             ])
           ])) : createCommentVNode("", true),
-          createVNode(_sfc_main$R),
-          createVNode(_sfc_main$O),
-          createVNode(_sfc_main$Q)
+          createVNode(_sfc_main$V),
+          createVNode(_sfc_main$S),
+          createVNode(_sfc_main$U)
         ], 64);
       };
     }
   };
-  const _hoisted_1$N = {
+  const _hoisted_1$R = {
     class: "anwp-overflow-auto mt-2",
     style: { marginBottom: "-1px" }
   };
-  const _hoisted_2$K = { class: "d-flex align-items-end" };
-  const _hoisted_3$I = ["onClick"];
-  const _hoisted_4$I = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-drag-handler anwp-icon anwp-icon--s24 anwp-icon--octi mr-2" }, [
+  const _hoisted_2$N = { class: "d-flex align-items-end" };
+  const _hoisted_3$L = ["onClick"];
+  const _hoisted_4$K = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-drag-handler anwp-icon anwp-icon--s24 anwp-icon--octi mr-2" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-grabber" })
   ], -1);
-  const _hoisted_5$G = { class: "d-flex flex-column anwp-user-select-none" };
-  const _hoisted_6$E = /* @__PURE__ */ createBaseVNode("span", { class: "anwp-text-xs anwp-font-normal anwp-opacity-60 anwp-text-nowrap" }, "Competition Stage", -1);
-  const _hoisted_7$C = {
+  const _hoisted_5$H = { class: "d-flex flex-column anwp-user-select-none" };
+  const _hoisted_6$F = /* @__PURE__ */ createBaseVNode("span", { class: "anwp-text-xs anwp-font-normal anwp-opacity-60 anwp-text-nowrap" }, "Competition Stage", -1);
+  const _hoisted_7$D = {
     key: 0,
     class: "anwp-text-base anwp-leading-1"
   };
-  const _hoisted_8$B = {
+  const _hoisted_8$C = {
     key: 1,
     class: "anwp-text-base anwp-leading-1 anwp-opacity-70"
   };
-  const _hoisted_9$z = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-drag-handler anwp-icon anwp-icon--s18 anwp-icon--octi mr-2" }, [
+  const _hoisted_9$A = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-drag-handler anwp-icon anwp-icon--s18 anwp-icon--octi mr-2" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-plus" })
   ], -1);
   const _hoisted_10$y = /* @__PURE__ */ createBaseVNode("span", { class: "anwp-text-sm anwp-leading-1 anwp-opacity-80 anwp-text-nowrap" }, "Add New Stage", -1);
   const _hoisted_11$u = [
-    _hoisted_9$z,
+    _hoisted_9$A,
     _hoisted_10$y
   ];
   const _hoisted_12$s = ["value"];
   const _hoisted_13$p = ["value"];
   const _hoisted_14$p = ["value"];
-  const _sfc_main$M = {
+  const _sfc_main$Q = {
     __name: "AppStages",
     setup(__props) {
       const trStore = useTrStore();
@@ -14419,8 +14419,8 @@ This will fail in production.`
       return (_ctx, _cache) => {
         const _component_draggable = resolveComponent("draggable");
         return openBlock(), createElementBlock(Fragment, null, [
-          createBaseVNode("div", _hoisted_1$N, [
-            createBaseVNode("div", _hoisted_2$K, [
+          createBaseVNode("div", _hoisted_1$R, [
+            createBaseVNode("div", _hoisted_2$N, [
               createVNode(_component_draggable, {
                 class: "d-flex mt-4",
                 modelValue: unref(trStore).stages,
@@ -14435,12 +14435,12 @@ This will fail in production.`
                       class: normalizeClass(["anwp-border anwp-border-gray-500 pt-2 pb-3 pl-2 pr-3 mr-2 d-flex align-items-center", unref(trStore).activeStageId === stage.stageId ? "anwp-fl-stage-tab__active" : "anwp-cursor-pointer"]),
                       onClick: ($event) => unref(trStore).activeStageId === stage.stageId || unref(trStore).setActiveStage(stage.stageId)
                     }, [
-                      _hoisted_4$I,
-                      createBaseVNode("div", _hoisted_5$G, [
-                        _hoisted_6$E,
-                        stage.stageTitle ? (openBlock(), createElementBlock("span", _hoisted_7$C, toDisplayString(stage.stageTitle), 1)) : (openBlock(), createElementBlock("span", _hoisted_8$B, "- stage title -"))
+                      _hoisted_4$K,
+                      createBaseVNode("div", _hoisted_5$H, [
+                        _hoisted_6$F,
+                        stage.stageTitle ? (openBlock(), createElementBlock("span", _hoisted_7$D, toDisplayString(stage.stageTitle), 1)) : (openBlock(), createElementBlock("span", _hoisted_8$C, "- stage title -"))
                       ])
-                    ], 10, _hoisted_3$I);
+                    ], 10, _hoisted_3$L);
                   }), 128))
                 ]),
                 _: 1
@@ -14451,7 +14451,7 @@ This will fail in production.`
               }, _hoisted_11$u)
             ])
           ]),
-          createVNode(_sfc_main$N),
+          createVNode(_sfc_main$R),
           createBaseVNode("input", {
             type: "hidden",
             name: "_fl_stages_data",
@@ -14478,7 +14478,7 @@ This will fail in production.`
     }
     return target;
   };
-  const _sfc_main$L = {
+  const _sfc_main$P = {
     name: "app-block-header",
     props: {
       iconClass: {
@@ -14491,36 +14491,36 @@ This will fail in production.`
       }
     }
   };
-  const _hoisted_1$M = { class: "anwp-border-bottom anwp-border-gray-500 bg-white d-flex align-items-center px-3 py-2 anwp-text-gray-700 anwp-font-semibold" };
-  const _hoisted_2$J = ["xlink:href"];
-  function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-    return openBlock(), createElementBlock("div", _hoisted_1$M, [
+  const _hoisted_1$Q = { class: "anwp-border-bottom anwp-border-gray-500 bg-white d-flex align-items-center px-3 py-2 anwp-text-gray-700 anwp-font-semibold" };
+  const _hoisted_2$M = ["xlink:href"];
+  function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
+    return openBlock(), createElementBlock("div", _hoisted_1$Q, [
       $props.icon ? (openBlock(), createElementBlock("svg", {
         key: 0,
         class: normalizeClass(["anwp-icon anwp-icon--s16 mr-2", $props.iconClass])
       }, [
-        createBaseVNode("use", { "xlink:href": $props.icon }, null, 8, _hoisted_2$J)
+        createBaseVNode("use", { "xlink:href": $props.icon }, null, 8, _hoisted_2$M)
       ], 2)) : createCommentVNode("", true),
       renderSlot(_ctx.$slots, "default")
     ]);
   }
-  const AppBlockHeader = /* @__PURE__ */ _export_sfc(_sfc_main$L, [["render", _sfc_render]]);
-  const _hoisted_1$L = {
+  const AppBlockHeader = /* @__PURE__ */ _export_sfc(_sfc_main$P, [["render", _sfc_render$1]]);
+  const _hoisted_1$P = {
     key: 0,
     class: "alert alert-warning d-flex py-2 border-warning mb-3"
   };
-  const _hoisted_2$I = /* @__PURE__ */ createBaseVNode("div", { class: "align-self-center mr-3 pr-1" }, [
+  const _hoisted_2$L = /* @__PURE__ */ createBaseVNode("div", { class: "align-self-center mr-3 pr-1" }, [
     /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi anwp-icon--s36" }, [
       /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-alert" })
     ])
   ], -1);
-  const _hoisted_3$H = { class: "mt-0 mb-1 anwp-text-orange-500 anwp-text-lg" };
-  const _hoisted_4$H = { class: "list-unstyled mt-0 mb-1" };
-  const _hoisted_5$F = { class: "anwp-border anwp-border-gray-500" };
-  const _hoisted_6$D = { class: "bg-white p-3 pb-4 d-sm-flex flex-wrap align-items-start" };
-  const _hoisted_7$B = { class: "anwp-flex-none anwp-w-150 text-center mx-auto mx-sm-0" };
-  const _hoisted_8$A = { class: "d-block text-center mt-2" };
-  const _hoisted_9$y = {
+  const _hoisted_3$K = { class: "mt-0 mb-1 anwp-text-orange-500 anwp-text-lg" };
+  const _hoisted_4$J = { class: "list-unstyled mt-0 mb-1" };
+  const _hoisted_5$G = { class: "anwp-border anwp-border-gray-500" };
+  const _hoisted_6$E = { class: "bg-white p-3 pb-4 d-sm-flex flex-wrap align-items-start" };
+  const _hoisted_7$C = { class: "anwp-flex-none anwp-w-150 text-center mx-auto mx-sm-0" };
+  const _hoisted_8$B = { class: "d-block text-center mt-2" };
+  const _hoisted_9$z = {
     key: 0,
     class: "d-flex flex-column mt-3 align-items-center"
   };
@@ -14558,7 +14558,7 @@ This will fail in production.`
   const _hoisted_26$h = ["value"];
   const _hoisted_27$f = ["value"];
   const _hoisted_28$d = ["value"];
-  const _sfc_main$K = {
+  const _sfc_main$O = {
     __name: "AppTournamentSetup",
     setup(__props) {
       var _a2;
@@ -14600,11 +14600,11 @@ This will fail in production.`
         var _a3;
         const _directive_tooltip = resolveDirective("tooltip");
         return openBlock(), createElementBlock(Fragment, null, [
-          !unref(trStore).leagueId || !unref(trStore).seasonIds.length ? (openBlock(), createElementBlock("div", _hoisted_1$L, [
-            _hoisted_2$I,
+          !unref(trStore).leagueId || !unref(trStore).seasonIds.length ? (openBlock(), createElementBlock("div", _hoisted_1$P, [
+            _hoisted_2$L,
             createBaseVNode("div", null, [
-              createBaseVNode("p", _hoisted_3$H, toDisplayString(unref(l10n).fill_in_the_required_fields) + ":", 1),
-              createBaseVNode("ul", _hoisted_4$H, [
+              createBaseVNode("p", _hoisted_3$K, toDisplayString(unref(l10n).fill_in_the_required_fields) + ":", 1),
+              createBaseVNode("ul", _hoisted_4$J, [
                 withDirectives(createBaseVNode("li", { class: "my-0 anwp-text-base text-capitalize" }, "- " + toDisplayString(unref(l10n).league), 513), [
                   [vShow, !unref(trStore).leagueId]
                 ]),
@@ -14614,17 +14614,17 @@ This will fail in production.`
               ])
             ])
           ])) : createCommentVNode("", true),
-          createBaseVNode("div", _hoisted_5$F, [
+          createBaseVNode("div", _hoisted_5$G, [
             createVNode(AppBlockHeader, { icon: "#icon-gear" }, {
               default: withCtx(() => [
                 createTextVNode(toDisplayString(unref(l10n).general), 1)
               ]),
               _: 1
             }),
-            createBaseVNode("div", _hoisted_6$D, [
-              createBaseVNode("div", _hoisted_7$B, [
-                createBaseVNode("label", _hoisted_8$A, toDisplayString(unref(l10n).competition_logo), 1),
-                unref(trStore).logo ? (openBlock(), createElementBlock("div", _hoisted_9$y, [
+            createBaseVNode("div", _hoisted_6$E, [
+              createBaseVNode("div", _hoisted_7$C, [
+                createBaseVNode("label", _hoisted_8$B, toDisplayString(unref(l10n).competition_logo), 1),
+                unref(trStore).logo ? (openBlock(), createElementBlock("div", _hoisted_9$z, [
                   createBaseVNode("img", {
                     src: unref(trStore).logo,
                     class: "border p-1 anwp-w-100 anwp-h-80 anwp-object-contain",
@@ -14718,22 +14718,22 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$K = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$O = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$H = [
-    _hoisted_1$K
+  const _hoisted_2$K = [
+    _hoisted_1$O
   ];
-  const _hoisted_3$G = { class: "anwp-vfm-admin-modal__title d-flex flex-wrap align-items-center" };
-  const _hoisted_4$G = { class: "my-0 mr-3 text-capitalize" };
-  const _hoisted_5$E = { class: "ml-auto mr-5 font-italic" };
-  const _hoisted_6$C = { class: "anwp-vfm-admin-modal__content" };
-  const _hoisted_7$A = { key: 0 };
-  const _hoisted_8$z = {
+  const _hoisted_3$J = { class: "anwp-vfm-admin-modal__title d-flex flex-wrap align-items-center" };
+  const _hoisted_4$I = { class: "my-0 mr-3 text-capitalize" };
+  const _hoisted_5$F = { class: "ml-auto mr-5 font-italic" };
+  const _hoisted_6$D = { class: "anwp-vfm-admin-modal__content" };
+  const _hoisted_7$B = { key: 0 };
+  const _hoisted_8$A = {
     class: "d-block mb-1",
     for: "anwp-modaal-league-create-name"
   };
-  const _hoisted_9$x = { class: "anwp-global-info my-2" };
+  const _hoisted_9$y = { class: "anwp-global-info my-2" };
   const _hoisted_10$w = { class: "wp-list-table widefat fixed striped" };
   const _hoisted_11$s = /* @__PURE__ */ createBaseVNode("th", { class: "check-column" }, null, -1);
   const _hoisted_12$q = /* @__PURE__ */ createBaseVNode("th", null, "ID", -1);
@@ -14746,7 +14746,7 @@ This will fail in production.`
   const _hoisted_19$n = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
   const _hoisted_20$n = { class: "anwp-vfm-admin-modal__actions" };
   const _hoisted_21$n = { class: "d-flex" };
-  const _sfc_main$J = {
+  const _sfc_main$N = {
     __name: "AppModalSeasonSelector",
     setup(__props) {
       const AppAxios = axios.create({
@@ -14820,10 +14820,10 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
               type: "button",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(trStore).modals.seasonSelector = false)
-            }, _hoisted_2$H),
-            createBaseVNode("div", _hoisted_3$G, [
-              createBaseVNode("h4", _hoisted_4$G, toDisplayString(unref(l10n).select_season), 1),
-              createBaseVNode("label", _hoisted_5$E, [
+            }, _hoisted_2$K),
+            createBaseVNode("div", _hoisted_3$J, [
+              createBaseVNode("h4", _hoisted_4$I, toDisplayString(unref(l10n).select_season), 1),
+              createBaseVNode("label", _hoisted_5$F, [
                 withDirectives(createBaseVNode("input", {
                   type: "checkbox",
                   class: "mr-1",
@@ -14834,9 +14834,9 @@ This will fail in production.`
                 createTextVNode(" " + toDisplayString(unref(l10n).allows_multiple_seasons), 1)
               ])
             ]),
-            createBaseVNode("div", _hoisted_6$C, [
-              unref(trStore).modalData.seasonsCreateMode ? (openBlock(), createElementBlock("div", _hoisted_7$A, [
-                createBaseVNode("label", _hoisted_8$z, toDisplayString(unref(l10n).season_name), 1),
+            createBaseVNode("div", _hoisted_6$D, [
+              unref(trStore).modalData.seasonsCreateMode ? (openBlock(), createElementBlock("div", _hoisted_7$B, [
+                createBaseVNode("label", _hoisted_8$A, toDisplayString(unref(l10n).season_name), 1),
                 withDirectives(createBaseVNode("input", {
                   type: "text",
                   class: "w-100",
@@ -14845,7 +14845,7 @@ This will fail in production.`
                 }, null, 512), [
                   [vModelText, unref(trStore).modalData.seasonsCreateName]
                 ]),
-                createBaseVNode("div", _hoisted_9$x, toDisplayString(unref(l10n).recommended_season_name), 1)
+                createBaseVNode("div", _hoisted_9$y, toDisplayString(unref(l10n).recommended_season_name), 1)
               ])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
                 withDirectives(createBaseVNode("table", _hoisted_10$w, [
                   createBaseVNode("thead", null, [
@@ -14932,25 +14932,25 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$J = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$N = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$G = [
-    _hoisted_1$J
+  const _hoisted_2$J = [
+    _hoisted_1$N
   ];
-  const _hoisted_3$F = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$F = { class: "my-0 text-capitalize" };
-  const _hoisted_5$D = { class: "anwp-vfm-admin-modal__content" };
-  const _hoisted_6$B = { key: 0 };
-  const _hoisted_7$z = {
+  const _hoisted_3$I = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$H = { class: "my-0 text-capitalize" };
+  const _hoisted_5$E = { class: "anwp-vfm-admin-modal__content" };
+  const _hoisted_6$C = { key: 0 };
+  const _hoisted_7$A = {
     class: "d-block mb-1",
     for: "anwp-modaal-league-create-name"
   };
-  const _hoisted_8$y = {
+  const _hoisted_8$z = {
     class: "d-block mb-1 mt-2",
     for: "anwp-modaal-league-create-country"
   };
-  const _hoisted_9$w = { class: "d-flex mt-2 mb-3" };
+  const _hoisted_9$x = { class: "d-flex mt-2 mb-3" };
   const _hoisted_10$v = { class: "wp-list-table widefat fixed striped" };
   const _hoisted_11$r = /* @__PURE__ */ createBaseVNode("th", { class: "check-column" }, null, -1);
   const _hoisted_12$p = /* @__PURE__ */ createBaseVNode("th", null, null, -1);
@@ -14969,7 +14969,7 @@ This will fail in production.`
   const _hoisted_22$k = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
   const _hoisted_23$j = { class: "anwp-vfm-admin-modal__actions" };
   const _hoisted_24$j = { class: "d-flex" };
-  const _sfc_main$I = {
+  const _sfc_main$M = {
     __name: "AppModalLeagueSelector",
     setup(__props) {
       const AppAxios = axios.create({
@@ -15060,13 +15060,13 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
               type: "button",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(trStore).modals.leagueSelector = false)
-            }, _hoisted_2$G),
-            createBaseVNode("div", _hoisted_3$F, [
-              createBaseVNode("h4", _hoisted_4$F, toDisplayString(unref(l10n).select_league), 1)
+            }, _hoisted_2$J),
+            createBaseVNode("div", _hoisted_3$I, [
+              createBaseVNode("h4", _hoisted_4$H, toDisplayString(unref(l10n).select_league), 1)
             ]),
-            createBaseVNode("div", _hoisted_5$D, [
-              unref(trStore).modalData.leaguesCreateMode ? (openBlock(), createElementBlock("div", _hoisted_6$B, [
-                createBaseVNode("label", _hoisted_7$z, toDisplayString(unref(l10n).league_name), 1),
+            createBaseVNode("div", _hoisted_5$E, [
+              unref(trStore).modalData.leaguesCreateMode ? (openBlock(), createElementBlock("div", _hoisted_6$C, [
+                createBaseVNode("label", _hoisted_7$A, toDisplayString(unref(l10n).league_name), 1),
                 withDirectives(createBaseVNode("input", {
                   type: "text",
                   class: "w-100",
@@ -15075,7 +15075,7 @@ This will fail in production.`
                 }, null, 512), [
                   [vModelText, unref(trStore).modalData.leaguesCreateName]
                 ]),
-                createBaseVNode("label", _hoisted_8$y, toDisplayString(unref(l10n).country), 1),
+                createBaseVNode("label", _hoisted_8$z, toDisplayString(unref(l10n).country), 1),
                 createVNode(_component_v_select, {
                   id: "anwp-modaal-league-create-country",
                   modelValue: unref(trStore).modalData.leaguesCreateCountry,
@@ -15090,7 +15090,7 @@ This will fail in production.`
                   reduce: (country) => country.code
                 }, null, 8, ["modelValue", "options", "reduce"])
               ])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-                createBaseVNode("div", _hoisted_9$w, [
+                createBaseVNode("div", _hoisted_9$x, [
                   withDirectives(createBaseVNode("input", {
                     "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => filterLeagueName.value = $event),
                     type: "text",
@@ -15202,37 +15202,37 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$I = { class: "anwp-vue-game-wrapper anwp-b-wrap anwp-vue-wrapper-ready" };
-  const _sfc_main$H = {
+  const _hoisted_1$M = { class: "anwp-vue-game-wrapper anwp-b-wrap anwp-vue-wrapper-ready" };
+  const _sfc_main$L = {
     __name: "AppTournament",
     setup(__props) {
       return (_ctx, _cache) => {
-        return openBlock(), createElementBlock("div", _hoisted_1$I, [
-          createVNode(_sfc_main$K),
-          createVNode(_sfc_main$M),
+        return openBlock(), createElementBlock("div", _hoisted_1$M, [
+          createVNode(_sfc_main$O),
+          createVNode(_sfc_main$Q),
           createVNode(unref(Wo)),
-          createVNode(_sfc_main$J),
-          createVNode(_sfc_main$I)
+          createVNode(_sfc_main$N),
+          createVNode(_sfc_main$M)
         ]);
       };
     }
   };
-  const _hoisted_1$H = { class: "anwp-vue-plugin-health-wrapper anwp-b-wrap anwp-vue-wrapper-ready" };
-  const _hoisted_2$F = { class: "anwp-border anwp-border-gray-500 bg-white p-3" };
-  const _hoisted_3$E = /* @__PURE__ */ createBaseVNode("div", { class: "anwp-text-base anwp-text-gray-800 mt-2" }, " Run tests to check some common problems ", -1);
-  const _hoisted_4$E = { class: "my-3" };
-  const _hoisted_5$C = { class: "d-flex flex-wrap align-items-center anwp-bg-gray-200 py-1 px-1" };
-  const _hoisted_6$A = { class: "my-0 anwp-text-sm mr-3 anwp-font-normal py-1 ml-2" };
-  const _hoisted_7$y = ["src"];
-  const _hoisted_8$x = ["innerHTML"];
-  const _hoisted_9$v = {
+  const _hoisted_1$L = { class: "anwp-vue-plugin-health-wrapper anwp-b-wrap anwp-vue-wrapper-ready" };
+  const _hoisted_2$I = { class: "anwp-border anwp-border-gray-500 bg-white p-3" };
+  const _hoisted_3$H = /* @__PURE__ */ createBaseVNode("div", { class: "anwp-text-base anwp-text-gray-800 mt-2" }, " Run tests to check some common problems ", -1);
+  const _hoisted_4$G = { class: "my-3" };
+  const _hoisted_5$D = { class: "d-flex flex-wrap align-items-center anwp-bg-gray-200 py-1 px-1" };
+  const _hoisted_6$B = { class: "my-0 anwp-text-sm mr-3 anwp-font-normal py-1 ml-2" };
+  const _hoisted_7$z = ["src"];
+  const _hoisted_8$y = ["innerHTML"];
+  const _hoisted_9$w = {
     key: 0,
     class: "my-3 d-flex"
   };
   const _hoisted_10$u = ["href"];
   const _hoisted_11$q = ["onClick"];
   const _hoisted_12$o = ["src"];
-  const _sfc_main$G = {
+  const _sfc_main$K = {
     __name: "AppPluginHealth",
     setup(__props) {
       const notyf2 = new Notyf();
@@ -15299,27 +15299,27 @@ This will fail in production.`
         activeRequest.value = "";
       };
       return (_ctx, _cache) => {
-        return openBlock(), createElementBlock("div", _hoisted_1$H, [
-          createBaseVNode("div", _hoisted_2$F, [
-            _hoisted_3$E,
+        return openBlock(), createElementBlock("div", _hoisted_1$L, [
+          createBaseVNode("div", _hoisted_2$I, [
+            _hoisted_3$H,
             createBaseVNode("button", {
               class: "button px-4 mt-3 mb-4",
               type: "button",
               onClick: _cache[0] || (_cache[0] = withModifiers(($event) => runTests(), ["prevent"]))
             }, "Run"),
-            createBaseVNode("div", _hoisted_4$E, [
+            createBaseVNode("div", _hoisted_4$G, [
               (openBlock(true), createElementBlock(Fragment, null, renderList(appOptions.actions, (action, actionIndex) => {
                 return openBlock(), createElementBlock("div", {
                   key: actionIndex,
                   class: "mb-3"
                 }, [
-                  createBaseVNode("div", _hoisted_5$C, [
-                    createBaseVNode("h3", _hoisted_6$A, toDisplayString(action.title), 1),
+                  createBaseVNode("div", _hoisted_5$D, [
+                    createBaseVNode("h3", _hoisted_6$B, toDisplayString(action.title), 1),
                     activeRequest.value === action.slug ? (openBlock(), createElementBlock("img", {
                       key: 0,
                       class: "ml-auto",
                       src: appOptions.spinnerUrl
-                    }, null, 8, _hoisted_7$y)) : (openBlock(), createElementBlock("div", {
+                    }, null, 8, _hoisted_7$z)) : (openBlock(), createElementBlock("div", {
                       key: 1,
                       class: normalizeClass(["ml-auto px-3 py-0 anwp-flex-none text-white", { "anwp-bg-green-500": "ok" === action.status, "anwp-bg-orange-500": "problems" === action.status }])
                     }, toDisplayString(action.status), 3))
@@ -15327,8 +15327,8 @@ This will fail in production.`
                   createBaseVNode("div", {
                     class: "anwp-text-sm my-2",
                     innerHTML: action.fix_data.text
-                  }, null, 8, _hoisted_8$x),
-                  "problems" === action.status ? (openBlock(), createElementBlock("div", _hoisted_9$v, [
+                  }, null, 8, _hoisted_8$y),
+                  "problems" === action.status ? (openBlock(), createElementBlock("div", _hoisted_9$w, [
                     "link" === action.fix_data.link_type ? (openBlock(true), createElementBlock(Fragment, { key: 0 }, renderList(action.fix_data.links, (fixLink) => {
                       return openBlock(), createElementBlock("a", {
                         href: fixLink.link,
@@ -15359,18 +15359,18 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$G = { class: "anwp-b-wrap anwp-vue-wrapper-ready" };
-  const _hoisted_2$E = {
+  const _hoisted_1$K = { class: "anwp-b-wrap anwp-vue-wrapper-ready" };
+  const _hoisted_2$H = {
     key: 0,
     id: "anwp-fl-manual-player-metabox"
   };
-  const _hoisted_3$D = { class: "mt-2 mb-4 p-2 anwp-border anwp-border-blue-600 anwp-bg-blue-100" };
-  const _hoisted_4$D = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
-  const _hoisted_5$B = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
-  const _hoisted_6$z = { class: "table-responsive" };
-  const _hoisted_7$x = { class: "table table-bordered anwp-fl-input-table anwp-fl-stats-manual-table anwp-border-collapse" };
-  const _hoisted_8$w = { class: "anwp-border anwp-border-gray-400 anwp-bg-gray-300 anwp-text-gray-900" };
-  const _hoisted_9$u = /* @__PURE__ */ createBaseVNode("td", null, null, -1);
+  const _hoisted_3$G = { class: "mt-2 mb-4 p-2 anwp-border anwp-border-blue-600 anwp-bg-blue-100" };
+  const _hoisted_4$F = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
+  const _hoisted_5$C = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
+  const _hoisted_6$A = { class: "table-responsive" };
+  const _hoisted_7$y = { class: "table table-bordered anwp-fl-input-table anwp-fl-stats-manual-table anwp-border-collapse" };
+  const _hoisted_8$x = { class: "anwp-border anwp-border-gray-400 anwp-bg-gray-300 anwp-text-gray-900" };
+  const _hoisted_9$v = /* @__PURE__ */ createBaseVNode("td", null, null, -1);
   const _hoisted_10$t = { class: "anwp-fl-td-vertical" };
   const _hoisted_11$p = { class: "anwp-fl-td-vertical" };
   const _hoisted_12$n = { class: "anwp-fl-td-vertical" };
@@ -15451,7 +15451,7 @@ This will fail in production.`
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-plus" })
   ], -1);
   const _hoisted_72$1 = ["value"];
-  const _sfc_main$F = {
+  const _sfc_main$J = {
     __name: "AppPlayerManual",
     setup(__props) {
       const l10n = window.anwpPlayerManualData.l10n;
@@ -15485,20 +15485,20 @@ This will fail in production.`
       };
       return (_ctx, _cache) => {
         const _component_draggable = resolveComponent("draggable");
-        return openBlock(), createElementBlock("div", _hoisted_1$G, [
-          statsData.value.length ? (openBlock(), createElementBlock("div", _hoisted_2$E, [
-            createBaseVNode("p", _hoisted_3$D, [
+        return openBlock(), createElementBlock("div", _hoisted_1$K, [
+          statsData.value.length ? (openBlock(), createElementBlock("div", _hoisted_2$H, [
+            createBaseVNode("p", _hoisted_3$G, [
               createTextVNode(" * " + toDisplayString(unref(l10n).notice_1), 1),
-              _hoisted_4$D,
+              _hoisted_4$F,
               createTextVNode(" ** " + toDisplayString(unref(l10n).notice_2), 1),
-              _hoisted_5$B,
+              _hoisted_5$C,
               createTextVNode(" *** " + toDisplayString(unref(l10n).notice_3), 1)
             ]),
-            createBaseVNode("div", _hoisted_6$z, [
-              createBaseVNode("table", _hoisted_7$x, [
+            createBaseVNode("div", _hoisted_6$A, [
+              createBaseVNode("table", _hoisted_7$y, [
                 createBaseVNode("thead", null, [
-                  createBaseVNode("tr", _hoisted_8$w, [
-                    _hoisted_9$u,
+                  createBaseVNode("tr", _hoisted_8$x, [
+                    _hoisted_9$v,
                     createBaseVNode("td", _hoisted_10$t, toDisplayString(unref(l10n).season), 1),
                     createBaseVNode("td", _hoisted_11$p, toDisplayString(unref(l10n).competition), 1),
                     createBaseVNode("td", _hoisted_12$n, toDisplayString(unref(l10n).played_matches), 1),
@@ -15798,18 +15798,18 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$F = { class: "anwp-vue-match-setup-wrapper anwp-b-wrap anwp-vue-wrapper-ready" };
-  const _hoisted_2$D = { class: "anwp-border anwp-border-gray-500" };
-  const _hoisted_3$C = { class: "p-3 d-sm-flex flex-wrap align-items-center bg-light" };
-  const _hoisted_4$C = /* @__PURE__ */ createBaseVNode("label", { class: "mr-3 mb-0" }, "show only active competitions", -1);
-  const _hoisted_5$A = { class: "bg-white p-3 pb-4 d-sm-flex flex-wrap align-items-start" };
-  const _hoisted_6$y = /* @__PURE__ */ createBaseVNode("div", { class: "w-100 mt-2" }, null, -1);
-  const _hoisted_7$w = { class: "d-flex flex-column mb-4 m-sm-2 px-2" };
-  const _hoisted_8$v = {
+  const _hoisted_1$J = { class: "anwp-vue-match-setup-wrapper anwp-b-wrap anwp-vue-wrapper-ready" };
+  const _hoisted_2$G = { class: "anwp-border anwp-border-gray-500" };
+  const _hoisted_3$F = { class: "p-3 d-sm-flex flex-wrap align-items-center bg-light" };
+  const _hoisted_4$E = /* @__PURE__ */ createBaseVNode("label", { class: "mr-3 mb-0" }, "show only active competitions", -1);
+  const _hoisted_5$B = { class: "bg-white p-3 pb-4 d-sm-flex flex-wrap align-items-start" };
+  const _hoisted_6$z = /* @__PURE__ */ createBaseVNode("div", { class: "w-100 mt-2" }, null, -1);
+  const _hoisted_7$x = { class: "d-flex flex-column mb-4 m-sm-2 px-2" };
+  const _hoisted_8$w = {
     class: "mb-1 anwp-text-gray-800",
     for: "anwp-fl-selected-competition"
   };
-  const _hoisted_9$t = { class: "d-flex flex-column mb-4 m-sm-2 px-2" };
+  const _hoisted_9$u = { class: "d-flex flex-column mb-4 m-sm-2 px-2" };
   const _hoisted_10$s = {
     class: "mb-1 anwp-text-gray-800",
     for: "anwp-fl-selected-season"
@@ -15866,7 +15866,7 @@ This will fail in production.`
     value: "setup"
   }, null, -1);
   const _hoisted_42$7 = ["value"];
-  const _sfc_main$E = {
+  const _sfc_main$I = {
     __name: "AppMatchSetup",
     setup(__props) {
       var _a2, _b2, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m;
@@ -16010,16 +16010,16 @@ This will fail in production.`
         const _component_toggle = resolveComponent("toggle");
         const _component_v_select = resolveComponent("v-select");
         const _directive_tooltip = resolveDirective("tooltip");
-        return openBlock(), createElementBlock("div", _hoisted_1$F, [
-          createBaseVNode("div", _hoisted_2$D, [
+        return openBlock(), createElementBlock("div", _hoisted_1$J, [
+          createBaseVNode("div", _hoisted_2$G, [
             createVNode(AppBlockHeader, { icon: "#icon-gear" }, {
               default: withCtx(() => [
                 createTextVNode(toDisplayString(unref(l10n).match_setup), 1)
               ]),
               _: 1
             }),
-            createBaseVNode("div", _hoisted_3$C, [
-              _hoisted_4$C,
+            createBaseVNode("div", _hoisted_3$F, [
+              _hoisted_4$E,
               createVNode(_component_toggle, {
                 modelValue: filterActive.value,
                 "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => filterActive.value = $event),
@@ -16028,10 +16028,10 @@ This will fail in production.`
                 class: "anwp-toggle-w-60"
               }, null, 8, ["modelValue", "on-label", "off-label"])
             ]),
-            createBaseVNode("div", _hoisted_5$A, [
-              _hoisted_6$y,
-              createBaseVNode("div", _hoisted_7$w, [
-                createBaseVNode("label", _hoisted_8$v, toDisplayString(unref(l10n).competition), 1),
+            createBaseVNode("div", _hoisted_5$B, [
+              _hoisted_6$z,
+              createBaseVNode("div", _hoisted_7$x, [
+                createBaseVNode("label", _hoisted_8$w, toDisplayString(unref(l10n).competition), 1),
                 createVNode(_component_v_select, {
                   id: "anwp-fl-selected-competition",
                   modelValue: selectedCompetition.value,
@@ -16046,7 +16046,7 @@ This will fail in production.`
                   placeholder: "- select competition -"
                 }, null, 8, ["modelValue", "options", "reduce"])
               ]),
-              createBaseVNode("div", _hoisted_9$t, [
+              createBaseVNode("div", _hoisted_9$u, [
                 createBaseVNode("label", _hoisted_10$s, toDisplayString(unref(l10n).season), 1),
                 createVNode(_component_v_select, {
                   id: "anwp-fl-selected-season",
@@ -17188,25 +17188,25 @@ This will fail in production.`
   function render$1(_ctx, _cache) {
     return openBlock(), createElementBlock("svg", _hoisted_1$1$1, _hoisted_3$1$1);
   }
-  const _hoisted_1$E = {
+  const _hoisted_1$I = {
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 24 24",
     width: "1em",
     height: "1em"
   };
-  const _hoisted_2$C = /* @__PURE__ */ createBaseVNode("path", {
+  const _hoisted_2$F = /* @__PURE__ */ createBaseVNode("path", {
     d: "M0 0h24v24H0z",
     fill: "none"
   }, null, -1);
-  const _hoisted_3$B = /* @__PURE__ */ createBaseVNode("path", { d: "M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" }, null, -1);
-  const _hoisted_4$B = /* @__PURE__ */ createBaseVNode("path", { d: "M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" }, null, -1);
-  const _hoisted_5$z = [
-    _hoisted_2$C,
-    _hoisted_3$B,
-    _hoisted_4$B
+  const _hoisted_3$E = /* @__PURE__ */ createBaseVNode("path", { d: "M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" }, null, -1);
+  const _hoisted_4$D = /* @__PURE__ */ createBaseVNode("path", { d: "M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" }, null, -1);
+  const _hoisted_5$A = [
+    _hoisted_2$F,
+    _hoisted_3$E,
+    _hoisted_4$D
   ];
   function render(_ctx, _cache) {
-    return openBlock(), createElementBlock("svg", _hoisted_1$E, _hoisted_5$z);
+    return openBlock(), createElementBlock("svg", _hoisted_1$I, _hoisted_5$A);
   }
   function createDate(y2, M2 = 0, d2 = 1, h2 = 0, m2 = 0, s2 = 0, ms = 0) {
     const date = new Date(y2, M2, d2, h2, m2, s2, ms);
@@ -19293,27 +19293,27 @@ This will fail in production.`
       tempReferees
     };
   });
-  const _hoisted_1$D = {
+  const _hoisted_1$H = {
     class: "anwp-border anwp-border-gray-500",
     id: "anwp-fl-general-metabox"
   };
-  const _hoisted_2$B = { class: "bg-white p-3 pb-4 d-sm-flex flex-wrap align-items-start" };
-  const _hoisted_3$A = { class: "d-flex flex-column mb-4 m-sm-2 px-2" };
-  const _hoisted_4$A = {
+  const _hoisted_2$E = { class: "bg-white p-3 pb-4 d-sm-flex flex-wrap align-items-start" };
+  const _hoisted_3$D = { class: "d-flex flex-column mb-4 m-sm-2 px-2" };
+  const _hoisted_4$C = {
     class: "mb-1 anwp-text-gray-800",
     for: "anwpfl-match-status"
   };
-  const _hoisted_5$y = { value: "0" };
-  const _hoisted_6$x = { value: "1" };
-  const _hoisted_7$v = {
+  const _hoisted_5$z = { value: "0" };
+  const _hoisted_6$y = { value: "1" };
+  const _hoisted_7$w = {
     key: 0,
     class: "d-flex flex-column mb-4 m-sm-2 px-2"
   };
-  const _hoisted_8$u = {
+  const _hoisted_8$v = {
     class: "mb-1 anwp-text-gray-800",
     for: "anwpfl-match-special-status"
   };
-  const _hoisted_9$s = { value: "" };
+  const _hoisted_9$t = { value: "" };
   const _hoisted_10$r = ["value"];
   const _hoisted_11$n = /* @__PURE__ */ createBaseVNode("div", { class: "w-100" }, null, -1);
   const _hoisted_12$l = { class: "d-flex flex-column mb-4 m-sm-2 px-2" };
@@ -19354,7 +19354,7 @@ This will fail in production.`
     _hoisted_25$f
   ];
   const _hoisted_27$c = ["value"];
-  const _sfc_main$D = {
+  const _sfc_main$H = {
     __name: "AppGeneral",
     setup(__props) {
       const gameStore = useGameStore();
@@ -19368,37 +19368,37 @@ This will fail in production.`
       return (_ctx, _cache) => {
         const _component_v_select = resolveComponent("v-select");
         const _directive_tooltip = resolveDirective("tooltip");
-        return openBlock(), createElementBlock("div", _hoisted_1$D, [
+        return openBlock(), createElementBlock("div", _hoisted_1$H, [
           createVNode(AppBlockHeader, { icon: "#icon-gear" }, {
             default: withCtx(() => [
               createTextVNode(toDisplayString(unref(l10n).basic_info), 1)
             ]),
             _: 1
           }),
-          createBaseVNode("div", _hoisted_2$B, [
-            createBaseVNode("div", _hoisted_3$A, [
-              createBaseVNode("label", _hoisted_4$A, toDisplayString(unref(l10n).status), 1),
+          createBaseVNode("div", _hoisted_2$E, [
+            createBaseVNode("div", _hoisted_3$D, [
+              createBaseVNode("label", _hoisted_4$C, toDisplayString(unref(l10n).status), 1),
               withDirectives(createBaseVNode("select", {
                 id: "anwpfl-match-status",
                 class: "anwp-w-min-100",
                 name: "_fl_finished",
                 "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(gameStore).finished = $event)
               }, [
-                createBaseVNode("option", _hoisted_5$y, toDisplayString(unref(l10n).fixture), 1),
-                createBaseVNode("option", _hoisted_6$x, toDisplayString(unref(l10n).result), 1)
+                createBaseVNode("option", _hoisted_5$z, toDisplayString(unref(l10n).fixture), 1),
+                createBaseVNode("option", _hoisted_6$y, toDisplayString(unref(l10n).result), 1)
               ], 512), [
                 [vModelSelect, unref(gameStore).finished]
               ])
             ]),
-            1 !== Number(unref(gameStore).finished) ? (openBlock(), createElementBlock("div", _hoisted_7$v, [
-              createBaseVNode("label", _hoisted_8$u, toDisplayString(unref(l10n).special_status), 1),
+            1 !== Number(unref(gameStore).finished) ? (openBlock(), createElementBlock("div", _hoisted_7$w, [
+              createBaseVNode("label", _hoisted_8$v, toDisplayString(unref(l10n).special_status), 1),
               withDirectives(createBaseVNode("select", {
                 id: "anwpfl-match-special-status",
                 class: "anwp-w-min-150",
                 name: "_anwpfl_special_status",
                 "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(gameStore).special_status = $event)
               }, [
-                createBaseVNode("option", _hoisted_9$s, "- " + toDisplayString(unref(l10n).none) + " -", 1),
+                createBaseVNode("option", _hoisted_9$t, "- " + toDisplayString(unref(l10n).none) + " -", 1),
                 (openBlock(true), createElementBlock(Fragment, null, renderList(unref(gameStore).appConfig.specialStatuses, (specialStatusText, specialStatusSlug) => {
                   return openBlock(), createElementBlock("option", {
                     value: specialStatusSlug,
@@ -19515,11 +19515,11 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$C = ["src"];
-  const _hoisted_2$A = { class: "anwp-text-xl anwp-text-gray-800" };
-  const _hoisted_3$z = { class: "anwp-text-xl anwp-text-gray-800 ml-auto" };
-  const _hoisted_4$z = ["src"];
-  const _sfc_main$C = {
+  const _hoisted_1$G = ["src"];
+  const _hoisted_2$D = { class: "anwp-text-xl anwp-text-gray-800" };
+  const _hoisted_3$C = { class: "anwp-text-xl anwp-text-gray-800 ml-auto" };
+  const _hoisted_4$B = ["src"];
+  const _sfc_main$G = {
     __name: "AppTeamHeader",
     props: {
       logo: {
@@ -19550,36 +19550,36 @@ This will fail in production.`
               src: __props.logo,
               alt: "club logo",
               class: "anwp-w-60 anwp-h-60 anwp-object-contain mr-3"
-            }, null, 8, _hoisted_1$C)) : createCommentVNode("", true),
-            createBaseVNode("div", _hoisted_2$A, toDisplayString(__props.title), 1)
+            }, null, 8, _hoisted_1$G)) : createCommentVNode("", true),
+            createBaseVNode("div", _hoisted_2$D, toDisplayString(__props.title), 1)
           ], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-            createBaseVNode("div", _hoisted_3$z, toDisplayString(__props.title), 1),
+            createBaseVNode("div", _hoisted_3$C, toDisplayString(__props.title), 1),
             __props.logo ? (openBlock(), createElementBlock("img", {
               key: 0,
               src: __props.logo,
               alt: "club logo",
               class: "anwp-w-60 anwp-h-60 anwp-object-contain ml-3"
-            }, null, 8, _hoisted_4$z)) : createCommentVNode("", true)
+            }, null, 8, _hoisted_4$B)) : createCommentVNode("", true)
           ], 64))
         ], 2);
       };
     }
   };
-  const _hoisted_1$B = {
+  const _hoisted_1$F = {
     class: "anwp-border anwp-border-gray-500 my-4",
     id: "anwp-fl-game-statistics-metabox"
   };
-  const _hoisted_2$z = { class: "bg-white p-3 pb-4" };
-  const _hoisted_3$y = { class: "d-flex flex-wrap justify-content-end" };
-  const _hoisted_4$y = { class: "d-flex flex-column m-sm-2 px-2 ml-auto" };
-  const _hoisted_5$x = {
+  const _hoisted_2$C = { class: "bg-white p-3 pb-4" };
+  const _hoisted_3$B = { class: "d-flex flex-wrap justify-content-end" };
+  const _hoisted_4$A = { class: "d-flex flex-column m-sm-2 px-2 ml-auto" };
+  const _hoisted_5$y = {
     class: "mb-1 anwp-text-gray-800",
     for: "anwpfl-input-extra-time"
   };
-  const _hoisted_6$w = { value: "" };
-  const _hoisted_7$u = { value: "yes" };
-  const _hoisted_8$t = { class: "d-flex flex-column m-sm-2 px-2" };
-  const _hoisted_9$r = {
+  const _hoisted_6$x = { value: "" };
+  const _hoisted_7$v = { value: "yes" };
+  const _hoisted_8$u = { class: "d-flex flex-column m-sm-2 px-2" };
+  const _hoisted_9$s = {
     class: "mb-1 anwp-text-gray-800",
     for: "anwpfl-input-penalty"
   };
@@ -19666,7 +19666,7 @@ This will fail in production.`
   };
   const _hoisted_38$7 = ["value"];
   const _hoisted_39$7 = ["value"];
-  const _sfc_main$B = {
+  const _sfc_main$F = {
     __name: "AppGameStats",
     setup(__props) {
       const gameStore = useGameStore();
@@ -19678,31 +19678,31 @@ This will fail in production.`
         return "yes" === gameStore.penalty ? 3 : 0;
       });
       return (_ctx, _cache) => {
-        return openBlock(), createElementBlock("div", _hoisted_1$B, [
+        return openBlock(), createElementBlock("div", _hoisted_1$F, [
           createVNode(AppBlockHeader, { icon: "#icon-graph" }, {
             default: withCtx(() => [
               createTextVNode(toDisplayString(unref(l10n).match_stats), 1)
             ]),
             _: 1
           }),
-          createBaseVNode("div", _hoisted_2$z, [
+          createBaseVNode("div", _hoisted_2$C, [
             Number(unref(gameStore).finished) ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-              createBaseVNode("div", _hoisted_3$y, [
-                createBaseVNode("div", _hoisted_4$y, [
-                  createBaseVNode("label", _hoisted_5$x, toDisplayString(unref(l10n).extra_time), 1),
+              createBaseVNode("div", _hoisted_3$B, [
+                createBaseVNode("div", _hoisted_4$A, [
+                  createBaseVNode("label", _hoisted_5$y, toDisplayString(unref(l10n).extra_time), 1),
                   withDirectives(createBaseVNode("select", {
                     id: "anwpfl-input-extra-time",
                     class: "anwp-w-min-150",
                     "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(gameStore).extraTime = $event)
                   }, [
-                    createBaseVNode("option", _hoisted_6$w, toDisplayString(unref(l10n).no), 1),
-                    createBaseVNode("option", _hoisted_7$u, toDisplayString(unref(l10n).yes), 1)
+                    createBaseVNode("option", _hoisted_6$x, toDisplayString(unref(l10n).no), 1),
+                    createBaseVNode("option", _hoisted_7$v, toDisplayString(unref(l10n).yes), 1)
                   ], 512), [
                     [vModelSelect, unref(gameStore).extraTime]
                   ])
                 ]),
-                createBaseVNode("div", _hoisted_8$t, [
-                  createBaseVNode("label", _hoisted_9$r, toDisplayString(unref(l10n).penalty), 1),
+                createBaseVNode("div", _hoisted_8$u, [
+                  createBaseVNode("label", _hoisted_9$s, toDisplayString(unref(l10n).penalty), 1),
                   withDirectives(createBaseVNode("select", {
                     id: "anwpfl-input-penalty",
                     class: "anwp-w-min-150",
@@ -19720,7 +19720,7 @@ This will fail in production.`
                   createBaseVNode("tr", null, [
                     _hoisted_13$i,
                     createBaseVNode("td", null, [
-                      createVNode(_sfc_main$C, {
+                      createVNode(_sfc_main$G, {
                         logo: unref(gameStore).clubHome.logo,
                         title: unref(gameStore).clubHome.title,
                         "is-home": true,
@@ -19728,7 +19728,7 @@ This will fail in production.`
                       }, null, 8, ["logo", "title"])
                     ]),
                     createBaseVNode("td", null, [
-                      createVNode(_sfc_main$C, {
+                      createVNode(_sfc_main$G, {
                         logo: unref(gameStore).clubAway.logo,
                         title: unref(gameStore).clubAway.title,
                         "is-home": true,
@@ -20202,28 +20202,28 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$A = { class: "anwp-border anwp-border-gray-400 anwp-bg-gray-100" };
-  const _hoisted_2$y = /* @__PURE__ */ createBaseVNode("td", { class: "anwp-drag-handler anwp-w-30 anwp-text-center pt-1 px-2" }, [
+  const _hoisted_1$E = { class: "anwp-border anwp-border-gray-400 anwp-bg-gray-100" };
+  const _hoisted_2$B = /* @__PURE__ */ createBaseVNode("td", { class: "anwp-drag-handler anwp-w-30 anwp-text-center pt-1 px-2" }, [
     /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--s24 anwp-icon--octi mr-0" }, [
       /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-grabber" })
     ])
   ], -1);
-  const _hoisted_3$x = { class: "position-relative anwp-cursor-pointer ml-2 anwp-w-50" };
-  const _hoisted_4$x = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-fl-icon--shirt" }, [
+  const _hoisted_3$A = { class: "position-relative anwp-cursor-pointer ml-2 anwp-w-50" };
+  const _hoisted_4$z = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-fl-icon--shirt" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-shirt" })
   ], -1);
-  const _hoisted_5$w = {
+  const _hoisted_5$x = {
     key: 1,
     class: "px-1 py-1 align-middle anwp-w-10"
   };
-  const _hoisted_6$v = ["src"];
-  const _hoisted_7$t = { class: "mt-1" };
-  const _hoisted_8$s = {
+  const _hoisted_6$w = ["src"];
+  const _hoisted_7$u = { class: "mt-1" };
+  const _hoisted_8$t = {
     key: 0,
     class: "options__flag f16 align-middle mr-1",
     style: { "line-height": "12px" }
   };
-  const _hoisted_9$q = {
+  const _hoisted_9$r = {
     key: 1,
     class: "anwp-text-xs anwp-text-gray-600"
   };
@@ -20233,7 +20233,7 @@ This will fail in production.`
   const _hoisted_11$l = [
     _hoisted_10$p
   ];
-  const _sfc_main$A = {
+  const _sfc_main$E = {
     __name: "AppMatchPlayer",
     props: {
       className: {
@@ -20277,8 +20277,8 @@ This will fail in production.`
     setup(__props) {
       return (_ctx, _cache) => {
         const _directive_tooltip = resolveDirective("tooltip");
-        return openBlock(), createElementBlock("tr", _hoisted_1$A, [
-          _hoisted_2$y,
+        return openBlock(), createElementBlock("tr", _hoisted_1$E, [
+          _hoisted_2$B,
           createBaseVNode("td", {
             class: normalizeClass(["p-1 anwp-w-15 anwp-text-center text-uppercase align-middle anwp-text-lg text-white anwp-font-bold anwp-leading-1 anwp-opacity-60", __props.player.position && __props.classPosition[__props.player.position] ? __props.classPosition[__props.player.position] : ""])
           }, toDisplayString(__props.player.position ? __props.player.position.charAt(0) : ""), 3),
@@ -20287,8 +20287,8 @@ This will fail in production.`
             class: "py-0 px-2 anwp-text-center align-middle anwp-w-10",
             onClick: _cache[0] || (_cache[0] = withModifiers(($event) => _ctx.$emit("open-number-modal"), ["prevent"]))
           }, [
-            createBaseVNode("div", _hoisted_3$x, [
-              _hoisted_4$x,
+            createBaseVNode("div", _hoisted_3$A, [
+              _hoisted_4$z,
               createBaseVNode("div", {
                 class: normalizeClass(["anwp-fl-icon--shirt-number", { "anwp-text-orange-500": __props.customNumbers[__props.player.id] > 0 }])
               }, toDisplayString(__props.customNumbers[__props.player.id] > 0 ? __props.customNumbers[__props.player.id] : __props.squadNumbers[__props.player.id] ? __props.squadNumbers[__props.player.id] : ""), 3)
@@ -20296,25 +20296,25 @@ This will fail in production.`
           ])), [
             [_directive_tooltip, __props.l10n.edit_player_number]
           ]) : createCommentVNode("", true),
-          __props.displayPhoto ? (openBlock(), createElementBlock("td", _hoisted_5$w, [
+          __props.displayPhoto ? (openBlock(), createElementBlock("td", _hoisted_5$x, [
             createBaseVNode("img", {
               class: "anwp-h-45 anwp-w-45 anwp-object-contain my-0 anwp-border anwp-border-gray-400",
               style: { "border-radius": "10px", "padding": "2px" },
               src: __props.player.photo ? __props.player.photo : __props.defaultPhoto,
               alt: "player photo"
-            }, null, 8, _hoisted_6$v)
+            }, null, 8, _hoisted_6$w)
           ])) : createCommentVNode("", true),
           createBaseVNode("td", {
             class: normalizeClass(["p-2 anwp-text-base anwp-leading-1", __props.className])
           }, [
             createTextVNode(toDisplayString(__props.player.name) + " ", 1),
-            createBaseVNode("div", _hoisted_7$t, [
-              __props.player.country ? (openBlock(), createElementBlock("span", _hoisted_8$s, [
+            createBaseVNode("div", _hoisted_7$u, [
+              __props.player.country ? (openBlock(), createElementBlock("span", _hoisted_8$t, [
                 createBaseVNode("span", {
                   class: normalizeClass(["flag", __props.player.country])
                 }, null, 2)
               ])) : createCommentVNode("", true),
-              __props.player.birthdate ? (openBlock(), createElementBlock("span", _hoisted_9$q, toDisplayString(__props.player.birthdate), 1)) : createCommentVNode("", true)
+              __props.player.birthdate ? (openBlock(), createElementBlock("span", _hoisted_9$r, toDisplayString(__props.player.birthdate), 1)) : createCommentVNode("", true)
             ])
           ], 2),
           renderSlot(_ctx.$slots, "default"),
@@ -20331,20 +20331,20 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$z = { class: "mr-3" };
-  const _hoisted_2$x = ["src"];
-  const _hoisted_3$w = { class: "anwp-text-base anwp-leading-1" };
-  const _hoisted_4$w = { class: "mt-1" };
-  const _hoisted_5$v = {
+  const _hoisted_1$D = { class: "mr-3" };
+  const _hoisted_2$A = ["src"];
+  const _hoisted_3$z = { class: "anwp-text-base anwp-leading-1" };
+  const _hoisted_4$y = { class: "mt-1" };
+  const _hoisted_5$w = {
     key: 0,
     class: "options__flag f16 align-middle mr-1",
     style: { "line-height": "12px" }
   };
-  const _hoisted_6$u = {
+  const _hoisted_6$v = {
     key: 1,
     class: "anwp-text-xs anwp-text-gray-600"
   };
-  const _sfc_main$z = {
+  const _sfc_main$D = {
     __name: "AppMatchCoach",
     props: {
       coach: {
@@ -20361,41 +20361,41 @@ This will fail in production.`
           class: "d-flex align-items-center anwp-cursor-pointer anwp-border anwp-border-gray-400 rounded px-3 py-2 anwp-bg-gray-100",
           onClick: _cache[0] || (_cache[0] = withModifiers(($event) => _ctx.$emit("click-coach"), ["prevent"]))
         }, [
-          createBaseVNode("div", _hoisted_1$z, [
+          createBaseVNode("div", _hoisted_1$D, [
             createBaseVNode("img", {
               class: "anwp-h-45 anwp-w-45 anwp-object-contain my-0 anwp-border anwp-border-gray-400",
               style: { "border-radius": "10px", "padding": "2px" },
               src: __props.coach.photo || __props.defaultPhoto,
               alt: "coach photo"
-            }, null, 8, _hoisted_2$x)
+            }, null, 8, _hoisted_2$A)
           ]),
-          createBaseVNode("div", _hoisted_3$w, [
+          createBaseVNode("div", _hoisted_3$z, [
             createTextVNode(toDisplayString(__props.coach.name) + " ", 1),
-            createBaseVNode("div", _hoisted_4$w, [
-              __props.coach.country ? (openBlock(), createElementBlock("span", _hoisted_5$v, [
+            createBaseVNode("div", _hoisted_4$y, [
+              __props.coach.country ? (openBlock(), createElementBlock("span", _hoisted_5$w, [
                 createBaseVNode("span", {
                   class: normalizeClass(["flag", __props.coach.country])
                 }, null, 2)
               ])) : createCommentVNode("", true),
-              __props.coach.birthdate ? (openBlock(), createElementBlock("span", _hoisted_6$u, toDisplayString(__props.coach.birthdate), 1)) : createCommentVNode("", true)
+              __props.coach.birthdate ? (openBlock(), createElementBlock("span", _hoisted_6$v, toDisplayString(__props.coach.birthdate), 1)) : createCommentVNode("", true)
             ])
           ])
         ]);
       };
     }
   };
-  const _hoisted_1$y = { class: "my-3" };
-  const _hoisted_2$w = {
+  const _hoisted_1$C = { class: "my-3" };
+  const _hoisted_2$z = {
     key: 0,
     class: "d-flex flex-wrap align-items-start"
   };
-  const _hoisted_3$v = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-red-600" }, [
+  const _hoisted_3$y = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-red-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_4$v = [
-    _hoisted_3$v
+  const _hoisted_4$x = [
+    _hoisted_3$y
   ];
-  const _sfc_main$y = {
+  const _sfc_main$C = {
     __name: "AppMatchCoachInput",
     props: {
       l10n: {
@@ -20408,9 +20408,9 @@ This will fail in production.`
     },
     setup(__props) {
       return (_ctx, _cache) => {
-        return openBlock(), createElementBlock("div", _hoisted_1$y, [
-          __props.coach ? (openBlock(), createElementBlock("div", _hoisted_2$w, [
-            createVNode(_sfc_main$z, {
+        return openBlock(), createElementBlock("div", _hoisted_1$C, [
+          __props.coach ? (openBlock(), createElementBlock("div", _hoisted_2$z, [
+            createVNode(_sfc_main$D, {
               onClickCoach: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("open-modal-coach-selector")),
               coach: __props.coach,
               defaultPhoto: __props.defaultPhoto
@@ -20419,7 +20419,7 @@ This will fail in production.`
               type: "button",
               class: "anwp-flex-none ml-2 anwp-cursor-pointer d-flex align-items-center justify-content-center button anwp-border-red-600",
               onClick: _cache[1] || (_cache[1] = withModifiers(($event) => _ctx.$emit("click-remove"), ["prevent"]))
-            }, _hoisted_4$v)
+            }, _hoisted_4$x)
           ])) : (openBlock(), createElementBlock("button", {
             key: 1,
             type: "button",
@@ -20430,37 +20430,37 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$x = {
+  const _hoisted_1$B = {
     key: 1,
     class: "mr-3 anwp-text-center position-relative"
   };
-  const _hoisted_2$v = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-fl-icon--shirt" }, [
+  const _hoisted_2$y = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-fl-icon--shirt" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-shirt" })
   ], -1);
-  const _hoisted_3$u = {
+  const _hoisted_3$x = {
     class: "anwp-fl-icon--shirt-number",
     style: { "top": "10px", "left": "0" }
   };
-  const _hoisted_4$u = {
+  const _hoisted_4$w = {
     key: 2,
     class: "mr-3"
   };
-  const _hoisted_5$u = ["src"];
-  const _hoisted_6$t = { class: "anwp-text-base anwp-leading-1" };
-  const _hoisted_7$s = {
+  const _hoisted_5$v = ["src"];
+  const _hoisted_6$u = { class: "anwp-text-base anwp-leading-1" };
+  const _hoisted_7$t = {
     key: 0,
     class: "mt-1"
   };
-  const _hoisted_8$r = {
+  const _hoisted_8$s = {
     key: 0,
     class: "options__flag f16 align-middle mr-1",
     style: { "line-height": "12px" }
   };
-  const _hoisted_9$p = {
+  const _hoisted_9$q = {
     key: 1,
     class: "anwp-text-xs anwp-text-gray-600"
   };
-  const _sfc_main$x = {
+  const _sfc_main$B = {
     __name: "AppMatchPlayerAlt",
     props: {
       displayPosition: {
@@ -20504,47 +20504,47 @@ This will fail in production.`
             key: 0,
             class: normalizeClass(["anwp-w-30 anwp-text-center text-uppercase anwp-text-base text-white anwp-font-bold mr-3", __props.player.position ? __props.classPosition[__props.player.position] : "anwp-bg-gray-500"])
           }, toDisplayString(__props.player.position ? __props.player.position.charAt(0) : "?"), 3)) : createCommentVNode("", true),
-          __props.displayNumber ? (openBlock(), createElementBlock("div", _hoisted_1$x, [
-            _hoisted_2$v,
-            createBaseVNode("div", _hoisted_3$u, toDisplayString(__props.playerNumber[__props.player.id] > 0 ? __props.playerNumber[__props.player.id] : ""), 1)
+          __props.displayNumber ? (openBlock(), createElementBlock("div", _hoisted_1$B, [
+            _hoisted_2$y,
+            createBaseVNode("div", _hoisted_3$x, toDisplayString(__props.playerNumber[__props.player.id] > 0 ? __props.playerNumber[__props.player.id] : ""), 1)
           ])) : createCommentVNode("", true),
-          __props.displayPhoto ? (openBlock(), createElementBlock("div", _hoisted_4$u, [
+          __props.displayPhoto ? (openBlock(), createElementBlock("div", _hoisted_4$w, [
             createBaseVNode("img", {
               class: "anwp-h-45 anwp-w-45 anwp-object-contain my-0 anwp-border anwp-border-gray-400",
               style: { "border-radius": "10px", "padding": "2px" },
               src: __props.player.photo ? __props.player.photo : __props.defaultPhoto,
               alt: "player photo"
-            }, null, 8, _hoisted_5$u)
+            }, null, 8, _hoisted_5$v)
           ])) : createCommentVNode("", true),
-          createBaseVNode("div", _hoisted_6$t, [
+          createBaseVNode("div", _hoisted_6$u, [
             createTextVNode(toDisplayString(__props.player.name) + " ", 1),
-            __props.displayPlayerMeta ? (openBlock(), createElementBlock("div", _hoisted_7$s, [
-              __props.player.country ? (openBlock(), createElementBlock("span", _hoisted_8$r, [
+            __props.displayPlayerMeta ? (openBlock(), createElementBlock("div", _hoisted_7$t, [
+              __props.player.country ? (openBlock(), createElementBlock("span", _hoisted_8$s, [
                 createBaseVNode("span", {
                   class: normalizeClass(["flag", __props.player.country])
                 }, null, 2)
               ])) : createCommentVNode("", true),
-              __props.player.birthdate ? (openBlock(), createElementBlock("span", _hoisted_9$p, toDisplayString(__props.player.birthdate), 1)) : createCommentVNode("", true)
+              __props.player.birthdate ? (openBlock(), createElementBlock("span", _hoisted_9$q, toDisplayString(__props.player.birthdate), 1)) : createCommentVNode("", true)
             ])) : createCommentVNode("", true)
           ])
         ]);
       };
     }
   };
-  const _hoisted_1$w = {
+  const _hoisted_1$A = {
     class: "anwp-border anwp-border-gray-500 my-4",
     id: "anwp-fl-players-metabox"
   };
-  const _hoisted_2$u = { class: "px-3 pb-4 bg-white" };
-  const _hoisted_3$t = { class: "anwp-row" };
-  const _hoisted_4$t = { class: "anwp-col-xl-6" };
-  const _hoisted_5$t = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi anwp-icon--s16 mr-2" }, [
+  const _hoisted_2$x = { class: "px-3 pb-4 bg-white" };
+  const _hoisted_3$w = { class: "anwp-row" };
+  const _hoisted_4$v = { class: "anwp-col-xl-6" };
+  const _hoisted_5$u = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi anwp-icon--s16 mr-2" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-plus" })
   ], -1);
-  const _hoisted_6$s = { class: "mb-2 py-1 px-2 anwp-text-base d-flex anwp-border anwp-border-gray-400 anwp-bg-gray-300 anwp-text-gray-900" };
-  const _hoisted_7$r = { class: "ml-auto" };
-  const _hoisted_8$q = { class: "table-responsive" };
-  const _hoisted_9$o = { class: "table table-sm anwp-border-collapse w-100 anwp-overflow-scroll anwp-user-select-none anwp-leading-1" };
+  const _hoisted_6$t = { class: "mb-2 py-1 px-2 anwp-text-base d-flex anwp-border anwp-border-gray-400 anwp-bg-gray-300 anwp-text-gray-900" };
+  const _hoisted_7$s = { class: "ml-auto" };
+  const _hoisted_8$r = { class: "table-responsive" };
+  const _hoisted_9$p = { class: "table table-sm anwp-border-collapse w-100 anwp-overflow-scroll anwp-user-select-none anwp-leading-1" };
   const _hoisted_10$o = { class: "mb-2 py-1 px-2 anwp-text-base d-flex anwp-border anwp-border-gray-400 anwp-bg-gray-300 anwp-text-gray-900" };
   const _hoisted_11$k = { class: "ml-auto" };
   const _hoisted_12$j = { class: "table-responsive" };
@@ -20596,7 +20596,7 @@ This will fail in production.`
   const _hoisted_42$6 = ["value"];
   const _hoisted_43$6 = ["value"];
   const _hoisted_44$5 = ["value"];
-  const _sfc_main$w = {
+  const _sfc_main$A = {
     __name: "AppPlayers",
     setup(__props) {
       const gameStore = useGameStore();
@@ -20608,17 +20608,17 @@ This will fail in production.`
       return (_ctx, _cache) => {
         var _a2, _b2, _c, _d, _e2, _f, _g, _h, _i, _j, _k;
         const _component_draggable = resolveComponent("draggable");
-        return openBlock(), createElementBlock("div", _hoisted_1$w, [
+        return openBlock(), createElementBlock("div", _hoisted_1$A, [
           createVNode(AppBlockHeader, { icon: "#icon-jersey" }, {
             default: withCtx(() => [
               createTextVNode(toDisplayString(unref(l10n).players), 1)
             ]),
             _: 1
           }),
-          createBaseVNode("div", _hoisted_2$u, [
-            createBaseVNode("div", _hoisted_3$t, [
-              createBaseVNode("div", _hoisted_4$t, [
-                createVNode(_sfc_main$C, {
+          createBaseVNode("div", _hoisted_2$x, [
+            createBaseVNode("div", _hoisted_3$w, [
+              createBaseVNode("div", _hoisted_4$v, [
+                createVNode(_sfc_main$G, {
                   logo: unref(gameStore).clubHome.logo,
                   title: unref(gameStore).clubHome.title,
                   "is-home": true,
@@ -20629,15 +20629,15 @@ This will fail in production.`
                   type: "button",
                   onClick: _cache[0] || (_cache[0] = withModifiers(($event) => unref(gameStore).openAddPlayerModal("home"), ["prevent"]))
                 }, [
-                  _hoisted_5$t,
+                  _hoisted_5$u,
                   createTextVNode(" " + toDisplayString(unref(l10n).add_player), 1)
                 ]),
-                createBaseVNode("div", _hoisted_6$s, [
+                createBaseVNode("div", _hoisted_6$t, [
                   createTextVNode(toDisplayString(unref(l10n).starting_line_up) + " ", 1),
-                  createBaseVNode("span", _hoisted_7$r, "(" + toDisplayString(((_a2 = unref(gameStore).active.playersHomeStart) == null ? void 0 : _a2.length) || 0) + ")", 1)
+                  createBaseVNode("span", _hoisted_7$s, "(" + toDisplayString(((_a2 = unref(gameStore).active.playersHomeStart) == null ? void 0 : _a2.length) || 0) + ")", 1)
                 ]),
-                createBaseVNode("div", _hoisted_8$q, [
-                  createBaseVNode("table", _hoisted_9$o, [
+                createBaseVNode("div", _hoisted_8$r, [
+                  createBaseVNode("table", _hoisted_9$p, [
                     createVNode(_component_draggable, {
                       modelValue: unref(gameStore).active.playersHomeStart,
                       "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(gameStore).active.playersHomeStart = $event),
@@ -20647,7 +20647,7 @@ This will fail in production.`
                     }, {
                       default: withCtx(() => [
                         (openBlock(true), createElementBlock(Fragment, null, renderList(unref(gameStore).active.playersHomeStart, (player, index2) => {
-                          return openBlock(), createBlock(_sfc_main$A, {
+                          return openBlock(), createBlock(_sfc_main$E, {
                             key: player.id,
                             player,
                             defaultPhoto: unref(gameStore).appConfig.default_photo,
@@ -20679,7 +20679,7 @@ This will fail in production.`
                     }, {
                       default: withCtx(() => [
                         (openBlock(true), createElementBlock(Fragment, null, renderList(unref(gameStore).active.playersHomeSubs, (player, index2) => {
-                          return openBlock(), createBlock(_sfc_main$A, {
+                          return openBlock(), createBlock(_sfc_main$E, {
                             key: player.id,
                             player,
                             defaultPhoto: unref(gameStore).appConfig.default_photo,
@@ -20697,7 +20697,7 @@ This will fail in production.`
                   ])
                 ]),
                 createBaseVNode("div", _hoisted_14$h, toDisplayString(unref(l10n).coach), 1),
-                createVNode(_sfc_main$y, {
+                createVNode(_sfc_main$C, {
                   l10n: unref(l10n),
                   "default-photo": unref(gameStore).appConfig.default_photo,
                   coach: unref(gameStore).coachHome,
@@ -20706,7 +20706,7 @@ This will fail in production.`
                 }, null, 8, ["l10n", "default-photo", "coach"]),
                 createBaseVNode("div", _hoisted_15$h, toDisplayString(unref(l10n).captain), 1),
                 ((_c = unref(gameStore).captainHome) == null ? void 0 : _c.id) ? (openBlock(), createElementBlock("div", _hoisted_16$h, [
-                  createVNode(_sfc_main$x, {
+                  createVNode(_sfc_main$B, {
                     onClickPlayer: _cache[5] || (_cache[5] = ($event) => unref(gameStore).openModalCaptainSelector("home")),
                     player: unref(gameStore).captainHome,
                     defaultPhoto: unref(gameStore).appConfig.default_photo,
@@ -20728,7 +20728,7 @@ This will fail in production.`
                 }, toDisplayString(unref(l10n).select_player), 1))
               ]),
               createBaseVNode("div", _hoisted_19$h, [
-                createVNode(_sfc_main$C, {
+                createVNode(_sfc_main$G, {
                   logo: unref(gameStore).clubAway.logo,
                   title: unref(gameStore).clubAway.title,
                   "is-home": false,
@@ -20757,7 +20757,7 @@ This will fail in production.`
                     }, {
                       default: withCtx(() => [
                         (openBlock(true), createElementBlock(Fragment, null, renderList(unref(gameStore).active.playersAwayStart, (player, index2) => {
-                          return openBlock(), createBlock(_sfc_main$A, {
+                          return openBlock(), createBlock(_sfc_main$E, {
                             key: player.id,
                             player,
                             defaultPhoto: unref(gameStore).appConfig.default_photo,
@@ -20789,7 +20789,7 @@ This will fail in production.`
                     }, {
                       default: withCtx(() => [
                         (openBlock(true), createElementBlock(Fragment, null, renderList(unref(gameStore).active.playersAwaySubs, (player, index2) => {
-                          return openBlock(), createBlock(_sfc_main$A, {
+                          return openBlock(), createBlock(_sfc_main$E, {
                             key: player.id,
                             player,
                             defaultPhoto: unref(gameStore).appConfig.default_photo,
@@ -20807,7 +20807,7 @@ This will fail in production.`
                   ])
                 ]),
                 createBaseVNode("div", _hoisted_29$9, toDisplayString(unref(l10n).coach), 1),
-                createVNode(_sfc_main$y, {
+                createVNode(_sfc_main$C, {
                   l10n: unref(l10n),
                   "default-photo": unref(gameStore).appConfig.default_photo,
                   coach: unref(gameStore).coachAway,
@@ -20816,7 +20816,7 @@ This will fail in production.`
                 }, null, 8, ["l10n", "default-photo", "coach"]),
                 createBaseVNode("div", _hoisted_30$7, toDisplayString(unref(l10n).captain), 1),
                 ((_g = unref(gameStore).captainAway) == null ? void 0 : _g.id) ? (openBlock(), createElementBlock("div", _hoisted_31$7, [
-                  createVNode(_sfc_main$x, {
+                  createVNode(_sfc_main$B, {
                     onClickPlayer: _cache[13] || (_cache[13] = ($event) => unref(gameStore).openModalCaptainSelector("away")),
                     player: unref(gameStore).captainAway,
                     defaultPhoto: unref(gameStore).appConfig.default_photo,
@@ -20898,24 +20898,24 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$v = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$z = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$t = [
-    _hoisted_1$v
+  const _hoisted_2$w = [
+    _hoisted_1$z
   ];
-  const _hoisted_3$s = { class: "anwp-vfm-admin-modal__title d-flex flex-wrap align-items-center" };
-  const _hoisted_4$s = { class: "my-0 mr-3" };
-  const _hoisted_5$s = /* @__PURE__ */ createBaseVNode("div", { class: "ml-auto mr-2" }, "Sort By", -1);
-  const _hoisted_6$r = /* @__PURE__ */ createBaseVNode("option", { value: "" }, "name", -1);
-  const _hoisted_7$q = /* @__PURE__ */ createBaseVNode("option", { value: "position" }, "position", -1);
-  const _hoisted_8$p = /* @__PURE__ */ createBaseVNode("option", { value: "squad_number" }, "squad number", -1);
-  const _hoisted_9$n = /* @__PURE__ */ createBaseVNode("option", { value: "squad_order" }, "squad order", -1);
+  const _hoisted_3$v = { class: "anwp-vfm-admin-modal__title d-flex flex-wrap align-items-center" };
+  const _hoisted_4$u = { class: "my-0 mr-3" };
+  const _hoisted_5$t = /* @__PURE__ */ createBaseVNode("div", { class: "ml-auto mr-2" }, "Sort By", -1);
+  const _hoisted_6$s = /* @__PURE__ */ createBaseVNode("option", { value: "" }, "name", -1);
+  const _hoisted_7$r = /* @__PURE__ */ createBaseVNode("option", { value: "position" }, "position", -1);
+  const _hoisted_8$q = /* @__PURE__ */ createBaseVNode("option", { value: "squad_number" }, "squad number", -1);
+  const _hoisted_9$o = /* @__PURE__ */ createBaseVNode("option", { value: "squad_order" }, "squad order", -1);
   const _hoisted_10$n = [
-    _hoisted_6$r,
-    _hoisted_7$q,
-    _hoisted_8$p,
-    _hoisted_9$n
+    _hoisted_6$s,
+    _hoisted_7$r,
+    _hoisted_8$q,
+    _hoisted_9$o
   ];
   const _hoisted_11$j = { class: "anwp-vfm-admin-modal__content" };
   const _hoisted_12$i = { class: "d-md-flex" };
@@ -20997,7 +20997,7 @@ This will fail in production.`
   const _hoisted_59$2 = /* @__PURE__ */ createBaseVNode("div", { class: "mr-2" }, "Append To", -1);
   const _hoisted_60$2 = { value: true };
   const _hoisted_61$2 = { value: false };
-  const _sfc_main$v = {
+  const _sfc_main$z = {
     __name: "AppModalAddPlayer",
     setup(__props) {
       const notyf2 = new Notyf({ duration: 5e3 });
@@ -21095,11 +21095,11 @@ This will fail in production.`
                 class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
                 type: "button",
                 onClick: _cache[0] || (_cache[0] = ($event) => unref(gameStore).modals.addPlayer = false)
-              }, _hoisted_2$t),
-              createBaseVNode("div", _hoisted_3$s, [
-                createBaseVNode("h4", _hoisted_4$s, toDisplayString(unref(l10n).add_player), 1),
+              }, _hoisted_2$w),
+              createBaseVNode("div", _hoisted_3$v, [
+                createBaseVNode("h4", _hoisted_4$u, toDisplayString(unref(l10n).add_player), 1),
                 ("home" === unref(gameStore).modalData.playerContext || "away" === unref(gameStore).modalData.playerContext) && "temp" !== unref(gameStore).modalData.modalPlayerMode ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-                  _hoisted_5$s,
+                  _hoisted_5$t,
                   withDirectives(createBaseVNode("select", {
                     "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(gameStore).modalData.playerAddSorting = $event),
                     class: "mr-4"
@@ -21381,22 +21381,22 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$u = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$y = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$s = [
-    _hoisted_1$u
+  const _hoisted_2$v = [
+    _hoisted_1$y
   ];
-  const _hoisted_3$r = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$r = { class: "my-0" };
-  const _hoisted_5$r = { class: "anwp-vfm-admin-modal__content" };
-  const _hoisted_6$q = { class: "anwp-text-center" };
-  const _hoisted_7$p = { class: "mb-1" };
-  const _hoisted_8$o = { class: "mb-1 mt-3" };
-  const _hoisted_9$m = ["value"];
+  const _hoisted_3$u = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$t = { class: "my-0" };
+  const _hoisted_5$s = { class: "anwp-vfm-admin-modal__content" };
+  const _hoisted_6$r = { class: "anwp-text-center" };
+  const _hoisted_7$q = { class: "mb-1" };
+  const _hoisted_8$p = { class: "mb-1 mt-3" };
+  const _hoisted_9$n = ["value"];
   const _hoisted_10$m = { class: "anwp-vfm-admin-modal__actions" };
   const _hoisted_11$i = { class: "d-flex flex-row-reverse" };
-  const _sfc_main$u = {
+  const _sfc_main$y = {
     __name: "AppModalCustomNumber",
     setup(__props) {
       const gameStore = useGameStore();
@@ -21422,10 +21422,10 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
               type: "button",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(gameStore).modals.changeCustomNumber = false)
-            }, _hoisted_2$s),
+            }, _hoisted_2$v),
             unref(gameStore).modalData.customNumberPlayerId ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-              createBaseVNode("div", _hoisted_3$r, [
-                createBaseVNode("h4", _hoisted_4$r, [
+              createBaseVNode("div", _hoisted_3$u, [
+                createBaseVNode("h4", _hoisted_4$t, [
                   createTextVNode(toDisplayString(unref(l10n).edit_player_number) + " ", 1),
                   unref(gameStore).modalData.customNumberPlayerId.toString().includes("temp__") ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
                     createTextVNode(" - " + toDisplayString(unref(gameStore).tempPlayers.find((p2) => unref(gameStore).modalData.customNumberPlayerId === `temp__${p2.id}`) ? unref(gameStore).tempPlayers.find((p2) => unref(gameStore).modalData.customNumberPlayerId === `temp__${p2.id}`).name : ""), 1)
@@ -21434,9 +21434,9 @@ This will fail in production.`
                   ], 64))
                 ])
               ]),
-              createBaseVNode("div", _hoisted_5$r, [
-                createBaseVNode("div", _hoisted_6$q, [
-                  createBaseVNode("div", _hoisted_7$p, toDisplayString(unref(l10n).custom_number), 1),
+              createBaseVNode("div", _hoisted_5$s, [
+                createBaseVNode("div", _hoisted_6$r, [
+                  createBaseVNode("div", _hoisted_7$q, toDisplayString(unref(l10n).custom_number), 1),
                   withDirectives(createBaseVNode("input", {
                     type: "text",
                     class: "anwp-w-50 anwp-text-xl anwp-text-center",
@@ -21447,13 +21447,13 @@ This will fail in production.`
                   }, null, 544), [
                     [vModelText, unref(gameStore).customNumbers[unref(gameStore).modalData.customNumberPlayerId]]
                   ]),
-                  createBaseVNode("div", _hoisted_8$o, toDisplayString(unref(l10n).squad_number), 1),
+                  createBaseVNode("div", _hoisted_8$p, toDisplayString(unref(l10n).squad_number), 1),
                   createBaseVNode("input", {
                     type: "text",
                     disabled: "",
                     class: "anwp-w-50 anwp-text-xl anwp-text-center",
                     value: unref(gameStore).appConfig.squadHomeNumbers[unref(gameStore).modalData.customNumberPlayerId] ? unref(gameStore).appConfig.squadHomeNumbers[unref(gameStore).modalData.customNumberPlayerId] : unref(gameStore).appConfig.squadAwayNumbers[unref(gameStore).modalData.customNumberPlayerId]
-                  }, null, 8, _hoisted_9$m)
+                  }, null, 8, _hoisted_9$n)
                 ])
               ])
             ], 64)) : createCommentVNode("", true),
@@ -21472,19 +21472,19 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$t = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$x = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$r = [
-    _hoisted_1$t
+  const _hoisted_2$u = [
+    _hoisted_1$x
   ];
-  const _hoisted_3$q = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$q = { class: "my-0 mr-4" };
-  const _hoisted_5$q = { class: "anwp-vfm-admin-modal__content anwp-h-min-300" };
-  const _hoisted_6$p = { class: "d-flex mb-4 anwp-fl-tabs-wrapper" };
-  const _hoisted_7$o = { class: "anwp-text-base" };
-  const _hoisted_8$n = { class: "anwp-text-xs mt-2" };
-  const _hoisted_9$l = { class: "anwp-text-base" };
+  const _hoisted_3$t = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$s = { class: "my-0 mr-4" };
+  const _hoisted_5$r = { class: "anwp-vfm-admin-modal__content anwp-h-min-300" };
+  const _hoisted_6$q = { class: "d-flex mb-4 anwp-fl-tabs-wrapper" };
+  const _hoisted_7$p = { class: "anwp-text-base" };
+  const _hoisted_8$o = { class: "anwp-text-xs mt-2" };
+  const _hoisted_9$m = { class: "anwp-text-base" };
   const _hoisted_10$l = { class: "anwp-text-xs mt-2" };
   const _hoisted_11$h = { class: "d-flex flex-column mt-4" };
   const _hoisted_12$h = {
@@ -21506,7 +21506,7 @@ This will fail in production.`
   const _hoisted_19$f = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
   const _hoisted_20$f = { class: "anwp-vfm-admin-modal__actions" };
   const _hoisted_21$f = { class: "d-flex align-items-center" };
-  const _sfc_main$t = {
+  const _sfc_main$x = {
     __name: "AppModalCoachSelector",
     setup(__props) {
       const gameStore = useGameStore();
@@ -21586,24 +21586,24 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
               type: "button",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(gameStore).modals.addCoach = false)
-            }, _hoisted_2$r),
-            createBaseVNode("div", _hoisted_3$q, [
-              createBaseVNode("h4", _hoisted_4$q, toDisplayString(unref(l10n).add_coach), 1)
+            }, _hoisted_2$u),
+            createBaseVNode("div", _hoisted_3$t, [
+              createBaseVNode("h4", _hoisted_4$s, toDisplayString(unref(l10n).add_coach), 1)
             ]),
-            createBaseVNode("div", _hoisted_5$q, [
-              createBaseVNode("div", _hoisted_6$p, [
+            createBaseVNode("div", _hoisted_5$r, [
+              createBaseVNode("div", _hoisted_6$q, [
                 createBaseVNode("div", {
                   class: normalizeClass(["anwp-tab-item anwp-flex-1 mr-1", unref(gameStore).modalData.modalCoachMode === "saved" ? "anwp-tab-item--active" : ""]),
                   onClick: _cache[1] || (_cache[1] = withModifiers(($event) => unref(gameStore).modalData.modalCoachMode = "saved", ["prevent"]))
                 }, [
-                  createBaseVNode("div", _hoisted_7$o, toDisplayString(unref(l10n).saved_coaches), 1),
-                  createBaseVNode("div", _hoisted_8$n, toDisplayString(unref(l10n).select_saved_coach), 1)
+                  createBaseVNode("div", _hoisted_7$p, toDisplayString(unref(l10n).saved_coaches), 1),
+                  createBaseVNode("div", _hoisted_8$o, toDisplayString(unref(l10n).select_saved_coach), 1)
                 ], 2),
                 createBaseVNode("div", {
                   class: normalizeClass(["anwp-tab-item anwp-flex-1 ml-1", unref(gameStore).modalData.modalCoachMode === "temp" ? "anwp-tab-item--active" : ""]),
                   onClick: _cache[2] || (_cache[2] = withModifiers(($event) => unref(gameStore).modalData.modalCoachMode = "temp", ["prevent"]))
                 }, [
-                  createBaseVNode("div", _hoisted_9$l, toDisplayString(unref(l10n).temporary_coach), 1),
+                  createBaseVNode("div", _hoisted_9$m, toDisplayString(unref(l10n).temporary_coach), 1),
                   createBaseVNode("div", _hoisted_10$l, toDisplayString(unref(l10n).add_coach_as_text), 1)
                 ], 2)
               ]),
@@ -21687,7 +21687,7 @@ This will fail in production.`
                   "page-link-class": "anwp-page-link"
                 }, null, 8, ["modelValue", "page-count", "prev-text", "next-text"])) : createCommentVNode("", true),
                 (openBlock(true), createElementBlock(Fragment, null, renderList(coachesInModalPaginated.value, (coach) => {
-                  return openBlock(), createBlock(_sfc_main$z, {
+                  return openBlock(), createBlock(_sfc_main$D, {
                     onClickCoach: ($event) => addCoach(coach),
                     class: "my-2",
                     key: coach.id,
@@ -21712,18 +21712,18 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$s = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$w = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$q = [
-    _hoisted_1$s
+  const _hoisted_2$t = [
+    _hoisted_1$w
   ];
-  const _hoisted_3$p = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$p = { class: "my-0" };
-  const _hoisted_5$p = { class: "anwp-vfm-admin-modal__content" };
-  const _hoisted_6$o = { class: "anwp-vfm-admin-modal__actions" };
-  const _hoisted_7$n = { class: "d-flex" };
-  const _sfc_main$s = {
+  const _hoisted_3$s = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$r = { class: "my-0" };
+  const _hoisted_5$q = { class: "anwp-vfm-admin-modal__content" };
+  const _hoisted_6$p = { class: "anwp-vfm-admin-modal__actions" };
+  const _hoisted_7$o = { class: "d-flex" };
+  const _sfc_main$w = {
     __name: "AppModalAddCaptain",
     setup(__props) {
       const gameStore = useGameStore();
@@ -21773,13 +21773,13 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
               type: "button",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(gameStore).modals.addCaptain = false)
-            }, _hoisted_2$q),
-            createBaseVNode("div", _hoisted_3$p, [
-              createBaseVNode("h4", _hoisted_4$p, toDisplayString(unref(l10n).select_player), 1)
+            }, _hoisted_2$t),
+            createBaseVNode("div", _hoisted_3$s, [
+              createBaseVNode("h4", _hoisted_4$r, toDisplayString(unref(l10n).select_player), 1)
             ]),
-            createBaseVNode("div", _hoisted_5$p, [
+            createBaseVNode("div", _hoisted_5$q, [
               (openBlock(true), createElementBlock(Fragment, null, renderList(captainModalList.value, (player) => {
-                return openBlock(), createBlock(_sfc_main$x, {
+                return openBlock(), createBlock(_sfc_main$B, {
                   onClickPlayer: ($event) => addModalCaptain(player),
                   class: "my-2",
                   key: player.id,
@@ -21790,8 +21790,8 @@ This will fail in production.`
                 }, null, 8, ["onClickPlayer", "player", "defaultPhoto", "playerNumber", "classPosition"]);
               }), 128))
             ]),
-            createBaseVNode("div", _hoisted_6$o, [
-              createBaseVNode("div", _hoisted_7$n, [
+            createBaseVNode("div", _hoisted_6$p, [
+              createBaseVNode("div", _hoisted_7$o, [
                 createBaseVNode("button", {
                   type: "button",
                   class: "button button-secondary text-capitalize",
@@ -21805,28 +21805,28 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$r = {
+  const _hoisted_1$v = {
     class: "anwp-border anwp-border-gray-500 my-4",
     id: "anwp-fl-game-events-metabox"
   };
-  const _hoisted_2$p = { class: "p-4 bg-white" };
-  const _hoisted_3$o = {
+  const _hoisted_2$s = { class: "p-4 bg-white" };
+  const _hoisted_3$r = {
     key: 0,
     class: "table-responsive"
   };
-  const _hoisted_4$o = { class: "table table-sm anwp-border-collapse anwp-overflow-scroll anwp-user-select-none anwp-leading-1 anwp-border anwp-border-gray-400 w-auto" };
-  const _hoisted_5$o = /* @__PURE__ */ createBaseVNode("td", { class: "anwp-drag-handler anwp-w-30 anwp-text-center pt-1 px-2" }, [
+  const _hoisted_4$q = { class: "table table-sm anwp-border-collapse anwp-overflow-scroll anwp-user-select-none anwp-leading-1 anwp-border anwp-border-gray-400 w-auto" };
+  const _hoisted_5$p = /* @__PURE__ */ createBaseVNode("td", { class: "anwp-drag-handler anwp-w-30 anwp-text-center pt-1 px-2" }, [
     /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--s24 anwp-icon--octi mr-0" }, [
       /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-grabber" })
     ])
   ], -1);
-  const _hoisted_6$n = { class: "anwp-w-40 anwp-text-center py-1 px-2 align-top anwp-bg-gray-200" };
-  const _hoisted_7$m = { class: "anwp-text-base anwp-font-semibold pl-1" };
-  const _hoisted_8$m = {
+  const _hoisted_6$o = { class: "anwp-w-40 anwp-text-center py-1 px-2 align-top anwp-bg-gray-200" };
+  const _hoisted_7$n = { class: "anwp-text-base anwp-font-semibold pl-1" };
+  const _hoisted_8$n = {
     key: 0,
     class: "anwp-border anwp-border-gray-200 pl-1"
   };
-  const _hoisted_9$k = { class: "anwp-w-60 anwp-text-center px-3 pt-3 pb-1 align-top" };
+  const _hoisted_9$l = { class: "anwp-w-60 anwp-text-center px-3 pt-3 pb-1 align-top" };
   const _hoisted_10$k = {
     key: 0,
     "xlink:href": "#icon-ball_penalty"
@@ -22063,7 +22063,7 @@ This will fail in production.`
   const _hoisted_126 = { value: "match" };
   const _hoisted_127 = { value: "squad" };
   const _hoisted_128 = ["value"];
-  const _sfc_main$r = {
+  const _sfc_main$v = {
     __name: "AppGameEvents",
     setup(__props) {
       const gameStore = useGameStore();
@@ -22168,16 +22168,16 @@ This will fail in production.`
       return (_ctx, _cache) => {
         const _component_draggable = resolveComponent("draggable");
         const _component_v_select = resolveComponent("v-select");
-        return openBlock(), createElementBlock("div", _hoisted_1$r, [
+        return openBlock(), createElementBlock("div", _hoisted_1$v, [
           createVNode(AppBlockHeader, { icon: "#icon-graph" }, {
             default: withCtx(() => [
               createTextVNode(toDisplayString(unref(l10n).match_events), 1)
             ]),
             _: 1
           }),
-          createBaseVNode("div", _hoisted_2$p, [
-            unref(gameStore).matchEvents.length ? (openBlock(), createElementBlock("div", _hoisted_3$o, [
-              createBaseVNode("table", _hoisted_4$o, [
+          createBaseVNode("div", _hoisted_2$s, [
+            unref(gameStore).matchEvents.length ? (openBlock(), createElementBlock("div", _hoisted_3$r, [
+              createBaseVNode("table", _hoisted_4$q, [
                 createVNode(_component_draggable, {
                   modelValue: unref(gameStore).matchEvents,
                   "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(gameStore).matchEvents = $event),
@@ -22191,12 +22191,12 @@ This will fail in production.`
                         class: "anwp-border anwp-border-gray-400 anwp-bg-gray-100",
                         key: gameEvent.id
                       }, [
-                        _hoisted_5$o,
-                        createBaseVNode("td", _hoisted_6$n, [
-                          createBaseVNode("div", _hoisted_7$m, toDisplayString(gameEvent.minute ? gameEvent.minute + "'" : ""), 1),
-                          gameEvent.minuteAdd ? (openBlock(), createElementBlock("div", _hoisted_8$m, "+" + toDisplayString(gameEvent.minuteAdd), 1)) : createCommentVNode("", true)
+                        _hoisted_5$p,
+                        createBaseVNode("td", _hoisted_6$o, [
+                          createBaseVNode("div", _hoisted_7$n, toDisplayString(gameEvent.minute ? gameEvent.minute + "'" : ""), 1),
+                          gameEvent.minuteAdd ? (openBlock(), createElementBlock("div", _hoisted_8$n, "+" + toDisplayString(gameEvent.minuteAdd), 1)) : createCommentVNode("", true)
                         ]),
-                        createBaseVNode("td", _hoisted_9$k, [
+                        createBaseVNode("td", _hoisted_9$l, [
                           "goal" === gameEvent.type ? (openBlock(), createElementBlock("svg", {
                             key: 0,
                             class: normalizeClass([{ "icon__ball--own": "yes" === gameEvent.ownGoal }, "icon__ball anwp-w-20 anwp-h-20"])
@@ -22502,7 +22502,7 @@ This will fail in production.`
                 createBaseVNode("div", _hoisted_98, [
                   createBaseVNode("label", _hoisted_99, toDisplayString("substitute" === unref(gameStore).modalData.eventInModal.type ? unref(l10n).player_in : unref(l10n).player), 1),
                   unref(gameStore).modalData.eventInModal.player ? (openBlock(), createElementBlock("div", _hoisted_100, [
-                    createVNode(_sfc_main$x, {
+                    createVNode(_sfc_main$B, {
                       onClickPlayer: _cache[14] || (_cache[14] = ($event) => openModalEventPlayerSelector("player")),
                       player: unref(gameStore).modalData.eventInModal.playerObj,
                       defaultPhoto: unref(gameStore).appConfig.default_photo,
@@ -22529,7 +22529,7 @@ This will fail in production.`
                 "goal" === unref(gameStore).modalData.eventInModal.type ? (openBlock(), createElementBlock("div", _hoisted_104, [
                   createBaseVNode("label", _hoisted_105, toDisplayString(unref(l10n).assistant), 1),
                   unref(gameStore).modalData.eventInModal.assistant ? (openBlock(), createElementBlock("div", _hoisted_106, [
-                    createVNode(_sfc_main$x, {
+                    createVNode(_sfc_main$B, {
                       onClickPlayer: _cache[17] || (_cache[17] = ($event) => openModalEventPlayerSelector("assistant")),
                       player: unref(gameStore).modalData.eventInModal.player2Obj,
                       defaultPhoto: unref(gameStore).appConfig.default_photo,
@@ -22555,7 +22555,7 @@ This will fail in production.`
                 "substitute" === unref(gameStore).modalData.eventInModal.type ? (openBlock(), createElementBlock("div", _hoisted_109, [
                   createBaseVNode("label", _hoisted_110, toDisplayString(unref(l10n).player_out), 1),
                   unref(gameStore).modalData.eventInModal.playerOut ? (openBlock(), createElementBlock("div", _hoisted_111, [
-                    createVNode(_sfc_main$x, {
+                    createVNode(_sfc_main$B, {
                       onClickPlayer: _cache[20] || (_cache[20] = ($event) => openModalEventPlayerSelector("playerOut")),
                       player: unref(gameStore).modalData.eventInModal.player2Obj,
                       defaultPhoto: unref(gameStore).appConfig.default_photo,
@@ -22611,7 +22611,7 @@ This will fail in production.`
               ]),
               createBaseVNode("div", _hoisted_120, [
                 !unref(gameStore).modalData.eventInModal.club ? (openBlock(), createElementBlock("div", _hoisted_121, " Event Club is not selected! ")) : (openBlock(true), createElementBlock(Fragment, { key: 1 }, renderList(playersInEventModal.value, (player) => {
-                  return openBlock(), createBlock(_sfc_main$x, {
+                  return openBlock(), createBlock(_sfc_main$B, {
                     onClickPlayer: ($event) => addModalEventPlayer(player),
                     class: "my-2",
                     key: player.id,
@@ -22656,22 +22656,22 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$q = {
+  const _hoisted_1$u = {
     class: "anwp-border anwp-border-gray-500 my-4",
     id: "anwp-fl-game-sidelines-metabox"
   };
-  const _hoisted_2$o = { class: "px-3 pb-4 bg-white" };
-  const _hoisted_3$n = { class: "anwp-row" };
-  const _hoisted_4$n = { class: "anwp-col-xl-6" };
-  const _hoisted_5$n = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi anwp-icon--s16 mr-2" }, [
+  const _hoisted_2$r = { class: "px-3 pb-4 bg-white" };
+  const _hoisted_3$q = { class: "anwp-row" };
+  const _hoisted_4$p = { class: "anwp-col-xl-6" };
+  const _hoisted_5$o = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi anwp-icon--s16 mr-2" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-plus" })
   ], -1);
-  const _hoisted_6$m = {
+  const _hoisted_6$n = {
     key: 0,
     class: "table-responsive"
   };
-  const _hoisted_7$l = { class: "table table-sm anwp-border-collapse w-100 anwp-overflow-scroll anwp-user-select-none anwp-leading-1 anwp-border anwp-border-gray-400" };
-  const _hoisted_8$l = /* @__PURE__ */ createBaseVNode("thead", null, [
+  const _hoisted_7$m = { class: "table table-sm anwp-border-collapse w-100 anwp-overflow-scroll anwp-user-select-none anwp-leading-1 anwp-border anwp-border-gray-400" };
+  const _hoisted_8$m = /* @__PURE__ */ createBaseVNode("thead", null, [
     /* @__PURE__ */ createBaseVNode("tr", { class: "anwp-border anwp-border-gray-400 anwp-bg-gray-300 anwp-text-gray-900" }, [
       /* @__PURE__ */ createBaseVNode("td"),
       /* @__PURE__ */ createBaseVNode("td"),
@@ -22680,7 +22680,7 @@ This will fail in production.`
       /* @__PURE__ */ createBaseVNode("td")
     ])
   ], -1);
-  const _hoisted_9$j = { class: "px-1 py-2 align-middle" };
+  const _hoisted_9$k = { class: "px-1 py-2 align-middle" };
   const _hoisted_10$j = ["onUpdate:modelValue"];
   const _hoisted_11$f = { value: "injured" };
   const _hoisted_12$f = { value: "suspended" };
@@ -22711,7 +22711,7 @@ This will fail in production.`
   const _hoisted_24$b = { value: "other" };
   const _hoisted_25$a = ["onUpdate:modelValue"];
   const _hoisted_26$9 = ["value"];
-  const _sfc_main$q = {
+  const _sfc_main$u = {
     __name: "AppGameSidelines",
     setup(__props) {
       const gameStore = useGameStore();
@@ -22724,17 +22724,17 @@ This will fail in production.`
       });
       return (_ctx, _cache) => {
         const _component_draggable = resolveComponent("draggable");
-        return openBlock(), createElementBlock("div", _hoisted_1$q, [
+        return openBlock(), createElementBlock("div", _hoisted_1$u, [
           createVNode(AppBlockHeader, { icon: "#icon-x" }, {
             default: withCtx(() => [
               createTextVNode(toDisplayString(unref(l10n).match_sidelines), 1)
             ]),
             _: 1
           }),
-          createBaseVNode("div", _hoisted_2$o, [
-            createBaseVNode("div", _hoisted_3$n, [
-              createBaseVNode("div", _hoisted_4$n, [
-                createVNode(_sfc_main$C, {
+          createBaseVNode("div", _hoisted_2$r, [
+            createBaseVNode("div", _hoisted_3$q, [
+              createBaseVNode("div", _hoisted_4$p, [
+                createVNode(_sfc_main$G, {
                   logo: unref(gameStore).clubHome.logo,
                   title: unref(gameStore).clubHome.title,
                   "is-home": true,
@@ -22745,12 +22745,12 @@ This will fail in production.`
                   type: "button",
                   onClick: _cache[0] || (_cache[0] = withModifiers(($event) => unref(gameStore).openAddPlayerModal("home-missing"), ["prevent"]))
                 }, [
-                  _hoisted_5$n,
+                  _hoisted_5$o,
                   createTextVNode(" " + toDisplayString(unref(l10n).add_sideline), 1)
                 ]),
-                unref(gameStore).active.playersHomeMissing.length ? (openBlock(), createElementBlock("div", _hoisted_6$m, [
-                  createBaseVNode("table", _hoisted_7$l, [
-                    _hoisted_8$l,
+                unref(gameStore).active.playersHomeMissing.length ? (openBlock(), createElementBlock("div", _hoisted_6$n, [
+                  createBaseVNode("table", _hoisted_7$m, [
+                    _hoisted_8$m,
                     createVNode(_component_draggable, {
                       modelValue: unref(gameStore).active.playersHomeMissing,
                       "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(gameStore).active.playersHomeMissing = $event),
@@ -22760,7 +22760,7 @@ This will fail in production.`
                     }, {
                       default: withCtx(() => [
                         (openBlock(true), createElementBlock(Fragment, null, renderList(unref(gameStore).active.playersHomeMissing, (missing, index2) => {
-                          return openBlock(), createBlock(_sfc_main$A, {
+                          return openBlock(), createBlock(_sfc_main$E, {
                             key: index2,
                             player: missing.playerObj,
                             displayNumber: false,
@@ -22772,7 +22772,7 @@ This will fail in production.`
                             l10n: unref(l10n)
                           }, {
                             default: withCtx(() => [
-                              createBaseVNode("td", _hoisted_9$j, [
+                              createBaseVNode("td", _hoisted_9$k, [
                                 withDirectives(createBaseVNode("select", {
                                   class: "w-auto",
                                   "onUpdate:modelValue": ($event) => missing.reason = $event
@@ -22803,7 +22803,7 @@ This will fail in production.`
                 ])) : createCommentVNode("", true)
               ]),
               createBaseVNode("div", _hoisted_15$d, [
-                createVNode(_sfc_main$C, {
+                createVNode(_sfc_main$G, {
                   logo: unref(gameStore).clubAway.logo,
                   title: unref(gameStore).clubAway.title,
                   "is-home": false,
@@ -22829,7 +22829,7 @@ This will fail in production.`
                     }, {
                       default: withCtx(() => [
                         (openBlock(true), createElementBlock(Fragment, null, renderList(unref(gameStore).active.playersAwayMissing, (missing, index2) => {
-                          return openBlock(), createBlock(_sfc_main$A, {
+                          return openBlock(), createBlock(_sfc_main$E, {
                             key: index2,
                             player: missing.playerObj,
                             displayNumber: false,
@@ -22882,20 +22882,20 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$p = { class: "mr-3" };
-  const _hoisted_2$n = ["src"];
-  const _hoisted_3$m = { class: "anwp-text-base anwp-leading-1" };
-  const _hoisted_4$m = { class: "mt-1" };
-  const _hoisted_5$m = {
+  const _hoisted_1$t = { class: "mr-3" };
+  const _hoisted_2$q = ["src"];
+  const _hoisted_3$p = { class: "anwp-text-base anwp-leading-1" };
+  const _hoisted_4$o = { class: "mt-1" };
+  const _hoisted_5$n = {
     key: 0,
     class: "options__flag f16 align-middle mr-1",
     style: { "line-height": "12px" }
   };
-  const _hoisted_6$l = {
+  const _hoisted_6$m = {
     key: 1,
     class: "anwp-text-xs anwp-text-gray-600"
   };
-  const _sfc_main$p = {
+  const _sfc_main$t = {
     __name: "AppMatchReferee",
     props: {
       referee: {
@@ -22912,42 +22912,42 @@ This will fail in production.`
           class: "d-flex align-items-center anwp-cursor-pointer anwp-border anwp-border-gray-400 rounded px-3 py-2 anwp-bg-gray-100",
           onClick: _cache[0] || (_cache[0] = withModifiers(($event) => _ctx.$emit("click-referee"), ["prevent"]))
         }, [
-          createBaseVNode("div", _hoisted_1$p, [
+          createBaseVNode("div", _hoisted_1$t, [
             createBaseVNode("img", {
               class: "anwp-h-45 anwp-w-45 anwp-object-contain my-0 anwp-border anwp-border-gray-400",
               style: { "border-radius": "10px", "padding": "2px" },
               src: __props.referee.photo ? __props.referee.photo : __props.defaultPhoto,
               alt: "player photo"
-            }, null, 8, _hoisted_2$n)
+            }, null, 8, _hoisted_2$q)
           ]),
-          createBaseVNode("div", _hoisted_3$m, [
+          createBaseVNode("div", _hoisted_3$p, [
             createTextVNode(toDisplayString(__props.referee.name) + " ", 1),
-            createBaseVNode("div", _hoisted_4$m, [
-              __props.referee.country ? (openBlock(), createElementBlock("span", _hoisted_5$m, [
+            createBaseVNode("div", _hoisted_4$o, [
+              __props.referee.country ? (openBlock(), createElementBlock("span", _hoisted_5$n, [
                 createBaseVNode("span", {
                   class: normalizeClass(["flag", __props.referee.country])
                 }, null, 2)
               ])) : createCommentVNode("", true),
-              __props.referee.birthdate ? (openBlock(), createElementBlock("span", _hoisted_6$l, toDisplayString(__props.referee.birthdate), 1)) : createCommentVNode("", true)
+              __props.referee.birthdate ? (openBlock(), createElementBlock("span", _hoisted_6$m, toDisplayString(__props.referee.birthdate), 1)) : createCommentVNode("", true)
             ])
           ])
         ]);
       };
     }
   };
-  const _hoisted_1$o = { class: "d-flex flex-column mb-4 m-sm-2 px-2 mr-sm-4" };
-  const _hoisted_2$m = { class: "mb-1 anwp-text-gray-800" };
-  const _hoisted_3$l = {
+  const _hoisted_1$s = { class: "d-flex flex-column mb-4 m-sm-2 px-2 mr-sm-4" };
+  const _hoisted_2$p = { class: "mb-1 anwp-text-gray-800" };
+  const _hoisted_3$o = {
     key: 0,
     class: "d-flex flex-wrap align-items-start"
   };
-  const _hoisted_4$l = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-red-600" }, [
+  const _hoisted_4$n = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-red-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_5$l = [
-    _hoisted_4$l
+  const _hoisted_5$m = [
+    _hoisted_4$n
   ];
-  const _sfc_main$o = {
+  const _sfc_main$s = {
     __name: "AppMatchRefereeInput",
     props: {
       l10n: {
@@ -22964,10 +22964,10 @@ This will fail in production.`
     },
     setup(__props) {
       return (_ctx, _cache) => {
-        return openBlock(), createElementBlock("div", _hoisted_1$o, [
-          createBaseVNode("label", _hoisted_2$m, toDisplayString(__props.textReferee), 1),
-          __props.referee ? (openBlock(), createElementBlock("div", _hoisted_3$l, [
-            createVNode(_sfc_main$p, {
+        return openBlock(), createElementBlock("div", _hoisted_1$s, [
+          createBaseVNode("label", _hoisted_2$p, toDisplayString(__props.textReferee), 1),
+          __props.referee ? (openBlock(), createElementBlock("div", _hoisted_3$o, [
+            createVNode(_sfc_main$t, {
               onClickReferee: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("open-modal-referee-selector")),
               referee: __props.referee,
               defaultPhoto: __props.defaultPhoto
@@ -22976,7 +22976,7 @@ This will fail in production.`
               type: "button",
               class: "anwp-flex-none ml-2 anwp-cursor-pointer d-flex align-items-center justify-content-center button anwp-border-red-600",
               onClick: _cache[1] || (_cache[1] = withModifiers(($event) => _ctx.$emit("click-remove"), ["prevent"]))
-            }, _hoisted_5$l)
+            }, _hoisted_5$m)
           ])) : (openBlock(), createElementBlock("button", {
             key: 1,
             type: "button",
@@ -22987,20 +22987,20 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$n = {
+  const _hoisted_1$r = {
     class: "anwp-border anwp-border-gray-500 my-4",
     id: "anwp-fl-referee-metabox"
   };
-  const _hoisted_2$l = { class: "bg-white p-3 pb-4 d-sm-flex flex-wrap align-items-start" };
-  const _hoisted_3$k = /* @__PURE__ */ createBaseVNode("div", { class: "w-100" }, null, -1);
-  const _hoisted_4$k = { class: "w-100 mt-4 ml-3 py-1 px-2 anwp-text-base d-flex anwp-border anwp-border-gray-400 anwp-bg-gray-300 anwp-text-gray-900 anwp-w-400" };
-  const _hoisted_5$k = { class: "d-flex flex-column" };
-  const _hoisted_6$k = { class: "d-flex" };
-  const _hoisted_7$k = { class: "d-flex flex-column mr-4" };
-  const _hoisted_8$k = ["disabled", "onClick"];
-  const _hoisted_9$i = /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-chevron-top" }, null, -1);
+  const _hoisted_2$o = { class: "bg-white p-3 pb-4 d-sm-flex flex-wrap align-items-start" };
+  const _hoisted_3$n = /* @__PURE__ */ createBaseVNode("div", { class: "w-100" }, null, -1);
+  const _hoisted_4$m = { class: "w-100 mt-4 ml-3 py-1 px-2 anwp-text-base d-flex anwp-border anwp-border-gray-400 anwp-bg-gray-300 anwp-text-gray-900 anwp-w-400" };
+  const _hoisted_5$l = { class: "d-flex flex-column" };
+  const _hoisted_6$l = { class: "d-flex" };
+  const _hoisted_7$l = { class: "d-flex flex-column mr-4" };
+  const _hoisted_8$l = ["disabled", "onClick"];
+  const _hoisted_9$j = /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-chevron-top" }, null, -1);
   const _hoisted_10$i = [
-    _hoisted_9$i
+    _hoisted_9$j
   ];
   const _hoisted_11$e = ["disabled", "onClick"];
   const _hoisted_12$e = /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-chevron-bottom" }, null, -1);
@@ -23055,7 +23055,7 @@ This will fail in production.`
   const _hoisted_43$3 = ["value"];
   const _hoisted_44$2 = { class: "anwp-vfm-admin-modal__actions" };
   const _hoisted_45$2 = { class: "d-flex flex-row-reverse" };
-  const _sfc_main$n = {
+  const _sfc_main$r = {
     __name: "AppGameReferees",
     setup(__props) {
       const gameStore = useGameStore();
@@ -23139,15 +23139,15 @@ This will fail in production.`
       };
       return (_ctx, _cache) => {
         var _a2, _b2, _c, _d;
-        return openBlock(), createElementBlock("div", _hoisted_1$n, [
+        return openBlock(), createElementBlock("div", _hoisted_1$r, [
           createVNode(AppBlockHeader, { icon: "#icon-organization" }, {
             default: withCtx(() => [
               createTextVNode(toDisplayString(unref(l10n).referee), 1)
             ]),
             _: 1
           }),
-          createBaseVNode("div", _hoisted_2$l, [
-            createVNode(_sfc_main$o, {
+          createBaseVNode("div", _hoisted_2$o, [
+            createVNode(_sfc_main$s, {
               l10n: unref(l10n),
               "default-photo": unref(gameStore).appConfig.default_photo,
               referee: unref(gameStore).referee,
@@ -23155,7 +23155,7 @@ This will fail in production.`
               onOpenModalRefereeSelector: _cache[0] || (_cache[0] = ($event) => openModalRefereeSelector("referee")),
               onClickRemove: _cache[1] || (_cache[1] = ($event) => unref(gameStore).referee = null)
             }, null, 8, ["l10n", "default-photo", "referee", "text-referee"]),
-            createVNode(_sfc_main$o, {
+            createVNode(_sfc_main$s, {
               l10n: unref(l10n),
               "default-photo": unref(gameStore).appConfig.default_photo,
               referee: unref(gameStore).assistant_1,
@@ -23163,7 +23163,7 @@ This will fail in production.`
               onOpenModalRefereeSelector: _cache[2] || (_cache[2] = ($event) => openModalRefereeSelector("assistant_1")),
               onClickRemove: _cache[3] || (_cache[3] = ($event) => unref(gameStore).assistant_1 = null)
             }, null, 8, ["l10n", "default-photo", "referee", "text-referee"]),
-            createVNode(_sfc_main$o, {
+            createVNode(_sfc_main$s, {
               l10n: unref(l10n),
               "default-photo": unref(gameStore).appConfig.default_photo,
               referee: unref(gameStore).assistant_2,
@@ -23171,8 +23171,8 @@ This will fail in production.`
               onOpenModalRefereeSelector: _cache[4] || (_cache[4] = ($event) => openModalRefereeSelector("assistant_2")),
               onClickRemove: _cache[5] || (_cache[5] = ($event) => unref(gameStore).assistant_2 = null)
             }, null, 8, ["l10n", "default-photo", "referee", "text-referee"]),
-            _hoisted_3$k,
-            createVNode(_sfc_main$o, {
+            _hoisted_3$n,
+            createVNode(_sfc_main$s, {
               class: "mt-sm-4",
               l10n: unref(l10n),
               "default-photo": unref(gameStore).appConfig.default_photo,
@@ -23181,7 +23181,7 @@ This will fail in production.`
               onOpenModalRefereeSelector: _cache[6] || (_cache[6] = ($event) => openModalRefereeSelector("referee_fourth")),
               onClickRemove: _cache[7] || (_cache[7] = ($event) => unref(gameStore).referee_fourth = null)
             }, null, 8, ["l10n", "default-photo", "referee", "text-referee"]),
-            createBaseVNode("div", _hoisted_4$k, toDisplayString(unref(l10n).additional_referees), 1),
+            createBaseVNode("div", _hoisted_4$m, toDisplayString(unref(l10n).additional_referees), 1),
             createVNode(TransitionGroup, {
               name: "fl-sortable-list",
               class: "w-100"
@@ -23192,9 +23192,9 @@ This will fail in production.`
                     class: "w-100 d-flex flex-wrap align-items-start my-2 ml-3 py-3 anwp-border-bottom anwp-border-gray-300",
                     key: add_ref.id
                   }, [
-                    createBaseVNode("div", _hoisted_5$k, [
-                      createBaseVNode("div", _hoisted_6$k, [
-                        createBaseVNode("div", _hoisted_7$k, [
+                    createBaseVNode("div", _hoisted_5$l, [
+                      createBaseVNode("div", _hoisted_6$l, [
+                        createBaseVNode("div", _hoisted_7$l, [
                           createBaseVNode("button", {
                             type: "button",
                             disabled: !ref_index,
@@ -23204,7 +23204,7 @@ This will fail in production.`
                             (openBlock(), createElementBlock("svg", {
                               class: normalizeClass(["anwp-icon anwp-icon--octi d-inline-block anwp-icon--s16", ref_index ? "" : "anwp-opacity-50"])
                             }, _hoisted_10$i, 2))
-                          ], 8, _hoisted_8$k),
+                          ], 8, _hoisted_8$l),
                           createBaseVNode("button", {
                             type: "button",
                             disabled: ref_index === unref(gameStore).additional_referees.length - 1,
@@ -23237,7 +23237,7 @@ This will fail in production.`
                         }, toDisplayString(unref(l10n).remove_referee), 9, _hoisted_18$c)
                       ])
                     ]),
-                    createVNode(_sfc_main$o, {
+                    createVNode(_sfc_main$s, {
                       class: "mr-4",
                       style: { "margin-top": "0 !important" },
                       l10n: unref(l10n),
@@ -23356,7 +23356,7 @@ This will fail in production.`
                     "page-link-class": "anwp-page-link"
                   }, null, 8, ["modelValue", "page-count", "prev-text", "next-text"])) : createCommentVNode("", true),
                   (openBlock(true), createElementBlock(Fragment, null, renderList(refereesInModalPaginated.value, (referee) => {
-                    return openBlock(), createBlock(_sfc_main$p, {
+                    return openBlock(), createBlock(_sfc_main$t, {
                       onClickReferee: ($event) => addReferee(referee),
                       class: "my-2",
                       key: referee.id,
@@ -23414,39 +23414,39 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$m = { class: "anwp-vue-match-wrapper anwp-b-wrap anwp-vue-wrapper-ready" };
-  const _sfc_main$m = {
+  const _hoisted_1$q = { class: "anwp-vue-match-wrapper anwp-b-wrap anwp-vue-wrapper-ready" };
+  const _sfc_main$q = {
     __name: "AppMatch",
     setup(__props) {
       return (_ctx, _cache) => {
-        return openBlock(), createElementBlock("div", _hoisted_1$m, [
-          createVNode(_sfc_main$D),
-          createVNode(_sfc_main$B),
-          createVNode(_sfc_main$w),
-          createVNode(_sfc_main$r),
-          createVNode(_sfc_main$q),
-          createVNode(_sfc_main$n),
-          createVNode(unref(Wo)),
+        return openBlock(), createElementBlock("div", _hoisted_1$q, [
+          createVNode(_sfc_main$H),
+          createVNode(_sfc_main$F),
+          createVNode(_sfc_main$A),
           createVNode(_sfc_main$v),
-          createVNode(_sfc_main$s),
           createVNode(_sfc_main$u),
-          createVNode(_sfc_main$t)
+          createVNode(_sfc_main$r),
+          createVNode(unref(Wo)),
+          createVNode(_sfc_main$z),
+          createVNode(_sfc_main$w),
+          createVNode(_sfc_main$y),
+          createVNode(_sfc_main$x)
         ]);
       };
     }
   };
-  const _hoisted_1$l = { class: "anwp-vue-standing-setup-wrapper anwp-b-wrap anwp-vue-wrapper-ready" };
-  const _hoisted_2$k = { class: "anwp-border anwp-border-gray-500 bg-white" };
-  const _hoisted_3$j = { class: "px-4" };
-  const _hoisted_4$j = { class: "d-flex flex-column my-4" };
-  const _hoisted_5$j = {
+  const _hoisted_1$p = { class: "anwp-vue-standing-setup-wrapper anwp-b-wrap anwp-vue-wrapper-ready" };
+  const _hoisted_2$n = { class: "anwp-border anwp-border-gray-500 bg-white" };
+  const _hoisted_3$m = { class: "px-4" };
+  const _hoisted_4$l = { class: "d-flex flex-column my-4" };
+  const _hoisted_5$k = {
     class: "mb-1 anwp-text-gray-800 d-flex",
     for: "anwpfl-input-competition"
   };
-  const _hoisted_6$j = { class: "w-100 d-flex align-items-center" };
-  const _hoisted_7$j = ["src"];
-  const _hoisted_8$j = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
-  const _hoisted_9$h = { class: "anwp-opacity-70 anwp-text-xs anwp-leading-1-25" };
+  const _hoisted_6$k = { class: "w-100 d-flex align-items-center" };
+  const _hoisted_7$k = ["src"];
+  const _hoisted_8$k = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
+  const _hoisted_9$i = { class: "anwp-opacity-70 anwp-text-xs anwp-leading-1-25" };
   const _hoisted_10$h = { class: "w-100 d-flex align-items-center" };
   const _hoisted_11$d = ["src"];
   const _hoisted_12$d = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
@@ -23481,7 +23481,7 @@ This will fail in production.`
   }, null, -1);
   const _hoisted_26$7 = ["value"];
   const _hoisted_27$6 = ["value"];
-  const _sfc_main$l = {
+  const _sfc_main$p = {
     __name: "AppStandingSetup",
     setup(__props) {
       const l10n = Object.assign({}, window._AnWP_FL_Standing_Setup.l10n);
@@ -23514,17 +23514,17 @@ This will fail in production.`
       });
       return (_ctx, _cache) => {
         const _component_v_select = resolveComponent("v-select");
-        return openBlock(), createElementBlock("div", _hoisted_1$l, [
-          createBaseVNode("div", _hoisted_2$k, [
+        return openBlock(), createElementBlock("div", _hoisted_1$p, [
+          createBaseVNode("div", _hoisted_2$n, [
             createVNode(AppBlockHeader, { icon: "#icon-gear" }, {
               default: withCtx(() => [
                 createTextVNode(toDisplayString(unref(l10n).select_competition_group), 1)
               ]),
               _: 1
             }),
-            createBaseVNode("div", _hoisted_3$j, [
-              createBaseVNode("div", _hoisted_4$j, [
-                createBaseVNode("label", _hoisted_5$j, toDisplayString(unref(l10n).competition), 1),
+            createBaseVNode("div", _hoisted_3$m, [
+              createBaseVNode("div", _hoisted_4$l, [
+                createBaseVNode("label", _hoisted_5$k, toDisplayString(unref(l10n).competition), 1),
                 createVNode(_component_v_select, {
                   id: "anwpfl-input-competition",
                   modelValue: competitionId.value,
@@ -23538,17 +23538,17 @@ This will fail in production.`
                   reduce: (o2) => o2.id
                 }, {
                   option: withCtx(({ title_full, logo, league_text, season_text }) => [
-                    createBaseVNode("div", _hoisted_6$j, [
+                    createBaseVNode("div", _hoisted_6$k, [
                       logo ? (openBlock(), createElementBlock("img", {
                         key: 0,
                         class: "anwp-object-contain anwp-w-30 anwp-h-30 mr-2",
                         src: logo,
                         alt: "competition logo"
-                      }, null, 8, _hoisted_7$j)) : createCommentVNode("", true),
+                      }, null, 8, _hoisted_7$k)) : createCommentVNode("", true),
                       createBaseVNode("div", null, [
                         createTextVNode(toDisplayString(title_full), 1),
-                        _hoisted_8$j,
-                        createBaseVNode("span", _hoisted_9$h, toDisplayString(league_text) + " | " + toDisplayString(season_text), 1)
+                        _hoisted_8$k,
+                        createBaseVNode("span", _hoisted_9$i, toDisplayString(league_text) + " | " + toDisplayString(season_text), 1)
                       ])
                     ])
                   ]),
@@ -23728,21 +23728,21 @@ This will fail in production.`
       tableNotes
     };
   });
-  const _hoisted_1$k = { class: "anwp-border anwp-border-gray-500" };
-  const _hoisted_2$j = { class: "bg-white p-3" };
-  const _hoisted_3$i = { class: "my-1 border-bottom font-weight-normal" };
-  const _hoisted_4$i = {
+  const _hoisted_1$o = { class: "anwp-border anwp-border-gray-500" };
+  const _hoisted_2$m = { class: "bg-white p-3" };
+  const _hoisted_3$l = { class: "my-1 border-bottom font-weight-normal" };
+  const _hoisted_4$k = {
     key: 0,
     class: "d-flex flex-column my-4"
   };
-  const _hoisted_5$i = { class: "mr-2 bg-secondary text-white anwp-standing__club-points d-inline-block anwp-text-base" };
-  const _hoisted_6$i = { class: "d-inline-block" };
-  const _hoisted_7$i = ["onClick"];
-  const _hoisted_8$i = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--s14" }, [
+  const _hoisted_5$j = { class: "mr-2 bg-secondary text-white anwp-standing__club-points d-inline-block anwp-text-base" };
+  const _hoisted_6$j = { class: "d-inline-block" };
+  const _hoisted_7$j = ["onClick"];
+  const _hoisted_8$j = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--s14" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-close" })
   ], -1);
-  const _hoisted_9$g = [
-    _hoisted_8$i
+  const _hoisted_9$h = [
+    _hoisted_8$j
   ];
   const _hoisted_10$g = {
     key: 1,
@@ -23781,7 +23781,7 @@ This will fail in production.`
   const _hoisted_41$2 = ["value"];
   const _hoisted_42$2 = ["value"];
   const _hoisted_43$2 = ["value"];
-  const _sfc_main$k = {
+  const _sfc_main$o = {
     __name: "AppInitial",
     setup(__props) {
       const stStore = useStStore();
@@ -23797,16 +23797,16 @@ This will fail in production.`
       };
       return (_ctx, _cache) => {
         const _component_toggle = resolveComponent("toggle");
-        return openBlock(), createElementBlock("div", _hoisted_1$k, [
+        return openBlock(), createElementBlock("div", _hoisted_1$o, [
           createVNode(AppBlockHeader, { icon: "#icon-gear" }, {
             default: withCtx(() => [
               createTextVNode(toDisplayString(unref(l10n).initial_standing_table_data), 1)
             ]),
             _: 1
           }),
-          createBaseVNode("div", _hoisted_2$j, [
-            createBaseVNode("h3", _hoisted_3$i, toDisplayString(unref(l10n).initial_points), 1),
-            Object.keys(unref(stStore).pointsInitial).length ? (openBlock(), createElementBlock("div", _hoisted_4$i, [
+          createBaseVNode("div", _hoisted_2$m, [
+            createBaseVNode("h3", _hoisted_3$l, toDisplayString(unref(l10n).initial_points), 1),
+            Object.keys(unref(stStore).pointsInitial).length ? (openBlock(), createElementBlock("div", _hoisted_4$k, [
               (openBlock(true), createElementBlock(Fragment, null, renderList(unref(stStore).pointsInitial, (points, clubId) => {
                 var _a2;
                 return openBlock(), createElementBlock("div", {
@@ -23814,14 +23814,14 @@ This will fail in production.`
                   key: clubId
                 }, [
                   createBaseVNode("div", null, [
-                    createBaseVNode("span", _hoisted_5$i, toDisplayString(points), 1),
-                    createBaseVNode("span", _hoisted_6$i, toDisplayString(((_a2 = unref(stStore).appConfig.clubs[clubId]) == null ? void 0 : _a2.title) || ""), 1)
+                    createBaseVNode("span", _hoisted_5$j, toDisplayString(points), 1),
+                    createBaseVNode("span", _hoisted_6$j, toDisplayString(((_a2 = unref(stStore).appConfig.clubs[clubId]) == null ? void 0 : _a2.title) || ""), 1)
                   ]),
                   createBaseVNode("a", {
                     class: "button d-flex align-items-center",
                     href: "#",
                     onClick: withModifiers(($event) => delete unref(stStore).pointsInitial[clubId], ["prevent"])
-                  }, _hoisted_9$g, 8, _hoisted_7$i)
+                  }, _hoisted_9$h, 8, _hoisted_7$j)
                 ]);
               }), 128))
             ])) : (openBlock(), createElementBlock("div", _hoisted_10$g, "- " + toDisplayString(unref(l10n).not_specified) + " -", 1)),
@@ -24003,27 +24003,27 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$j = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$n = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$i = [
-    _hoisted_1$j
+  const _hoisted_2$l = [
+    _hoisted_1$n
   ];
-  const _hoisted_3$h = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$h = { class: "my-0" };
-  const _hoisted_5$h = { class: "anwp-vfm-admin-modal__content d-flex flex-column" };
-  const _hoisted_6$h = {
+  const _hoisted_3$k = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$j = { class: "my-0" };
+  const _hoisted_5$i = { class: "anwp-vfm-admin-modal__content d-flex flex-column" };
+  const _hoisted_6$i = {
     for: "anwpfl-input-initial-points-club",
     class: "mb-1"
   };
-  const _hoisted_7$h = ["value"];
-  const _hoisted_8$h = {
+  const _hoisted_7$i = ["value"];
+  const _hoisted_8$i = {
     for: "anwpfl-input-initial-points",
     class: "mb-1 mt-3"
   };
-  const _hoisted_9$f = { class: "anwp-vfm-admin-modal__actions" };
+  const _hoisted_9$g = { class: "anwp-vfm-admin-modal__actions" };
   const _hoisted_10$f = { class: "d-flex flex-row-reverse" };
-  const _sfc_main$j = {
+  const _sfc_main$n = {
     __name: "AppModalInitialPoints",
     setup(__props) {
       const stStore = useStStore();
@@ -24049,12 +24049,12 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
               type: "button",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(stStore).modals.initialPoints = false)
-            }, _hoisted_2$i),
-            createBaseVNode("div", _hoisted_3$h, [
-              createBaseVNode("h4", _hoisted_4$h, toDisplayString(unref(l10n).add_initial_points), 1)
+            }, _hoisted_2$l),
+            createBaseVNode("div", _hoisted_3$k, [
+              createBaseVNode("h4", _hoisted_4$j, toDisplayString(unref(l10n).add_initial_points), 1)
             ]),
-            createBaseVNode("div", _hoisted_5$h, [
-              createBaseVNode("label", _hoisted_6$h, toDisplayString(unref(l10n).select_club), 1),
+            createBaseVNode("div", _hoisted_5$i, [
+              createBaseVNode("label", _hoisted_6$i, toDisplayString(unref(l10n).select_club), 1),
               withDirectives(createBaseVNode("select", {
                 id: "anwpfl-input-initial-points-club",
                 "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(stStore).modalData.pointsInitialClub = $event)
@@ -24063,12 +24063,12 @@ This will fail in production.`
                   return openBlock(), createElementBlock("option", {
                     value: clubId,
                     key: clubId
-                  }, toDisplayString(club.title), 9, _hoisted_7$h);
+                  }, toDisplayString(club.title), 9, _hoisted_7$i);
                 }), 128))
               ], 512), [
                 [vModelSelect, unref(stStore).modalData.pointsInitialClub]
               ]),
-              createBaseVNode("label", _hoisted_8$h, toDisplayString(unref(l10n).club_initial_points), 1),
+              createBaseVNode("label", _hoisted_8$i, toDisplayString(unref(l10n).club_initial_points), 1),
               withDirectives(createBaseVNode("input", {
                 id: "anwpfl-input-initial-points",
                 class: "anwp-w-70 anwp-text-xl anwp-text-center",
@@ -24079,7 +24079,7 @@ This will fail in production.`
                 [vModelText, unref(stStore).modalData.pointsInitialNumber]
               ])
             ]),
-            createBaseVNode("div", _hoisted_9$f, [
+            createBaseVNode("div", _hoisted_9$g, [
               createBaseVNode("div", _hoisted_10$f, [
                 createBaseVNode("button", {
                   onClick: _cache[3] || (_cache[3] = withModifiers(($event) => addInitialPoints(), ["prevent"])),
@@ -24099,21 +24099,21 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$i = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$m = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$h = [
-    _hoisted_1$i
+  const _hoisted_2$k = [
+    _hoisted_1$m
   ];
-  const _hoisted_3$g = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$g = { class: "my-0" };
-  const _hoisted_5$g = { class: "anwp-vfm-admin-modal__content d-flex flex-column" };
-  const _hoisted_6$g = { class: "anwp-vfm-admin-modal__actions" };
-  const _hoisted_7$g = { class: "d-flex flex-row-reverse" };
-  const _hoisted_8$g = ["disabled"];
-  const _hoisted_9$e = ["src"];
+  const _hoisted_3$j = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$i = { class: "my-0" };
+  const _hoisted_5$h = { class: "anwp-vfm-admin-modal__content d-flex flex-column" };
+  const _hoisted_6$h = { class: "anwp-vfm-admin-modal__actions" };
+  const _hoisted_7$h = { class: "d-flex flex-row-reverse" };
+  const _hoisted_8$h = ["disabled"];
+  const _hoisted_9$f = ["src"];
   const _hoisted_10$e = ["disabled"];
-  const _sfc_main$i = {
+  const _sfc_main$m = {
     __name: "AppModalInitialLoadFrom",
     setup(__props) {
       const notyf2 = new Notyf({ duration: 5e3 });
@@ -24163,11 +24163,11 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
               type: "button",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(stStore).modals.initialLoadFrom = false)
-            }, _hoisted_2$h),
-            createBaseVNode("div", _hoisted_3$g, [
-              createBaseVNode("h4", _hoisted_4$g, toDisplayString(unref(l10n).load_initial_data_another), 1)
+            }, _hoisted_2$k),
+            createBaseVNode("div", _hoisted_3$j, [
+              createBaseVNode("h4", _hoisted_4$i, toDisplayString(unref(l10n).load_initial_data_another), 1)
             ]),
-            createBaseVNode("div", _hoisted_5$g, [
+            createBaseVNode("div", _hoisted_5$h, [
               createVNode(_component_v_select, {
                 class: "anwp-w-400 anwp-max-width-100",
                 label: "title",
@@ -24181,8 +24181,8 @@ This will fail in production.`
                 reduce: (o2) => o2.id
               }, null, 8, ["modelValue", "options", "reduce"])
             ]),
-            createBaseVNode("div", _hoisted_6$g, [
-              createBaseVNode("div", _hoisted_7$g, [
+            createBaseVNode("div", _hoisted_6$h, [
+              createBaseVNode("div", _hoisted_7$h, [
                 createBaseVNode("button", {
                   disabled: unref(stStore).modalData.loadingPoints,
                   onClick: _cache[2] || (_cache[2] = withModifiers(($event) => loadInitialPoints(), ["prevent"])),
@@ -24195,8 +24195,8 @@ This will fail in production.`
                     class: "ml-2",
                     src: unref(stStore).appConfig.spinnerUrl,
                     alt: "spinner"
-                  }, null, 8, _hoisted_9$e)) : createCommentVNode("", true)
-                ], 8, _hoisted_8$g),
+                  }, null, 8, _hoisted_9$f)) : createCommentVNode("", true)
+                ], 8, _hoisted_8$h),
                 createBaseVNode("button", {
                   disabled: unref(stStore).modalData.loadingPoints,
                   type: "button",
@@ -24211,19 +24211,19 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$h = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$l = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$g = [
-    _hoisted_1$h
+  const _hoisted_2$j = [
+    _hoisted_1$l
   ];
-  const _hoisted_3$f = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$f = { class: "my-0" };
-  const _hoisted_5$f = { class: "anwp-vfm-admin-modal__content d-flex flex-column" };
-  const _hoisted_6$f = { for: "anwpfl-input-color-type mb-1" };
-  const _hoisted_7$f = { value: "place" };
-  const _hoisted_8$f = { value: "club" };
-  const _hoisted_9$d = {
+  const _hoisted_3$i = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$h = { class: "my-0" };
+  const _hoisted_5$g = { class: "anwp-vfm-admin-modal__content d-flex flex-column" };
+  const _hoisted_6$g = { for: "anwpfl-input-color-type mb-1" };
+  const _hoisted_7$g = { value: "place" };
+  const _hoisted_8$g = { value: "club" };
+  const _hoisted_9$e = {
     for: "anwpfl-input-color-club",
     class: "mb-1"
   };
@@ -24258,7 +24258,7 @@ This will fail in production.`
   ];
   const _hoisted_24$7 = { class: "anwp-vfm-admin-modal__actions" };
   const _hoisted_25$6 = { class: "d-flex flex-row-reverse" };
-  const _sfc_main$h = {
+  const _sfc_main$l = {
     __name: "AppModalColor",
     setup(__props) {
       const notyf2 = new Notyf({ duration: 5e3 });
@@ -24306,24 +24306,24 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
               type: "button",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(stStore).modals.colorModal = false)
-            }, _hoisted_2$g),
-            createBaseVNode("div", _hoisted_3$f, [
-              createBaseVNode("h4", _hoisted_4$f, toDisplayString(unref(l10n).add_table_color), 1)
+            }, _hoisted_2$j),
+            createBaseVNode("div", _hoisted_3$i, [
+              createBaseVNode("h4", _hoisted_4$h, toDisplayString(unref(l10n).add_table_color), 1)
             ]),
-            createBaseVNode("div", _hoisted_5$f, [
-              createBaseVNode("label", _hoisted_6$f, toDisplayString(unref(l10n).color_by), 1),
+            createBaseVNode("div", _hoisted_5$g, [
+              createBaseVNode("label", _hoisted_6$g, toDisplayString(unref(l10n).color_by), 1),
               withDirectives(createBaseVNode("select", {
                 id: "anwpfl-input-color-type",
                 "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(stStore).modalData.modalColorType = $event),
                 class: "mb-3"
               }, [
-                createBaseVNode("option", _hoisted_7$f, toDisplayString(unref(l10n).place), 1),
-                createBaseVNode("option", _hoisted_8$f, toDisplayString(unref(l10n).club), 1)
+                createBaseVNode("option", _hoisted_7$g, toDisplayString(unref(l10n).place), 1),
+                createBaseVNode("option", _hoisted_8$g, toDisplayString(unref(l10n).club), 1)
               ], 512), [
                 [vModelSelect, unref(stStore).modalData.modalColorType]
               ]),
               "club" === unref(stStore).modalData.modalColorType ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-                createBaseVNode("label", _hoisted_9$d, toDisplayString(unref(l10n).select_club), 1),
+                createBaseVNode("label", _hoisted_9$e, toDisplayString(unref(l10n).select_club), 1),
                 withDirectives(createBaseVNode("select", {
                   id: "anwpfl-input-color-club",
                   "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => unref(stStore).modalData.modalColorClub = $event)
@@ -24410,29 +24410,29 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$g = { class: "anwp-border anwp-border-gray-500 my-4" };
-  const _hoisted_2$f = { class: "bg-white p-3 pb-4" };
-  const _hoisted_3$e = {
+  const _hoisted_1$k = { class: "anwp-border anwp-border-gray-500 my-4" };
+  const _hoisted_2$i = { class: "bg-white p-3 pb-4" };
+  const _hoisted_3$h = {
     key: 0,
     class: "table-bordered"
   };
-  const _hoisted_4$e = { key: 0 };
-  const _hoisted_5$e = { key: 1 };
-  const _hoisted_6$e = {
+  const _hoisted_4$g = { key: 0 };
+  const _hoisted_5$f = { key: 1 };
+  const _hoisted_6$f = {
     class: "p-0",
     style: { "width": "30px" }
   };
-  const _hoisted_7$e = ["onClick"];
-  const _hoisted_8$e = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--s14 pr-0" }, [
+  const _hoisted_7$f = ["onClick"];
+  const _hoisted_8$f = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--s14 pr-0" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-close" })
   ], -1);
-  const _hoisted_9$c = [
-    _hoisted_8$e
+  const _hoisted_9$d = [
+    _hoisted_8$f
   ];
   const _hoisted_10$c = { key: 1 };
   const _hoisted_11$a = { class: "bg-light anwp-fl-border anwp-border-top anwp-border-gray-400 px-3 py-2" };
   const _hoisted_12$a = ["value"];
-  const _sfc_main$g = {
+  const _sfc_main$k = {
     __name: "AppTableColors",
     setup(__props) {
       const stStore = useStStore();
@@ -24446,15 +24446,15 @@ This will fail in production.`
         stStore.modals.colorModal = true;
       };
       return (_ctx, _cache) => {
-        return openBlock(), createElementBlock("div", _hoisted_1$g, [
+        return openBlock(), createElementBlock("div", _hoisted_1$k, [
           createVNode(AppBlockHeader, { icon: "#icon-gear" }, {
             default: withCtx(() => [
               createTextVNode(toDisplayString(unref(l10n).standing_table_colors), 1)
             ]),
             _: 1
           }),
-          createBaseVNode("div", _hoisted_2$f, [
-            Object.keys(unref(stStore).tableColors).length ? (openBlock(), createElementBlock("table", _hoisted_3$e, [
+          createBaseVNode("div", _hoisted_2$i, [
+            Object.keys(unref(stStore).tableColors).length ? (openBlock(), createElementBlock("table", _hoisted_3$h, [
               (openBlock(true), createElementBlock(Fragment, null, renderList(unref(stStore).tableColors, (colorClass, cValue) => {
                 var _a2;
                 return openBlock(), createElementBlock("tr", { key: cValue }, [
@@ -24462,14 +24462,14 @@ This will fail in production.`
                     class: normalizeClass(["px-4 py-1 align-middle", [colorClass.startsWith("#") ? "" : "table-" + colorClass]]),
                     style: normalizeStyle([{ backgroundColor: colorClass.startsWith("#") ? colorClass : "" }, { "width": "250px" }])
                   }, [
-                    "p" === cValue[0] ? (openBlock(), createElementBlock("span", _hoisted_4$e, toDisplayString(unref(l10n).place) + ": #" + toDisplayString(cValue.substring(1)), 1)) : (openBlock(), createElementBlock("span", _hoisted_5$e, toDisplayString(unref(l10n).club) + ": " + toDisplayString(((_a2 = unref(stStore).appConfig.clubs[cValue.substring(1)]) == null ? void 0 : _a2.title) || ""), 1))
+                    "p" === cValue[0] ? (openBlock(), createElementBlock("span", _hoisted_4$g, toDisplayString(unref(l10n).place) + ": #" + toDisplayString(cValue.substring(1)), 1)) : (openBlock(), createElementBlock("span", _hoisted_5$f, toDisplayString(unref(l10n).club) + ": " + toDisplayString(((_a2 = unref(stStore).appConfig.clubs[cValue.substring(1)]) == null ? void 0 : _a2.title) || ""), 1))
                   ], 6),
-                  createBaseVNode("td", _hoisted_6$e, [
+                  createBaseVNode("td", _hoisted_6$f, [
                     createBaseVNode("button", {
                       class: "button d-flex align-items-center",
                       type: "button",
                       onClick: withModifiers(($event) => delete unref(stStore).tableColors[cValue], ["prevent"])
-                    }, _hoisted_9$c, 8, _hoisted_7$e)
+                    }, _hoisted_9$d, 8, _hoisted_7$f)
                   ])
                 ]);
               }), 128))
@@ -24491,15 +24491,15 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$f = { class: "anwp-border anwp-border-gray-500 my-4" };
-  const _hoisted_2$e = { class: "bg-white p-3 pb-4" };
-  const _hoisted_3$d = { class: "bg-light anwp-fl-border anwp-border-top anwp-border-gray-400 px-3 py-2" };
-  const _hoisted_4$d = { class: "my-1" };
-  const _hoisted_5$d = /* @__PURE__ */ createStaticVNode('<div class="d-flex flex-wrap"><span class="border mr-2 px-3 table-primary"></span> %primary% <span class="ml-4 border mr-2 px-3 table-secondary"></span> %secondary% <span class="ml-4 border mr-2 px-3 table-success"></span> %success% <span class="ml-4 border mr-2 px-3 table-warning"></span> %warning% <span class="ml-4 border mr-2 px-3 table-danger"></span> %danger% <span class="ml-4 border mr-2 px-3 table-info"></span> %info% </div>', 1);
-  const _hoisted_6$d = { class: "d-flex flex-wrap mt-1" };
-  const _hoisted_7$d = { class: "mr-4" };
-  const _hoisted_8$d = ["value"];
-  const _sfc_main$f = {
+  const _hoisted_1$j = { class: "anwp-border anwp-border-gray-500 my-4" };
+  const _hoisted_2$h = { class: "bg-white p-3 pb-4" };
+  const _hoisted_3$g = { class: "bg-light anwp-fl-border anwp-border-top anwp-border-gray-400 px-3 py-2" };
+  const _hoisted_4$f = { class: "my-1" };
+  const _hoisted_5$e = /* @__PURE__ */ createStaticVNode('<div class="d-flex flex-wrap"><span class="border mr-2 px-3 table-primary"></span> %primary% <span class="ml-4 border mr-2 px-3 table-secondary"></span> %secondary% <span class="ml-4 border mr-2 px-3 table-success"></span> %success% <span class="ml-4 border mr-2 px-3 table-warning"></span> %warning% <span class="ml-4 border mr-2 px-3 table-danger"></span> %danger% <span class="ml-4 border mr-2 px-3 table-info"></span> %info% </div>', 1);
+  const _hoisted_6$e = { class: "d-flex flex-wrap mt-1" };
+  const _hoisted_7$e = { class: "mr-4" };
+  const _hoisted_8$e = ["value"];
+  const _sfc_main$j = {
     __name: "AppTableNotes",
     setup(__props) {
       const stStore = useStStore();
@@ -24508,14 +24508,14 @@ This will fail in production.`
         return Object.values(stStore.tableColors).filter((c2) => c2.startsWith("#"));
       });
       return (_ctx, _cache) => {
-        return openBlock(), createElementBlock("div", _hoisted_1$f, [
+        return openBlock(), createElementBlock("div", _hoisted_1$j, [
           createVNode(AppBlockHeader, { icon: "#icon-note" }, {
             default: withCtx(() => [
               createTextVNode(toDisplayString(unref(l10n).notes_below_table), 1)
             ]),
             _: 1
           }),
-          createBaseVNode("div", _hoisted_2$e, [
+          createBaseVNode("div", _hoisted_2$h, [
             withDirectives(createBaseVNode("textarea", {
               class: "w-100",
               "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(stStore).tableNotes = $event),
@@ -24525,12 +24525,12 @@ This will fail in production.`
               [vModelText, unref(stStore).tableNotes]
             ])
           ]),
-          createBaseVNode("div", _hoisted_3$d, [
-            createBaseVNode("h4", _hoisted_4$d, toDisplayString(unref(l10n).available_placeholders), 1),
-            _hoisted_5$d,
-            createBaseVNode("div", _hoisted_6$d, [
+          createBaseVNode("div", _hoisted_3$g, [
+            createBaseVNode("h4", _hoisted_4$f, toDisplayString(unref(l10n).available_placeholders), 1),
+            _hoisted_5$e,
+            createBaseVNode("div", _hoisted_6$e, [
               (openBlock(true), createElementBlock(Fragment, null, renderList(customTableColors.value, (color) => {
-                return openBlock(), createElementBlock("div", _hoisted_7$d, [
+                return openBlock(), createElementBlock("div", _hoisted_7$e, [
                   createBaseVNode("span", {
                     class: "border mr-2 px-3",
                     style: normalizeStyle({ backgroundColor: color })
@@ -24544,40 +24544,40 @@ This will fail in production.`
             type: "hidden",
             name: "_anwpfl_table_notes",
             value: unref(stStore).tableNotes
-          }, null, 8, _hoisted_8$d)
+          }, null, 8, _hoisted_8$e)
         ]);
       };
     }
   };
-  const _hoisted_1$e = { class: "anwp-border anwp-border-gray-500 my-4" };
-  const _hoisted_2$d = { class: "bg-white p-3 pb-4" };
-  const _hoisted_3$c = { class: "d-flex flex-wrap" };
-  const _hoisted_4$c = { class: "d-flex flex-column mr-3 mb-2" };
-  const _hoisted_5$c = { for: "anwpfl-input-pointsWin" };
-  const _hoisted_6$c = { class: "d-flex flex-column mr-3 mb-2" };
-  const _hoisted_7$c = { for: "anwpfl-input-pointsDraw" };
-  const _hoisted_8$c = { class: "d-flex flex-column" };
-  const _hoisted_9$b = { for: "anwpfl-input-pointsLoss" };
+  const _hoisted_1$i = { class: "anwp-border anwp-border-gray-500 my-4" };
+  const _hoisted_2$g = { class: "bg-white p-3 pb-4" };
+  const _hoisted_3$f = { class: "d-flex flex-wrap" };
+  const _hoisted_4$e = { class: "d-flex flex-column mr-3 mb-2" };
+  const _hoisted_5$d = { for: "anwpfl-input-pointsWin" };
+  const _hoisted_6$d = { class: "d-flex flex-column mr-3 mb-2" };
+  const _hoisted_7$d = { for: "anwpfl-input-pointsDraw" };
+  const _hoisted_8$d = { class: "d-flex flex-column" };
+  const _hoisted_9$c = { for: "anwpfl-input-pointsLoss" };
   const _hoisted_10$b = ["value"];
   const _hoisted_11$9 = ["value"];
   const _hoisted_12$9 = ["value"];
-  const _sfc_main$e = {
+  const _sfc_main$i = {
     __name: "AppPoints",
     setup(__props) {
       const stStore = useStStore();
       const l10n = window._AnWP_FL_Standing_Data.l10n;
       return (_ctx, _cache) => {
-        return openBlock(), createElementBlock("div", _hoisted_1$e, [
+        return openBlock(), createElementBlock("div", _hoisted_1$i, [
           createVNode(AppBlockHeader, { icon: "#icon-gear" }, {
             default: withCtx(() => [
               createTextVNode(toDisplayString(unref(l10n).points), 1)
             ]),
             _: 1
           }),
-          createBaseVNode("div", _hoisted_2$d, [
-            createBaseVNode("div", _hoisted_3$c, [
-              createBaseVNode("div", _hoisted_4$c, [
-                createBaseVNode("label", _hoisted_5$c, toDisplayString(unref(l10n).points_for_a_win), 1),
+          createBaseVNode("div", _hoisted_2$g, [
+            createBaseVNode("div", _hoisted_3$f, [
+              createBaseVNode("div", _hoisted_4$e, [
+                createBaseVNode("label", _hoisted_5$d, toDisplayString(unref(l10n).points_for_a_win), 1),
                 withDirectives(createBaseVNode("input", {
                   id: "anwpfl-input-pointsWin",
                   type: "number",
@@ -24594,8 +24594,8 @@ This will fail in production.`
                   ]
                 ])
               ]),
-              createBaseVNode("div", _hoisted_6$c, [
-                createBaseVNode("label", _hoisted_7$c, toDisplayString(unref(l10n).points_for_a_draw), 1),
+              createBaseVNode("div", _hoisted_6$d, [
+                createBaseVNode("label", _hoisted_7$d, toDisplayString(unref(l10n).points_for_a_draw), 1),
                 withDirectives(createBaseVNode("input", {
                   id: "anwpfl-input-pointsDraw",
                   type: "number",
@@ -24612,8 +24612,8 @@ This will fail in production.`
                   ]
                 ])
               ]),
-              createBaseVNode("div", _hoisted_8$c, [
-                createBaseVNode("label", _hoisted_9$b, toDisplayString(unref(l10n).points_for_a_loss), 1),
+              createBaseVNode("div", _hoisted_8$d, [
+                createBaseVNode("label", _hoisted_9$c, toDisplayString(unref(l10n).points_for_a_loss), 1),
                 withDirectives(createBaseVNode("input", {
                   id: "anwpfl-input-pointsLoss",
                   type: "number",
@@ -24651,15 +24651,15 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$d = { class: "anwp-border anwp-border-gray-500 my-4" };
-  const _hoisted_2$c = { class: "anwp-fl-admin-metabox__content" };
-  const _hoisted_3$b = { class: "row" };
-  const _hoisted_4$b = { class: "col-md-6" };
-  const _hoisted_5$b = { class: "col-md-6" };
-  const _hoisted_6$b = { class: "p-2 mt-2 border border-secondary anwp-standing-rule bg-light d-flex align-items-center" };
-  const _hoisted_7$b = /* @__PURE__ */ createBaseVNode("span", { class: "ml-2 my-1" }, "1", -1);
-  const _hoisted_8$b = ["onChange", "id"];
-  const _hoisted_9$a = ["for"];
+  const _hoisted_1$h = { class: "anwp-border anwp-border-gray-500 my-4" };
+  const _hoisted_2$f = { class: "anwp-fl-admin-metabox__content" };
+  const _hoisted_3$e = { class: "row" };
+  const _hoisted_4$d = { class: "col-md-6" };
+  const _hoisted_5$c = { class: "col-md-6" };
+  const _hoisted_6$c = { class: "p-2 mt-2 border border-secondary anwp-standing-rule bg-light d-flex align-items-center" };
+  const _hoisted_7$c = /* @__PURE__ */ createBaseVNode("span", { class: "ml-2 my-1" }, "1", -1);
+  const _hoisted_8$c = ["onChange", "id"];
+  const _hoisted_9$b = ["for"];
   const _hoisted_10$a = ["onClick"];
   const _hoisted_11$8 = /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-chevron-top" }, null, -1);
   const _hoisted_12$8 = [
@@ -24679,7 +24679,7 @@ This will fail in production.`
   const _hoisted_19$8 = ["onChange", "id"];
   const _hoisted_20$8 = ["for"];
   const _hoisted_21$8 = ["value"];
-  const _sfc_main$d = {
+  const _sfc_main$h = {
     __name: "AppRankingRules",
     setup(__props) {
       const stStore = useStStore();
@@ -24700,23 +24700,23 @@ This will fail in production.`
         return false;
       };
       return (_ctx, _cache) => {
-        return openBlock(), createElementBlock("div", _hoisted_1$d, [
+        return openBlock(), createElementBlock("div", _hoisted_1$h, [
           createVNode(AppBlockHeader, { icon: "#icon-gear" }, {
             default: withCtx(() => [
               createTextVNode(toDisplayString(unref(l10n).ranking_rules), 1)
             ]),
             _: 1
           }),
-          createBaseVNode("div", _hoisted_2$c, [
-            createBaseVNode("div", _hoisted_3$b, [
-              createBaseVNode("div", _hoisted_4$b, [
+          createBaseVNode("div", _hoisted_2$f, [
+            createBaseVNode("div", _hoisted_3$e, [
+              createBaseVNode("div", _hoisted_4$d, [
                 createBaseVNode("p", null, toDisplayString(unref(l10n).ranking_rules_notes_1), 1),
                 createBaseVNode("p", null, toDisplayString(unref(l10n).ranking_rules_notes_2), 1)
               ]),
-              createBaseVNode("div", _hoisted_5$b, [
+              createBaseVNode("div", _hoisted_5$c, [
                 createBaseVNode("label", null, toDisplayString(unref(l10n).current_ranking_rules), 1),
-                createBaseVNode("div", _hoisted_6$b, [
-                  _hoisted_7$b,
+                createBaseVNode("div", _hoisted_6$c, [
+                  _hoisted_7$c,
                   createTextVNode(" :: " + toDisplayString(unref(l10n).points), 1)
                 ]),
                 createVNode(TransitionGroup, {
@@ -24735,11 +24735,11 @@ This will fail in production.`
                           onChange: ($event) => unref(stStore).rankingRulesCurrent.splice(ruleIndex, 1),
                           type: "checkbox",
                           id: "anwpfl-input-rules-a-" + ruleSlug
-                        }, null, 40, _hoisted_8$b),
+                        }, null, 40, _hoisted_8$c),
                         createBaseVNode("label", {
                           for: "anwpfl-input-rules-a-" + ruleSlug,
                           class: "mb-0"
-                        }, toDisplayString(ruleIndex + 2) + " :: " + toDisplayString(unref(stStore).rankingRulesMap[ruleSlug]), 9, _hoisted_9$a),
+                        }, toDisplayString(ruleIndex + 2) + " :: " + toDisplayString(unref(stStore).rankingRulesMap[ruleSlug]), 9, _hoisted_9$b),
                         createBaseVNode("a", {
                           class: "button d-flex align-items-center ml-auto",
                           href: "#",
@@ -24795,18 +24795,18 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$c = { class: "anwp-border anwp-border-gray-500 my-4" };
-  const _hoisted_2$b = { class: "bg-light anwp-border-gray-400 anwp-fl-border anwp-border-bottom p-3" };
-  const _hoisted_3$a = { class: "d-flex align-items-center" };
-  const _hoisted_4$a = { class: "bg-white p-3 pb-4" };
-  const _hoisted_5$a = { class: "table-responsive" };
-  const _hoisted_6$a = {
+  const _hoisted_1$g = { class: "anwp-border anwp-border-gray-500 my-4" };
+  const _hoisted_2$e = { class: "bg-light anwp-border-gray-400 anwp-fl-border anwp-border-bottom p-3" };
+  const _hoisted_3$d = { class: "d-flex align-items-center" };
+  const _hoisted_4$c = { class: "bg-white p-3 pb-4" };
+  const _hoisted_5$b = { class: "table-responsive" };
+  const _hoisted_6$b = {
     key: 0,
     class: "table-bordered table-sm anwp-standing-table"
   };
-  const _hoisted_7$a = /* @__PURE__ */ createBaseVNode("th", { scope: "col" }, "#", -1);
-  const _hoisted_8$a = { scope: "col" };
-  const _hoisted_9$9 = { scope: "col" };
+  const _hoisted_7$b = /* @__PURE__ */ createBaseVNode("th", { scope: "col" }, "#", -1);
+  const _hoisted_8$b = { scope: "col" };
+  const _hoisted_9$a = { scope: "col" };
   const _hoisted_10$9 = { scope: "col" };
   const _hoisted_11$7 = { scope: "col" };
   const _hoisted_12$7 = { scope: "col" };
@@ -24837,7 +24837,7 @@ This will fail in production.`
   ];
   const _hoisted_28$4 = ["value"];
   const _hoisted_29$4 = ["value"];
-  const _sfc_main$c = {
+  const _sfc_main$g = {
     __name: "AppTableMain",
     setup(__props) {
       const stStore = useStStore();
@@ -24863,15 +24863,15 @@ This will fail in production.`
       };
       return (_ctx, _cache) => {
         const _component_toggle = resolveComponent("toggle");
-        return openBlock(), createElementBlock("div", _hoisted_1$c, [
+        return openBlock(), createElementBlock("div", _hoisted_1$g, [
           createVNode(AppBlockHeader, { icon: "#icon-gear" }, {
             default: withCtx(() => [
               createTextVNode(toDisplayString(unref(l10n).standing_table), 1)
             ]),
             _: 1
           }),
-          createBaseVNode("div", _hoisted_2$b, [
-            createBaseVNode("div", _hoisted_3$a, [
+          createBaseVNode("div", _hoisted_2$e, [
+            createBaseVNode("div", _hoisted_3$d, [
               createTextVNode(toDisplayString(unref(l10n).automatic_pos_calculation) + " ", 1),
               createVNode(_component_toggle, {
                 modelValue: unref(stStore).manualOrdering,
@@ -24883,14 +24883,14 @@ This will fail in production.`
               }, null, 8, ["modelValue", "on-label", "off-label"])
             ])
           ]),
-          createBaseVNode("div", _hoisted_4$a, [
-            createBaseVNode("div", _hoisted_5$a, [
-              unref(stStore).tableMain.length ? (openBlock(), createElementBlock("table", _hoisted_6$a, [
+          createBaseVNode("div", _hoisted_4$c, [
+            createBaseVNode("div", _hoisted_5$b, [
+              unref(stStore).tableMain.length ? (openBlock(), createElementBlock("table", _hoisted_6$b, [
                 createBaseVNode("thead", null, [
                   createBaseVNode("tr", null, [
-                    _hoisted_7$a,
-                    createBaseVNode("th", _hoisted_8$a, toDisplayString(unref(l10n).club), 1),
-                    createBaseVNode("th", _hoisted_9$9, toDisplayString(unref(l10n).played), 1),
+                    _hoisted_7$b,
+                    createBaseVNode("th", _hoisted_8$b, toDisplayString(unref(l10n).club), 1),
+                    createBaseVNode("th", _hoisted_9$a, toDisplayString(unref(l10n).played), 1),
                     createBaseVNode("th", _hoisted_10$9, toDisplayString(unref(l10n).won), 1),
                     createBaseVNode("th", _hoisted_11$7, toDisplayString(unref(l10n).drawn), 1),
                     createBaseVNode("th", _hoisted_12$7, toDisplayString(unref(l10n).lost), 1),
@@ -24966,28 +24966,28 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$b = { class: "anwp-vue-standing-wrapper anwp-b-wrap anwp-vue-wrapper-ready" };
-  const _hoisted_2$a = /* @__PURE__ */ createBaseVNode("input", {
+  const _hoisted_1$f = { class: "anwp-vue-standing-wrapper anwp-b-wrap anwp-vue-wrapper-ready" };
+  const _hoisted_2$d = /* @__PURE__ */ createBaseVNode("input", {
     type: "hidden",
     name: "_anwpfl_fixed",
     value: "true"
   }, null, -1);
-  const _sfc_main$b = {
+  const _sfc_main$f = {
     __name: "AppStanding",
     setup(__props) {
       return (_ctx, _cache) => {
-        return openBlock(), createElementBlock("div", _hoisted_1$b, [
+        return openBlock(), createElementBlock("div", _hoisted_1$f, [
+          createVNode(_sfc_main$o),
           createVNode(_sfc_main$k),
-          createVNode(_sfc_main$g),
-          createVNode(_sfc_main$f),
-          createVNode(_sfc_main$e),
-          createVNode(_sfc_main$d),
-          createVNode(_sfc_main$c),
-          createVNode(unref(Wo)),
           createVNode(_sfc_main$j),
           createVNode(_sfc_main$i),
           createVNode(_sfc_main$h),
-          _hoisted_2$a
+          createVNode(_sfc_main$g),
+          createVNode(unref(Wo)),
+          createVNode(_sfc_main$n),
+          createVNode(_sfc_main$m),
+          createVNode(_sfc_main$l),
+          _hoisted_2$d
         ]);
       };
     }
@@ -25163,21 +25163,21 @@ This will fail in production.`
       updatePlayerData
     };
   });
-  const _hoisted_1$a = {
+  const _hoisted_1$e = {
     id: "anwp-fl-squad-metabox",
     class: "anwp-border anwp-border-gray-500"
   };
-  const _hoisted_2$9 = { class: "p-3 d-flex align-items-center flex-wrap bg-white" };
-  const _hoisted_3$9 = {
+  const _hoisted_2$c = { class: "p-3 d-flex align-items-center flex-wrap bg-white" };
+  const _hoisted_3$c = {
     for: "anwpfl-input-season",
     class: "mr-2"
   };
-  const _hoisted_4$9 = ["value"];
-  const _hoisted_5$9 = { class: "ml-auto" };
-  const _hoisted_6$9 = { class: "font-weight-bold" };
-  const _hoisted_7$9 = { class: "bg-white py-4 px-3" };
-  const _hoisted_8$9 = { class: "mb-3" };
-  const _hoisted_9$8 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi anwp-icon--s16 mr-2" }, [
+  const _hoisted_4$b = ["value"];
+  const _hoisted_5$a = { class: "ml-auto" };
+  const _hoisted_6$a = { class: "font-weight-bold" };
+  const _hoisted_7$a = { class: "bg-white py-4 px-3" };
+  const _hoisted_8$a = { class: "mb-3" };
+  const _hoisted_9$9 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi anwp-icon--s16 mr-2" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-plus" })
   ], -1);
   const _hoisted_10$8 = {
@@ -25261,7 +25261,7 @@ This will fail in production.`
   };
   const _hoisted_65 = ["value"];
   const _hoisted_66 = ["value"];
-  const _sfc_main$a = {
+  const _sfc_main$e = {
     __name: "AppPlayers",
     setup(__props) {
       const squadStore = useSquadStore();
@@ -25315,15 +25315,15 @@ This will fail in production.`
         var _a2;
         const _component_draggable = resolveComponent("draggable");
         const _component_toggle = resolveComponent("toggle");
-        return openBlock(), createElementBlock("div", _hoisted_1$a, [
+        return openBlock(), createElementBlock("div", _hoisted_1$e, [
           createVNode(AppBlockHeader, { icon: "#icon-jersey" }, {
             default: withCtx(() => [
               createTextVNode(toDisplayString(unref(l10n).club_squad), 1)
             ]),
             _: 1
           }),
-          createBaseVNode("div", _hoisted_2$9, [
-            createBaseVNode("label", _hoisted_3$9, toDisplayString(unref(l10n).season), 1),
+          createBaseVNode("div", _hoisted_2$c, [
+            createBaseVNode("label", _hoisted_3$c, toDisplayString(unref(l10n).season), 1),
             withDirectives(createBaseVNode("select", {
               id: "anwpfl-input-season",
               "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(squadStore).active.season = $event),
@@ -25334,24 +25334,24 @@ This will fail in production.`
                 return openBlock(), createElementBlock("option", {
                   key: s2.id,
                   value: s2.id
-                }, toDisplayString(s2.title), 9, _hoisted_4$9);
+                }, toDisplayString(s2.title), 9, _hoisted_4$b);
               }), 128))
             ], 544), [
               [vModelSelect, unref(squadStore).active.season]
             ]),
-            createBaseVNode("div", _hoisted_5$9, [
+            createBaseVNode("div", _hoisted_5$a, [
               createTextVNode(toDisplayString(unref(l10n).number_of_players_in_squad) + ": ", 1),
-              createBaseVNode("span", _hoisted_6$9, toDisplayString(((_a2 = unref(squadStore).activeSquad) == null ? void 0 : _a2.length) || 0), 1)
+              createBaseVNode("span", _hoisted_6$a, toDisplayString(((_a2 = unref(squadStore).activeSquad) == null ? void 0 : _a2.length) || 0), 1)
             ])
           ]),
-          createBaseVNode("div", _hoisted_7$9, [
-            createBaseVNode("div", _hoisted_8$9, [
+          createBaseVNode("div", _hoisted_7$a, [
+            createBaseVNode("div", _hoisted_8$a, [
               createBaseVNode("button", {
                 class: "button d-flex align-items-center",
                 type: "button",
                 onClick: _cache[2] || (_cache[2] = withModifiers(($event) => openAttachToSquadPlayersModal(), ["prevent"]))
               }, [
-                _hoisted_9$8,
+                _hoisted_9$9,
                 createTextVNode(" " + toDisplayString(unref(l10n).attach_player_to_squad), 1)
               ])
             ]),
@@ -25527,21 +25527,21 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$9 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$d = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$8 = [
-    _hoisted_1$9
+  const _hoisted_2$b = [
+    _hoisted_1$d
   ];
-  const _hoisted_3$8 = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$8 = { class: "my-0" };
-  const _hoisted_5$8 = { class: "anwp-vfm-admin-modal__content" };
-  const _hoisted_6$8 = { class: "anwp-text-center" };
-  const _hoisted_7$8 = { class: "anwp-text-lg anwp-font-bold" };
-  const _hoisted_8$8 = { class: "anwp-text-base" };
-  const _hoisted_9$7 = { class: "anwp-vfm-admin-modal__actions" };
+  const _hoisted_3$b = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$a = { class: "my-0" };
+  const _hoisted_5$9 = { class: "anwp-vfm-admin-modal__content" };
+  const _hoisted_6$9 = { class: "anwp-text-center" };
+  const _hoisted_7$9 = { class: "anwp-text-lg anwp-font-bold" };
+  const _hoisted_8$9 = { class: "anwp-text-base" };
+  const _hoisted_9$8 = { class: "anwp-vfm-admin-modal__actions" };
   const _hoisted_10$7 = { class: "d-flex flex-row-reverse" };
-  const _sfc_main$9 = {
+  const _sfc_main$d = {
     __name: "AppModalPlayerDeleteConfirm",
     setup(__props) {
       const squadStore = useSquadStore();
@@ -25568,18 +25568,18 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
               type: "button",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(squadStore).modals.playerDeleteConfirm = false)
-            }, _hoisted_2$8),
-            createBaseVNode("div", _hoisted_3$8, [
-              createBaseVNode("h4", _hoisted_4$8, toDisplayString(unref(l10n).confirm_delete), 1)
+            }, _hoisted_2$b),
+            createBaseVNode("div", _hoisted_3$b, [
+              createBaseVNode("h4", _hoisted_4$a, toDisplayString(unref(l10n).confirm_delete), 1)
             ]),
-            createBaseVNode("div", _hoisted_5$8, [
-              createBaseVNode("div", _hoisted_6$8, [
-                createBaseVNode("div", _hoisted_7$8, toDisplayString(unref(l10n).are_you_sure), 1),
+            createBaseVNode("div", _hoisted_5$9, [
+              createBaseVNode("div", _hoisted_6$9, [
+                createBaseVNode("div", _hoisted_7$9, toDisplayString(unref(l10n).are_you_sure), 1),
                 createBaseVNode("p", null, toDisplayString(unref(l10n).really_want_delete_from_squad), 1),
-                createBaseVNode("div", _hoisted_8$8, toDisplayString(unref(squadStore).deleteData.playerObject.name), 1)
+                createBaseVNode("div", _hoisted_8$9, toDisplayString(unref(squadStore).deleteData.playerObject.name), 1)
               ])
             ]),
-            createBaseVNode("div", _hoisted_9$7, [
+            createBaseVNode("div", _hoisted_9$8, [
               createBaseVNode("div", _hoisted_10$7, [
                 createBaseVNode("button", {
                   type: "button",
@@ -25599,19 +25599,19 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$8 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$c = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$7 = [
-    _hoisted_1$8
+  const _hoisted_2$a = [
+    _hoisted_1$c
   ];
-  const _hoisted_3$7 = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$7 = { class: "my-0" };
-  const _hoisted_5$7 = { class: "anwp-vfm-admin-modal__content" };
-  const _hoisted_6$7 = { class: "d-sm-flex" };
-  const _hoisted_7$7 = { class: "col-sm-6 bg-light py-3" };
-  const _hoisted_8$7 = { class: "px-3 anwp-text-base" };
-  const _hoisted_9$6 = { class: "col-sm-6 py-0 anwp-h-min-300" };
+  const _hoisted_3$a = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$9 = { class: "my-0" };
+  const _hoisted_5$8 = { class: "anwp-vfm-admin-modal__content" };
+  const _hoisted_6$8 = { class: "d-sm-flex" };
+  const _hoisted_7$8 = { class: "col-sm-6 bg-light py-3" };
+  const _hoisted_8$8 = { class: "px-3 anwp-text-base" };
+  const _hoisted_9$7 = { class: "col-sm-6 py-0 anwp-h-min-300" };
   const _hoisted_10$6 = {
     key: 0,
     class: "anwp-bg-gray-200 px-2 mx-n2 anwp-text-gray-800"
@@ -25657,7 +25657,7 @@ This will fail in production.`
   const _hoisted_31$1 = { class: "mr-2" };
   const _hoisted_32$1 = { value: true };
   const _hoisted_33$1 = { value: false };
-  const _sfc_main$8 = {
+  const _sfc_main$c = {
     __name: "AppModalPlayerAttachToSquad",
     setup(__props) {
       const squadStore = useSquadStore();
@@ -25761,13 +25761,13 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
               type: "button",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(squadStore).modals.playerAttachToSquad = false)
-            }, _hoisted_2$7),
-            createBaseVNode("div", _hoisted_3$7, [
-              createBaseVNode("h4", _hoisted_4$7, toDisplayString(unref(l10n).attach_player_to_squad) + " - " + toDisplayString(unref(l10n).season) + " " + toDisplayString(unref(squadStore).active.season_title), 1)
+            }, _hoisted_2$a),
+            createBaseVNode("div", _hoisted_3$a, [
+              createBaseVNode("h4", _hoisted_4$9, toDisplayString(unref(l10n).attach_player_to_squad) + " - " + toDisplayString(unref(l10n).season) + " " + toDisplayString(unref(squadStore).active.season_title), 1)
             ]),
-            createBaseVNode("div", _hoisted_5$7, [
-              createBaseVNode("div", _hoisted_6$7, [
-                createBaseVNode("div", _hoisted_7$7, [
+            createBaseVNode("div", _hoisted_5$8, [
+              createBaseVNode("div", _hoisted_6$8, [
+                createBaseVNode("div", _hoisted_7$8, [
                   (openBlock(true), createElementBlock(Fragment, null, renderList(unref(squadStore).activeSquad, (player) => {
                     return openBlock(), createElementBlock("div", {
                       key: player.id,
@@ -25776,11 +25776,11 @@ This will fail in production.`
                       createBaseVNode("div", {
                         class: normalizeClass(["anwp-w-30 anwp-text-center text-uppercase anwp-text-base text-white anwp-font-bold", player.position ? unref(squadStore).appConfig.classPosition[player.position] : ""])
                       }, toDisplayString(player.position ? player.position.charAt(0) : ""), 3),
-                      createBaseVNode("div", _hoisted_8$7, toDisplayString(player.name), 1)
+                      createBaseVNode("div", _hoisted_8$8, toDisplayString(player.name), 1)
                     ]);
                   }), 128))
                 ]),
-                createBaseVNode("div", _hoisted_9$6, [
+                createBaseVNode("div", _hoisted_9$7, [
                   createVNode(_component_v_select, {
                     modelValue: unref(squadStore).modalPlayers.activeAction,
                     "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(squadStore).modalPlayers.activeAction = $event),
@@ -25901,22 +25901,22 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$7 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$b = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$6 = [
-    _hoisted_1$7
+  const _hoisted_2$9 = [
+    _hoisted_1$b
   ];
-  const _hoisted_3$6 = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$6 = { class: "my-0 anwp-font-semibold anwp-text-base" };
-  const _hoisted_5$6 = { class: "anwp-vfm-admin-modal__content" };
-  const _hoisted_6$6 = {
+  const _hoisted_3$9 = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$8 = { class: "my-0 anwp-font-semibold anwp-text-base" };
+  const _hoisted_5$7 = { class: "anwp-vfm-admin-modal__content" };
+  const _hoisted_6$7 = {
     key: 0,
     class: "d-flex flex-wrap align-items-center"
   };
-  const _hoisted_7$6 = { class: "anwp-text-base mr-2" };
-  const _hoisted_8$6 = { value: "" };
-  const _hoisted_9$5 = ["value"];
+  const _hoisted_7$7 = { class: "anwp-text-base mr-2" };
+  const _hoisted_8$7 = { value: "" };
+  const _hoisted_9$6 = ["value"];
   const _hoisted_10$5 = { class: "spinner mr-0 is-active" };
   const _hoisted_11$4 = { key: 1 };
   const _hoisted_12$4 = {
@@ -25939,7 +25939,7 @@ This will fail in production.`
   ];
   const _hoisted_23$3 = { class: "anwp-vfm-admin-modal__actions" };
   const _hoisted_24$3 = { class: "d-flex align-items-center" };
-  const _sfc_main$7 = {
+  const _sfc_main$b = {
     __name: "AppModalPlayerActions",
     setup(__props) {
       const notyf2 = new Notyf({ duration: 5e3 });
@@ -25993,24 +25993,24 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
               type: "button",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(squadStore).modals.playerActions = false)
-            }, _hoisted_2$6),
-            createBaseVNode("div", _hoisted_3$6, [
-              createBaseVNode("h4", _hoisted_4$6, toDisplayString(unref(squadStore).modalActions.playerObject.name), 1)
+            }, _hoisted_2$9),
+            createBaseVNode("div", _hoisted_3$9, [
+              createBaseVNode("h4", _hoisted_4$8, toDisplayString(unref(squadStore).modalActions.playerObject.name), 1)
             ]),
-            createBaseVNode("div", _hoisted_5$6, [
-              "change_club" === unref(squadStore).modalActions.mode ? (openBlock(), createElementBlock("div", _hoisted_6$6, [
-                createBaseVNode("span", _hoisted_7$6, toDisplayString(unref(l10n).change_current_club_to), 1),
+            createBaseVNode("div", _hoisted_5$7, [
+              "change_club" === unref(squadStore).modalActions.mode ? (openBlock(), createElementBlock("div", _hoisted_6$7, [
+                createBaseVNode("span", _hoisted_7$7, toDisplayString(unref(l10n).change_current_club_to), 1),
                 withDirectives(createBaseVNode("select", {
                   name: "",
                   id: "",
                   "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(squadStore).modalActions.change_club_id = $event)
                 }, [
-                  createBaseVNode("option", _hoisted_8$6, "- " + toDisplayString(unref(l10n).none) + " -", 1),
+                  createBaseVNode("option", _hoisted_8$7, "- " + toDisplayString(unref(l10n).none) + " -", 1),
                   (openBlock(true), createElementBlock(Fragment, null, renderList(unref(squadStore).appConfig.clubsMap, (clubName, clubId) => {
                     return openBlock(), createElementBlock("option", {
                       value: clubId,
                       key: clubId
-                    }, toDisplayString(clubName), 9, _hoisted_9$5);
+                    }, toDisplayString(clubName), 9, _hoisted_9$6);
                   }), 128))
                 ], 512), [
                   [vModelSelect, unref(squadStore).modalActions.change_club_id]
@@ -26083,23 +26083,23 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$6 = {
+  const _hoisted_1$a = {
     class: "anwp-border anwp-border-gray-500 my-4",
     id: "anwp-fl-staff-metabox"
   };
-  const _hoisted_2$5 = { class: "p-3 d-flex align-items-center flex-wrap bg-white" };
-  const _hoisted_3$5 = {
+  const _hoisted_2$8 = { class: "p-3 d-flex align-items-center flex-wrap bg-white" };
+  const _hoisted_3$8 = {
     for: "anwpfl-input-season-alt",
     class: "mr-2"
   };
-  const _hoisted_4$5 = ["value"];
-  const _hoisted_5$5 = { class: "bg-white py-4 px-3" };
-  const _hoisted_6$5 = { class: "mb-3" };
-  const _hoisted_7$5 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi anwp-icon--s16 mr-2" }, [
+  const _hoisted_4$7 = ["value"];
+  const _hoisted_5$6 = { class: "bg-white py-4 px-3" };
+  const _hoisted_6$6 = { class: "mb-3" };
+  const _hoisted_7$6 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi anwp-icon--s16 mr-2" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-plus" })
   ], -1);
-  const _hoisted_8$5 = { class: "table-responsive" };
-  const _hoisted_9$4 = { class: "table table-sm anwp-border-collapse w-100 anwp-overflow-scroll anwp-user-select-none" };
+  const _hoisted_8$6 = { class: "table-responsive" };
+  const _hoisted_9$5 = { class: "table table-sm anwp-border-collapse w-100 anwp-overflow-scroll anwp-user-select-none" };
   const _hoisted_10$4 = { class: "anwp-border anwp-border-gray-400 anwp-bg-gray-200" };
   const _hoisted_11$3 = /* @__PURE__ */ createBaseVNode("td", null, null, -1);
   const _hoisted_12$3 = /* @__PURE__ */ createBaseVNode("td", null, null, -1);
@@ -26152,7 +26152,7 @@ This will fail in production.`
   const _hoisted_45 = /* @__PURE__ */ createBaseVNode("td", { class: "py-1 px-2" }, null, -1);
   const _hoisted_46 = { class: "py-1 px-2" };
   const _hoisted_47 = ["value"];
-  const _sfc_main$6 = {
+  const _sfc_main$a = {
     __name: "AppStaff",
     setup(__props) {
       const squadStore = useSquadStore();
@@ -26182,15 +26182,15 @@ This will fail in production.`
       });
       return (_ctx, _cache) => {
         const _component_draggable = resolveComponent("draggable");
-        return openBlock(), createElementBlock("div", _hoisted_1$6, [
+        return openBlock(), createElementBlock("div", _hoisted_1$a, [
           createVNode(AppBlockHeader, { icon: "#icon-organization" }, {
             default: withCtx(() => [
               createTextVNode(toDisplayString(unref(l10n).club_staff), 1)
             ]),
             _: 1
           }),
-          createBaseVNode("div", _hoisted_2$5, [
-            createBaseVNode("label", _hoisted_3$5, toDisplayString(unref(l10n).season), 1),
+          createBaseVNode("div", _hoisted_2$8, [
+            createBaseVNode("label", _hoisted_3$8, toDisplayString(unref(l10n).season), 1),
             withDirectives(createBaseVNode("select", {
               id: "anwpfl-input-season-alt",
               onChange: _cache[0] || (_cache[0] = (...args) => unref(squadStore).changeActiveSeason && unref(squadStore).changeActiveSeason(...args)),
@@ -26201,25 +26201,25 @@ This will fail in production.`
                 return openBlock(), createElementBlock("option", {
                   value: s2.id,
                   key: s2.id
-                }, toDisplayString(s2.title), 9, _hoisted_4$5);
+                }, toDisplayString(s2.title), 9, _hoisted_4$7);
               }), 128))
             ], 544), [
               [vModelSelect, unref(squadStore).active.season]
             ])
           ]),
-          createBaseVNode("div", _hoisted_5$5, [
-            createBaseVNode("div", _hoisted_6$5, [
+          createBaseVNode("div", _hoisted_5$6, [
+            createBaseVNode("div", _hoisted_6$6, [
               createBaseVNode("button", {
                 class: "button d-flex align-items-center",
                 type: "button",
                 onClick: withModifiers(openAttachToSquadStaffModal, ["prevent"])
               }, [
-                _hoisted_7$5,
+                _hoisted_7$6,
                 createTextVNode(" " + toDisplayString(unref(l10n).attach_person_to_staff), 1)
               ])
             ]),
-            withDirectives(createBaseVNode("div", _hoisted_8$5, [
-              withDirectives(createBaseVNode("table", _hoisted_9$4, [
+            withDirectives(createBaseVNode("div", _hoisted_8$6, [
+              withDirectives(createBaseVNode("table", _hoisted_9$5, [
                 createBaseVNode("thead", null, [
                   createBaseVNode("tr", _hoisted_10$4, [
                     _hoisted_11$3,
@@ -26334,21 +26334,21 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$5 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$9 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$4 = [
-    _hoisted_1$5
+  const _hoisted_2$7 = [
+    _hoisted_1$9
   ];
-  const _hoisted_3$4 = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$4 = { class: "my-0" };
-  const _hoisted_5$4 = { class: "anwp-vfm-admin-modal__content" };
-  const _hoisted_6$4 = { class: "anwp-text-center" };
-  const _hoisted_7$4 = { class: "anwp-text-lg anwp-font-bold" };
-  const _hoisted_8$4 = { class: "anwp-text-base" };
-  const _hoisted_9$3 = { class: "anwp-vfm-admin-modal__actions" };
+  const _hoisted_3$7 = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$6 = { class: "my-0" };
+  const _hoisted_5$5 = { class: "anwp-vfm-admin-modal__content" };
+  const _hoisted_6$5 = { class: "anwp-text-center" };
+  const _hoisted_7$5 = { class: "anwp-text-lg anwp-font-bold" };
+  const _hoisted_8$5 = { class: "anwp-text-base" };
+  const _hoisted_9$4 = { class: "anwp-vfm-admin-modal__actions" };
   const _hoisted_10$3 = { class: "d-flex flex-row-reverse" };
-  const _sfc_main$5 = {
+  const _sfc_main$9 = {
     __name: "AppModalStaffDeleteConfirm",
     setup(__props) {
       const squadStore = useSquadStore();
@@ -26375,18 +26375,18 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
               type: "button",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(squadStore).modals.staffDeleteConfirm = false)
-            }, _hoisted_2$4),
-            createBaseVNode("div", _hoisted_3$4, [
-              createBaseVNode("h4", _hoisted_4$4, toDisplayString(unref(l10n).confirm_delete), 1)
+            }, _hoisted_2$7),
+            createBaseVNode("div", _hoisted_3$7, [
+              createBaseVNode("h4", _hoisted_4$6, toDisplayString(unref(l10n).confirm_delete), 1)
             ]),
-            createBaseVNode("div", _hoisted_5$4, [
-              createBaseVNode("div", _hoisted_6$4, [
-                createBaseVNode("div", _hoisted_7$4, toDisplayString(unref(l10n).are_you_sure), 1),
+            createBaseVNode("div", _hoisted_5$5, [
+              createBaseVNode("div", _hoisted_6$5, [
+                createBaseVNode("div", _hoisted_7$5, toDisplayString(unref(l10n).are_you_sure), 1),
                 createBaseVNode("p", null, toDisplayString(unref(l10n).really_want_delete_from_squad), 1),
-                createBaseVNode("div", _hoisted_8$4, toDisplayString(unref(squadStore).deleteData.staffObject.name), 1)
+                createBaseVNode("div", _hoisted_8$5, toDisplayString(unref(squadStore).deleteData.staffObject.name), 1)
               ])
             ]),
-            createBaseVNode("div", _hoisted_9$3, [
+            createBaseVNode("div", _hoisted_9$4, [
               createBaseVNode("div", _hoisted_10$3, [
                 createBaseVNode("button", {
                   type: "button",
@@ -26406,19 +26406,19 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$4 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
+  const _hoisted_1$8 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s18 anwp-fill-current anwp-text-gray-600" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-x" })
   ], -1);
-  const _hoisted_2$3 = [
-    _hoisted_1$4
+  const _hoisted_2$6 = [
+    _hoisted_1$8
   ];
-  const _hoisted_3$3 = { class: "anwp-vfm-admin-modal__title" };
-  const _hoisted_4$3 = { class: "my-0" };
-  const _hoisted_5$3 = { class: "anwp-vfm-admin-modal__content" };
-  const _hoisted_6$3 = { class: "d-sm-flex" };
-  const _hoisted_7$3 = { class: "col-sm-6 bg-light py-3" };
-  const _hoisted_8$3 = { class: "pr-3 anwp-text-base" };
-  const _hoisted_9$2 = {
+  const _hoisted_3$6 = { class: "anwp-vfm-admin-modal__title" };
+  const _hoisted_4$5 = { class: "my-0" };
+  const _hoisted_5$4 = { class: "anwp-vfm-admin-modal__content" };
+  const _hoisted_6$4 = { class: "d-sm-flex" };
+  const _hoisted_7$4 = { class: "col-sm-6 bg-light py-3" };
+  const _hoisted_8$4 = { class: "pr-3 anwp-text-base" };
+  const _hoisted_9$3 = {
     key: 0,
     class: "anwp-text-gray-600"
   };
@@ -26451,7 +26451,7 @@ This will fail in production.`
   const _hoisted_24$1 = { class: "mr-2" };
   const _hoisted_25$1 = { value: true };
   const _hoisted_26$1 = { value: false };
-  const _sfc_main$4 = {
+  const _sfc_main$8 = {
     __name: "AppModalStaffAttachToSquad",
     setup(__props) {
       const squadStore = useSquadStore();
@@ -26537,20 +26537,20 @@ This will fail in production.`
               class: "anwp-vfm-admin-modal__close button d-flex align-items-center justify-content-center anwp-cursor-pointer border-0 modal__close",
               type: "button",
               onClick: _cache[0] || (_cache[0] = ($event) => unref(squadStore).modals.staffAttachToSquad = false)
-            }, _hoisted_2$3),
-            createBaseVNode("div", _hoisted_3$3, [
-              createBaseVNode("h4", _hoisted_4$3, toDisplayString(unref(l10n).attach_person_to_staff) + " - " + toDisplayString(unref(l10n).season) + " " + toDisplayString(unref(squadStore).active.season_title), 1)
+            }, _hoisted_2$6),
+            createBaseVNode("div", _hoisted_3$6, [
+              createBaseVNode("h4", _hoisted_4$5, toDisplayString(unref(l10n).attach_person_to_staff) + " - " + toDisplayString(unref(l10n).season) + " " + toDisplayString(unref(squadStore).active.season_title), 1)
             ]),
-            createBaseVNode("div", _hoisted_5$3, [
-              createBaseVNode("div", _hoisted_6$3, [
-                createBaseVNode("div", _hoisted_7$3, [
+            createBaseVNode("div", _hoisted_5$4, [
+              createBaseVNode("div", _hoisted_6$4, [
+                createBaseVNode("div", _hoisted_7$4, [
                   (openBlock(true), createElementBlock(Fragment, null, renderList(unref(squadStore).activeStaff, (member) => {
                     return openBlock(), createElementBlock("div", {
                       class: "py-1 px-2 mb-1 anwp-border anwp-border-gray-200 d-flex align-items-center bg-white",
                       key: member.id
                     }, [
-                      createBaseVNode("div", _hoisted_8$3, toDisplayString(member.name), 1),
-                      member.job ? (openBlock(), createElementBlock("div", _hoisted_9$2, "(" + toDisplayString(member.job) + ")", 1)) : createCommentVNode("", true)
+                      createBaseVNode("div", _hoisted_8$4, toDisplayString(member.name), 1),
+                      member.job ? (openBlock(), createElementBlock("div", _hoisted_9$3, "(" + toDisplayString(member.job) + ")", 1)) : createCommentVNode("", true)
                     ]);
                   }), 128))
                 ]),
@@ -26665,20 +26665,20 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1$3 = { class: "anwp-vue-squad-wrapper anwp-b-wrap anwp-vue-wrapper-ready w-100" };
-  const _sfc_main$3 = {
+  const _hoisted_1$7 = { class: "anwp-vue-squad-wrapper anwp-b-wrap anwp-vue-wrapper-ready w-100" };
+  const _sfc_main$7 = {
     __name: "AppSquad",
     setup(__props) {
       return (_ctx, _cache) => {
-        return openBlock(), createElementBlock("div", _hoisted_1$3, [
+        return openBlock(), createElementBlock("div", _hoisted_1$7, [
+          createVNode(_sfc_main$e),
           createVNode(_sfc_main$a),
-          createVNode(_sfc_main$6),
           createVNode(unref(Wo)),
+          createVNode(_sfc_main$d),
+          createVNode(_sfc_main$c),
+          createVNode(_sfc_main$b),
           createVNode(_sfc_main$9),
-          createVNode(_sfc_main$8),
-          createVNode(_sfc_main$7),
-          createVNode(_sfc_main$5),
-          createVNode(_sfc_main$4)
+          createVNode(_sfc_main$8)
         ]);
       };
     }
@@ -26740,69 +26740,69 @@ This will fail in production.`
       updaterTasks
     };
   });
-  const _hoisted_1$2 = {
+  const _hoisted_1$6 = {
     key: 0,
     class: "anwp-bg-gray-100 p-2 mt-4"
   };
-  const _hoisted_2$2 = /* @__PURE__ */ createBaseVNode("div", { class: "anwp-text-sm anwp-text-gray-600 mb-3" }, "Tasks Log", -1);
-  const _hoisted_3$2 = { class: "text-nowrap d-flex" };
-  const _hoisted_4$2 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s16 anwp-fill-current anwp-text-gray-600 mr-2" }, [
+  const _hoisted_2$5 = /* @__PURE__ */ createBaseVNode("div", { class: "anwp-text-sm anwp-text-gray-600 mb-3" }, "Tasks Log", -1);
+  const _hoisted_3$5 = { class: "text-nowrap d-flex" };
+  const _hoisted_4$4 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--octi d-inline-block anwp-icon--s16 anwp-fill-current anwp-text-gray-600 mr-2" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-fl-pro-calendar" })
   ], -1);
-  const _hoisted_5$2 = { class: "d-inline-block anwp-w-100" };
-  const _hoisted_6$2 = { class: "anwp-w-120 anwp-text-center mr-3" };
-  const _hoisted_7$2 = {
+  const _hoisted_5$3 = { class: "d-inline-block anwp-w-100" };
+  const _hoisted_6$3 = { class: "anwp-w-120 anwp-text-center mr-3" };
+  const _hoisted_7$3 = {
     key: 0,
     class: "anwp-text-xs anwp-text-gray-600 mr-2"
   };
-  const _hoisted_8$2 = { class: "anwp-text-sm anwp-leading-1-25" };
-  const _sfc_main$2 = {
+  const _hoisted_8$3 = { class: "anwp-text-sm anwp-leading-1-25" };
+  const _sfc_main$6 = {
     __name: "AppTasksLog",
     setup(__props) {
       const appStore = useAppStore();
       return (_ctx, _cache) => {
-        return unref(appStore).appLogs.length ? (openBlock(), createElementBlock("div", _hoisted_1$2, [
-          _hoisted_2$2,
+        return unref(appStore).appLogs.length ? (openBlock(), createElementBlock("div", _hoisted_1$6, [
+          _hoisted_2$5,
           (openBlock(true), createElementBlock(Fragment, null, renderList(unref(appStore).appLogs, (log) => {
             return openBlock(), createElementBlock("div", {
               key: log.index,
               class: "d-flex flex-wrap align-items-center anwp-border-bottom anwp-border-gray-300 pb-1 mb-1"
             }, [
-              createBaseVNode("div", _hoisted_3$2, [
-                _hoisted_4$2,
-                createBaseVNode("span", _hoisted_5$2, toDisplayString(log.time), 1)
+              createBaseVNode("div", _hoisted_3$5, [
+                _hoisted_4$4,
+                createBaseVNode("span", _hoisted_5$3, toDisplayString(log.time), 1)
               ]),
-              createBaseVNode("div", _hoisted_6$2, [
+              createBaseVNode("div", _hoisted_6$3, [
                 createBaseVNode("div", {
                   class: normalizeClass(["px-2 pb-1 anwp-leading-1 rounded text-white", [{ "anwp-bg-green-600": "success" === log.type }, { "anwp-bg-red-600": "error" === log.type }, { "anwp-bg-orange-600": "warning" === log.type }]])
                 }, toDisplayString(log.type), 3)
               ]),
-              log.title ? (openBlock(), createElementBlock("div", _hoisted_7$2, toDisplayString(log.title), 1)) : createCommentVNode("", true),
-              createBaseVNode("div", _hoisted_8$2, toDisplayString(log.text), 1)
+              log.title ? (openBlock(), createElementBlock("div", _hoisted_7$3, toDisplayString(log.title), 1)) : createCommentVNode("", true),
+              createBaseVNode("div", _hoisted_8$3, toDisplayString(log.text), 1)
             ]);
           }), 128))
         ])) : createCommentVNode("", true);
       };
     }
   };
-  const _hoisted_1$1 = { class: "anwp-vue-optimizer-wrapper d-sm-flex" };
-  const _hoisted_2$1 = { class: "w-100 anwp-flex-grow-1 pr-5" };
-  const _hoisted_3$1 = {
+  const _hoisted_1$5 = { class: "anwp-vue-optimizer-wrapper d-sm-flex" };
+  const _hoisted_2$4 = { class: "w-100 anwp-flex-grow-1 pr-5" };
+  const _hoisted_3$4 = {
     key: 0,
     class: "d-flex align-items-center"
   };
-  const _hoisted_4$1 = ["src"];
-  const _hoisted_5$1 = /* @__PURE__ */ createBaseVNode("span", null, "Check database tasks to update", -1);
-  const _hoisted_6$1 = { key: 1 };
-  const _hoisted_7$1 = {
+  const _hoisted_4$3 = ["src"];
+  const _hoisted_5$2 = /* @__PURE__ */ createBaseVNode("span", null, "Check database tasks to update", -1);
+  const _hoisted_6$2 = { key: 1 };
+  const _hoisted_7$2 = {
     key: 2,
     class: "my-2 anwp-border anwp-border-orange-600 anwp-bg-orange-100 py-3 px-4 anwp-w-max-700"
   };
-  const _hoisted_8$1 = /* @__PURE__ */ createBaseVNode("h3", { class: "my-0 anwp-text-orange-800" }, "Backup Your Database", -1);
-  const _hoisted_9$1 = /* @__PURE__ */ createBaseVNode("div", { class: "mt-2" }, " Before initiating the migration process, it is crucial to create a database backup. This ensures that you can restore your information in case of any unforeseen issues. ", -1);
+  const _hoisted_8$2 = /* @__PURE__ */ createBaseVNode("h3", { class: "my-0 anwp-text-orange-800" }, "Backup Your Database", -1);
+  const _hoisted_9$2 = /* @__PURE__ */ createBaseVNode("div", { class: "mt-2" }, " Before initiating the migration process, it is crucial to create a database backup. This ensures that you can restore your information in case of any unforeseen issues. ", -1);
   const _hoisted_10$1 = [
-    _hoisted_8$1,
-    _hoisted_9$1
+    _hoisted_8$2,
+    _hoisted_9$2
   ];
   const _hoisted_11$1 = { class: "anwp-b-wrap anwp-w-max-500" };
   const _hoisted_12$1 = { class: "my-2 anwp-border anwp-border-gray-400 py-2 px-3 bg-white d-flex" };
@@ -26850,7 +26850,7 @@ This will fail in production.`
     _hoisted_27
   ];
   const _hoisted_29 = { class: "flex-shrink-1 d-flex flex-column anwp-text-nowrap text-nowrap" };
-  const _sfc_main$1 = {
+  const _sfc_main$5 = {
     __name: "AppUpdater",
     setup(__props) {
       var _a2;
@@ -26955,18 +26955,18 @@ This will fail in production.`
         });
       };
       return (_ctx, _cache) => {
-        return openBlock(), createElementBlock("div", _hoisted_1$1, [
-          createBaseVNode("div", _hoisted_2$1, [
-            "update_tasks_list" === unref(appStore).activeRequest ? (openBlock(), createElementBlock("div", _hoisted_3$1, [
+        return openBlock(), createElementBlock("div", _hoisted_1$5, [
+          createBaseVNode("div", _hoisted_2$4, [
+            "update_tasks_list" === unref(appStore).activeRequest ? (openBlock(), createElementBlock("div", _hoisted_3$4, [
               createBaseVNode("img", {
                 src: unref(appStore).spinnerUrl,
                 alt: "spinner",
                 class: "mr-2"
-              }, null, 8, _hoisted_4$1),
-              _hoisted_5$1
+              }, null, 8, _hoisted_4$3),
+              _hoisted_5$2
             ])) : createCommentVNode("", true),
-            !unref(appStore).activeRequest && !unref(appStore).updaterTasks.length && unref(appStore).initialTasksLoaded ? (openBlock(), createElementBlock("div", _hoisted_6$1, " No update needed ")) : createCommentVNode("", true),
-            unref(appStore).updaterTasks.length ? (openBlock(), createElementBlock("div", _hoisted_7$1, _hoisted_10$1)) : createCommentVNode("", true),
+            !unref(appStore).activeRequest && !unref(appStore).updaterTasks.length && unref(appStore).initialTasksLoaded ? (openBlock(), createElementBlock("div", _hoisted_6$2, " No update needed ")) : createCommentVNode("", true),
+            unref(appStore).updaterTasks.length ? (openBlock(), createElementBlock("div", _hoisted_7$2, _hoisted_10$1)) : createCommentVNode("", true),
             createBaseVNode("div", _hoisted_11$1, [
               (openBlock(true), createElementBlock(Fragment, null, renderList(unref(appStore).updaterTasks, (task) => {
                 return openBlock(), createElementBlock("div", _hoisted_12$1, [
@@ -27000,7 +27000,7 @@ This will fail in production.`
                 ]);
               }), 256))
             ]),
-            createVNode(_sfc_main$2)
+            createVNode(_sfc_main$6)
           ]),
           createBaseVNode("div", _hoisted_29, [
             createBaseVNode("a", {
@@ -27028,18 +27028,18 @@ This will fail in production.`
       };
     }
   };
-  const _hoisted_1 = { class: "anwp-vue-api-import-wrapper" };
-  const _hoisted_2 = { class: "mb-3" };
-  const _hoisted_3 = {
+  const _hoisted_1$4 = { class: "anwp-vue-api-import-wrapper" };
+  const _hoisted_2$3 = { class: "mb-3" };
+  const _hoisted_3$3 = {
     key: 0,
     class: "text-muted mx-2 d-inline-block"
   };
-  const _hoisted_4 = ["onClick", "href"];
-  const _hoisted_5 = { class: "my-3 px-3 py-3 border anwp-sl-batch-import-filter-wrapper" };
-  const _hoisted_6 = { class: "d-flex flex-wrap" };
-  const _hoisted_7 = ["disabled"];
-  const _hoisted_8 = /* @__PURE__ */ createBaseVNode("h4", { class: "mb-1 mt-3" }, "Columns order and visibility", -1);
-  const _hoisted_9 = { class: "anwp-overflow-x-auto" };
+  const _hoisted_4$2 = ["onClick", "href"];
+  const _hoisted_5$1 = { class: "my-3 px-3 py-3 border anwp-sl-batch-import-filter-wrapper" };
+  const _hoisted_6$1 = { class: "d-flex flex-wrap" };
+  const _hoisted_7$1 = ["disabled"];
+  const _hoisted_8$1 = /* @__PURE__ */ createBaseVNode("h4", { class: "mb-1 mt-3" }, "Columns order and visibility", -1);
+  const _hoisted_9$1 = { class: "anwp-overflow-x-auto" };
   const _hoisted_10 = /* @__PURE__ */ createBaseVNode("svg", { class: "anwp-icon anwp-icon--s24 anwp-icon--octi anwp-drag-handler" }, [
     /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-grabber" })
   ], -1);
@@ -27071,7 +27071,7 @@ This will fail in production.`
     class: "d-flex flex-wrap mt-4"
   };
   const _hoisted_22 = ["disabled"];
-  const _sfc_main = {
+  const _sfc_main$4 = {
     __name: "AppImportTool",
     setup(__props) {
       var _a2, _b2, _c;
@@ -27380,16 +27380,16 @@ This will fail in production.`
         const _component_toggle = resolveComponent("toggle");
         const _component_draggable = resolveComponent("draggable");
         const _directive_tooltip = resolveDirective("tooltip");
-        return openBlock(), createElementBlock("div", _hoisted_1, [
-          createBaseVNode("div", _hoisted_2, [
+        return openBlock(), createElementBlock("div", _hoisted_1$4, [
+          createBaseVNode("div", _hoisted_2$3, [
             (openBlock(true), createElementBlock(Fragment, null, renderList(appPages.value, (page) => {
               return openBlock(), createElementBlock(Fragment, null, [
-                "players" !== page.slug ? (openBlock(), createElementBlock("small", _hoisted_3, "|")) : createCommentVNode("", true),
+                "players" !== page.slug ? (openBlock(), createElementBlock("small", _hoisted_3$3, "|")) : createCommentVNode("", true),
                 createBaseVNode("a", {
                   class: normalizeClass(["text-decoration-none anwp-text-capitalize anwp-text-sm", page.slug === activePage.value ? "text-muted" : ""]),
                   onClick: withModifiers(($event) => changeUrl(page), ["prevent"]),
                   href: `admin.php?page=anwp-settings-tools&tool=${page.slug}`
-                }, toDisplayString(page.title), 11, _hoisted_4)
+                }, toDisplayString(page.title), 11, _hoisted_4$2)
               ], 64);
             }), 256))
           ]),
@@ -27403,15 +27403,15 @@ This will fail in production.`
           }, null, 8, ["modelValue", "disabled"]), [
             [_directive_tooltip, `insert or update`]
           ]),
-          createBaseVNode("div", _hoisted_5, [
-            createBaseVNode("div", _hoisted_6, [
+          createBaseVNode("div", _hoisted_5$1, [
+            createBaseVNode("div", _hoisted_6$1, [
               createBaseVNode("button", {
                 class: "button button-secondary mr-3",
                 type: "button",
                 disabled: isActiveChangeStructure.value,
                 onClick: _cache[1] || (_cache[1] = withModifiers(($event) => isActiveChangeStructure.value = true, ["prevent"])),
                 key: "sl-change-btn"
-              }, " Change Import Columns ", 8, _hoisted_7),
+              }, " Change Import Columns ", 8, _hoisted_7$1),
               isActiveChangeStructure.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
                 createBaseVNode("button", {
                   class: "button button-secondary mr-3",
@@ -27428,8 +27428,8 @@ This will fail in production.`
               ], 64)) : createCommentVNode("", true)
             ]),
             isActiveChangeStructure.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-              _hoisted_8,
-              createBaseVNode("div", _hoisted_9, [
+              _hoisted_8$1,
+              createBaseVNode("div", _hoisted_9$1, [
                 columns.value && columns.value.length ? (openBlock(), createBlock(_component_draggable, {
                   key: 0,
                   modelValue: columns.value,
@@ -27501,6 +27501,211 @@ This will fail in production.`
               }, "Clear All")) : createCommentVNode("", true)
             ])) : createCommentVNode("", true)
           ])) : createCommentVNode("", true)
+        ]);
+      };
+    }
+  };
+  const useApiStore = defineStore("api", () => {
+    const activeRequest = ref("");
+    const activeTool = ref("");
+    const spinnerUrl = window._anwpToolbox.spinner_url || "";
+    return {
+      activeRequest,
+      activeTool,
+      spinnerUrl
+    };
+  });
+  const _sfc_main$3 = {};
+  const _hoisted_1$3 = { class: "anwp-icon anwp-icon--octi anwp-icon--s16" };
+  const _hoisted_2$2 = /* @__PURE__ */ createBaseVNode("use", { "xlink:href": "#icon-caret-right" }, null, -1);
+  const _hoisted_3$2 = [
+    _hoisted_2$2
+  ];
+  function _sfc_render(_ctx, _cache) {
+    return openBlock(), createElementBlock("svg", _hoisted_1$3, _hoisted_3$2);
+  }
+  const AppDashboardRunBtn = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render]]);
+  const _hoisted_1$2 = ["src"];
+  const _hoisted_2$1 = {
+    key: 1,
+    class: "anwp-border anwp-border-gray-300 bg-white py-2 px-4 anwp-w-max-600"
+  };
+  const _hoisted_3$1 = /* @__PURE__ */ createBaseVNode("h3", { class: "mt-1 mb-3 anwp-text-base" }, " Save Player's Current Team ", -1);
+  const _hoisted_4$1 = { class: "mt-1" };
+  const _hoisted_5 = /* @__PURE__ */ createBaseVNode("hr", null, null, -1);
+  const _hoisted_6 = { class: "mt-1" };
+  const _hoisted_7 = { class: "mt-1" };
+  const _hoisted_8 = ["disabled"];
+  const _hoisted_9 = ["src"];
+  const _sfc_main$2 = {
+    __name: "AppUpdatePlayerCurrentTeam",
+    setup(__props) {
+      const AppAxios = axios.create({
+        baseURL: window._anwpToolbox.rest_root,
+        headers: {
+          "X-WP-Nonce": window._anwpToolbox.rest_nonce
+        }
+      });
+      function newAbortSignal(timeout) {
+        const abortController = new AbortController();
+        setTimeout(() => abortController.abort(), timeout);
+        return abortController.signal;
+      }
+      const toolOptions = reactive({
+        player_ids: [],
+        updated: 0,
+        checked: 0
+      });
+      const toolCompleted = ref(false);
+      const apiStore = useApiStore();
+      const notyf2 = new Notyf({ duration: 5e3 });
+      const loadInitialData = () => {
+        apiStore.activeRequest = "load-data";
+        AppAxios.get("anwpfl/toolkit/get_all_player_ids").then((response) => {
+          var _a2, _b2;
+          if ((_a2 = response == null ? void 0 : response.data) == null ? void 0 : _a2.toolOptions) {
+            Object.assign(toolOptions, response.data.toolOptions);
+          } else {
+            notyf2.error(((_b2 = response == null ? void 0 : response.data) == null ? void 0 : _b2.message) ? response.data.message : "Error loading initial Data");
+          }
+        }).catch((error) => {
+          notyf2.error(error);
+        }).finally(() => apiStore.activeRequest = "");
+      };
+      onMounted(() => {
+        loadInitialData();
+      });
+      const runUpdatePlayers = () => {
+        if (!toolOptions.player_ids.length) {
+          notyf2.success("Task Completed!");
+          apiStore.activeRequest = "";
+          return;
+        }
+        apiStore.activeRequest = "update-players";
+        const playerId = toolOptions.player_ids.pop();
+        updatePlayers(playerId);
+      };
+      const updatePlayers = (playerId) => {
+        AppAxios.post(
+          "anwpfl/toolkit/update_player_current_team",
+          { playerId },
+          {
+            timeout: 5e3,
+            signal: newAbortSignal(5e3)
+          }
+        ).then((response) => {
+          var _a2, _b2, _c;
+          if (((_a2 = response == null ? void 0 : response.data) == null ? void 0 : _a2.result) === true) {
+            toolOptions.checked++;
+            if (((_b2 = response == null ? void 0 : response.data) == null ? void 0 : _b2.saved) === true) {
+              toolOptions.updated++;
+            }
+            runUpdatePlayers();
+          } else {
+            notyf2.error(((_c = response == null ? void 0 : response.data) == null ? void 0 : _c.message) ? response.data.message : "Task Error");
+          }
+        }).catch((error) => {
+          console.log(error.code);
+          if (error.code === "ECONNABORTED" || error.code === "ERR_CANCELED") {
+            runUpdatePlayers();
+          } else {
+            console.log(error);
+            notyf2.error(error);
+          }
+        });
+      };
+      return (_ctx, _cache) => {
+        return unref(apiStore).activeRequest === "load-data" ? (openBlock(), createElementBlock("img", {
+          key: 0,
+          class: "align-text-bottom",
+          src: unref(apiStore).spinnerUrl,
+          alt: "spinner"
+        }, null, 8, _hoisted_1$2)) : (openBlock(), createElementBlock("div", _hoisted_2$1, [
+          _hoisted_3$1,
+          createBaseVNode("div", _hoisted_4$1, "Players to check: " + toDisplayString(toolOptions.player_ids.length), 1),
+          _hoisted_5,
+          createBaseVNode("div", _hoisted_6, "Players Checked: " + toDisplayString(toolOptions.checked), 1),
+          createBaseVNode("div", _hoisted_7, "Players Updated: " + toDisplayString(toolOptions.updated), 1),
+          !toolCompleted.value ? (openBlock(), createElementBlock("button", {
+            key: 0,
+            class: "button d-flex align-items-center justify-content-center anwp-w-80 anwp-h-20 anwp-h-min-20 my-3",
+            type: "button",
+            disabled: "" !== unref(apiStore).activeRequest,
+            onClick: _cache[0] || (_cache[0] = withModifiers(($event) => runUpdatePlayers(), ["prevent"]))
+          }, [
+            unref(apiStore).activeRequest === "update-players" ? (openBlock(), createElementBlock("img", {
+              key: 0,
+              class: "align-text-bottom",
+              src: unref(apiStore).spinnerUrl,
+              alt: "spinner"
+            }, null, 8, _hoisted_9)) : (openBlock(), createBlock(AppDashboardRunBtn, { key: 1 }))
+          ], 8, _hoisted_8)) : createCommentVNode("", true)
+        ]));
+      };
+    }
+  };
+  const _hoisted_1$1 = { class: "d-flex align-items-end anwp-w-max-600 anwp-border anwp-border-gray-300 bg-white py-2 px-4 my-2" };
+  const _hoisted_2 = { class: "anwp-flex-grow-1" };
+  const _hoisted_3 = { class: "mt-1 mb-2 anwp-text-base" };
+  const _hoisted_4 = { class: "my-1 anwp-text-sm pr-3" };
+  const _sfc_main$1 = {
+    __name: "AppToolkitListItem",
+    props: {
+      toolHeader: {
+        type: String,
+        default: ""
+      },
+      toolDescription: {
+        type: String,
+        default: ""
+      },
+      toolSlug: {
+        type: String,
+        default: ""
+      }
+    },
+    setup(__props) {
+      const apiStore = useApiStore();
+      return (_ctx, _cache) => {
+        return openBlock(), createElementBlock("div", _hoisted_1$1, [
+          createBaseVNode("div", _hoisted_2, [
+            createBaseVNode("h3", _hoisted_3, toDisplayString(__props.toolHeader), 1),
+            createBaseVNode("p", _hoisted_4, toDisplayString(__props.toolDescription), 1)
+          ]),
+          createBaseVNode("div", null, [
+            createBaseVNode("button", {
+              class: "button",
+              type: "button",
+              onClick: _cache[0] || (_cache[0] = withModifiers(($event) => unref(apiStore).activeTool = __props.toolSlug, ["prevent"]))
+            }, "Select Tool")
+          ])
+        ]);
+      };
+    }
+  };
+  const _hoisted_1 = { class: "anwp-vue-api-import-wrapper px-2" };
+  const _sfc_main = {
+    __name: "AppToolkit",
+    setup(__props) {
+      const componentMap = {
+        "update-player-current-team": _sfc_main$2
+      };
+      const apiStore = useApiStore();
+      return (_ctx, _cache) => {
+        return openBlock(), createElementBlock("div", _hoisted_1, [
+          unref(apiStore).activeTool && !unref(apiStore).activeRequest ? (openBlock(), createElementBlock("button", {
+            key: 0,
+            type: "button",
+            class: "button button-secondary mb-2",
+            onClick: _cache[0] || (_cache[0] = withModifiers(($event) => unref(apiStore).activeTool = "", ["prevent"]))
+          }, " ← Go Back ")) : createCommentVNode("", true),
+          (openBlock(), createBlock(resolveDynamicComponent(componentMap[unref(apiStore).activeTool]))),
+          !unref(apiStore).activeTool ? (openBlock(), createBlock(_sfc_main$1, {
+            key: 1,
+            "tool-header": "Update Player's Current Team",
+            "tool-description": "Update the player's 'Current Team' based on the last game played",
+            "tool-slug": "update-player-current-team"
+          })) : createCommentVNode("", true)
         ]);
       };
     }
@@ -32430,7 +32635,7 @@ https://vue-select.org/api/props.html#getoptionkey`, e, t);
   });
   window.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById("fl-app-tournament")) {
-      const app = createApp(_sfc_main$H);
+      const app = createApp(_sfc_main$L);
       const pinia = createPinia();
       const vfm = zo();
       app.component("draggable", lo);
@@ -32442,23 +32647,23 @@ https://vue-select.org/api/props.html#getoptionkey`, e, t);
       app.mount("#fl-app-tournament");
     }
     if (document.getElementById("fl-app-plugin-health")) {
-      const app = createApp(_sfc_main$G);
+      const app = createApp(_sfc_main$K);
       app.mount("#fl-app-plugin-health");
     }
     if (document.getElementById("fl-app-player-manual-stats")) {
-      const app = createApp(_sfc_main$F);
+      const app = createApp(_sfc_main$J);
       app.component("draggable", lo);
       app.mount("#fl-app-player-manual-stats");
     }
     if (document.getElementById("fl-app-match-setup")) {
-      const app = createApp(_sfc_main$E);
+      const app = createApp(_sfc_main$I);
       app.use(Gt$1);
       app.component("vSelect", Ce$1);
       app.component("Toggle", b);
       app.mount("#fl-app-match-setup");
     }
     if (document.getElementById("fl-app-match")) {
-      const app = createApp(_sfc_main$m);
+      const app = createApp(_sfc_main$q);
       const pinia = createPinia();
       const vfm = zo();
       app.component("vSelect", Ce$1);
@@ -32470,12 +32675,12 @@ https://vue-select.org/api/props.html#getoptionkey`, e, t);
       app.mount("#fl-app-match");
     }
     if (document.getElementById("fl-app-standing-setup")) {
-      const app = createApp(_sfc_main$l);
+      const app = createApp(_sfc_main$p);
       app.component("vSelect", Ce$1);
       app.mount("#fl-app-standing-setup");
     }
     if (document.getElementById("fl-app-standing")) {
-      const app = createApp(_sfc_main$b);
+      const app = createApp(_sfc_main$f);
       const pinia = createPinia();
       const vfm = zo();
       app.component("vSelect", Ce$1);
@@ -32485,7 +32690,7 @@ https://vue-select.org/api/props.html#getoptionkey`, e, t);
       app.mount("#fl-app-standing");
     }
     if (document.getElementById("fl-app-squad")) {
-      const app = createApp(_sfc_main$3);
+      const app = createApp(_sfc_main$7);
       const pinia = createPinia();
       const vfm = zo();
       app.component("draggable", lo);
@@ -32496,13 +32701,19 @@ https://vue-select.org/api/props.html#getoptionkey`, e, t);
       app.mount("#fl-app-squad");
     }
     if (document.getElementById("fl-app-toolbox--updater")) {
-      const app = createApp(_sfc_main$1);
+      const app = createApp(_sfc_main$5);
       const pinia = createPinia();
       app.use(pinia);
       app.mount("#fl-app-toolbox--updater");
     }
-    if (document.getElementById("anwp-fl-batch-import-tool-app")) {
+    if (document.getElementById("fl-app-toolbox--toolkit")) {
       const app = createApp(_sfc_main);
+      const pinia = createPinia();
+      app.use(pinia);
+      app.mount("#fl-app-toolbox--toolkit");
+    }
+    if (document.getElementById("anwp-fl-batch-import-tool-app")) {
+      const app = createApp(_sfc_main$4);
       app.component("draggable", lo);
       app.component("Toggle", b);
       app.use(Gt$1);

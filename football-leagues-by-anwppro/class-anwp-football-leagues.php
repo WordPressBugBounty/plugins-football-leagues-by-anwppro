@@ -57,6 +57,7 @@ spl_autoload_register( 'anwp_football_leagues_autoload_classes' );
  * @property-read AnWPFL_Template          $template
  * @property-read AnWPFL_Text              $text
  * @property-read AnWPFL_Text_Countries    $text_countries
+ * @property-read AnWPFL_Toolbox           $toolbox
  * @property-read AnWPFL_Upgrade           $upgrade
  * @property-read string                   $path     Path of plugin directory
  *
@@ -69,7 +70,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * @var    string
 	 * @since  0.1.0
 	 */
-	const VERSION = '0.16.13';
+	const VERSION = '0.16.14';
 
 	/**
 	 * Current DB structure version.
@@ -232,6 +233,11 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	protected $text;
 
 	/**
+	 * @var AnWPFL_Toolbox
+	 */
+	protected $toolbox;
+
+	/**
 	 * @var AnWPFL_Text_Countries
 	 */
 	protected $text_countries;
@@ -363,6 +369,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 		$this->text_countries    = new AnWPFL_Text_Countries( $this );
 		$this->customizer        = new AnWPFL_Customizer( $this );
 		$this->blocks            = new AnWPFL_Blocks( $this );
+		$this->toolbox           = new AnWPFL_Toolbox( $this );
 
 		$this->upgrade = new AnWPFL_Upgrade( $this );
 
@@ -1272,6 +1279,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 			case 'blocks':
 			case 'assets':
 			case 'upgrade':
+			case 'toolbox':
 				return $this->$field;
 			default:
 				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . esc_html( $field ) );
@@ -1750,12 +1758,13 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * Converts a string to a bool.
 	 * From WOO
 	 *
+	 * @param mixed $string_value String to convert.
+	 *
 	 * @since 0.7.4
-	 * @param string $string String to convert.
 	 * @return bool
 	 */
-	public static function string_to_bool( $string ) {
-		return is_bool( $string ) ? $string : ( 1 === $string || 'yes' === $string || 'true' === $string || '1' === $string );
+	public static function string_to_bool( $string_value ): bool {
+		return is_bool( $string_value ) ? $string_value : ( 1 === $string_value || 'yes' === $string_value || 'true' === $string_value || '1' === $string_value );
 	}
 
 	/**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Import API subpage for AnWP Football Leagues
+ * Toolbox subpage for AnWP Football Leagues
  *
  * @link       https://anwp.pro
  * @since      0.16.0
@@ -22,8 +22,8 @@ if ( ! current_user_can( 'manage_options' ) ) {
 </div>
 <div class="mb-3 d-flex align-items-center">
 	<span class="text-muted">Database Updater</span>
-<!--	<small class="text-muted mx-2 d-inline-block">|</small>-->
-<!--	<a class="text-decoration-none" href="#">Optimizer</a>-->
+	<small class="text-muted mx-2 d-inline-block">|</small>
+	<a class="text-decoration-none" href="<?php echo esc_url( self_admin_url( 'admin.php?page=anwpfl-toolbox&tab=toolkit' ) ); ?>">Toolkit</a>
 </div>
 
 <hr class="mb-3">

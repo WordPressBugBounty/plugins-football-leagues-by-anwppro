@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.6.1
  *
- * @version       0.16.12
+ * @version       0.16.13.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -55,7 +55,7 @@ $data = (object) wp_parse_args(
 	]
 );
 
-$competition = anwp_fl()->competition->get_competition( $data->competition_id );
+$competition = anwp_fl()->competition->get_competition_data( $data->competition_id );
 
 // Wrapper classes
 $render_competition = AnWP_Football_Leagues::string_to_bool( $data->competition_logo );
@@ -72,12 +72,12 @@ $render_match_time  = AnWP_Football_Leagues::string_to_bool( $data->show_match_d
 			<?php if ( $render_competition ) : ?>
 				<div class="match-slim__competition-wrapper d-flex d-sm-block anwp-order-sm-1 anwp-order-3 ml-auto">
 					<div class="match-slim__competition-title d-block d-sm-none mr-2 anwp-leading-1">
-						<?php echo esc_html( $competition->league_text ); ?>
+						<?php echo esc_html( $competition['league_text'] ); ?>
 					</div>
 
-					<?php if ( ! empty( $competition->logo ) ) : ?>
-						<img loading="lazy" class="anwp-object-contain anwp-w-20 anwp-h-20 anwp-w-sm-30 anwp-h-sm-30 match-slim__competition-logo anwp-flex-none mr-0" data-toggle="anwp-tooltip" data-tippy-content="<?php echo esc_attr( $competition->title ); ?>"
-							src="<?php echo esc_url( $competition->logo ); ?>" alt="<?php echo esc_attr( $competition->title ); ?>">
+					<?php if ( ! empty( $competition['logo'] ) ) : ?>
+						<img loading="lazy" class="anwp-object-contain anwp-w-20 anwp-h-20 anwp-w-sm-30 anwp-h-sm-30 match-slim__competition-logo anwp-flex-none mr-0" data-toggle="anwp-tooltip" data-tippy-content="<?php echo esc_attr( $competition['title'] ); ?>"
+							src="<?php echo esc_url( $competition['logo'] ); ?>" alt="<?php echo esc_attr( $competition['title'] ); ?>">
 					<?php else : ?>
 						<div class="anwp-w-15 anwp-w-sm-30 match-slim__competition-logo">&nbsp;</div>
 					<?php endif; ?>

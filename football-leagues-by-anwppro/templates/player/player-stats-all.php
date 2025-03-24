@@ -278,9 +278,9 @@ $col_span = 'g' === $data->position_code ? 10 : 11;
 					<?php
 					if ( 'new' === $manual_stat->competition_type ) {
 						echo esc_html( $manual_stat->competition_text ) . ' ';
-						echo isset( anwp_football_leagues()->season->get_seasons_options()[ $manual_stat->season_id ] ) ? esc_html( anwp_football_leagues()->season->get_seasons_options()[ $manual_stat->season_id ] ) : '';
+						echo isset( anwp_fl()->season->get_seasons_options()[ $manual_stat->season_id ] ) ? esc_html( anwp_football_leagues()->season->get_seasons_options()[ $manual_stat->season_id ] ) : '';
 					} elseif ( 'id' === $manual_stat->competition_type ) {
-						echo esc_html( anwp_football_leagues()->competition->get_competition( $manual_stat->competition_id )->title );
+						echo esc_html( anwp_fl()->competition->get_competition_data( $manual_stat->competition_id )['title'] );
 					}
 					?>
 				</span>

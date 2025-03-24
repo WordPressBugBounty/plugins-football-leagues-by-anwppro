@@ -11,35 +11,50 @@
  * @since         0.5.1
  * @since         0.7.4 Added link wrapper
  *
- * @version       0.16.11
+ * @version       0.16.13.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-// Check for required data
-if ( empty( $data->id ) ) {
-	return;
-}
-
-$data = (object) wp_parse_args(
+$data = wp_parse_args(
 	$data,
 	[
 		'title_as_link'   => 0,
+		'id'              => '',
 		'title'           => '',
 		'season_selector' => 0,
 		'transparent_bg'  => 0,
 		'title_field'     => '', // league name (league - default) or competition title (competition)
+		'context'         => 'shortcode',
 	]
 );
 
-$season_selector = apply_filters( 'anwpfl/competition/show_season_selector', AnWP_Football_Leagues::string_to_bool( $data->season_selector ) );
+if ( empty( $data['id'] ) ) {
+	return;
+}
+
+$season_selector = apply_filters( 'anwpfl/competition/show_season_selector', AnWP_Football_Leagues::string_to_bool( $data['season_selector'] ) );
 $season_options  = [];
 
-$competition_obj = anwp_fl()->competition->get_competition( $data->id );
-$terms           = anwp_fl()->competition->tmpl_get_competition_terms( $data->id );
-$logo            = get_post_meta( $data->id, '_anwpfl_logo_big', true ) ?: $competition_obj->logo;
+$terms = anwp_fl()->competition->tmpl_get_competition_terms( $data['id'] );
+
+if ( get_the_ID() !== absint( $data['id'] ) ) {
+
+	$competition_data = [
+		'logo'       => get_post_meta( $data['id'], '_anwpfl_logo', true ) ?? '',
+		'league_id'  => $terms['league_id'],
+		'season_ids' => implode( ',', $terms['season_id'] ),
+		'title'      => get_post()->post_title,
+		'id'         => $data['id'],
+	];
+
+} else {
+	$competition_data = anwp_fl()->competition->get_competition_data( $data['id'] );
+}
+
+$logo = get_post_meta( $data['id'], '_anwpfl_logo_big', true ) ?: $competition_data['logo'];
 
 // Prepare seasons text
 $terms['season_title'] = ! empty( $terms['season_title'] ) && is_array( $terms['season_title'] ) ? anwp_fl()->season->combine_season_text( $terms['season_title'] ) : '';
@@ -49,16 +64,16 @@ $terms['season_title'] = ! empty( $terms['season_title'] ) && is_array( $terms['
 | Season Selector
 |--------------------------------------------------------------------
 */
-if ( $season_selector && absint( $competition_obj->league_id ) && absint( $competition_obj->season_ids ) && 1 === count( wp_parse_id_list( $competition_obj->season_ids ) ) ) {
+if ( $season_selector && absint( $competition_data['league_id'] ) && absint( $competition_data['season_ids'] ) && 1 === count( wp_parse_id_list( $competition_data['season_ids'] ) ) ) {
 
 	$season_all = anwp_fl()->season->get_seasons_options();
 
-	foreach ( anwp_fl()->competition->get_competitions() as $competition_item ) {
-		if ( absint( $competition_obj->league_id ) === absint( $competition_item->league_id ) && 'secondary' !== $competition_item->multistage && isset( $season_all[ $competition_item->season_ids ] ) ) {
+	foreach ( anwp_fl()->competition->get_competitions_data() as $competition_item ) {
+		if ( absint( $competition_data['league_id'] ) === absint( $competition_item['league_id'] ) && 'secondary' !== $competition_item['multistage'] && isset( $season_all[ $competition_item['season_ids'] ] ) ) {
 			$season_options[] = [
-				'id'        => $competition_item->id,
-				'season'    => $season_all[ $competition_item->season_ids ],
-				'permalink' => get_permalink( $competition_item->id ),
+				'id'        => $competition_item['id'],
+				'season'    => $season_all[ $competition_item['season_ids'] ],
+				'permalink' => get_permalink( $competition_item['id'] ),
 			];
 		}
 	}
@@ -68,7 +83,7 @@ if ( $season_selector && absint( $competition_obj->league_id ) && absint( $compe
 	}
 }
 
-$transparent_bg = AnWP_Football_Leagues::string_to_bool( $data->transparent_bg );
+$transparent_bg = AnWP_Football_Leagues::string_to_bool( $data['transparent_bg'] );
 
 /*
 |--------------------------------------------------------------------------
@@ -77,11 +92,11 @@ $transparent_bg = AnWP_Football_Leagues::string_to_bool( $data->transparent_bg )
 */
 $link_post_id = 0;
 
-if ( AnWP_Football_Leagues::string_to_bool( $data->title_as_link ) ) {
-	$link_post_id = anwp_fl()->competition->get_main_competition_id( $data->id );
+if ( AnWP_Football_Leagues::string_to_bool( $data['title_as_link'] ) ) {
+	$link_post_id = anwp_fl()->competition->get_main_competition_id( $data['id'] );
 }
 
-$competition_title = empty( $data->title ) ? ( 'competition' === $data->title_field ? $competition_obj->title : $terms['league_title'] ) : $data->title;
+$competition_title = empty( $data['title'] ) ? ( 'competition' === $data['title_field'] ? $competition_data['title'] : $terms['league_title'] ) : $data['title'];
 
 ?>
 <div class="anwp-b-wrap competition-header p-3 position-relative anwp-section d-sm-flex align-items-center <?php echo $transparent_bg ? '' : 'anwp-bg-light'; ?>">
@@ -100,7 +115,7 @@ $competition_title = empty( $data->title ) ? ( 'competition' === $data->title_fi
 			<?php if ( ! empty( $season_options ) && count( $season_options ) > 1 ) : ?>
 				<select class="anwp-fl-season-dropdown anwp-text-sm">
 					<?php foreach ( $season_options as $season_item ) : ?>
-						<option <?php selected( $season_item['id'], $competition_obj->id ); ?>
+						<option <?php selected( $season_item['id'], $competition_data['id'] ); ?>
 							data-href="<?php echo esc_url( $season_item['permalink'] ); ?>"
 							value="<?php echo esc_attr( $season_item['id'] ); ?>"><?php echo esc_attr( $season_item['season'] ); ?></option>
 					<?php endforeach; ?>

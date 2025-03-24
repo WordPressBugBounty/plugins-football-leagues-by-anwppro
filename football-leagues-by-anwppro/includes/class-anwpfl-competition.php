@@ -2342,13 +2342,18 @@ class AnWPFL_Competition extends CPT_Core {
 	 * @return string Competition round title.
 	 * @since 0.10.0
 	 */
-	public function get_round_title( $competition_id, $round_id ) {
+	public function get_round_title( $competition_id, $round_id ): string {
 
-		$title  = '';
-		$rounds = anwp_football_leagues()->competition->get_competition( $competition_id )->rounds;
+		$title = '';
 
-		if ( ! empty( $rounds ) && is_array( $rounds ) ) {
-			foreach ( $rounds as $round ) {
+		static $competition_rounds = [];
+
+		if ( ! isset( $competition_rounds[ $competition_id ] ) ) {
+			$competition_rounds[ $competition_id ] = json_decode( get_post_meta( $competition_id, '_anwpfl_rounds', true ) ) ?: [];
+		}
+
+		if ( ! empty( $competition_rounds[ $competition_id ] ) && is_array( $competition_rounds[ $competition_id ] ) ) {
+			foreach ( $competition_rounds[ $competition_id ] as $round ) {
 				if ( intval( $round_id ) === intval( $round->id ) && ! empty( $round->title ) ) {
 					$title = trim( $round->title );
 					break;
@@ -2376,10 +2381,10 @@ class AnWPFL_Competition extends CPT_Core {
 			return $output;
 		}
 
-		$competition_type = anwp_football_leagues()->competition->get_competition( $competition_id )->type;
+		$competition_type = anwp_fl()->competition->get_competition_data( $competition_id )['type'];
 
 		if ( 'round-robin' === $competition_type ) {
-			$output = anwp_football_leagues()->options->get_text_matchweek( $match_week );
+			$output = anwp_fl()->options->get_text_matchweek( $match_week );
 		} elseif ( 'knockout' === $competition_type ) {
 
 			// Backward compatibility: when round is not set use first

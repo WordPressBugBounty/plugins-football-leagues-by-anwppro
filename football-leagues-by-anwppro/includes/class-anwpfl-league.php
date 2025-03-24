@@ -244,8 +244,10 @@ class AnWPFL_League extends Taxonomy_Core {
 	/**
 	 * Get league Country code by league ID
 	 *
-	 * @return string
+	 * @param $league_id
+	 *
 	 * @since 0.13.0
+	 * @return string
 	 */
 	public function get_league_country_code( $league_id ): string {
 

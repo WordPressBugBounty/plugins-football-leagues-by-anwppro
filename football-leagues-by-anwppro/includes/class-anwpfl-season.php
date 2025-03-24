@@ -319,6 +319,7 @@ class AnWPFL_Season extends Taxonomy_Core {
 	public function combine_season_text( array $season_titles ): string {
 
 		if ( count( $season_titles ) > 1 ) {
+
 			$seasons = [];
 
 			foreach ( $season_titles as $season_title ) {

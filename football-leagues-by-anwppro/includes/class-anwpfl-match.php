@@ -264,22 +264,25 @@ class AnWPFL_Match extends AnWPFL_DB {
 
 				<div class="mb-3 border border-success bg-light px-3 py-2">
 					<div class="d-flex flex-wrap align-items-center">
-						<b class="mr-1"><?php echo esc_html__( 'Competition', 'anwp-football-leagues' ); ?>:</b> <span><?php echo esc_html( get_the_title( $competition_id ) ); ?></span>
+						<b class="mr-1"><?php echo esc_html__( 'Competition', 'anwp-football-leagues' ); ?>:</b> <span><?php echo esc_html( get_the_title( $competition_id ) ); ?> (<?php echo absint( $game_data['main_stage_id'] ) . '-' . absint( $game_data['competition_id'] ); ?>)</span>
 
 						<?php if ( ! empty( $league->name ) ) : ?>
 							<span class="text-muted small mx-2">|</span>
-							<b class="mr-1"><?php echo esc_html__( 'League', 'anwp-football-leagues' ); ?>:</b> <span><?php echo esc_html( $league->name ); ?></span>
+							<b class="mr-1"><?php echo esc_html__( 'League', 'anwp-football-leagues' ); ?>:</b> <span><?php echo esc_html( $league->name ); ?> (<?php echo absint( $game_data['league_id'] ); ?>)</span>
 						<?php endif; ?>
 
 						<?php if ( ! empty( $season->name ) ) : ?>
 							<span class="text-muted small mx-2">|</span>
-							<b class="mr-1"><?php echo esc_html__( 'Season', 'anwp-football-leagues' ); ?>:</b> <span><?php echo esc_html( $season->name ); ?></span>
+							<b class="mr-1"><?php echo esc_html__( 'Season', 'anwp-football-leagues' ); ?>:</b> <span><?php echo esc_html( $season->name ); ?> (<?php echo absint( $game_data['season_id'] ); ?>)</span>
 						<?php endif; ?>
 
 						<?php if ( $round_title ) : ?>
 							<span class="text-muted small mx-2">|</span>
-							<b class="mr-1"><?php echo esc_html__( 'Round', 'anwp-football-leagues' ); ?>:</b> <span><?php echo esc_html( $round_title ); ?></span>
+							<b class="mr-1"><?php echo esc_html__( 'Round', 'anwp-football-leagues' ); ?>:</b> <span><?php echo esc_html( $round_title ); ?> (<?php echo absint( $game_data['match_week'] ); ?>)</span>
 						<?php endif; ?>
+
+						<span class="text-muted small mx-2">|</span>
+						<b class="mr-1">Group/Matchup ID:</b> <span><?php echo absint( $game_data['group_id'] ); ?></span>
 
 						<a class="ml-auto anwp-text-red-700" href="<?php echo esc_url( get_delete_post_link( $post ) ); ?>"><?php echo esc_html__( 'Delete Game', 'anwp-football-leagues' ); ?></a>
 						<span class="text-muted small mx-3">|</span>
@@ -1618,7 +1621,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 
 		// Stage title
 		if ( absint( $game_data['main_stage_id'] ) !== absint( $game_data['competition_id'] ) ) {
-			$game_data['stage_title'] = anwp_fl()->competition->get_competition( absint( $game_data['competition_id'] ) )->stage_title;
+			$game_data['stage_title'] = anwp_fl()->competition->get_competition_data( absint( $game_data['competition_id'] ) )['stage_title'];
 		}
 
 		$game_data['show_match_datetime'] = AnWP_Football_Leagues::string_to_bool( $args['show_match_datetime'] );
@@ -1718,7 +1721,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 		}
 
 		if ( false !== mb_strpos( $match_title, '%competition%' ) ) {
-			$competition_title = anwp_fl()->competition->get_competition( $data['competition_id'] )->title;
+			$competition_title = anwp_fl()->competition->get_competition_data( $data['competition_id'] )['title'];
 			$match_title       = str_ireplace( '%competition%', $competition_title, $match_title );
 		}
 

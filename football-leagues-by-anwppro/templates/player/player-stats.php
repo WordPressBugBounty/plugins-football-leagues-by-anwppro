@@ -187,7 +187,7 @@ $col_span = 'g' === $data->position_code ? 9 : 10;
 					if ( 'new' === $manual_stat->competition_type ) {
 						echo esc_html( $manual_stat->competition_text );
 					} elseif ( 'id' === $manual_stat->competition_type ) {
-						echo esc_html( anwp_football_leagues()->competition->get_competition( $manual_stat->competition_id )->title );
+						echo esc_html( anwp_fl()->competition->get_competition_data( $manual_stat->competition_id )['title'] );
 					}
 					?>
 				</span>
