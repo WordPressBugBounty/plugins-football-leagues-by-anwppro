@@ -1,0 +1,176 @@
+/* ==========================================================================
+   Toggle Switch
+   ========================================================================== */
+.anwp-toggle-switch-control .customize-control-title {
+	display: inline-block;
+}
+
+.anwp-toggle-switch {
+	position: relative;
+	width: 64px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	float: right;
+}
+
+.anwp-toggle-switch .anwp-toggle-switch-checkbox {
+	display: none;
+}
+
+.anwp-toggle-switch .anwp-toggle-switch-label {
+	display: block;
+	overflow: hidden;
+	cursor: pointer;
+	border: 2px solid #ddd;
+	border-radius: 20px;
+	padding: 0;
+	margin: 0;
+}
+
+.anwp-toggle-switch-inner {
+	display: block;
+	width: 200%;
+	margin-left: -100%;
+	transition: margin 0.2s ease-in 0s;
+}
+
+.anwp-toggle-switch-inner:before,
+.anwp-toggle-switch-inner:after {
+	display: block;
+	float: left;
+	width: 50%;
+	height: 22px;
+	padding: 0;
+	line-height: 22px;
+	font-size: 20px;
+	color: white;
+	font-family: dashicons;
+	font-weight: 600;
+	box-sizing: border-box;
+}
+
+.anwp-toggle-switch-inner:before {
+	content: "\f147";
+	padding-left: 8px;
+	background-color: #2885bb;
+	color: #fff;
+}
+
+.anwp-toggle-switch-inner:after {
+	content: "\f158";
+	padding-right: 8px;
+	background-color: #eee;
+	color: #999;
+	text-align: right;
+}
+
+.anwp-toggle-switch-switch {
+	display: block;
+	width: 16px;
+	margin: 3px;
+	background-color: #fff;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 38px;
+	border: 2px solid #ddd;
+	border-radius: 20px;
+	transition: all 0.2s ease-in 0s;
+}
+
+.anwp-toggle-switch-checkbox:checked + .anwp-toggle-switch-label .anwp-toggle-switch-inner {
+	margin-left: 0;
+}
+
+.anwp-toggle-switch-checkbox:checked + .anwp-toggle-switch-label .anwp-toggle-switch-switch {
+	right: 0;
+}
+
+/* ==========================================================================
+   Pill Checkboxes
+   ========================================================================== */
+.anwp-pill_checkbox_control .checkbox-label > input {
+	display: none;
+}
+
+.anwp-pill_checkbox_control .checkbox-label > .sortable-pill-title {
+	box-sizing: border-box;
+	cursor: pointer;
+	background-color: #ddd;
+	padding: 5px 15px;
+	border-radius: 20px;
+	font-size: 1rem;
+	display: inline-block;
+	margin-bottom: 5px
+}
+
+.anwp-pill_checkbox_control .sortable .checkbox-label > .sortable-pill-title {
+	cursor: move;
+}
+
+.anwp-pill_checkbox_control .sortable.fullwidth_pills .checkbox-label > .sortable-pill-title {
+	cursor: pointer;
+}
+
+.anwp-pill_checkbox_control .checkbox-label > input:checked + .sortable-pill-title {
+	background-color: #2084bd;
+	color: #fff;
+}
+
+.anwp-pill_checkbox_control .checkbox-label > input:checked + .sortable-pill-title:before {
+	display: inline-block;
+	font-style: normal;
+	font-variant: normal;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	font-family: dashicons;
+	font-weight: normal;
+	font-size: 24px;
+	content: "\f147";
+	margin-left: -10px;
+	vertical-align: bottom;
+}
+
+.anwp-pill_checkbox_control .fullwidth_pills .checkbox-label > .sortable-pill-title {
+	width: 100%;
+	border-radius: 0;
+}
+
+.anwp-pill_checkbox_control .sortable.fullwidth_pills .checkbox-label > .sortable-pill-title {
+	width: 90%;
+}
+
+.pill-ui-state-highlight {
+	display: inline-block;
+	padding: 5px 15px;
+	border-radius: 20px;
+	font-size: 1rem;
+	border: 1px dotted #2084bd;
+	margin-bottom: 5px;
+	height: 16px;
+}
+
+.anwp-pill_checkbox_control .sortable_pills .pill-ui-state-highlight {
+	width: 50px;
+	border-radius: 20px;
+}
+
+.anwp-pill_checkbox_control .sortable_pills.fullwidth_pills .pill-ui-state-highlight {
+	width: 90%;
+	border-radius: 0;
+}
+
+.anwp-pill_checkbox_control .dashicons-sort {
+	margin: 5px 0 0 1px;
+	color: #d4d4d4;
+	cursor: move;
+}
+
+.anwp-pill_checkbox_control .dashicons-sort:hover {
+	color: #a7a7a7;
+}
+
+.anwp-pill_checkbox_control .sortable_pills.fullwidth_pills .ui-sortable-helper {
+	width: calc(100% - 25px) !important;
+}

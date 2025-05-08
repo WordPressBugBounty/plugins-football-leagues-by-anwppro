@@ -2499,27 +2499,48 @@ class AnWPFL_Helper {
 	 * Get links map
 	 *
 	 * @param array        $ids
-	 * @param array|string $post_type
+	 * @param string $post_type
 	 *
-	 * @return array
 	 * @since 0.13.3
+	 *@return array
 	 */
-	public function get_permalinks_by_ids( $ids, $post_type ) {
+	public function get_permalinks_by_ids( array $ids, string $post_type ): array {
+		global $wpdb;
 
-		if ( empty( $post_type ) ) {
+		if ( empty( $post_type ) || empty( $ids ) ) {
 			return [];
 		}
 
-		$args = [
-			'include'       => $ids,
-			'cache_results' => false,
-			'post_type'     => $post_type,
-		];
-
 		$output = [];
 
-		foreach ( get_posts( $args ) as $post_obj ) {
-			$output[ $post_obj->ID ] = get_permalink( $post_obj );
+		if ( '/%postname%/' === get_option( 'permalink_structure' ) && 'yes' === AnWPFL_Options::get_value( 'simple_permalink_slug_building' ) ) {
+			$post_type_short = sanitize_key( str_replace( 'anwp_', '', $post_type ) );
+
+			$permalink_slug = $this->plugin->options->get_permalink_structure()[ $post_type_short ] ?? $post_type_short;
+			$base_url       = get_site_url( null, '/' . $permalink_slug . '/' );
+
+			$query = $wpdb->prepare( "SELECT post_name, ID FROM $wpdb->posts WHERE post_status = 'publish' AND post_type = %s", $post_type );
+
+			$include_placeholders = array_fill( 0, count( $ids ), '%s' );
+			$include_format       = implode( ', ', $include_placeholders );
+
+			$query .= $wpdb->prepare( " AND ID IN ({$include_format})", $ids ); // phpcs:ignore
+
+			$all_posts = $wpdb->get_results( $query, ARRAY_A ) ?: []; // phpcs:ignore
+
+			foreach ( $all_posts as $post_data ) {
+				$output[ $post_data['ID'] ] = $base_url . $post_data['post_name'] . '/';
+			}
+		} else {
+			$args = [
+				'include'       => $ids,
+				'cache_results' => false,
+				'post_type'     => $post_type,
+			];
+
+			foreach ( get_posts( $args ) as $post_obj ) {
+				$output[ $post_obj->ID ] = get_permalink( $post_obj );
+			}
 		}
 
 		return $output;
@@ -2668,5 +2689,35 @@ class AnWPFL_Helper {
 		}
 
 		return wp_kses_post( $value );
+	}
+
+	/**
+	 * Get metadata grouped by meta value and post id
+	 *
+	 * @param array $meta_keys
+	 *
+	 * @return array
+	 */
+	public function get_metadata_grouped( array $meta_keys ): array {
+		global $wpdb;
+
+		$all_meta_data = array_fill_keys( $meta_keys, [] );
+
+		$include_placeholders = array_fill( 0, count( $meta_keys ), '%s' );
+		$include_format       = implode( ', ', $include_placeholders );
+
+		$meta_data_rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT post_id, meta_value, meta_key FROM $wpdb->postmeta WHERE meta_value != '' AND meta_key IN ({$include_format})", // phpcs:ignore
+				$meta_keys
+			),
+			ARRAY_A
+		);
+
+		foreach ( $meta_data_rows as $meta_data_row ) {
+			$all_meta_data[ $meta_data_row['meta_key'] ][ $meta_data_row['post_id'] ] = $meta_data_row['meta_value'];
+		}
+
+		return $all_meta_data;
 	}
 }

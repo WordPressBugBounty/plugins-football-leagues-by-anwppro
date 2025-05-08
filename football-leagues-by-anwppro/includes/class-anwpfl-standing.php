@@ -1674,11 +1674,13 @@ class AnWPFL_Standing extends CPT_Core {
 
 			$cache_key = 'FL-STANDINGS-LIST';
 
-			if ( anwp_football_leagues()->cache->get( $cache_key ) ) {
-				$output_data = anwp_football_leagues()->cache->get( $cache_key );
+			if ( anwp_fl()->cache->get( $cache_key ) ) {
+				$output_data = anwp_fl()->cache->get( $cache_key );
 
 				return $output_data;
 			}
+
+			global $wpdb;
 
 			/*
 			|--------------------------------------------------------------------
@@ -1687,16 +1689,33 @@ class AnWPFL_Standing extends CPT_Core {
 			*/
 			$output_data = [];
 
-			$all_standings = get_posts(
+			$meta_keys = apply_filters(
+				'anwpfl/standing/cached_meta_keys',
 				[
-					'numberposts'            => - 1,
-					'post_type'              => 'anwp_standing',
-					'suppress_filters'       => false,
-					'orderby'                => 'title',
-					'order'                  => 'ASC',
-					'update_post_term_cache' => false,
+					'_anwpfl_table_notes',
+					'_anwpfl_manual_ordering',
+					'_anwpfl_ranking_rules_current',
+					'_anwpfl_points_initial',
+					'_anwpfl_is_initial_data_active',
+					'_anwpfl_table_colors',
+					'_anwpfl_table_last_round',
+					'_anwpfl_competition',
+					'_anwpfl_competition_group',
+					'_anwpfl_points_win',
+					'_anwpfl_points_draw',
+					'_anwpfl_points_loss',
+					'_anwpfl_fixed',
 				]
 			);
+
+			$all_meta_data = $this->plugin->helper->get_metadata_grouped( $meta_keys );
+			$all_standings = $wpdb->get_results(
+				"
+				SELECT ID, post_title
+				FROM $wpdb->posts
+				WHERE post_status = 'publish' AND post_type = 'anwp_standing'
+				",
+			) ?: [];
 
 			if ( empty( $all_standings ) ) {
 				return [];
@@ -1704,26 +1723,25 @@ class AnWPFL_Standing extends CPT_Core {
 
 			/** @var WP_Post $standing */
 			foreach ( $all_standings as $standing ) {
-
-				if ( 'true' !== get_post_meta( $standing->ID, '_anwpfl_fixed', true ) ) {
+				if ( 'true' !== ( $all_meta_data['_anwpfl_fixed'][ $standing->ID ] ?? '' ) ) {
 					continue;
 				}
 
 				$standing_data = [
 					'id'                     => $standing->ID,
 					'title'                  => $standing->post_title,
-					'table_notes'            => get_post_meta( $standing->ID, '_anwpfl_table_notes', true ),
-					'manual_ordering'        => get_post_meta( $standing->ID, '_anwpfl_manual_ordering', true ),
-					'ranking_rules'          => get_post_meta( $standing->ID, '_anwpfl_ranking_rules_current', true ),
-					'points_initial'         => get_post_meta( $standing->ID, '_anwpfl_points_initial', true ),
-					'is_initial_data_active' => get_post_meta( $standing->ID, '_anwpfl_is_initial_data_active', true ),
-					'table_colors'           => get_post_meta( $standing->ID, '_anwpfl_table_colors', true ),
-					'last_round'             => absint( get_post_meta( $standing->ID, '_anwpfl_table_last_round', true ) ),
-					'competition'            => absint( get_post_meta( $standing->ID, '_anwpfl_competition', true ) ),
-					'group'                  => absint( get_post_meta( $standing->ID, '_anwpfl_competition_group', true ) ),
-					'win'                    => absint( get_post_meta( $standing->ID, '_anwpfl_points_win', true ) ),
-					'draw'                   => absint( get_post_meta( $standing->ID, '_anwpfl_points_draw', true ) ),
-					'loss'                   => absint( get_post_meta( $standing->ID, '_anwpfl_points_loss', true ) ),
+					'table_notes'            => $all_meta_data['_anwpfl_table_notes'][ $standing->ID ] ?? '',
+					'manual_ordering'        => $all_meta_data['_anwpfl_manual_ordering'][ $standing->ID ] ?? '',
+					'ranking_rules'          => $all_meta_data['_anwpfl_ranking_rules_current'][ $standing->ID ] ?? '',
+					'points_initial'         => $all_meta_data['_anwpfl_points_initial'][ $standing->ID ] ?? '',
+					'is_initial_data_active' => $all_meta_data['_anwpfl_is_initial_data_active'][ $standing->ID ] ?? '',
+					'table_colors'           => $all_meta_data['_anwpfl_table_colors'][ $standing->ID ] ?? '',
+					'last_round'             => absint( $all_meta_data['_anwpfl_table_last_round'][ $standing->ID ] ?? 0 ),
+					'competition'            => absint( $all_meta_data['_anwpfl_competition'][ $standing->ID ] ?? 0 ),
+					'group'                  => absint( $all_meta_data['_anwpfl_competition_group'][ $standing->ID ] ?? 0 ),
+					'win'                    => absint( $all_meta_data['_anwpfl_points_win'][ $standing->ID ] ?? 0 ),
+					'draw'                   => absint( $all_meta_data['_anwpfl_points_draw'][ $standing->ID ] ?? 0 ),
+					'loss'                   => absint( $all_meta_data['_anwpfl_points_loss'][ $standing->ID ] ?? 0 ),
 				];
 
 				/**
@@ -1744,7 +1762,7 @@ class AnWPFL_Standing extends CPT_Core {
 			|--------------------------------------------------------------------
 			*/
 			if ( ! empty( $output_data ) ) {
-				anwp_football_leagues()->cache->set( $cache_key, $output_data );
+				anwp_fl()->cache->set( $cache_key, $output_data );
 			}
 		}
 

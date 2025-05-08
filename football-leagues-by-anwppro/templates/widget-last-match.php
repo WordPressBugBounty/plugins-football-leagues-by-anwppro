@@ -17,11 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-// Check for required data
-if ( empty( $data->club_id ) && empty( $data->competition_id ) ) {
-	return;
-}
-
 // Prevent errors with new params
 $args = (object) wp_parse_args(
 	$data,

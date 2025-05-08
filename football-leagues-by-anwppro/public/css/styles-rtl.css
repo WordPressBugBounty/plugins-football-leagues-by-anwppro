@@ -2713,13 +2713,16 @@
 /*--------------------------------------------------------------
 # Modules
 --------------------------------------------------------------*/
+.anwp-mb-n05 {
+  margin-bottom: -2px;
+}
+
 .anwp-fl-hover-effect:hover {
   background-color: rgba(228, 229, 230, 0.2);
 }
 
 .anwp-fl-btn {
-  -webkit-appearance: none;
-          appearance: none;
+  appearance: none;
   border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 6px;
   box-sizing: border-box;
@@ -3390,8 +3393,7 @@ body .featherlight .featherlight-close-icon:hover {
 
 .anwp-fl-v-playbtn__visually-hidden {
   clip: rect(0 0 0 0);
-  -webkit-clip-path: inset(50%);
-          clip-path: inset(50%);
+  clip-path: inset(50%);
   height: 1px;
   overflow: hidden;
   position: absolute;
@@ -5064,28 +5066,23 @@ body .featherlight .featherlight-close-icon:hover {
 }
 
 .anwp-object-contain {
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 
 .anwp-object-cover {
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .anwp-object-fill {
-  -o-object-fit: fill;
-     object-fit: fill;
+  object-fit: fill;
 }
 
 .anwp-object-none {
-  -o-object-fit: none;
-     object-fit: none;
+  object-fit: none;
 }
 
 .anwp-object-scale-down {
-  -o-object-fit: scale-down;
-     object-fit: scale-down;
+  object-fit: scale-down;
 }
 
 .anwp-opacity-0 {

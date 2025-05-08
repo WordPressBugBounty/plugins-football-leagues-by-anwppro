@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: AnWP Football Leagues\n"
-"POT-Creation-Date: 2025-03-24 11:29+0100\n"
+"POT-Creation-Date: 2025-05-08 12:26+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -641,7 +641,7 @@ msgstr ""
 
 #: admin/views/tutorials.php:23 class-anwp-football-leagues.php:729
 #: class-anwp-football-leagues.php:850 class-anwp-football-leagues.php:851
-#: includes/class-anwpfl-helper.php:2490 includes/class-anwpfl-options.php:1521
+#: includes/class-anwpfl-helper.php:2490 includes/class-anwpfl-options.php:1541
 msgid "Documentation"
 msgstr ""
 
@@ -1428,7 +1428,7 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:1093 includes/class-anwpfl-options.php:1514
+#: includes/class-anwpfl-club.php:1093 includes/class-anwpfl-options.php:1534
 #: includes/class-anwpfl-player.php:1405 includes/class-anwpfl-referee.php:390
 #: includes/class-anwpfl-stadium.php:423 includes/class-anwpfl-staff.php:532
 msgid "Dynamic Custom Fields"
@@ -1441,16 +1441,16 @@ msgstr ""
 msgid "Content"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:1720
-#: includes/class-anwpfl-competition.php:2119
+#: includes/class-anwpfl-club.php:1740
+#: includes/class-anwpfl-competition.php:2062
 msgid "Logo"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:1721
-#: includes/class-anwpfl-competition.php:2121
-#: includes/class-anwpfl-competition.php:2199
-#: includes/class-anwpfl-competition.php:2223
-#: includes/class-anwpfl-competition.php:2247
+#: includes/class-anwpfl-club.php:1741
+#: includes/class-anwpfl-competition.php:2064
+#: includes/class-anwpfl-competition.php:2142
+#: includes/class-anwpfl-competition.php:2166
+#: includes/class-anwpfl-competition.php:2190
 #: includes/class-anwpfl-helper.php:1833 includes/class-anwpfl-helper.php:1855
 #: includes/class-anwpfl-helper.php:1914 includes/class-anwpfl-helper.php:1938
 #: includes/class-anwpfl-helper.php:2018 includes/class-anwpfl-helper.php:2042
@@ -1463,11 +1463,11 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:1722
+#: includes/class-anwpfl-club.php:1742
 msgid "Games"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:1723
+#: includes/class-anwpfl-club.php:1743
 msgid "Club Color"
 msgstr ""
 
@@ -1663,34 +1663,34 @@ msgstr ""
 msgid "Competition Order"
 msgstr ""
 
-#: includes/class-anwpfl-competition.php:2120
+#: includes/class-anwpfl-competition.php:2063
 msgid "Stages"
 msgstr ""
 
-#: includes/class-anwpfl-competition.php:2122
+#: includes/class-anwpfl-competition.php:2065
 #: includes/shortcodes/class-anwpfl-shortcode-matches.php:131
 #: includes/shortcodes/class-anwpfl-shortcode-matches.php:143
 #: includes/shortcodes/class-anwpfl-shortcode-player-data.php:120
 msgid "Matches"
 msgstr ""
 
-#: includes/class-anwpfl-competition.php:2123
+#: includes/class-anwpfl-competition.php:2066
 msgid "Standings"
 msgstr ""
 
-#: includes/class-anwpfl-competition.php:2178
-#: includes/class-anwpfl-competition.php:2233
+#: includes/class-anwpfl-competition.php:2121
+#: includes/class-anwpfl-competition.php:2176
 #: includes/class-anwpfl-data.php:221
 msgid "Groups"
 msgstr ""
 
-#: includes/class-anwpfl-competition.php:2178
-#: includes/class-anwpfl-competition.php:2233
+#: includes/class-anwpfl-competition.php:2121
+#: includes/class-anwpfl-competition.php:2176
 #: includes/class-anwpfl-data.php:354
 msgid "Ties"
 msgstr ""
 
-#: includes/class-anwpfl-competition.php:2181
+#: includes/class-anwpfl-competition.php:2124
 #: includes/class-anwpfl-options.php:1029
 #: includes/class-anwpfl-options.php:1067
 #: includes/class-anwpfl-options.php:1105
@@ -1698,7 +1698,7 @@ msgstr ""
 msgid "Single"
 msgstr ""
 
-#: includes/class-anwpfl-competition.php:2202
+#: includes/class-anwpfl-competition.php:2145
 #: includes/class-anwpfl-options.php:1039
 #: includes/class-anwpfl-options.php:1077
 #: includes/class-anwpfl-options.php:1115
@@ -1706,7 +1706,7 @@ msgstr ""
 msgid "Multiple"
 msgstr ""
 
-#: includes/class-anwpfl-competition.php:2251
+#: includes/class-anwpfl-competition.php:2194
 msgid "!!! Error: Main Stage in Multistage competition is not set."
 msgstr ""
 
@@ -1912,7 +1912,7 @@ msgstr ""
 #: templates/match/match--small.php:197 templates/match/match-referees.php:61
 #: templates/referee/referee-finished.php:80
 #: templates/referee/referee-fixtures.php:74
-#: templates/widget-next-match.php:179
+#: templates/widget-next-match.php:174
 msgid "Referee"
 msgstr ""
 
@@ -4937,7 +4937,7 @@ msgstr ""
 msgid "Matchweek %d"
 msgstr ""
 
-#: includes/class-anwpfl-options.php:479 includes/class-anwpfl-options.php:1514
+#: includes/class-anwpfl-options.php:479 includes/class-anwpfl-options.php:1534
 msgid "Settings"
 msgstr ""
 
@@ -5166,18 +5166,20 @@ msgid "Plugin Caching System"
 msgstr ""
 
 #: includes/class-anwpfl-options.php:1406
+#: includes/class-anwpfl-options.php:1426
 msgid "Disabled"
 msgstr ""
 
 #: includes/class-anwpfl-options.php:1410
+#: includes/class-anwpfl-options.php:1430
 msgid "Enabled"
 msgstr ""
 
-#: includes/class-anwpfl-options.php:1449
+#: includes/class-anwpfl-options.php:1469
 msgid "Flush plugin cache"
 msgstr ""
 
-#: includes/class-anwpfl-options.php:1453
+#: includes/class-anwpfl-options.php:1473
 msgid "Flush"
 msgstr ""
 
@@ -5596,7 +5598,7 @@ msgstr ""
 #: templates/match/match--simple.php:129
 #: templates/match/match--slim-footer.php:144
 #: templates/match/match--small.php:249 templates/match/match.php:179
-#: templates/widget-last-match.php:74
+#: templates/widget-last-match.php:69
 msgctxt "Abbr: after extra time"
 msgid "AET"
 msgstr ""
@@ -5605,7 +5607,7 @@ msgstr ""
 #: templates/match/match--simple.php:133
 #: templates/match/match--slim-footer.php:148
 #: templates/match/match--small.php:253 templates/match/match.php:183
-#: templates/widget-last-match.php:78
+#: templates/widget-last-match.php:73
 msgctxt "on penalties"
 msgid "Penalties"
 msgstr ""

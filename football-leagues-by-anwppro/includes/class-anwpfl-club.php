@@ -1375,8 +1375,8 @@ class AnWPFL_Club extends CPT_Core {
 		if ( null === $output ) {
 			$cache_key = 'FL-CLUBS-LIST';
 
-			if ( anwp_football_leagues()->cache->get( $cache_key ) ) {
-				$output = anwp_football_leagues()->cache->get( $cache_key );
+			if ( anwp_fl()->cache->get( $cache_key ) ) {
+				$output = anwp_fl()->cache->get( $cache_key );
 
 				return $output;
 			}
@@ -1427,37 +1427,57 @@ class AnWPFL_Club extends CPT_Core {
 				OBJECT_K
 			);
 
-			/*
-			|--------------------------------------------------------------------
-			| All Clubs
-			|--------------------------------------------------------------------
-			*/
-			$all_clubs = get_posts(
-				[
-					'numberposts'      => - 1,
-					'post_type'        => 'anwp_club',
-					'suppress_filters' => false,
-					'post_status'      => 'publish',
-					'order'            => 'ASC',
-					'orderby'          => 'title',
-					'cache_results'    => false,
-				]
-			);
-
-			if ( empty( $all_clubs ) ) {
-				return [];
-			}
-
 			$use_club_abbr = apply_filters( 'anwpfl/club/use_club_abbr', true );
 
-			foreach ( $all_clubs as $club_obj ) {
-				$output[ $club_obj->ID ] = [
-					'title'    => $club_obj->post_title,
-					'abbr'     => ( ! $use_club_abbr || empty( $abbrs[ $club_obj->ID ]->abbr ) ) ? $club_obj->post_title : $abbrs[ $club_obj->ID ]->abbr,
-					'link'     => get_permalink( $club_obj ),
-					'logo_big' => empty( $logos_big[ $club_obj->ID ]->meta_value ) ? '' : $logos_big[ $club_obj->ID ]->meta_value,
-					'logo'     => empty( $logos[ $club_obj->ID ]->meta_value ) ? '' : $logos[ $club_obj->ID ]->meta_value,
-				];
+			if ( '/%postname%/' === get_option( 'permalink_structure' ) && 'yes' === AnWPFL_Options::get_value( 'simple_permalink_slug_building' ) ) {
+				$all_clubs = $wpdb->get_results(
+					"
+					SELECT p.post_title, p.post_name, p.ID
+					FROM $wpdb->posts p
+					WHERE p.post_status = 'publish' AND p.post_type = 'anwp_club'
+					ORDER BY p.post_title ASC
+					",
+					ARRAY_A
+				) ?: [];
+
+				$permalink_slug = $this->plugin->options->get_permalink_structure()['club'] ?? 'club';
+				$base_url       = get_site_url( null, '/' . $permalink_slug . '/' );
+
+				foreach ( $all_clubs as $club_data ) {
+					$output[ $club_data['ID'] ] = [
+						'title'    => $club_data['post_title'],
+						'abbr'     => ( ! $use_club_abbr || empty( $abbrs[ $club_data['ID'] ]->abbr ) ) ? $club_data['post_title'] : $abbrs[ $club_data['ID'] ]->abbr,
+						'link'     => $base_url . $club_data['post_name'] . '/',
+						'logo_big' => empty( $logos_big[ $club_data['ID'] ]->meta_value ) ? '' : $logos_big[ $club_data['ID'] ]->meta_value,
+						'logo'     => empty( $logos[ $club_data['ID'] ]->meta_value ) ? '' : $logos[ $club_data['ID'] ]->meta_value,
+					];
+				}
+			} else {
+				$all_clubs = get_posts(
+					[
+						'numberposts'      => - 1,
+						'post_type'        => 'anwp_club',
+						'suppress_filters' => false,
+						'post_status'      => 'publish',
+						'order'            => 'ASC',
+						'orderby'          => 'title',
+						'cache_results'    => false,
+					]
+				);
+
+				if ( empty( $all_clubs ) ) {
+					return [];
+				}
+
+				foreach ( $all_clubs as $club_obj ) {
+					$output[ $club_obj->ID ] = [
+						'title'    => $club_obj->post_title,
+						'abbr'     => ( ! $use_club_abbr || empty( $abbrs[ $club_obj->ID ]->abbr ) ) ? $club_obj->post_title : $abbrs[ $club_obj->ID ]->abbr,
+						'link'     => get_permalink( $club_obj ),
+						'logo_big' => empty( $logos_big[ $club_obj->ID ]->meta_value ) ? '' : $logos_big[ $club_obj->ID ]->meta_value,
+						'logo'     => empty( $logos[ $club_obj->ID ]->meta_value ) ? '' : $logos[ $club_obj->ID ]->meta_value,
+					];
+				}
 			}
 
 			/*
@@ -1466,7 +1486,7 @@ class AnWPFL_Club extends CPT_Core {
 			|--------------------------------------------------------------------
 			*/
 			if ( ! empty( $output ) ) {
-				anwp_football_leagues()->cache->set( $cache_key, $output );
+				anwp_fl()->cache->set( $cache_key, $output );
 			}
 		}
 

@@ -1396,10 +1396,30 @@ class AnWPFL_Options {
 
 		$cmb->add_field(
 			[
-				'name'      => esc_html__( 'Plugin Caching System', 'anwp-football-leagues' ),
-				'id'        => 'cache_active',
+				'name'    => esc_html__( 'Plugin Caching System', 'anwp-football-leagues' ),
+				'id'      => 'cache_active',
+				'type'    => 'anwpfl_simple_trigger',
+				'default' => 'yes',
+				'options' => [
+					'no'  => [
+						'color' => 'neutral',
+						'text'  => esc_html__( 'Disabled', 'anwp-football-leagues' ),
+					],
+					'yes' => [
+						'color' => 'success',
+						'text'  => esc_html__( 'Enabled', 'anwp-football-leagues' ),
+					],
+				],
+			]
+		);
+
+		$cmb->add_field(
+			[
+				'name'      => 'Simple Permalink Slug Building (BETA)',
+				'id'        => 'simple_permalink_slug_building',
 				'type'      => 'anwpfl_simple_trigger',
-				'default'   => 'yes',
+				'desc'      => 'Generate permalinks efficiently by minimizing additional database queries and reducing memory usage. Only works with /%postname%/ permalink structure.',
+				'default'   => 'no',
 				'options'   => [
 					'no'  => [
 						'color' => 'neutral',

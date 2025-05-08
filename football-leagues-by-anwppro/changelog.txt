@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 0.16.15 - 2025-05-08 =
+* added: new option - Simple Permalink Slug Building (BETA)
+* improved: minor performance improvements
+
 = 0.16.14 - 2025-03-24 =
 * added: tool to update player's 'Current Team' based on the last game played
 * added: new option to show player's current team by last game with save/fix (if incorrect) in the Player Profile
