@@ -1370,16 +1370,16 @@ class AnWPFL_Club extends CPT_Core {
 	 */
 	public function get_all_clubs_data() {
 
+		$cache_key   = 'FL-CLUBS-LIST';
+		$cached_data = anwp_fl()->cache->get( $cache_key );
+
+		if ( $cached_data ) {
+			return $cached_data;
+		}
+
 		static $output = null;
 
 		if ( null === $output ) {
-			$cache_key = 'FL-CLUBS-LIST';
-
-			if ( anwp_fl()->cache->get( $cache_key ) ) {
-				$output = anwp_fl()->cache->get( $cache_key );
-
-				return $output;
-			}
 
 			$output = [];
 
@@ -1429,7 +1429,7 @@ class AnWPFL_Club extends CPT_Core {
 
 			$use_club_abbr = apply_filters( 'anwpfl/club/use_club_abbr', true );
 
-			if ( '/%postname%/' === get_option( 'permalink_structure' ) && 'yes' === AnWPFL_Options::get_value( 'simple_permalink_slug_building' ) ) {
+			if ( $this->plugin->cache->simple_link_building ) {
 				$all_clubs = $wpdb->get_results(
 					"
 					SELECT p.post_title, p.post_name, p.ID
@@ -1455,7 +1455,7 @@ class AnWPFL_Club extends CPT_Core {
 			} else {
 				$all_clubs = get_posts(
 					[
-						'numberposts'      => - 1,
+						'numberposts'      => -1,
 						'post_type'        => 'anwp_club',
 						'suppress_filters' => false,
 						'post_status'      => 'publish',

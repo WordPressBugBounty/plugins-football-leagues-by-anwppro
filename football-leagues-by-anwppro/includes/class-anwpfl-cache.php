@@ -14,24 +14,36 @@ class AnWPFL_Cache {
 
 	/**
 	 * Parent plugin class.
-	 *
-	 * @var AnWP_Football_Leagues
 	 */
-	protected $plugin = null;
+	protected ?AnWP_Football_Leagues $plugin = null;
 
 	/**
 	 * Is cache active.
-	 *
-	 * @var AnWP_Football_Leagues
 	 */
-	protected $active = true;
+	public $active = true;
 
 	/**
-	 * Cache group map.
-	 *
-	 * @var AnWP_Football_Leagues
+	 * Allow Simple Link Building
 	 */
-	protected $groups_map = [];
+	public bool $simple_link_building = false;
+
+	/**
+	 * Cache version
+	 * v1 - based on transients and options table
+	 * v2 - based on external object cache
+	 */
+	public string $version = '';
+
+	/**
+	 * Cache group map
+	 * Used in v1 (transients)
+	 */
+	protected array $groups_map = [
+		'anwp_match'         => 'anwpfl_cached_keys__game',
+		'anwp_player'        => 'anwpfl_cached_keys__player',
+		'anwp_transfer'      => 'anwpfl_cached_keys__transfer',
+		'anwp_fl_suspension' => 'anwpfl_cached_keys__suspension',
+	];
 
 	/**
 	 * Constructor.
@@ -40,38 +52,21 @@ class AnWPFL_Cache {
 	 */
 	public function __construct( $plugin ) {
 
-		global $wp_version;
-
 		$this->plugin = $plugin;
-
-		/*
-		|--------------------------------------------------------------------
-		| Cache Groups
-		|--------------------------------------------------------------------
-		*/
-		$this->groups_map = [
-			'anwp_match'         => 'anwpfl_cached_keys__game',
-			'anwp_player'        => 'anwpfl_cached_keys__player',
-			'anwp_transfer'      => 'anwpfl_cached_keys__transfer',
-			'anwp_fl_suspension' => 'anwpfl_cached_keys__suspension',
-		];
-
-		/*
-		|--------------------------------------------------------------------
-		| Disable/Enable Cache
-		|--------------------------------------------------------------------
-		*/
-		$this->active = 'no' !== AnWPFL_Options::get_value( 'cache_active', $this->active );
 
 		/**
 		 * Disable/Enable cache
-		 *
-		 * @param bool $is_active
 		 */
-		$this->active = apply_filters( 'anwpfl/cache/is_active', $this->active );
+		$this->active = apply_filters( 'anwpfl/cache/is_active', 'no' !== AnWPFL_Options::get_value( 'cache_active', $this->active ) );
+
+		$this->simple_link_building = in_array( get_option( 'permalink_structure' ), [ '/%postname%/', '/%category%/%postname%/' ], true ) && 'yes' === AnWPFL_Options::get_value( 'simple_permalink_slug_building' );
 
 		if ( ! wp_next_scheduled( 'anwp_fl_cache_maybe_cleanup' ) && $this->active ) {
-			wp_schedule_event( time() + 86400, version_compare( $wp_version, '5.4', '>=' ) ? 'weekly' : 'daily', 'anwp_fl_cache_maybe_cleanup' );
+			wp_schedule_event( time() + 86400, 'weekly', 'anwp_fl_cache_maybe_cleanup' );
+		}
+
+		if ( $this->active ) {
+			$this->version = wp_using_ext_object_cache() ? 'v2' : 'v1';
 		}
 
 		// Run Hooks
@@ -91,11 +86,15 @@ class AnWPFL_Cache {
 		add_action( 'wp_insert_post', [ $this, 'on_modify_post' ], 10, 2 );
 		add_action( 'anwp_fl_edit_post', [ $this, 'on_modify_post' ], 10, 2 );
 
-		// Cron action
-		add_action( 'anwp_fl_cache_maybe_cleanup', [ $this, 'cleanup_generated_keys' ], 10, 1 );
-		add_action( 'anwp_fl_cache_maybe_reflush', [ $this, 'flush_cache_by_post_type' ], 10, 1 );
+		add_action( 'delete_anwp_league', [ $this, 'on_modify_league' ] );
+		add_action( 'edit_term_anwp_league', [ $this, 'on_modify_league' ] );
+		add_action( 'created_anwp_league', [ $this, 'on_modify_league' ] );
 
-		add_action( 'permalink_structure_changed', [ $this, 'permalink_structure_changed' ], 10, 1 );
+		// Cron action
+		add_action( 'anwp_fl_cache_maybe_cleanup', [ $this, 'cleanup_generated_keys' ] );
+		add_action( 'anwp_fl_cache_maybe_reflush', [ $this, 'flush_cache_by_post_type' ] );
+
+		add_action( 'permalink_structure_changed', [ $this, 'permalink_structure_changed' ] );
 	}
 
 	/**
@@ -103,78 +102,64 @@ class AnWPFL_Cache {
 	 *
 	 * @param string $cache_key
 	 * @param string $dependent_group
-	 * @param array  $default
+	 * @param array|string  $default_value
 	 *
-	 * @return array|mixed
 	 * @since   0.13.3
+	 * @return array|mixed
 	 */
-	public function get( $cache_key, $dependent_group = '', $default = [] ) {
-
-		if ( ! $this->active ) {
+	public function get( string $cache_key, string $dependent_group = '', $default_value = [] ) {
+		if ( ! $this->active || in_array( $cache_key, apply_filters( 'anwpfl/cache/excluded_keys', [] ), true ) ) {
 			return false;
 		}
 
-		if ( $dependent_group && ! in_array( $cache_key, $this->get_saved_keys( $dependent_group ), true ) ) {
-			return false;
+		if ( 'v1' === $this->version ) {
+			if ( $dependent_group && ! in_array( $cache_key, $this->get_saved_keys( $dependent_group ), true ) ) {
+				return false;
+			}
+
+			$response = get_transient( $cache_key );
+
+			return false !== $response ? $response : $default_value;
+		} elseif ( 'v2' === $this->version ) {
+			$cached_value = wp_cache_get( $cache_key, 'anwp-fl-' . $dependent_group );
+
+			return false !== $cached_value ? $cached_value : $default_value;
 		}
 
-		$response = get_transient( $cache_key );
-
-		return false !== $response ? $response : $default;
+		return $default_value;
 	}
 
 	/**
-	 * Sets/updates the value of a transient.
+	 * Set/update cached value
 	 *
-	 * @param $cache_key
+	 * @param string       $cache_key
 	 * @param $value
-	 * @param $dependent_group
+	 * @param string|array $dependent_group
 	 */
-	public function set( $cache_key, $value, $dependent_group = '' ) {
-
-		if ( ! $this->active ) {
+	public function set( string $cache_key, $value, $dependent_group = '' ) {
+		if ( ! $this->active || in_array( $cache_key, apply_filters( 'anwpfl/cache/excluded_keys', [] ), true ) ) {
 			return;
 		}
 
 		$expiration = $this->get_key_expiration( $cache_key );
 
-		if ( $expiration ) {
-			set_transient( $cache_key, $value, $expiration );
+		if ( 'v1' === $this->version ) {
+			if ( $expiration ) {
+				set_transient( $cache_key, $value, $expiration );
 
-			// Add generated keys to the options
-			if ( $dependent_group ) {
-				if ( is_array( $dependent_group ) ) {
-					foreach ( $dependent_group as $group ) {
-						$this->maybe_add_cached_key( $cache_key, $group );
+				// Add generated keys to the options
+				if ( $dependent_group ) {
+					if ( is_array( $dependent_group ) ) {
+						foreach ( $dependent_group as $group ) {
+							$this->maybe_add_cached_key( $cache_key, $group );
+						}
+					} else {
+						$this->maybe_add_cached_key( $cache_key, $dependent_group );
 					}
-				} else {
-					$this->maybe_add_cached_key( $cache_key, $dependent_group );
 				}
 			}
-		}
-	}
-
-	/**
-	 * Maybe add cached key to the saved option
-	 *
-	 * @param string $cache_key
-	 * @param string $dependent_group
-	 */
-	private function maybe_add_cached_key( $cache_key, $dependent_group ) {
-		global $wpdb;
-
-		if ( ! in_array( $cache_key, $this->get_saved_keys( $dependent_group ), true ) && ! empty( $this->groups_map[ $dependent_group ] ) ) {
-			$wpdb->query(
-				$wpdb->prepare(
-					"
-			        UPDATE $wpdb->options
-			        SET option_value = CONCAT(option_value, %s)
-			        WHERE option_name = %s
-			        ",
-					'+' . $cache_key . '+',
-					$this->groups_map[ $dependent_group ]
-				)
-			);
+		} elseif ( 'v2' === $this->version ) {
+			wp_cache_set( $cache_key, $value, 'anwp-fl-' . $dependent_group, $expiration );
 		}
 	}
 
@@ -185,7 +170,7 @@ class AnWPFL_Cache {
 	 *
 	 * @return string
 	 */
-	protected function get_key_expiration( $cache_key ) {
+	protected function get_key_expiration( string $cache_key ): string {
 
 		$expiration_map = [
 			'FL-REFEREES-LIST-SIMPLE'            => WEEK_IN_SECONDS,
@@ -195,15 +180,16 @@ class AnWPFL_Cache {
 			'FL-STANDINGS-LIST'                  => MONTH_IN_SECONDS,
 			'FL-COMPETITIONS-LIST'               => WEEK_IN_SECONDS,
 			'FL-COMPETITIONS-DATA'               => WEEK_IN_SECONDS,
+			'FL-LEAGUE-OPTIONS'                  => WEEK_IN_SECONDS,
 			'FL-PLAYER_tmpl_get_latest_matches'  => WEEK_IN_SECONDS,
 			'FL-PLAYER_tmpl_get_players_by_type' => WEEK_IN_SECONDS,
 			'FL-SHORTCODE_players'               => WEEK_IN_SECONDS,
 			'FL-SHORTCODE_cards'                 => WEEK_IN_SECONDS,
 			'FL-PLAYER_get_birthdays'            => DAY_IN_SECONDS,
-			'FL-REFEREES-GAME-MAP'               => WEEK_IN_SECONDS,
 			'FL-PRO-REFEREES-NAME-LIST'          => WEEK_IN_SECONDS,
 			'FL-PRO-REFEREES-NAMES'              => WEEK_IN_SECONDS,
 			'FL-STAFF-PHOTO-MAP'                 => WEEK_IN_SECONDS,
+			'FL-MATCHWEEK-OPTIONS'               => WEEK_IN_SECONDS,
 		];
 
 		$cache_group = explode( '__', $cache_key )[0];
@@ -216,16 +202,21 @@ class AnWPFL_Cache {
 		 */
 		$expiration_map = apply_filters( 'anwpfl/cache/expiration_map', $expiration_map, $cache_group, $cache_key );
 
-		return isset( $expiration_map[ $cache_group ] ) ? $expiration_map[ $cache_group ] : HOUR_IN_SECONDS;
+		return $expiration_map[ $cache_group ] ?? HOUR_IN_SECONDS;
 	}
 
 	/**
 	 * Delete cache
 	 *
-	 * @param $cache_key
+	 * @param        $cache_key
+	 * @param string $cached_group
 	 */
-	public function delete( $cache_key ) {
-		delete_transient( $cache_key );
+	public function delete( $cache_key, string $cached_group = '' ) {
+		if ( 'v1' === $this->version ) {
+			delete_transient( $cache_key );
+		} elseif ( 'v2' === $this->version ) {
+			wp_cache_delete( $cache_key, 'anwp-fl-' . $cached_group );
+		}
 	}
 
 	/**
@@ -234,7 +225,7 @@ class AnWPFL_Cache {
 	 * @param int     $post_id
 	 * @param WP_Post $post_obj
 	 */
-	public function on_modify_post( $post_id, $post_obj ) {
+	public function on_modify_post( int $post_id, WP_Post $post_obj ) {
 
 		if ( ! $this->active ) {
 			return;
@@ -244,10 +235,21 @@ class AnWPFL_Cache {
 			$this->flush_cache_by_post_type( $post_obj->post_type );
 
 			// On modify Plugin Instances
-			if ( ! empty( $this->groups_map[ $post_obj->post_type ] ) ) {
+			if ( 'v1' === $this->version && ! empty( $this->groups_map[ $post_obj->post_type ] ) ) {
 				$this->schedule_cache_reflush( $post_obj->post_type );
 			}
 		}
+	}
+
+	/**
+	 * Run on term delete/update to invalidate some cache.
+	 */
+	public function on_modify_league() {
+		if ( ! $this->active ) {
+			return;
+		}
+
+		$this->delete( 'FL-LEAGUE-OPTIONS' );
 	}
 
 	/**
@@ -255,8 +257,7 @@ class AnWPFL_Cache {
 	 *
 	 * @param string $post_type
 	 */
-	public function flush_cache_by_post_type( $post_type ) {
-
+	public function flush_cache_by_post_type( string $post_type ) {
 		if ( ! $this->active || empty( $post_type ) ) {
 			return;
 		}
@@ -308,7 +309,7 @@ class AnWPFL_Cache {
 
 		// On modify GAME
 		if ( 'anwp_match' === $post_type ) {
-			$this->delete( 'FL-REFEREES-GAME-MAP' );
+			$this->delete( 'FL-MATCHWEEK-OPTIONS' );
 		}
 
 		/*
@@ -324,79 +325,35 @@ class AnWPFL_Cache {
 	}
 
 	/**
-	 * Schedule Re-Flush cache to fix trailing queries
-	 *
-	 * @param string $post_type
-	 */
-	private function schedule_cache_reflush( $post_type ) {
-
-		if ( empty( $post_type ) ) {
-			return;
-		}
-
-		$args = [ $post_type ];
-
-		if ( wp_next_scheduled( 'anwp_fl_cache_maybe_reflush', $args ) ) {
-			wp_clear_scheduled_hook( 'anwp_fl_cache_maybe_reflush', $args );
-		}
-
-		wp_schedule_single_event( time() + 180, 'anwp_fl_cache_maybe_reflush', $args );
-	}
-
-	/**
 	 * Run on post update to invalidate some cache.
 	 *
 	 * @param string $dependent_group
+	 *
 	 * @since 0.13.3
 	 */
-	private function remove_cached_group_keys( $dependent_group ) {
-
+	private function remove_cached_group_keys( string $dependent_group ) {
 		global $wpdb;
 
 		if ( empty( $dependent_group ) || empty( $this->groups_map[ $dependent_group ] ) ) {
 			return;
 		}
 
-		$saved_keys = $this->get_saved_keys( $dependent_group, true );
-		$wpdb->update( $wpdb->options, [ 'option_value' => '' ], [ 'option_name' => $this->groups_map[ $dependent_group ] ] );
+		if ( 'v1' === $this->version ) {
+			$saved_keys = $this->get_saved_keys( $dependent_group, true );
+			$wpdb->update( $wpdb->options, [ 'option_value' => '' ], [ 'option_name' => $this->groups_map[ $dependent_group ] ] );
 
-		foreach ( $saved_keys as $saved_key ) {
+			foreach ( $saved_keys as $saved_key ) {
+				if ( empty( $saved_key ) ) {
+					continue;
+				}
 
-			if ( empty( $saved_key ) ) {
-				continue;
+				$this->delete( $saved_key );
 			}
-
-			$this->delete( $saved_key );
+		} elseif ( 'v2' === $this->version && wp_cache_supports( 'flush_group' ) ) {
+			wp_cache_flush_group( 'anwp-fl-' . $dependent_group );
+		} elseif ( 'v2' === $this->version ) {
+			wp_cache_flush();
 		}
-	}
-
-	/**
-	 * Remove single cached key
-	 *
-	 * @param string $cached_key
-	 * @param string $dependent_group
-	 *
-	 * @since 0.13.3
-	 */
-	private function remove_cached_group_key( $cached_key, $dependent_group ) {
-
-		global $wpdb;
-
-		if ( empty( $cached_key ) || empty( $dependent_group ) || empty( $this->groups_map[ $dependent_group ] ) ) {
-			return;
-		}
-
-		$wpdb->query(
-			$wpdb->prepare(
-				"
-			        UPDATE $wpdb->options
-			        SET option_value = REPLACE(option_value, %s, '')
-			        WHERE option_name = %s
-			        ",
-				'+' . $cached_key . '+',
-				$this->groups_map[ $dependent_group ]
-			)
-		);
 	}
 
 	/**
@@ -405,7 +362,7 @@ class AnWPFL_Cache {
 	 * @return bool
 	 * @since  0.13.3
 	 */
-	public function flush_all_cache() {
+	public function flush_all_cache(): bool {
 
 		/*
 		|--------------------------------------------------------------------
@@ -419,8 +376,13 @@ class AnWPFL_Cache {
 		$this->delete( 'FL-COMPETITIONS-LIST' );
 		$this->delete( 'FL-COMPETITIONS-DATA' );
 		$this->delete( 'FL-STANDINGS-LIST' );
-		$this->delete( 'FL-REFEREES-GAME-MAP' );
 		$this->delete( 'FL-PRO-REFEREES-NAME-LIST' );
+
+		$this->delete( 'FL-LEAGUE-OPTIONS' );
+
+		if ( 'v2' === $this->version && wp_cache_supports( 'flush_group' ) ) {
+			wp_cache_flush_group( 'anwp-fl-' );
+		}
 
 		/*
 		|--------------------------------------------------------------------
@@ -443,18 +405,52 @@ class AnWPFL_Cache {
 		$this->delete( 'FL-CLUBS-LIST' );
 	}
 
+	/*
+	|--------------------------------------------------------------------
+	| V1 only methods
+	|--------------------------------------------------------------------
+	*/
+
 	/**
-	 * Clean Up generated expired keys (CRON)
+	 * Removes all cache v1
 	 *
 	 * @return bool
 	 */
-	public function cleanup_generated_keys() {
+	public function flush_all_cache_v1(): bool {
 
+		/*
+		|--------------------------------------------------------------------
+		| Remove Static Keys
+		|--------------------------------------------------------------------
+		*/
+		delete_transient( 'FL-REFEREES-LIST-SIMPLE' );
+		delete_transient( 'FL-REFEREES-LIST' );
+		delete_transient( 'FL-STADIUMS-LIST' );
+		delete_transient( 'FL-CLUBS-LIST' );
+		delete_transient( 'FL-COMPETITIONS-LIST' );
+		delete_transient( 'FL-COMPETITIONS-DATA' );
+		delete_transient( 'FL-STANDINGS-LIST' );
+		delete_transient( 'FL-PRO-REFEREES-NAME-LIST' );
+
+		/*
+		|--------------------------------------------------------------------
+		| Remove Generated Keys
+		|--------------------------------------------------------------------
+		*/
 		foreach ( array_keys( $this->groups_map ) as $cached_group ) {
-			foreach ( $this->get_saved_keys( $cached_group ) as $cached_key ) {
-				if ( false === get_transient( $cached_key ) ) {
-					$this->remove_cached_group_key( $cached_key, $cached_group );
+			if ( empty( $cached_group ) || empty( $this->groups_map[ $cached_group ] ) ) {
+				continue;
+			}
+
+			$saved_keys = $this->get_saved_keys( $cached_group, true );
+			delete_option( $this->groups_map[ $cached_group ] );
+
+			foreach ( $saved_keys as $saved_key ) {
+				if ( empty( $saved_key ) ) {
+					continue;
 				}
+
+				$this->delete( $saved_key );
 			}
 		}
 
@@ -464,12 +460,12 @@ class AnWPFL_Cache {
 	/**
 	 * Get saved cached keys
 	 *
-	 * @param $group
-	 * @param $force_get
+	 * @param string $group
+	 * @param bool   $force_get
 	 *
 	 * @return mixed|string
 	 */
-	private function get_saved_keys( $group = 'anwp_match', $force_get = false ) {
+	private function get_saved_keys( string $group = 'anwp_match', bool $force_get = false ) {
 
 		global $wpdb;
 		static $keys = [];
@@ -496,5 +492,104 @@ class AnWPFL_Cache {
 		}
 
 		return $keys[ $group ];
+	}
+
+	/**
+	 * Maybe add cached key to the saved option
+	 * V1 - only
+	 *
+	 * @param string $cache_key
+	 * @param string $dependent_group
+	 */
+	private function maybe_add_cached_key( string $cache_key, string $dependent_group ) {
+		global $wpdb;
+
+		if ( ! in_array( $cache_key, $this->get_saved_keys( $dependent_group ), true ) && ! empty( $this->groups_map[ $dependent_group ] ) ) {
+			$wpdb->query(
+				$wpdb->prepare(
+					"
+			        UPDATE $wpdb->options
+			        SET option_value = CONCAT(option_value, %s)
+			        WHERE option_name = %s
+			        ",
+					'+' . $cache_key . '+',
+					$this->groups_map[ $dependent_group ]
+				)
+			);
+		}
+	}
+
+	/**
+	 * Clean Up generated expired keys (CRON)
+	 * V1 - only
+	 *
+	 * @return bool
+	 */
+	public function cleanup_generated_keys(): bool {
+		if ( 'v1' !== $this->version ) {
+			return true;
+		}
+
+		foreach ( array_keys( $this->groups_map ) as $cached_group ) {
+			foreach ( $this->get_saved_keys( $cached_group ) as $cached_key ) {
+				if ( false === get_transient( $cached_key ) ) {
+					$this->remove_cached_group_key( $cached_key, $cached_group );
+				}
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Remove single cached key
+	 * V1 - only
+	 *
+	 * @param string $cached_key
+	 * @param string $dependent_group
+	 *
+	 * @since 0.13.3
+	 */
+	private function remove_cached_group_key( string $cached_key, string $dependent_group ) {
+		if ( 'v1' !== $this->version ) {
+			return;
+		}
+
+		global $wpdb;
+
+		if ( empty( $cached_key ) || empty( $dependent_group ) || empty( $this->groups_map[ $dependent_group ] ) ) {
+			return;
+		}
+
+		$wpdb->query(
+			$wpdb->prepare(
+				"
+			        UPDATE $wpdb->options
+			        SET option_value = REPLACE(option_value, %s, '')
+			        WHERE option_name = %s
+			        ",
+				'+' . $cached_key . '+',
+				$this->groups_map[ $dependent_group ]
+			)
+		);
+	}
+
+	/**
+	 * Schedule Re-Flush cache to fix trailing queries
+	 *
+	 * @param string $post_type
+	 */
+	private function schedule_cache_reflush( string $post_type ) {
+		if ( empty( $post_type ) ) {
+			return;
+		}
+
+		$args = [ $post_type ];
+
+		if ( wp_next_scheduled( 'anwp_fl_cache_maybe_reflush', $args ) ) {
+			wp_clear_scheduled_hook( 'anwp_fl_cache_maybe_reflush', $args );
+		}
+
+		wp_schedule_single_event( time() + 180, 'anwp_fl_cache_maybe_reflush', $args );
 	}
 }

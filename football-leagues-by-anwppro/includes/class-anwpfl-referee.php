@@ -510,15 +510,15 @@ class AnWPFL_Referee extends CPT_Core {
 
 		$cache_key = 'FL-REFEREES-LIST';
 
-		if ( anwp_football_leagues()->cache->get( $cache_key ) ) {
-			return anwp_football_leagues()->cache->get( $cache_key );
+		if ( anwp_fl()->cache->get( $cache_key ) ) {
+			return anwp_fl()->cache->get( $cache_key );
 		}
 
 		global $wpdb;
 
 		$all_officials = $wpdb->get_results(
 			"
-			SELECT p.ID id, p.post_title name,
+			SELECT p.ID id, p.post_title name, p.post_name,
 				MAX( CASE WHEN pm.meta_key = '_anwpfl_job_title' THEN pm.meta_value ELSE '' END) as job,
 				MAX( CASE WHEN pm.meta_key = '_anwpfl_nationality' THEN pm.meta_value ELSE '' END) as nationality,
 				MAX( CASE WHEN pm.meta_key = '_anwpfl_date_of_birth' THEN pm.meta_value ELSE '' END) as birthdate,
@@ -536,21 +536,26 @@ class AnWPFL_Referee extends CPT_Core {
 		| Get Referee links
 		|--------------------------------------------------------------------
 		*/
-		$all_referee_objects = get_posts(
-			[
-				'numberposts'      => - 1,
-				'post_type'        => 'anwp_referee',
-				'suppress_filters' => false,
-				'post_status'      => 'publish',
-				'cache_results'    => false,
-			]
-		);
-
 		$referee_links = [];
 
-		foreach ( $all_referee_objects as $referee_obj ) {
-			$referee_links[ $referee_obj->ID ] = get_permalink( $referee_obj );
+		if ( ! $this->plugin->cache->simple_link_building ) {
+			$all_referee_objects = get_posts(
+				[
+					'numberposts'      => - 1,
+					'post_type'        => 'anwp_referee',
+					'suppress_filters' => false,
+					'post_status'      => 'publish',
+					'cache_results'    => false,
+				]
+			);
+
+			foreach ( $all_referee_objects as $referee_obj ) {
+				$referee_links[ $referee_obj->ID ] = get_permalink( $referee_obj );
+			}
 		}
+
+		$permalink_slug = $this->plugin->options->get_permalink_structure()['referee'] ?? 'referee';
+		$base_url       = get_site_url( null, '/' . $permalink_slug . '/' );
 
 		/*
 		|--------------------------------------------------------------------
@@ -564,8 +569,12 @@ class AnWPFL_Referee extends CPT_Core {
 		foreach ( $all_officials as $official ) {
 
 			$official->id      = absint( $official->id );
-			$official->link    = isset( $referee_links[ $official->id ] ) ? $referee_links[ $official->id ] : '';
 			$official->country = '';
+			$official->link    = $referee_links[ $official->id ] ?? '';
+
+			if ( $this->plugin->cache->simple_link_building && empty( $official->link ) ) {
+				$official->link = $base_url . $official->post_name . '/';
+			}
 
 			if ( $official->birthdate ) {
 				$official->birthdate = date_i18n( get_option( 'date_format' ), strtotime( $official->birthdate ) );
@@ -586,7 +595,7 @@ class AnWPFL_Referee extends CPT_Core {
 			unset( $official->nationality );
 		}
 
-		anwp_football_leagues()->cache->set( $cache_key, $all_officials );
+		anwp_fl()->cache->set( $cache_key, $all_officials );
 
 		return $all_officials;
 	}
@@ -615,7 +624,7 @@ class AnWPFL_Referee extends CPT_Core {
 			return false;
 		}
 
-		return isset( $referees_cache[ $referee_id ] ) ? $referees_cache[ $referee_id ] : false;
+		return $referees_cache[ $referee_id ] ?? false;
 	}
 
 	/**

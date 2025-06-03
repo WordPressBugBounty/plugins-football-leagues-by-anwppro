@@ -1223,6 +1223,40 @@ class AnWPFL_Customizer {
 			]
 		);
 
+		/*
+		|--------------------------------------------------------------------
+		| squad_elements
+		|--------------------------------------------------------------------
+		*/
+		$wp_customize->add_setting(
+			'anwp-fl-customizer[squad][squad_elements]',
+			[
+				'default'           => 'age,nationalities',
+				'type'              => 'option',
+				'sanitize_callback' => 'anwp_customizer_text_sanitization',
+			]
+		);
+
+		$wp_customize->add_control(
+			new AnWPFL_Pill_Checkbox_Custom_Control(
+				$wp_customize,
+				'anwp-fl-customizer[squad][squad_elements]',
+				[
+					'label'       => esc_html__( 'Squad Elements', 'anwp-football-leagues' ),
+					'section'     => 'fl_squad',
+					'input_attrs' => [
+						'sortable'  => false,
+						'fullwidth' => true,
+					],
+					'choices'     => [
+						'date_of_birth' => __( 'Date Of Birth', 'anwp-football-leagues' ),
+						'age'           => __( 'Age', 'anwp-football-leagues' ),
+						'nationalities' => __( 'Nationality', 'anwp-football-leagues' ),
+					],
+				]
+			)
+		);
+
 		//=================================
 		//-- Standing --
 		//=================================

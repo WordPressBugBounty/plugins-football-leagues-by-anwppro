@@ -1444,6 +1444,15 @@ class AnWPFL_Text {
 
 		$cmb->add_field(
 			[
+				'name' => esc_html__( 'Date of Birth', 'anwp-football-leagues' ),
+				'desc' => 'squad :: shortcode',
+				'id'   => 'squad__shortcode__date_of_birth',
+				'type' => 'anwp_fl_text',
+			]
+		);
+
+		$cmb->add_field(
+			[
 				'name' => esc_html__( 'Nationality', 'anwp-football-leagues' ),
 				'desc' => 'squad :: shortcode',
 				'id'   => 'squad__shortcode__nationality',

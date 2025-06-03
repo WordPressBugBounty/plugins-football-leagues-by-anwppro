@@ -63,7 +63,7 @@ if ( ! apply_filters( 'anwpfl/tmpl-club/render_squad', true, $club, $data->seaso
 	 *
 	 * @since 0.7.5
 	 */
-	$squad_layout = apply_filters( 'anwpfl/tmpl-club/squad_layout', anwp_football_leagues()->customizer->get_value( 'squad', 'club_squad_layout' ), $club, $data->season_id );
+	$squad_layout = apply_filters( 'anwpfl/tmpl-club/squad_layout', anwp_fl()->customizer->get_value( 'squad', 'club_squad_layout' ), $club, $data->season_id );
 
 	$shortcode_args = [
 		'club_id'         => $data->club_id,

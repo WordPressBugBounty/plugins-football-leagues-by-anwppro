@@ -2814,6 +2814,19 @@ body {
   margin-left: -1px;
 }
 
+.anwp-btns {
+  font-size: 14px;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+.anwp-btns__btn {
+  border-radius: 3px;
+  margin: 5px;
+}
+.anwp-btns__btn:not(.anwp-is-active) {
+  cursor: pointer;
+}
+
 .fl-flag--rounded {
   border-radius: 50px;
 }
@@ -6820,12 +6833,6 @@ section: Utilities
   border-bottom: none;
 }
 
-.squad-rows {
-  grid-template-columns: minmax(50px, auto) minmax(53px, auto) minmax(0, 1fr) minmax(50px, auto) minmax(50px, auto);
-}
-.squad-rows__staff {
-  grid-template-columns: minmax(53px, auto) minmax(0, 1fr) minmax(50px, auto) minmax(50px, auto);
-}
 .squad-rows__staff .squad-rows__header-title {
   grid-column: 1/3;
 }

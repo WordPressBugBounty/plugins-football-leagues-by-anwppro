@@ -5,7 +5,7 @@ Tags:              football, soccer, sport
 Requires at least: 5.7
 Requires PHP:      7.0
 Tested up to:      6.8
-Stable tag:        0.16.15
+Stable tag:        0.16.16
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,13 @@ Yes! The plugin works with most themes out of the box. If you have any CSS styli
 17. Admin >> Edit Match (Events)
 
 == Changelog ==
+
+= 0.16.16 - 2025-06-03 =
+* added: option in Squad to show/hide - age/birth date/nationality (Customizer > Football Leagues > Squad)
+* improved: plugin caching system (added object cache support + automatic detection of what to use: transients or object cache)
+* improved: minor performance improvements
+* updated: Syria flag (rounded flags)
+* improved: Game Edit - custom numbers are automatically filled on adding a player to the lineups (if squad number is set)
 
 = 0.16.15 - 2025-05-08 =
 * added: new option - Simple Permalink Slug Building (BETA)

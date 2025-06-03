@@ -35,26 +35,29 @@ $data = (object) wp_parse_args(
 );
 
 // Prepare squad
-$squad         = anwp_football_leagues()->club->tmpl_prepare_club_squad( $data->club_id, $data->season_id, true );
-$squad_display = anwp_football_leagues()->club->get_squad_display_options( $data->club_id, $data->season_id );
+$squad         = anwp_fl()->club->tmpl_prepare_club_squad( $data->club_id, $data->season_id, true );
+$squad_display = anwp_fl()->club->get_squad_display_options( $data->club_id, $data->season_id );
 
 // Prepare staff
-$staff = anwp_football_leagues()->club->tmpl_prepare_club_staff( $data->club_id, $data->season_id );
+$staff = anwp_fl()->club->tmpl_prepare_club_staff( $data->club_id, $data->season_id );
 
 // Initialize staff groups
 $staff_group_attached = '';
 
-$default_photo = anwp_football_leagues()->helper->get_default_player_photo();
+$default_photo = anwp_fl()->helper->get_default_player_photo();
 $photo_dir     = wp_upload_dir()['baseurl'];
 
 // Prepare positions
-$positions      = anwp_football_leagues()->data->get_positions_plural();
+$positions      = anwp_fl()->data->get_positions_plural();
 $positions_l10n = [
-	'g' => anwp_football_leagues()->get_option_value( 'text_multiple_goalkeeper' ) ?: $positions['g'],
-	'd' => anwp_football_leagues()->get_option_value( 'text_multiple_defender' ) ?: $positions['d'],
-	'm' => anwp_football_leagues()->get_option_value( 'text_multiple_midfielder' ) ?: $positions['m'],
-	'f' => anwp_football_leagues()->get_option_value( 'text_multiple_forward' ) ?: $positions['f'],
+	'g' => anwp_fl()->get_option_value( 'text_multiple_goalkeeper' ) ?: $positions['g'],
+	'd' => anwp_fl()->get_option_value( 'text_multiple_defender' ) ?: $positions['d'],
+	'm' => anwp_fl()->get_option_value( 'text_multiple_midfielder' ) ?: $positions['m'],
+	'f' => anwp_fl()->get_option_value( 'text_multiple_forward' ) ?: $positions['f'],
 ];
+
+// Squad elements
+$squad_elements = wp_parse_list( anwp_fl()->customizer->get_value( 'squad', 'squad_elements', 'age,nationalities' ) );
 ?>
 <div class="anwp-b-wrap squad squad--shortcode <?php echo esc_attr( $data->class ); ?>">
 
@@ -65,7 +68,7 @@ $positions_l10n = [
 	|--------------------------------------------------------------------
 	*/
 	if ( AnWP_Football_Leagues::string_to_bool( $data->header ) ) {
-		anwp_football_leagues()->load_partial(
+		anwp_fl()->load_partial(
 			[
 				'text' => AnWPFL_Text::get_value( 'squad__shortcode__squad', __( 'Squad', 'anwp-football-leagues' ) ),
 			],
@@ -76,7 +79,7 @@ $positions_l10n = [
 
 	<?php
 	if ( empty( $squad ) ) :
-		anwp_football_leagues()->load_partial(
+		anwp_fl()->load_partial(
 			[
 				'no_data_text' => AnWPFL_Text::get_value( 'squad__shortcode__no_players_in_the_squad', __( 'No players in the squad', 'anwp-football-leagues' ) ),
 			],
@@ -135,18 +138,25 @@ $positions_l10n = [
 							<?php if ( $player['position'] ) : ?>
 								<div class="squad-blocks__player-param d-flex anwp-border-light">
 									<span class="squad-blocks__player-param-title anwp-text-sm anwp-opacity-70"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__position', __( 'Position', 'anwp-football-leagues' ) ) ); ?></span>
-									<span class="squad-blocks__player-param-value ml-auto anwp-text-base"><?php echo esc_html( anwp_football_leagues()->data->get_value_by_key( $player['position'], 'position' ) ); ?></span>
+									<span class="squad-blocks__player-param-value ml-auto anwp-text-base"><?php echo esc_html( anwp_fl()->data->get_value_by_key( $player['position'], 'position' ) ); ?></span>
 								</div>
 							<?php endif; ?>
 
-							<?php if ( $player['age'] ) : ?>
+							<?php if ( $player['age2'] && in_array( 'age', $squad_elements, true ) ) : ?>
 								<div class="squad-blocks__player-param d-flex anwp-border-light">
 									<span class="squad-blocks__player-param-title anwp-text-sm anwp-opacity-70"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?></span>
 									<span class="squad-blocks__player-param-value ml-auto anwp-text-base"><?php echo esc_html( $player['age'] ); ?></span>
 								</div>
 							<?php endif; ?>
 
-							<?php if ( $player['nationalities'] ?? '' ) : ?>
+							<?php if ( $player['age2'] && in_array( 'date_of_birth', $squad_elements, true ) ) : ?>
+								<div class="squad-blocks__player-param d-flex anwp-border-light">
+									<span class="squad-blocks__player-param-title anwp-text-sm anwp-opacity-70"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?></span>
+									<span class="squad-blocks__player-param-value ml-auto anwp-text-base"><?php echo esc_html( $player['age2'] ); ?></span>
+								</div>
+							<?php endif; ?>
+
+							<?php if ( ( $player['nationalities'] ?? '' ) && in_array( 'nationalities', $squad_elements, true ) ) : ?>
 								<div class="squad-blocks__player-param d-flex">
 									<span class="squad-blocks__player-param-title anwp-text-sm anwp-opacity-70"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__nationality', __( 'Nationality', 'anwp-football-leagues' ) ) ); ?></span>
 									<span class="squad-blocks__player-param-value ml-auto anwp-text-base">
@@ -197,20 +207,27 @@ $positions_l10n = [
 
 						<div class="squad-blocks__name mb-auto anwp-text-lg anwp-font-semibold"><?php echo esc_html( $staff_member['name'] ); ?></div>
 
-						<?php if ( $staff_member['age'] ) : ?>
+						<?php if ( in_array( 'age', $squad_elements, true ) && $staff_member['age2'] ) : ?>
 							<div class="squad-blocks__player-param d-flex anwp-border-light">
 								<span class="squad-blocks__player-param-title anwp-text-sm anwp-opacity-70"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?></span>
 								<span class="squad-blocks__player-param-value ml-auto anwp-text-base"><?php echo esc_html( $staff_member['age'] ); ?></span>
 							</div>
 						<?php endif; ?>
 
-						<?php if ( ! empty( $staff_member['nationality'] ) && is_array( $staff_member['nationality'] ) ) : ?>
+						<?php if ( in_array( 'date_of_birth', $squad_elements, true ) && $staff_member['age2'] ) : ?>
+							<div class="squad-blocks__player-param d-flex anwp-border-light">
+								<span class="squad-blocks__player-param-title anwp-text-sm anwp-opacity-70"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?></span>
+								<span class="squad-blocks__player-param-value ml-auto anwp-text-base"><?php echo esc_html( $staff_member['age2'] ); ?></span>
+							</div>
+						<?php endif; ?>
+
+						<?php if ( in_array( 'nationalities', $squad_elements, true ) && ! empty( $staff_member['nationality'] ) && is_array( $staff_member['nationality'] ) ) : ?>
 							<div class="squad-blocks__player-param d-flex">
 								<span class="squad-blocks__player-param-title anwp-text-sm anwp-opacity-70"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__nationality', __( 'Nationality', 'anwp-football-leagues' ) ) ); ?></span>
 								<span class="squad-blocks__player-param-value ml-auto anwp-text-base">
 									<?php
 									foreach ( $staff_member ['nationality'] as $country_code ) :
-										anwp_football_leagues()->load_partial(
+										anwp_fl()->load_partial(
 											[
 												'class'        => 'options__flag',
 												'size'         => 32,
@@ -247,7 +264,7 @@ $positions_l10n = [
 
 		if ( $staff_group ) :
 
-			anwp_football_leagues()->load_partial(
+			anwp_fl()->load_partial(
 				[
 					'text'  => $staff_group,
 					'class' => empty( $squad ) ? '' : 'mt-5',
@@ -275,20 +292,27 @@ $positions_l10n = [
 
 					<div class="squad-blocks__name mb-auto anwp-text-lg anwp-font-semibold"><?php echo esc_html( $staff_group_item['name'] ); ?></div>
 
-					<?php if ( $staff_group_item['age'] ) : ?>
+					<?php if ( in_array( 'age', $squad_elements, true ) && $staff_group_item['age2'] ) : ?>
 						<div class="squad-blocks__player-param d-flex anwp-border-light">
 							<span class="squad-blocks__player-param-title anwp-text-sm anwp-opacity-70"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?></span>
 							<span class="squad-blocks__player-param-value ml-auto anwp-text-base"><?php echo esc_html( $staff_group_item['age'] ); ?></span>
 						</div>
 					<?php endif; ?>
 
-					<?php if ( ! empty( $staff_group_item['nationality'] ) && is_array( $staff_group_item['nationality'] ) ) : ?>
+					<?php if ( in_array( 'date_of_birth', $squad_elements, true ) && $staff_group_item['age2'] ) : ?>
+						<div class="squad-blocks__player-param d-flex anwp-border-light">
+							<span class="squad-blocks__player-param-title anwp-text-sm anwp-opacity-70"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?></span>
+							<span class="squad-blocks__player-param-value ml-auto anwp-text-base"><?php echo esc_html( $staff_group_item['age2'] ); ?></span>
+						</div>
+					<?php endif; ?>
+
+					<?php if ( in_array( 'nationalities', $squad_elements, true ) && ! empty( $staff_group_item['nationality'] ) && is_array( $staff_group_item['nationality'] ) ) : ?>
 						<div class="squad-blocks__player-param d-flex">
 							<span class="squad-blocks__player-param-title anwp-text-sm anwp-opacity-70"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__nationality', __( 'Nationality', 'anwp-football-leagues' ) ) ); ?></span>
 							<span class="squad-blocks__player-param-value ml-auto anwp-text-base">
 								<?php
 								foreach ( $staff_group_item ['nationality'] as $country_code ) :
-									anwp_football_leagues()->load_partial(
+									anwp_fl()->load_partial(
 										[
 											'class'        => 'options__flag',
 											'size'         => 32,

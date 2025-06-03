@@ -197,11 +197,11 @@ class AnWPFL_Assets {
 			'anwpflGlobals',
 			[
 				'ajaxNonce'    => wp_create_nonce( 'ajax_anwpfl_nonce' ),
-				'selectorHtml' => anwp_football_leagues()->include_selector_modaal(),
-				'countries'    => anwp_football_leagues()->helper->get_select2_formatted_options( anwp_football_leagues()->data->cb_get_countries() ),
-				'clubs'        => anwp_football_leagues()->helper->get_select2_formatted_options( anwp_football_leagues()->club->get_clubs_options() ),
-				'seasons'      => anwp_football_leagues()->helper->get_select2_formatted_options( anwp_football_leagues()->season->get_seasons_options() ),
-				'leagues'      => anwp_football_leagues()->helper->get_select2_formatted_options( anwp_football_leagues()->league->get_league_options() ),
+				'selectorHtml' => anwp_fl()->include_selector_modaal(),
+				'countries'    => anwp_fl()->helper->get_select2_formatted_options( anwp_fl()->data->cb_get_countries() ),
+				'clubs'        => anwp_fl()->helper->get_select2_formatted_options( anwp_fl()->club->get_clubs_options() ),
+				'seasons'      => anwp_fl()->helper->get_select2_formatted_options( anwp_fl()->season->get_seasons_options() ),
+				'leagues'      => anwp_fl()->helper->get_select2_formatted_options( anwp_fl()->league->get_league_options() ),
 			]
 		);
 

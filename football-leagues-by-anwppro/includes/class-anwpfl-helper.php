@@ -2513,7 +2513,7 @@ class AnWPFL_Helper {
 
 		$output = [];
 
-		if ( '/%postname%/' === get_option( 'permalink_structure' ) && 'yes' === AnWPFL_Options::get_value( 'simple_permalink_slug_building' ) ) {
+		if ( $this->plugin->cache->simple_link_building ) {
 			$post_type_short = sanitize_key( str_replace( 'anwp_', '', $post_type ) );
 
 			$permalink_slug = $this->plugin->options->get_permalink_structure()[ $post_type_short ] ?? $post_type_short;

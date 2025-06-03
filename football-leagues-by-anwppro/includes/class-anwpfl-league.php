@@ -180,24 +180,48 @@ class AnWPFL_League extends Taxonomy_Core {
 	 * @since 0.5.1 (2018-03-22)
 	 * @return array $output_data - Array <league_id> => <league_title>.
 	 */
-	public function get_league_options() {
+	public function get_league_options(): array {
 
-		static $output_data = null;
+		$cache_key   = 'FL-LEAGUE-OPTIONS';
+		$cached_data = anwp_fl()->cache->get( $cache_key );
 
-		if ( null === $output_data ) {
-			$output_data = get_terms(
-				[
-					'taxonomy'         => 'anwp_league',
-					'suppress_filters' => false,
-					'hide_empty'       => false,
-					'orderby'          => 'name',
-					'order'            => 'ASC',
-					'fields'           => 'id=>name',
-				]
+		if ( $cached_data ) {
+			return $cached_data;
+		}
+
+		static $term_data = null;
+
+		if ( null === $term_data ) {
+			global $wpdb;
+
+			$term_data = $wpdb->get_results(
+				"
+				SELECT t.term_id, t.name
+				FROM $wpdb->terms AS t
+				INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id
+				WHERE tt.taxonomy = 'anwp_league'
+			",
+				OBJECT_K
+			); // phpcs:ignore WordPress.DB.PreparedSQL
+
+			$term_data = array_map(
+				function ( $term ) {
+					return $term->name;
+				},
+				$term_data
 			);
 		}
 
-		return $output_data;
+		/*
+		|--------------------------------------------------------------------
+		| Save transient
+		|--------------------------------------------------------------------
+		*/
+		if ( ! empty( $term_data ) ) {
+			anwp_fl()->cache->set( $cache_key, $term_data );
+		}
+
+		return $term_data ?? [];
 	}
 
 	/**

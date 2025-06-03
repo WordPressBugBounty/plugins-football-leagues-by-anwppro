@@ -1805,24 +1805,41 @@ class AnWPFL_Player extends AnWPFL_DB {
 	 * @return array
 	 */
 	public function get_player_obj_list( array $squad_position_map = [] ): array {
+
 		global $wpdb;
 
-		$all_players = $wpdb->get_results(
+		$use_lighter_version = apply_filters( 'anwpfl/player/use_lighter_player_obj_list', false );
+
+		if ( $use_lighter_version ) {
+			$all_players = $wpdb->get_results(
+				"
+			SELECT `player_id` as id, `name` as name, `short_name`, `team_id` as club_id, `position`, `nationality` as country
+			FROM $wpdb->anwpfl_player_data
+			ORDER BY name
 			"
+			) ?: [];
+
+			foreach ( $all_players as $player ) {
+				$player->id = absint( $player->id );
+			}
+		} else {
+			$all_players = $wpdb->get_results(
+				"
 			SELECT `player_id` as id, `name` as name, `short_name`, `team_id` as club_id, `position`, `nationality` as country, `date_of_birth` as birthdate, `photo`
 			FROM $wpdb->anwpfl_player_data
 			ORDER BY name
 			"
-		) ?: [];
+			) ?: [];
 
-		foreach ( $all_players as $player ) {
-			$player->id        = absint( $player->id );
-			$player->birthdate = '0000-00-00' !== $player->birthdate ? date_i18n( 'M j, Y', strtotime( $player->birthdate ) ) : '';
-			$player->country2  = '';
-			$player->photo     = $player->photo ? anwp_fl()->upload_dir . $player->photo : '';
+			foreach ( $all_players as $player ) {
+				$player->id        = absint( $player->id );
+				$player->birthdate = '0000-00-00' !== $player->birthdate ? date_i18n( 'M j, Y', strtotime( $player->birthdate ) ) : '';
+				$player->country2  = '';
+				$player->photo     = $player->photo ? anwp_fl()->upload_dir . $player->photo : '';
 
-			if ( ! empty( $squad_position_map[ $player->id ] ) && $squad_position_map[ $player->id ] !== $player->position ) {
-				$player->position = $squad_position_map[ $player->id ];
+				if ( ! empty( $squad_position_map[ $player->id ] ) && $squad_position_map[ $player->id ] !== $player->position ) {
+					$player->position = $squad_position_map[ $player->id ];
+				}
 			}
 		}
 

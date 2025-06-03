@@ -45,7 +45,7 @@ if ( 'legacy' === anwp_football_leagues()->customizer->get_value( 'general', 'fl
 static $flags_url = null;
 
 if ( null === $flags_url ) {
-	$flags_url = apply_filters( 'anwpfl/media/modify_url_svg_sprite', AnWP_Football_Leagues::url( 'public/img/flags-v1.svg' ) );
+	$flags_url = apply_filters( 'anwpfl/media/modify_url_svg_sprite', AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) );
 }
 
 /*

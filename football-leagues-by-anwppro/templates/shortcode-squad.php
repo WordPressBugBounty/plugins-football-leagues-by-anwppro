@@ -3,6 +3,7 @@
  * The Template for displaying Club Squad.
  *
  * This template can be overridden by copying it to yourtheme/anwp-football-leagues/shortcode-squad.php.
+ * // ToDO completely rewrite template !!!
  *
  * @var object $data - Object with shortcode data.
  *
@@ -10,7 +11,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.5.0
  *
- * @version       0.16.9
+ * @version       0.16.16
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -34,11 +35,11 @@ $data = (object) wp_parse_args(
 );
 
 // Prepare squad
-$squad         = anwp_football_leagues()->club->tmpl_prepare_club_squad( $data->club_id, $data->season_id, true );
-$squad_display = anwp_football_leagues()->club->get_squad_display_options( $data->club_id, $data->season_id );
+$squad         = anwp_fl()->club->tmpl_prepare_club_squad( $data->club_id, $data->season_id, true );
+$squad_display = anwp_fl()->club->get_squad_display_options( $data->club_id, $data->season_id );
 
 // Prepare staff
-$staff = anwp_football_leagues()->club->tmpl_prepare_club_staff( $data->club_id, $data->season_id );
+$staff = anwp_fl()->club->tmpl_prepare_club_staff( $data->club_id, $data->season_id );
 
 // Initialize staff groups
 $staff_group_attached = '';
@@ -54,6 +55,18 @@ $positions_l10n = [
 	'm' => anwp_football_leagues()->get_option_value( 'text_multiple_midfielder' ) ?: $positions['m'],
 	'f' => anwp_football_leagues()->get_option_value( 'text_multiple_forward' ) ?: $positions['f'],
 ];
+
+// Squad elements
+$squad_elements = wp_parse_list( anwp_fl()->customizer->get_value( 'squad', 'squad_elements', 'age,nationalities' ) );
+
+// CSS rows style
+$squad_rows_player_style = 'minmax( 50px, auto ) minmax( 53px, auto ) minmax(0, 1fr)';
+$squad_rows_staff_style  = 'minmax( 53px, auto ) minmax(0, 1fr)';
+
+if ( count( $squad_elements ) ) {
+	$squad_rows_player_style .= ' repeat( ' . count( $squad_elements ) . ', minmax( 50px, auto ) )';
+	$squad_rows_staff_style  .= ' repeat( ' . count( $squad_elements ) . ', minmax( 50px, auto ) )';
+}
 ?>
 <div class="anwp-b-wrap squad squad--shortcode <?php echo esc_attr( $data->class ); ?>">
 
@@ -64,7 +77,7 @@ $positions_l10n = [
 	|--------------------------------------------------------------------
 	*/
 	if ( AnWP_Football_Leagues::string_to_bool( $data->header ) ) {
-		anwp_football_leagues()->load_partial(
+		anwp_fl()->load_partial(
 			[
 				'text' => AnWPFL_Text::get_value( 'squad__shortcode__squad', __( 'Squad', 'anwp-football-leagues' ) ),
 			],
@@ -75,7 +88,7 @@ $positions_l10n = [
 
 	<?php
 	if ( empty( $squad ) ) :
-		anwp_football_leagues()->load_partial(
+		anwp_fl()->load_partial(
 			[
 				'no_data_text' => AnWPFL_Text::get_value( 'squad__shortcode__no_players_in_the_squad', __( 'No players in the squad', 'anwp-football-leagues' ) ),
 			],
@@ -83,34 +96,43 @@ $positions_l10n = [
 		);
 	else :
 		?>
-		<div class="anwp-grid-table squad-rows anwp-text-center anwp-border-light">
-			<?php
-			foreach ( $positions_l10n as $position_slug => $position_title ) :
-
+		<div class="anwp-grid-table squad-rows anwp-text-center anwp-border-light" style="grid-template-columns: <?php echo esc_html( $squad_rows_player_style ); ?>;">
+			<?php foreach ( $positions_l10n as $position_slug => $position_title ) : ?>
+				<?php
 				/*
 				|--------------------------------------------------------------------
 				| Squad Header
 				|--------------------------------------------------------------------
 				*/
-				if ( $squad_display->group ) :
-					?>
+				?>
+				<?php if ( $squad_display->group ) : ?>
 					<div class="squad-rows__header-title anwp-text-lg anwp-bg-light anwp-text-left px-3 py-1">
 						<?php echo esc_html( $position_title ); ?>
 					</div>
-					<div class="squad-rows__header-param anwp-text-sm anwp-bg-light py-1 d-flex align-items-center justify-content-center px-2 anwp-grid-table__sm-none">
-						<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?>
-					</div>
-					<div class="squad-rows__header-param anwp-text-sm anwp-bg-light py-1 d-flex justify-content-center align-items-center px-2 anwp-grid-table__sm-none">
-						<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__nationality', __( 'Nationality', 'anwp-football-leagues' ) ) ); ?>
-					</div>
-					<?php
-				endif;
-
+					<?php if ( in_array( 'date_of_birth', $squad_elements, true ) ) : ?>
+						<div class="squad-rows__header-param anwp-text-sm anwp-bg-light py-1 d-flex align-items-center justify-content-center px-2 anwp-grid-table__sm-none">
+							<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ( in_array( 'age', $squad_elements, true ) ) : ?>
+						<div class="squad-rows__header-param anwp-text-sm anwp-bg-light py-1 d-flex align-items-center justify-content-center px-2 anwp-grid-table__sm-none">
+							<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ( in_array( 'nationalities', $squad_elements, true ) ) : ?>
+						<div class="squad-rows__header-param anwp-text-sm anwp-bg-light py-1 d-flex justify-content-center align-items-center px-2 anwp-grid-table__sm-none">
+							<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__nationality', __( 'Nationality', 'anwp-football-leagues' ) ) ); ?>
+						</div>
+					<?php endif; ?>
+				<?php endif; ?>
+				<?php
 				/*
 				|--------------------------------------------------------------------
 				| Squad Data
 				|--------------------------------------------------------------------
 				*/
+				?>
+				<?php
 				foreach ( $squad as $player_id => $player ) :
 					if ( $player['position'] !== $position_slug && $squad_display->group ) {
 						continue;
@@ -153,7 +175,7 @@ $positions_l10n = [
 
 						<div class="d-none anwp-grid-table__sm-flex align-items-center">
 							<?php
-							if ( $player['nationalities'] ?? '' ) :
+							if ( ( $player['nationalities'] ?? '' ) && in_array( 'nationalities', $squad_elements, true ) ) :
 								foreach ( $player['nationalities'] as $country_code ) :
 									anwp_fl()->load_partial(
 										[
@@ -173,31 +195,51 @@ $positions_l10n = [
 								<div class="anwp-text-xs anwp-opacity-30 mx-2">|</div>
 							<?php endif; ?>
 
-							<div class="squad-rows__age-title-mobile mx-2 anwp-opacity-70">
-								<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?>:
-							</div>
-							<div class="squad-rows__age-mobile anwp-text-lg"><?php echo esc_html( $player['age'] ?: '-' ); ?></div>
+							<?php if ( in_array( 'age', $squad_elements, true ) ) : ?>
+								<div class="squad-rows__age-title-mobile mx-2 anwp-opacity-70">
+									<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?>:
+								</div>
+								<div class="squad-rows__age-mobile anwp-text-lg"><?php echo esc_html( $player['age'] ?: '-' ); ?></div>
+							<?php endif; ?>
+
+							<?php if ( in_array( 'date_of_birth', $squad_elements, true ) && $player['age2'] ) : ?>
+								<div class="squad-rows__age-title-mobile mx-2 anwp-opacity-70">
+									<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?>:
+								</div>
+								<div class="squad-rows__age-mobile anwp-text-sm"><?php echo esc_html( $player['age2'] ); ?></div>
+							<?php endif; ?>
 						</div>
 					</div>
-					<div class="squad-rows__age px-2 pt-2 anwp-text-xl anwp-grid-table__sm-none d-flex align-items-center">
-						<?php echo esc_html( $player['age'] ?: '-' ); ?>
-					</div>
-					<div class="squad-rows__nationality px-2 pt-1 d-flex anwp-grid-table__sm-none justify-content-center d-flex align-items-center">
-						<?php
-						if ( $player['nationalities'] ?? '' ) :
-							foreach ( $player['nationalities'] as $country_code ) :
-								anwp_fl()->load_partial(
-									[
-										'class'        => 'options__flag',
-										'size'         => 32,
-										'country_code' => $country_code,
-									],
-									'general/flag'
-								);
-							endforeach;
-						endif;
-						?>
-					</div>
+					<?php if ( in_array( 'date_of_birth', $squad_elements, true ) ) : ?>
+						<div class="squad-rows__age px-2 pt-2 anwp-text-sm anwp-grid-table__sm-none d-flex align-items-center">
+							<?php echo esc_html( $player['age2'] ) ?: '-'; ?>
+						</div>
+					<?php endif; ?>
+
+					<?php if ( in_array( 'age', $squad_elements, true ) ) : ?>
+						<div class="squad-rows__age px-2 pt-2 anwp-text-xl anwp-grid-table__sm-none d-flex align-items-center">
+							<?php echo esc_html( $player['age'] ?: '-' ); ?>
+						</div>
+					<?php endif; ?>
+
+					<?php if ( in_array( 'nationalities', $squad_elements, true ) ) : ?>
+						<div class="squad-rows__nationality px-2 pt-1 d-flex anwp-grid-table__sm-none justify-content-center d-flex align-items-center">
+							<?php
+							if ( $player['nationalities'] ?? '' ) :
+								foreach ( $player['nationalities'] as $country_code ) :
+									anwp_fl()->load_partial(
+										[
+											'class'        => 'options__flag',
+											'size'         => 32,
+											'country_code' => $country_code,
+										],
+										'general/flag'
+									);
+								endforeach;
+							endif;
+							?>
+						</div>
+					<?php endif; ?>
 					<?php
 				endforeach;
 
@@ -222,12 +264,21 @@ $positions_l10n = [
 					<div class="squad-rows__header-title anwp-text-lg anwp-bg-light anwp-text-left px-3 py-1">
 						<?php echo esc_html( $staff_member['job'] ); ?>
 					</div>
-					<div class="squad-rows__header-param anwp-text-sm anwp-bg-light py-1 d-flex align-items-center justify-content-center px-2 anwp-grid-table__sm-none">
-						<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?>
-					</div>
-					<div class="squad-rows__header-param anwp-text-sm anwp-bg-light py-1 d-flex justify-content-center align-items-center px-2 anwp-grid-table__sm-none">
-						<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__nationality', __( 'Nationality', 'anwp-football-leagues' ) ) ); ?>
-					</div>
+					<?php if ( in_array( 'date_of_birth', $squad_elements, true ) ) : ?>
+						<div class="squad-rows__header-param anwp-text-sm anwp-bg-light py-1 d-flex align-items-center justify-content-center px-2 anwp-grid-table__sm-none">
+							<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ( in_array( 'age', $squad_elements, true ) ) : ?>
+						<div class="squad-rows__header-param anwp-text-sm anwp-bg-light py-1 d-flex align-items-center justify-content-center px-2 anwp-grid-table__sm-none">
+							<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ( in_array( 'nationalities', $squad_elements, true ) ) : ?>
+						<div class="squad-rows__header-param anwp-text-sm anwp-bg-light py-1 d-flex justify-content-center align-items-center px-2 anwp-grid-table__sm-none">
+							<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__nationality', __( 'Nationality', 'anwp-football-leagues' ) ) ); ?>
+						</div>
+					<?php endif; ?>
 					<?php $staff_group_attached = $staff_member['job']; ?>
 				<?php endif; ?>
 
@@ -245,7 +296,7 @@ $positions_l10n = [
 					</a>
 					<div class="d-none anwp-grid-table__sm-flex align-items-center">
 						<?php
-						if ( ! empty( $staff_member['nationality'] ) && is_array( $staff_member['nationality'] ) ) :
+						if ( ! empty( $staff_member['nationality'] ) && is_array( $staff_member['nationality'] ) && in_array( 'nationalities', $squad_elements, true ) ) :
 							foreach ( $staff_member['nationality'] as $country_code ) :
 								anwp_football_leagues()->load_partial(
 									[
@@ -259,32 +310,48 @@ $positions_l10n = [
 							endforeach;
 						endif;
 						?>
-
-						<div class="squad-rows__age-title-mobile mr-1 anwp-opacity-70">
-							<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?>:
-						</div>
-						<div class="squad-rows__age-mobile anwp-text-lg"><?php echo esc_html( $staff_member['age'] ?: '-' ); ?></div>
+						<?php if ( in_array( 'age', $squad_elements, true ) ) : ?>
+							<div class="squad-rows__age-title-mobile mr-1 anwp-opacity-70">
+								<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?>:
+							</div>
+							<div class="squad-rows__age-mobile anwp-text-lg"><?php echo esc_html( $staff_member['age'] ?: '-' ); ?></div>
+						<?php endif; ?>
+						<?php if ( in_array( 'date_of_birth', $squad_elements, true ) ) : ?>
+							<div class="squad-rows__age-title-mobile mr-1 anwp-opacity-70">
+								<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?>:
+							</div>
+							<div class="squad-rows__age-mobile anwp-text-sm"><?php echo esc_html( $staff_member['age2'] ) ?: '-'; ?></div>
+						<?php endif; ?>
 					</div>
 				</div>
-				<div class="squad-rows__age px-2 pt-2 anwp-text-xl anwp-grid-table__sm-none d-flex align-items-center">
-					<?php echo esc_html( $staff_member['age'] ?: '-' ); ?>
-				</div>
-				<div class="squad-rows__nationality px-2 pt-1 d-flex  justify-content-center anwp-grid-table__sm-none d-flex align-items-center">
-					<?php
-					if ( ! empty( $staff_member['nationality'] ) && is_array( $staff_member['nationality'] ) ) :
-						foreach ( $staff_member['nationality'] as $country_code ) :
-							anwp_football_leagues()->load_partial(
-								[
-									'class'        => 'options__flag',
-									'size'         => 32,
-									'country_code' => $country_code,
-								],
-								'general/flag'
-							);
-						endforeach;
-					endif;
-					?>
-				</div>
+				<?php if ( in_array( 'date_of_birth', $squad_elements, true ) ) : ?>
+					<div class="squad-rows__age px-2 pt-2 anwp-text-sm anwp-grid-table__sm-none d-flex align-items-center">
+						<?php echo esc_html( $staff_member['age2'] ) ?: '-'; ?>
+					</div>
+				<?php endif; ?>
+				<?php if ( in_array( 'age', $squad_elements, true ) ) : ?>
+					<div class="squad-rows__age px-2 pt-2 anwp-text-xl anwp-grid-table__sm-none d-flex align-items-center">
+						<?php echo esc_html( $staff_member['age'] ?: '-' ); ?>
+					</div>
+				<?php endif; ?>
+				<?php if ( in_array( 'nationalities', $squad_elements, true ) ) : ?>
+					<div class="squad-rows__nationality px-2 pt-1 d-flex  justify-content-center anwp-grid-table__sm-none d-flex align-items-center">
+						<?php
+						if ( ! empty( $staff_member['nationality'] ) && is_array( $staff_member['nationality'] ) ) :
+							foreach ( $staff_member['nationality'] as $country_code ) :
+								anwp_fl()->load_partial(
+									[
+										'class'        => 'options__flag',
+										'size'         => 32,
+										'country_code' => $country_code,
+									],
+									'general/flag'
+								);
+							endforeach;
+						endif;
+						?>
+					</div>
+				<?php endif; ?>
 			<?php endforeach; ?>
 		</div>
 	<?php endif; ?>
@@ -317,7 +384,7 @@ $positions_l10n = [
 		endif;
 		?>
 
-		<div class="anwp-grid-table squad-rows squad-rows__staff anwp-text-center anwp-border-light">
+		<div class="anwp-grid-table squad-rows squad-rows__staff anwp-text-center anwp-border-light" style="grid-template-columns: <?php echo esc_html( $squad_rows_staff_style ); ?>;">
 			<?php
 			foreach ( $staff_group_items as $staff_group_item_id => $staff_group_item ) :
 				/*
@@ -330,12 +397,16 @@ $positions_l10n = [
 					<div class="squad-rows__header-title anwp-text-lg anwp-bg-light anwp-text-left px-3 py-1">
 						<?php echo esc_html( $staff_group_item['job'] ); ?>
 					</div>
-					<div class="squad-rows__header-param anwp-text-sm anwp-bg-light py-1 d-flex align-items-center justify-content-center px-2 anwp-grid-table__sm-none">
-						<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?>
-					</div>
-					<div class="squad-rows__header-param anwp-text-sm anwp-bg-light py-1 d-flex justify-content-center align-items-center px-2 anwp-grid-table__sm-none">
-						<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__nationality', __( 'Nationality', 'anwp-football-leagues' ) ) ); ?>
-					</div>
+					<?php if ( in_array( 'age', $squad_elements, true ) ) : ?>
+						<div class="squad-rows__header-param anwp-text-sm anwp-bg-light py-1 d-flex align-items-center justify-content-center px-2 anwp-grid-table__sm-none">
+							<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ( in_array( 'nationalities', $squad_elements, true ) ) : ?>
+						<div class="squad-rows__header-param anwp-text-sm anwp-bg-light py-1 d-flex justify-content-center align-items-center px-2 anwp-grid-table__sm-none">
+							<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__nationality', __( 'Nationality', 'anwp-football-leagues' ) ) ); ?>
+						</div>
+					<?php endif; ?>
 					<?php $staff_job = $staff_group_item['job']; ?>
 				<?php endif; ?>
 
@@ -352,7 +423,7 @@ $positions_l10n = [
 					</a>
 					<div class="d-none anwp-grid-table__sm-flex align-items-center">
 						<?php
-						if ( ! empty( $staff_group_item['nationality'] ) && is_array( $staff_group_item['nationality'] ) ) :
+						if ( ! empty( $staff_group_item['nationality'] ) && is_array( $staff_group_item['nationality'] ) && in_array( 'nationalities', $squad_elements, true ) ) :
 							foreach ( $staff_group_item['nationality'] as $country_code ) :
 								anwp_football_leagues()->load_partial(
 									[
@@ -366,32 +437,48 @@ $positions_l10n = [
 							endforeach;
 						endif;
 						?>
-
-						<div class="squad-rows__age-title-mobile mr-1 anwp-opacity-70">
-							<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?>:
-						</div>
-						<div class="squad-rows__age-mobile anwp-text-lg"><?php echo esc_html( $staff_group_item['age'] ); ?></div>
+						<?php if ( in_array( 'age', $squad_elements, true ) ) : ?>
+							<div class="squad-rows__age-title-mobile mr-1 anwp-opacity-70">
+								<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?>:
+							</div>
+							<div class="squad-rows__age-mobile anwp-text-lg"><?php echo esc_html( $staff_group_item['age'] ?: '-' ); ?></div>
+						<?php endif; ?>
+						<?php if ( in_array( 'date_of_birth', $squad_elements, true ) ) : ?>
+							<div class="squad-rows__age-title-mobile mr-1 anwp-opacity-70">
+								<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?>:
+							</div>
+							<div class="squad-rows__age-mobile anwp-text-sm"><?php echo esc_html( $staff_group_item['age2'] ) ?: '-'; ?></div>
+						<?php endif; ?>
 					</div>
 				</div>
-				<div class="squad-rows__age px-2 pt-2 anwp-text-xl anwp-grid-table__sm-none d-flex align-items-center">
-					<?php echo esc_html( $staff_group_item['age'] ?: '-' ); ?>
-				</div>
-				<div class="squad-rows__nationality px-2 pt-1 d-flex justify-content-center anwp-grid-table__sm-none d-flex align-items-center">
-					<?php
-					if ( ! empty( $staff_group_item['nationality'] ) && is_array( $staff_group_item['nationality'] ) ) :
-						foreach ( $staff_group_item['nationality'] as $country_code ) :
-							anwp_football_leagues()->load_partial(
-								[
-									'class'        => 'options__flag',
-									'size'         => 32,
-									'country_code' => $country_code,
-								],
-								'general/flag'
-							);
-						endforeach;
-					endif;
-					?>
-				</div>
+				<?php if ( in_array( 'date_of_birth', $squad_elements, true ) ) : ?>
+					<div class="squad-rows__age px-2 pt-2 anwp-text-sm anwp-grid-table__sm-none d-flex align-items-center">
+						<?php echo esc_html( $staff_group_item['age2'] ) ?: '-'; ?>
+					</div>
+				<?php endif; ?>
+				<?php if ( in_array( 'age', $squad_elements, true ) ) : ?>
+					<div class="squad-rows__age px-2 pt-2 anwp-text-xl anwp-grid-table__sm-none d-flex align-items-center">
+						<?php echo esc_html( $staff_group_item['age'] ?: '-' ); ?>
+					</div>
+				<?php endif; ?>
+				<?php if ( in_array( 'nationalities', $squad_elements, true ) ) : ?>
+					<div class="squad-rows__nationality px-2 pt-1 d-flex justify-content-center anwp-grid-table__sm-none d-flex align-items-center">
+						<?php
+						if ( ! empty( $staff_group_item['nationality'] ) && is_array( $staff_group_item['nationality'] ) ) :
+							foreach ( $staff_group_item['nationality'] as $country_code ) :
+								anwp_football_leagues()->load_partial(
+									[
+										'class'        => 'options__flag',
+										'size'         => 32,
+										'country_code' => $country_code,
+									],
+									'general/flag'
+								);
+							endforeach;
+						endif;
+						?>
+					</div>
+				<?php endif; ?>
 			<?php endforeach; ?>
 		</div>
 	<?php endforeach; ?>

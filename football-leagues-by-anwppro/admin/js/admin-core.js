@@ -21057,8 +21057,14 @@ This will fail in production.`
           };
           if ("home" === gameStore.modalData.playerContext) {
             gameStore.modalData.playerAppendStart ? gameStore.active.playersHomeStart.push(playerObj) : gameStore.active.playersHomeSubs.push(playerObj);
+            if (Number(gameStore.appConfig.squadHomeNumbers[player.id])) {
+              gameStore.customNumbers[player.id] = Number(gameStore.appConfig.squadHomeNumbers[player.id]);
+            }
           } else {
             gameStore.modalData.playerAppendStart ? gameStore.active.playersAwayStart.push(playerObj) : gameStore.active.playersAwaySubs.push(playerObj);
+            if (Number(gameStore.appConfig.squadAwayNumbers[player.id])) {
+              gameStore.customNumbers[player.id] = Number(gameStore.appConfig.squadAwayNumbers[player.id]);
+            }
           }
         } else if ("home-missing" === gameStore.modalData.playerContext || "away-missing" === gameStore.modalData.playerContext) {
           let missing = {

@@ -64,6 +64,17 @@ class AnWPFL_Upgrade {
 			update_option( 'anwpfl_data_schema', empty( $this->get_toolbox_updater_tasks( 'tasks' ) ) ? 16 : 15, true );
 		}
 
+		/*
+		|--------------------------------------------------------------------
+		| New Caching System v0.16.16
+		|--------------------------------------------------------------------
+		*/
+		if ( version_compare( $version_saved, '0.16.15.1', '<' ) ) {
+			if ( wp_using_ext_object_cache() && 'no' !== AnWPFL_Options::get_value( 'cache_active' ) ) {
+				anwp_fl()->cache->flush_all_cache_v1();
+			}
+		}
+
 		update_option( 'anwpfl_version', $version_current, true );
 	}
 

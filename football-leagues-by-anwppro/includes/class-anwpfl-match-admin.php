@@ -112,38 +112,43 @@ class AnWPFL_Match_Admin {
 	 * @param integer $post_id ID of post to display column for.
 	 */
 	public function columns_display( string $column, int $post_id ) {
-		global $post;
+
+		static $game_data = [];
+
+		if ( ! isset( $game_data[ $post_id ] ) ) {
+			$game_data[ $post_id ] = anwp_fl()->match->get_game_data( $post_id );
+		}
 
 		switch ( $column ) {
 
 			case '_fl_match_competition':
 				// Get competition title
-				$competition = anwp_fl()->competition->get_competition( $post->_fl_competition_id );
+				$competition = anwp_fl()->competition->get_competition_data_full( $game_data[ $post_id ]['competition_id'] );
 
 				if ( ! $competition ) {
 					return;
 				}
 
-				echo '<span class="anwp-admin-competition-icon"></span> <strong>' . esc_html( $competition->title ) . '</strong><br>';
+				echo '<span class="anwp-admin-competition-icon"></span> <strong>' . esc_html( $competition['title'] ) . '</strong><br>';
 
 				// Stage title
-				if ( '' !== $competition->multistage && $competition->stage_title ) {
-					echo '<strong>' . esc_html__( 'Stage', 'anwp-football-leagues' ) . ':</strong> ' . esc_html( $competition->stage_title ) . '<br>';
+				if ( '' !== $competition['multistage'] && $competition['stage_title'] ) {
+					echo '<strong>' . esc_html__( 'Stage', 'anwp-football-leagues' ) . ':</strong> ' . esc_html( $competition['stage_title'] ) . '<br>';
 				}
 
 				// Season
-				if ( ! empty( $competition->season_text ) ) {
-					echo '<strong>' . esc_html__( 'Season', 'anwp-football-leagues' ) . ':</strong> ' . esc_html( $competition->season_text ) . '<br>';
+				if ( ! empty( $competition['season_text'] ) ) {
+					echo '<strong>' . esc_html__( 'Season', 'anwp-football-leagues' ) . ':</strong> ' . esc_html( $competition['season_text'] ) . '<br>';
 				}
 
-				if ( 'knockout' === $competition->type ) {
-					$round_id = $post->_fl_match_week ?: 1;
+				if ( 'knockout' === $competition['type'] ) {
+					$round_id = $game_data[ $post_id ]['match_week'] ?: 1;
 
 					if ( $round_id ) {
 						$round_title = '';
 
-						if ( ! empty( $competition->rounds ) && is_array( $competition->rounds ) ) {
-							foreach ( $competition->rounds as $round ) {
+						if ( ! empty( $competition['rounds'] ) && is_array( $competition['rounds'] ) ) {
+							foreach ( $competition['rounds'] as $round ) {
 								if ( intval( $round_id ) === intval( $round->id ) && ! empty( $round->title ) ) {
 									$round_title = trim( $round->title );
 									break;
@@ -154,25 +159,25 @@ class AnWPFL_Match_Admin {
 						echo '<strong>' . esc_html__( 'Round', 'anwp-football-leagues' ) . ' #' . intval( $round_id ) . ':</strong> ' . esc_html( $round_title );
 					}
 				} else {
-					echo '<strong>' . esc_html__( 'MatchWeek', 'anwp-football-leagues' ) . ':</strong> ' . esc_html( $post->_fl_match_week ) . '<br>';
+					echo '<strong>' . esc_html__( 'MatchWeek', 'anwp-football-leagues' ) . ':</strong> ' . esc_html( $game_data[ $post_id ]['match_week'] ) . '<br>';
 				}
 				break;
 
 			case '_fl_match_scores':
 				// HOME
-				echo '<span class="anwp-text-nowrap"><span class="anwp-admin-table-scores">' . ( absint( $post->_fl_finished ) ? absint( $post->_fl_home_goals ) : '-' ) . '</span>';
+				echo '<span class="anwp-text-nowrap"><span class="anwp-admin-table-scores">' . ( absint( $game_data[ $post_id ]['finished'] ) ? absint( $game_data[ $post_id ]['home_goals'] ) : '-' ) . '</span>';
 				$clubs_options = $this->plugin->club->get_clubs_options();
 
-				if ( ! empty( $clubs_options[ $post->_fl_home_club ] ) ) {
-					echo esc_html( $clubs_options[ $post->_fl_home_club ] ) . '</span><br>';
+				if ( ! empty( $clubs_options[ $game_data[ $post_id ]['home_club'] ] ) ) {
+					echo esc_html( $clubs_options[ $game_data[ $post_id ]['home_club'] ] ) . '</span><br>';
 				}
 
 				// AWAY
-				echo '<span class="anwp-text-nowrap"><span class="anwp-admin-table-scores">' . ( absint( $post->_fl_finished ) ? absint( $post->_fl_away_goals ) : '-' ) . '</span>';
+				echo '<span class="anwp-text-nowrap"><span class="anwp-admin-table-scores">' . ( absint( $game_data[ $post_id ]['finished'] ) ? absint( $game_data[ $post_id ]['away_goals'] ) : '-' ) . '</span>';
 				$clubs_options = $this->plugin->club->get_clubs_options();
 
-				if ( ! empty( $clubs_options[ $post->_fl_away_club ] ) ) {
-					echo esc_html( $clubs_options[ $post->_fl_away_club ] );
+				if ( ! empty( $clubs_options[ $game_data[ $post_id ]['away_club'] ] ) ) {
+					echo esc_html( $clubs_options[ $game_data[ $post_id ]['away_club'] ] );
 				}
 
 				echo '</span>';
@@ -180,8 +185,8 @@ class AnWPFL_Match_Admin {
 				break;
 
 			case '_fl_match_datetime':
-				if ( ! empty( $post->_fl_kickoff ) && '0000-00-00 00:00:00' !== $post->_fl_kickoff ) {
-					echo esc_html( date_i18n( 'M j, Y', strtotime( $post->_fl_kickoff ) ) ) . '<br>' . esc_html( date( 'H:i', strtotime( $post->_fl_kickoff ) ) );
+				if ( ! empty( $game_data[ $post_id ]['kickoff'] ) && '0000-00-00 00:00:00' !== $game_data[ $post_id ]['kickoff'] ) {
+					echo esc_html( date_i18n( 'M j, Y', strtotime( $game_data[ $post_id ]['kickoff'] ) ) ) . '<br>' . esc_html( date( 'H:i', strtotime( $game_data[ $post_id ]['kickoff'] ) ) );
 				}
 
 				break;
@@ -222,68 +227,80 @@ class AnWPFL_Match_Admin {
 		}
 
 		if ( 'edit.php' === $pagenow && 'anwp_match' === $post_type ) {
-			$clauses['join'] .= " LEFT JOIN $wpdb->anwpfl_matches fl_match ON fl_match.match_id = {$wpdb->posts}.ID";
 
-			$game_fields = [
-				'fl_match.competition_id _fl_competition_id',
-				'fl_match.match_week     _fl_match_week',
-				'fl_match.finished       _fl_finished',
-				'fl_match.home_goals     _fl_home_goals',
-				'fl_match.away_goals     _fl_away_goals',
-				'fl_match.home_club      _fl_home_club',
-				'fl_match.away_club      _fl_away_club',
-				'fl_match.kickoff        _fl_kickoff',
-				'fl_match.priority       _fl_priority',
+			$default_data = [
+				'_fl_team_id'        => '',
+				'_fl_finished'       => '',
+				'_fl_league'         => '',
+				'_fl_season'         => '',
+				'_fl_competition_id' => '',
+				'_fl_date_from'      => '',
+				'_fl_date_to'        => '',
+				'_fl_matchweek'      => '',
 			];
-
-			$clauses['fields'] .= ',' . implode( ',', $game_fields );
 
 			$get_data = wp_parse_args(
 				$_GET, // phpcs:ignore WordPress.Security.NonceVerification
-				[
-					'_fl_team_id'        => '',
-					'_fl_finished'       => '',
-					'_fl_league'         => '',
-					'_fl_season'         => '',
-					'_fl_competition_id' => '',
-					'_fl_date_from'      => '',
-					'_fl_date_to'        => '',
-					'_fl_matchweek'      => '',
-				]
+				$default_data
 			);
 
 			$get_data = array_map( 'sanitize_text_field', $get_data );
+			$use_join = false;
 
-			if ( absint( $get_data['_fl_team_id'] ) ) {
-				$clauses['where'] .= $wpdb->prepare( ' AND ( fl_match.home_club = %d OR fl_match.away_club = %d ) ', absint( $get_data['_fl_team_id'] ), absint( $get_data['_fl_team_id'] ) );
+			foreach ( array_keys( $default_data ) as $key ) {
+				if ( '' !== $get_data[ $key ] ) {
+					$use_join = true;
+				}
 			}
 
-			if ( '' !== $get_data['_fl_finished'] ) {
-				$clauses['where'] .= $wpdb->prepare( ' AND fl_match.finished = %d ', absint( $get_data['_fl_finished'] ) );
-			}
+			if ( $use_join ) {
+				$clauses['join'] .= " LEFT JOIN $wpdb->anwpfl_matches fl_match ON fl_match.match_id = {$wpdb->posts}.ID";
 
-			if ( '' !== $get_data['_fl_league'] ) {
-				$clauses['where'] .= $wpdb->prepare( ' AND fl_match.league_id = %d ', absint( $get_data['_fl_league'] ) );
-			}
+				$game_fields = [
+					'fl_match.competition_id _fl_competition_id',
+					'fl_match.match_week     _fl_match_week',
+					'fl_match.finished       _fl_finished',
+					'fl_match.home_goals     _fl_home_goals',
+					'fl_match.away_goals     _fl_away_goals',
+					'fl_match.home_club      _fl_home_club',
+					'fl_match.away_club      _fl_away_club',
+					'fl_match.kickoff        _fl_kickoff',
+					'fl_match.priority       _fl_priority',
+				];
 
-			if ( '' !== $get_data['_fl_season'] ) {
-				$clauses['where'] .= $wpdb->prepare( ' AND fl_match.season_id = %d ', absint( $get_data['_fl_season'] ) );
-			}
+				$clauses['fields'] .= ',' . implode( ',', $game_fields );
 
-			if ( '' !== $get_data['_fl_competition_id'] ) {
-				$clauses['where'] .= $wpdb->prepare( ' AND fl_match.competition_id = %d ', absint( $get_data['_fl_competition_id'] ) );
-			}
+				if ( absint( $get_data['_fl_team_id'] ) ) {
+					$clauses['where'] .= $wpdb->prepare( ' AND ( fl_match.home_club = %d OR fl_match.away_club = %d ) ', absint( $get_data['_fl_team_id'] ), absint( $get_data['_fl_team_id'] ) );
+				}
 
-			if ( '' !== $get_data['_fl_date_from'] ) {
-				$clauses['where'] .= $wpdb->prepare( ' AND fl_match.kickoff >= %s ', $get_data['_fl_date_from'] . ' 00:00:00' );
-			}
+				if ( '' !== $get_data['_fl_finished'] ) {
+					$clauses['where'] .= $wpdb->prepare( ' AND fl_match.finished = %d ', absint( $get_data['_fl_finished'] ) );
+				}
 
-			if ( '' !== $get_data['_fl_date_to'] ) {
-				$clauses['where'] .= $wpdb->prepare( ' AND fl_match.kickoff <= %s ', $get_data['_fl_date_to'] . ' 23:59:59' );
-			}
+				if ( '' !== $get_data['_fl_league'] ) {
+					$clauses['where'] .= $wpdb->prepare( ' AND fl_match.league_id = %d ', absint( $get_data['_fl_league'] ) );
+				}
 
-			if ( '' !== $get_data['_fl_matchweek'] ) {
-				$clauses['where'] .= $wpdb->prepare( ' AND fl_match.match_week = %d ', absint( $get_data['_fl_matchweek'] ) );
+				if ( '' !== $get_data['_fl_season'] ) {
+					$clauses['where'] .= $wpdb->prepare( ' AND fl_match.season_id = %d ', absint( $get_data['_fl_season'] ) );
+				}
+
+				if ( '' !== $get_data['_fl_competition_id'] ) {
+					$clauses['where'] .= $wpdb->prepare( ' AND fl_match.competition_id = %d ', absint( $get_data['_fl_competition_id'] ) );
+				}
+
+				if ( '' !== $get_data['_fl_date_from'] ) {
+					$clauses['where'] .= $wpdb->prepare( ' AND fl_match.kickoff >= %s ', $get_data['_fl_date_from'] . ' 00:00:00' );
+				}
+
+				if ( '' !== $get_data['_fl_date_to'] ) {
+					$clauses['where'] .= $wpdb->prepare( ' AND fl_match.kickoff <= %s ', $get_data['_fl_date_to'] . ' 23:59:59' );
+				}
+
+				if ( '' !== $get_data['_fl_matchweek'] ) {
+					$clauses['where'] .= $wpdb->prepare( ' AND fl_match.match_week = %d ', absint( $get_data['_fl_matchweek'] ) );
+				}
 			}
 		}
 
@@ -338,23 +355,20 @@ class AnWPFL_Match_Admin {
 			| Filter By League
 			|--------------------------------------------------------------------
 			*/
-			$leagues = get_terms(
-				[
-					'taxonomy'   => 'anwp_league',
-					'hide_empty' => false,
-				]
-			);
+			$leagues = anwp_fl()->league->get_league_options();
 
 			if ( ! is_wp_error( $leagues ) && ! empty( $leagues ) ) {
 				// phpcs:ignore WordPress.Security.NonceVerification
 				$league_filter = empty( $_GET['_fl_league'] ) ? '' : (int) $_GET['_fl_league'];
+
+				asort( $leagues );
 				?>
 
 				<select name='_fl_league' id='anwp_league_filter' class='postform'>
 					<option value=''><?php echo esc_html__( 'All Leagues', 'anwp-football-leagues' ); ?></option>
-					<?php foreach ( $leagues as $league ) : ?>
-						<option value="<?php echo esc_attr( $league->term_id ); ?>" <?php selected( $league->term_id, $league_filter ); ?>>
-							<?php echo esc_html( $league->name ); ?>
+					<?php foreach ( $leagues as $league_id => $league_name ) : ?>
+						<option value="<?php echo esc_attr( $league_id ); ?>" <?php selected( $league_id, $league_filter ); ?>>
+							<?php echo esc_html( $league_name ); ?>
 						</option>
 					<?php endforeach; ?>
 				</select>
@@ -362,15 +376,10 @@ class AnWPFL_Match_Admin {
 			}
 
 			// Seasons dropdown
-			$seasons = get_terms(
-				[
-					'taxonomy'   => 'anwp_season',
-					'hide_empty' => false,
-				]
-			);
+			$seasons = anwp_fl()->season->get_seasons_list();
 
 			if ( ! is_wp_error( $seasons ) && ! empty( $seasons ) ) {
-				$seasons = wp_list_sort( $seasons, 'name', 'DESC' );
+				$seasons = wp_list_sort( $seasons, 'title', 'DESC' );
 
 				// phpcs:ignore WordPress.Security.NonceVerification
 				$season_filter = empty( $_GET['_fl_season'] ) ? '' : (int) $_GET['_fl_season'];
@@ -378,8 +387,8 @@ class AnWPFL_Match_Admin {
 				<select name='_fl_season' id='anwp_season_filter' class='postform'>
 					<option value=''><?php echo esc_html__( 'All Seasons', 'anwp-football-leagues' ); ?></option>
 					<?php foreach ( $seasons as $season ) : ?>
-						<option value="<?php echo esc_attr( $season->term_id ); ?>" <?php selected( $season->term_id, $season_filter ); ?>>
-							<?php echo esc_html( $season->name ); ?>
+						<option value="<?php echo esc_attr( $season->id ); ?>" <?php selected( $season->id, $season_filter ); ?>>
+							<?php echo esc_html( $season->title ); ?>
 						</option>
 					<?php endforeach; ?>
 				</select>
@@ -944,16 +953,29 @@ class AnWPFL_Match_Admin {
 	 */
 	public function get_matchweek_options(): array {
 
+		$cache_key = 'FL-MATCHWEEK-OPTIONS';
+
+		if ( anwp_fl()->cache->get( $cache_key ) ) {
+			return anwp_fl()->cache->get( $cache_key );
+		}
+
 		global $wpdb;
 
 		// Get finished matches
-		return $wpdb->get_col(
+		$match_weeks = $wpdb->get_col(
 			"
 			SELECT DISTINCT match_week
 			FROM $wpdb->anwpfl_matches
-			WHERE match_week != 0
-			ORDER BY match_week ASC
 			"
 		) ?: [];
+
+		$match_weeks = array_filter( array_map( 'absint', $match_weeks ) );
+		sort( $match_weeks, SORT_NUMERIC );
+
+		if ( ! empty( $match_weeks ) ) {
+			anwp_fl()->cache->set( $cache_key, $match_weeks );
+		}
+
+		return $match_weeks;
 	}
 }
