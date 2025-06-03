@@ -6878,7 +6878,7 @@ section: Utilities
   padding: 2px 4px;
 }
 .squad-rows.squad-rows--mini {
-  grid-template-columns: minmax(50px, auto) minmax(53px, auto) minmax(0, 1fr);
+  grid-template-columns: minmax(50px, auto) minmax(53px, auto) minmax(0, 1fr) !important;
 }
 .squad-rows.squad-rows--mini .squad-rows__name {
   flex-direction: column;
@@ -6906,7 +6906,7 @@ section: Utilities
 
 @media (max-width: 550px) {
   .squad-rows:not(.squad-rows--mini) {
-    grid-template-columns: minmax(50px, auto) minmax(53px, auto) minmax(0, 1fr);
+    grid-template-columns: minmax(50px, auto) minmax(53px, auto) minmax(0, 1fr) !important;
   }
   .squad-rows:not(.squad-rows--mini) .squad-rows__name {
     flex-direction: column;

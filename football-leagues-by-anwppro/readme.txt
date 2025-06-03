@@ -5,7 +5,7 @@ Tags:              football, soccer, sport
 Requires at least: 5.7
 Requires PHP:      7.0
 Tested up to:      6.8
-Stable tag:        0.16.16
+Stable tag:        0.16.16.1
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,9 @@ Yes! The plugin works with most themes out of the box. If you have any CSS styli
 17. Admin >> Edit Match (Events)
 
 == Changelog ==
+
+= 0.16.16.1 - 2025-06-03 =
+* fixed: Squad - table-rows layout in mobile view
 
 = 0.16.16 - 2025-06-03 =
 * added: option in Squad to show/hide - age/birth date/nationality (Customizer > Football Leagues > Squad)
