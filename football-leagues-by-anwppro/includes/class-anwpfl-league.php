@@ -295,4 +295,38 @@ class AnWPFL_League extends Taxonomy_Core {
 
 		return $output_data[ $league_id ] ?? '';
 	}
+
+	/**
+	 * Generate a unique slug for a league.
+	 *
+	 * @param string $base_slug The base slug to generate a unique version from.
+	 *
+	 * @return string The generated unique slug.
+	 */
+	public function generate_unique_league_slug( string $base_slug ): string {
+		$existing_slugs = get_terms(
+			[
+				'taxonomy'   => 'anwp_league',
+				'fields'     => 'slugs',
+				'hide_empty' => false,
+			]
+		);
+
+		$base_slug = sanitize_title( $base_slug );
+
+		// Use the list of slugs to perform a check
+		if ( is_wp_error( $existing_slugs ) || empty( $existing_slugs ) || ! in_array( $base_slug, $existing_slugs, true ) ) {
+			return $base_slug;
+		}
+
+		$slug_increment = 2;
+		$current_slug   = $base_slug . '-' . $slug_increment;
+
+		while ( in_array( $current_slug, $existing_slugs, true ) ) {
+			++$slug_increment;
+			$current_slug = $base_slug . '-' . $slug_increment;
+		}
+
+		return $current_slug;
+	}
 }

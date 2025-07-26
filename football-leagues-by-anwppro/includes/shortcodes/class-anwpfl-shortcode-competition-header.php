@@ -97,10 +97,12 @@ class AnWPFL_Shortcode_Competition_Header {
 			<tr>
 				<th scope="row"><label for="fl-form-shortcode-id"><?php echo esc_html__( 'Competition ID', 'anwp-football-leagues' ); ?></label></th>
 				<td>
-					<input name="id" data-fl-type="text" type="text" id="fl-form-shortcode-id" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="competition" data-single="yes">
-						<span class="dashicons dashicons-search"></span>
-					</button>
+					<div class="anwp-x-selector" fl-x-data="selectorItem('main_stage',true)">
+						<input name="id" id="fl-form-shortcode-id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
+						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
+							<span class="dashicons dashicons-search"></span>
+						</button>
+					</div>
 				</td>
 			</tr>
 			<tr>

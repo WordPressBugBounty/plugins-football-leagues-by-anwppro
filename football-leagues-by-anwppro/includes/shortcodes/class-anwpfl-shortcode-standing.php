@@ -121,10 +121,13 @@ class AnWPFL_Shortcode_Standing {
 			<tr>
 				<th scope="row"><label for="fl-form-shortcode-exclude_ids"><?php echo esc_html__( 'Exclude Clubs', 'anwp-football-leagues' ); ?></label></th>
 				<td>
-					<input name="exclude_ids" data-fl-type="text" type="text" id="fl-form-shortcode-exclude_ids" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="club" data-single="no">
-						<span class="dashicons dashicons-search"></span>
-					</button>
+					<div class="anwp-x-selector" fl-x-data="selectorItem('club',false)">
+						<input name="exclude_ids" id="fl-form-shortcode-exclude_ids" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
+						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
+							<span class="dashicons dashicons-search"></span>
+						</button>
+					</div>
+
 					<span class="anwp-option-desc"><?php echo esc_html__( 'comma-separated list of IDs', 'anwp-football-leagues' ); ?></span>
 				</td>
 			</tr>

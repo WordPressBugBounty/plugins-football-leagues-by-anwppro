@@ -46,7 +46,7 @@ if ( empty( $club_obj->logo ) ) {
 		];
 	}
 
-	$club_obj->logo_big = anwp_football_leagues()->helper->get_default_club_logo();
+	$club_obj->logo = anwp_football_leagues()->helper->get_default_club_logo();
 }
 ?>
 <div class="club-title py-2 px-1 px-sm-2 d-flex align-items-center anwp-bg-light position-relative <?php echo esc_attr( $is_home ? '' : 'flex-row-reverse' ); ?> <?php echo esc_attr( $data['class'] ); ?>">

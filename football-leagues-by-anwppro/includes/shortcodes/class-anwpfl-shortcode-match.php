@@ -103,10 +103,12 @@ class AnWPFL_Shortcode_Match {
 			<tr>
 				<th scope="row"><label for="fl-form-shortcode-match_id"><?php echo esc_html__( 'Match ID', 'anwp-football-leagues' ); ?>*</label></th>
 				<td>
-					<input name="match_id" data-fl-type="text" type="text" id="fl-form-shortcode-match_id" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="match" data-single="yes">
-						<span class="dashicons dashicons-search"></span>
-					</button>
+					<div class="anwp-x-selector" fl-x-data="selectorItem('match',true)">
+						<input name="match_id" id="fl-form-shortcode-match_id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
+						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
+							<span class="dashicons dashicons-search"></span>
+						</button>
+					</div>
 				</td>
 			</tr>
 			<tr>
@@ -114,10 +116,12 @@ class AnWPFL_Shortcode_Match {
 					<label for="fl-form-shortcode-club_last"><?php echo esc_html__( 'Last finished match of the club', 'anwp-football-leagues' ); ?></label>
 				</th>
 				<td>
-					<input name="club_last" data-fl-type="text" type="text" id="fl-form-shortcode-club_last" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="club" data-single="yes">
-						<span class="dashicons dashicons-search"></span>
-					</button>
+					<div class="anwp-x-selector" fl-x-data="selectorItem('club',true)">
+						<input name="club_last" id="fl-form-shortcode-club_last" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
+						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
+							<span class="dashicons dashicons-search"></span>
+						</button>
+					</div>
 				</td>
 			</tr>
 			<tr>
@@ -125,10 +129,12 @@ class AnWPFL_Shortcode_Match {
 					<label for="fl-form-shortcode-club_next"><?php echo esc_html__( 'Next match of the club', 'anwp-football-leagues' ); ?></label>
 				</th>
 				<td>
-					<input name="club_next" data-fl-type="text" type="text" id="fl-form-shortcode-club_next" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="club" data-single="yes">
-						<span class="dashicons dashicons-search"></span>
-					</button>
+					<div class="anwp-x-selector" fl-x-data="selectorItem('club',true)">
+						<input name="club_next" id="fl-form-shortcode-club_next" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
+						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
+							<span class="dashicons dashicons-search"></span>
+						</button>
+					</div>
 				</td>
 			</tr>
 			<tr>

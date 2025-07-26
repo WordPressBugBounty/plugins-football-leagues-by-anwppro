@@ -94,40 +94,52 @@ class AnWPFL_Shortcode_Competition_List {
 			<tr>
 				<th scope="row"><label for="fl-form-shortcode-league_ids"><?php echo esc_html__( 'League IDs', 'anwp-football-leagues' ); ?></label></th>
 				<td>
-					<input name="league_ids" data-fl-type="text" type="text" id="fl-form-shortcode-league_ids" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="league" data-single="no">
-						<span class="dashicons dashicons-search"></span>
-					</button>
+					<div class="anwp-x-selector" fl-x-data="selectorItem('league',false)">
+						<input name="league_ids" id="fl-form-shortcode-league_ids" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
+						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
+							<span class="dashicons dashicons-search"></span>
+						</button>
+					</div>
+
 					<span class="anwp-option-desc"><?php echo esc_html__( 'Optional. Empty - for all.', 'anwp-football-leagues' ); ?></span>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row"><label for="fl-form-shortcode-season_ids"><?php echo esc_html__( 'Season IDs', 'anwp-football-leagues' ); ?></label></th>
 				<td>
-					<input name="season_ids" data-fl-type="text" type="text" id="fl-form-shortcode-season_ids" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="season" data-single="no">
-						<span class="dashicons dashicons-search"></span>
-					</button>
+					<div class="anwp-x-selector" fl-x-data="selectorItem('season',false)">
+						<input name="season_ids" id="fl-form-shortcode-season_ids" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
+						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
+							<span class="dashicons dashicons-search"></span>
+						</button>
+					</div>
+
 					<span class="anwp-option-desc"><?php echo esc_html__( 'Optional. Empty - for all.', 'anwp-football-leagues' ); ?></span>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row"><label for="fl-form-shortcode-include_ids"><?php echo esc_html__( 'Include Competitions', 'anwp-football-leagues' ); ?></label></th>
 				<td>
-					<input name="include_ids" data-fl-type="text" type="text" id="fl-form-shortcode-include_ids" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="competition" data-single="no">
-						<span class="dashicons dashicons-search"></span>
-					</button>
+					<div class="anwp-x-selector" fl-x-data="selectorItem('competition',false)">
+						<input name="include_ids" id="fl-form-shortcode-include_ids" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
+						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
+							<span class="dashicons dashicons-search"></span>
+						</button>
+					</div>
+
 					<span class="anwp-option-desc"><?php echo esc_html__( 'comma-separated list of IDs', 'anwp-football-leagues' ); ?></span>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row"><label for="fl-form-shortcode-exclude_ids"><?php echo esc_html__( 'Exclude Competitions', 'anwp-football-leagues' ); ?></label></th>
 				<td>
-					<input name="exclude_ids" data-fl-type="text" type="text" id="fl-form-shortcode-exclude_ids" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="competition" data-single="no">
-						<span class="dashicons dashicons-search"></span>
-					</button>
+					<div class="anwp-x-selector" fl-x-data="selectorItem('competition',false)">
+						<input name="exclude_ids" id="fl-form-shortcode-exclude_ids" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
+						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
+							<span class="dashicons dashicons-search"></span>
+						</button>
+					</div>
+
 					<span class="anwp-option-desc"><?php echo esc_html__( 'comma-separated list of IDs', 'anwp-football-leagues' ); ?></span>
 				</td>
 			</tr>

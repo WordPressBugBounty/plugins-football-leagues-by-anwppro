@@ -52,13 +52,6 @@ class AnWPFL_Assets {
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
 
 		/**
-		 * Enqueue admin scripts in Elementor
-		 *
-		 * @since 0.12.7
-		 */
-		add_action( 'elementor/editor/after_enqueue_styles', [ $this, 'admin_enqueue_scripts_elementor' ] );
-
-		/**
 		 * Add svg icons to the footer
 		 *
 		 * @since 0.2.0 (2017-10-28)
@@ -158,6 +151,20 @@ class AnWPFL_Assets {
 				wp_add_inline_style( 'anwpfl_styles', $customizer_css );
 			}
 		}
+
+		/*
+		|--------------------------------------------------------------------------
+		| Additional Inline CSS
+		|--------------------------------------------------------------------------
+		*/
+		$inline_css = [
+			'[fl-x-cloak] { display: none !important; }', // AlpineJS support
+			'.anwpfl-not-ready {opacity: 0; transition: opacity 0.5s ease; visibility: hidden;}', // Hide some content before DOM loaded
+			'.anwpfl-ready .anwpfl-not-ready {opacity: 1; visibility: visible;}',
+			'body:not(.anwpfl-ready) .anwpfl-not-ready-0 {display: none !important;}',
+		];
+
+		wp_add_inline_style( 'anwpfl_styles', implode( ' ', $inline_css ) );
 	}
 
 	/**
@@ -190,18 +197,31 @@ class AnWPFL_Assets {
 		| Global JS
 		|--------------------------------------------------------------------------
 		*/
-		wp_enqueue_script( 'anwp-fl-js-global', AnWP_Football_Leagues::url( 'admin/js/anwp-fl-global.js' ), [ 'jquery', 'underscore', 'modaal' ], AnWP_Football_Leagues::VERSION, false );
+		wp_enqueue_script( 'anwp-fl-js-global', AnWP_Football_Leagues::url( 'admin/js/anwp-fl-global.min.js' ), [], AnWP_Football_Leagues::VERSION, false );
 
 		wp_localize_script(
 			'anwp-fl-js-global',
 			'anwpflGlobals',
 			[
-				'ajaxNonce'    => wp_create_nonce( 'ajax_anwpfl_nonce' ),
-				'selectorHtml' => anwp_fl()->include_selector_modaal(),
-				'countries'    => anwp_fl()->helper->get_select2_formatted_options( anwp_fl()->data->cb_get_countries() ),
-				'clubs'        => anwp_fl()->helper->get_select2_formatted_options( anwp_fl()->club->get_clubs_options() ),
-				'seasons'      => anwp_fl()->helper->get_select2_formatted_options( anwp_fl()->season->get_seasons_options() ),
-				'leagues'      => anwp_fl()->helper->get_select2_formatted_options( anwp_fl()->league->get_league_options() ),
+				'ajaxNonce'     => wp_create_nonce( 'ajax_anwpfl_nonce' ),
+				'selectorHtml'  => anwp_fl()->include_selector_modaal(),
+				'rest_root'     => esc_url_raw( rest_url() ),
+				'rest_nonce'    => wp_create_nonce( 'wp_rest' ),
+				'countries'     => [],
+				'clubs'         => [],
+				'seasons'       => [],
+				'leagues'       => [],
+				'context_l10n'  => [
+					'club'        => esc_html__( 'Club', 'anwp-football-leagues' ),
+					'competition' => esc_html__( 'Competition', 'anwp-football-leagues' ),
+					'main_stage'  => esc_html__( 'Main Stage', 'anwp-football-leagues' ),
+					'match'       => esc_html__( 'Match', 'anwp-football-leagues' ),
+					'player'      => esc_html__( 'Player', 'anwp-football-leagues' ),
+					'referee'     => esc_html__( 'Referee', 'anwp-football-leagues' ),
+					'staff'       => esc_html__( 'Staff', 'anwp-football-leagues' ),
+					'stage'       => esc_html__( 'Stage', 'anwp-football-leagues' ),
+				],
+				'optionsLoaded' => false,
 			]
 		);
 
@@ -484,51 +504,5 @@ class AnWPFL_Assets {
 		if ( file_exists( $svg_icons ) ) {
 			require_once $svg_icons;
 		}
-	}
-
-	/**
-	 * Load admin scripts and styles in Elementor
-	 *
-	 * @since 0.12.7
-	 */
-	public function admin_enqueue_scripts_elementor() {
-
-		// Load global styles
-		if ( is_rtl() ) {
-			wp_enqueue_style( 'anwpfl_styles_global_rtl', AnWP_Football_Leagues::url( 'admin/css/global-rtl.css' ), [], AnWP_Football_Leagues::VERSION );
-			wp_enqueue_style( 'anwpfl_styles_global_rtl_extra', AnWP_Football_Leagues::url( 'admin/css/global-rtl-extra.css' ), [], AnWP_Football_Leagues::VERSION );
-		} else {
-			wp_enqueue_style( 'anwpfl_styles_global', AnWP_Football_Leagues::url( 'admin/css/global.css' ), [], AnWP_Football_Leagues::VERSION );
-		}
-
-		/*
-		|--------------------------------------------------------------------------
-		| Modaal
-		|
-		| @license  MIT
-		| @link     https://github.com/humaan/Modaal
-		|--------------------------------------------------------------------------
-		*/
-		wp_enqueue_script( 'modaal', AnWP_Football_Leagues::url( 'vendor/modaal/modaal.min.js' ), [ 'jquery', 'underscore' ], AnWP_Football_Leagues::VERSION, false );
-
-		/*
-		|--------------------------------------------------------------------------
-		| Global JS
-		|--------------------------------------------------------------------------
-		*/
-		wp_enqueue_script( 'anwp-fl-js-global', AnWP_Football_Leagues::url( 'admin/js/anwp-fl-global.js' ), [ 'jquery', 'underscore', 'modaal' ], AnWP_Football_Leagues::VERSION, false );
-
-		wp_localize_script(
-			'anwp-fl-js-global',
-			'anwpflGlobals',
-			[
-				'ajaxNonce'    => wp_create_nonce( 'ajax_anwpfl_nonce' ),
-				'selectorHtml' => anwp_football_leagues()->include_selector_modaal(),
-				'countries'    => anwp_football_leagues()->helper->get_select2_formatted_options( anwp_football_leagues()->data->cb_get_countries() ),
-				'clubs'        => anwp_football_leagues()->helper->get_select2_formatted_options( anwp_football_leagues()->club->get_clubs_options() ),
-				'seasons'      => anwp_football_leagues()->helper->get_select2_formatted_options( anwp_football_leagues()->season->get_seasons_options() ),
-				'leagues'      => anwp_football_leagues()->helper->get_select2_formatted_options( anwp_football_leagues()->league->get_league_options() ),
-			]
-		);
 	}
 }

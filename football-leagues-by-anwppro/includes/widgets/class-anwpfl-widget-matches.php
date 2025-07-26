@@ -75,12 +75,11 @@ class AnWPFL_Widget_Matches extends AnWPFL_Widget {
 				'label' => esc_html__( 'Include matches from secondary stages', 'anwp-football-leagues' ),
 			],
 			[
-				'id'         => 'league_id',
-				'type'       => 'select',
-				'label'      => esc_html__( 'League', 'anwp-football-leagues' ),
-				'show_empty' => esc_html__( '- select league -', 'anwp-football-leagues' ),
-				'default'    => '',
-				'options_cb' => [ anwp_football_leagues()->league, 'get_league_options' ],
+				'id'      => 'league_id',
+				'type'    => 'league_id',
+				'single'  => 'yes',
+				'label'   => esc_html__( 'League', 'anwp-football-leagues' ),
+				'default' => '',
 			],
 			[
 				'id'         => 'season_id',

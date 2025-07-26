@@ -1610,7 +1610,7 @@ class AnWPFL_Standing extends CPT_Core {
 		if ( ! empty( $groups ) && is_array( $groups ) ) {
 			foreach ( $groups as $index => $group ) {
 				if ( absint( $group->id ) === absint( $group_id ) ) {
-					$generated_title .= ' - ' . esc_html( $group->title ? $group->title : ( esc_html__( 'Group', 'anwp-football-leagues' ) . ' #' . ( $index + 1 ) ) );
+					$generated_title .= ' - ' . esc_html( $group->title ? : ( esc_html__( 'Group', 'anwp-football-leagues' ) . ' #' . ( $index + 1 ) ) );
 				}
 			}
 		}

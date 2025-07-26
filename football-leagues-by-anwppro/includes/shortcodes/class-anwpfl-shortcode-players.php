@@ -118,10 +118,12 @@ class AnWPFL_Shortcode_Players {
 			<tr>
 				<th scope="row"><label for="fl-form-shortcode-competition_id"><?php echo esc_html__( 'Competition IDs', 'anwp-football-leagues' ); ?></label></th>
 				<td>
-					<input name="competition_id" data-fl-type="text" type="text" id="fl-form-shortcode-competition_id" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="competition" data-single="no">
-						<span class="dashicons dashicons-search"></span>
-					</button>
+					<div class="anwp-x-selector" fl-x-data="selectorItem('competition',false)">
+						<input name="competition_id" id="fl-form-shortcode-competition_id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
+						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
+							<span class="dashicons dashicons-search"></span>
+						</button>
+					</div>
 				</td>
 			</tr>
 			<tr>
@@ -138,19 +140,23 @@ class AnWPFL_Shortcode_Players {
 			<tr>
 				<th scope="row"><label for="fl-form-shortcode-season_id"><?php echo esc_html__( 'Season ID', 'anwp-football-leagues' ); ?></label></th>
 				<td>
-					<input name="season_id" data-fl-type="text" type="text" id="fl-form-shortcode-season_id" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="season" data-single="yes">
-						<span class="dashicons dashicons-search"></span>
-					</button>
+					<div class="anwp-x-selector" fl-x-data="selectorItem('season',true)">
+						<input name="season_id" id="fl-form-shortcode-season_id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
+						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
+							<span class="dashicons dashicons-search"></span>
+						</button>
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row"><label for="fl-form-shortcode-league_id"><?php echo esc_html__( 'League ID', 'anwp-football-leagues' ); ?></label></th>
 				<td>
-					<input name="league_id" data-fl-type="text" type="text" id="fl-form-shortcode-league_id" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="league" data-single="yes">
-						<span class="dashicons dashicons-search"></span>
-					</button>
+					<div class="anwp-x-selector" fl-x-data="selectorItem('league',true)">
+						<input name="league_id" id="fl-form-shortcode-league_id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
+						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
+							<span class="dashicons dashicons-search"></span>
+						</button>
+					</div>
 				</td>
 			</tr>
 			<tr>
@@ -158,10 +164,12 @@ class AnWPFL_Shortcode_Players {
 					<label for="fl-form-shortcode-club_id"><?php echo esc_html__( 'Club IDs', 'anwp-football-leagues' ); ?></label>
 				</th>
 				<td>
-					<input name="club_id" data-fl-type="text" type="text" id="fl-form-shortcode-club_id" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="club" data-single="no">
-						<span class="dashicons dashicons-search"></span>
-					</button>
+					<div class="anwp-x-selector" fl-x-data="selectorItem('club',false)">
+						<input name="club_id" id="fl-form-shortcode-club_id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
+						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
+							<span class="dashicons dashicons-search"></span>
+						</button>
+					</div>
 				</td>
 			</tr>
 			<tr>

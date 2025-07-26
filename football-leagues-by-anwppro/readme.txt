@@ -3,11 +3,11 @@ Contributors:      anwppro
 Donate link:       https://anwppro.userecho.com/communities/1-football-leagues
 Tags:              football, soccer, sport
 Requires at least: 5.7
-Requires PHP:      7.0
+Requires PHP:      7.4
 Tested up to:      6.8
-Stable tag:        0.16.16.1
-License:           GPLv2 or later
-License URI:       http://www.gnu.org/licenses/gpl-2.0.html
+Stable tag:        0.16.17
+License:           GPLv3
+License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
 A complete solution for any football site. Knockout and round-robin competitions, player profiles and statistics, squads, standings and stadiums.
 
@@ -149,6 +149,9 @@ Yes! The plugin works with most themes out of the box. If you have any CSS styli
 17. Admin >> Edit Match (Events)
 
 == Changelog ==
+
+= 0.16.17 - 2025-07-26 =
+* added: new version of FL Selector
 
 = 0.16.16.1 - 2025-06-03 =
 * fixed: Squad - table-rows layout in mobile view

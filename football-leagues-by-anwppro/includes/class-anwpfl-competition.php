@@ -2324,7 +2324,7 @@ class AnWPFL_Competition extends CPT_Core {
 			return $output;
 		}
 
-		$competition_type = anwp_fl()->competition->get_competition_data( $competition_id )['type'];
+		$competition_type = anwp_fl()->competition->get_competition_data( $competition_id )['type'] ?? '';
 
 		if ( 'round-robin' === $competition_type ) {
 			$output = anwp_fl()->options->get_text_matchweek( $match_week );
@@ -2386,6 +2386,10 @@ class AnWPFL_Competition extends CPT_Core {
 	 */
 	public function get_competition_title( int $post_id ): string {
 		$competition_data = anwp_fl()->competition->get_competition_data( $post_id );
+
+		if ( empty( $competition_data['id'] ) ) {
+			return '';
+		}
 
 		if ( 'secondary' !== $competition_data['multistage'] ) {
 			return ltrim( anwp_fl()->competition->get_competition_data( $post_id )['title_full'] ?? '', ' -' );
@@ -2610,7 +2614,7 @@ class AnWPFL_Competition extends CPT_Core {
 	/**
 	 * Get competition data (extended with groups and rounds).
 	 *
-	 * @param int $competition_id
+	 * @param int|null $competition_id
 	 *
 	 * @since 0.16.16
 	 *
@@ -2634,7 +2638,10 @@ class AnWPFL_Competition extends CPT_Core {
 	 *     rounds: array,
 	 * }
 	 */
-	public function get_competition_data_full( int $competition_id ): array {
+	public function get_competition_data_full( ?int $competition_id ): array {
+		if ( empty( $competition_id ) ) {
+			return [];
+		}
 
 		$competition_data = $this->get_competitions_data()[ $competition_id ] ?? [];
 

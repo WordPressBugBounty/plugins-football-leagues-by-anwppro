@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 0.16.17 - 2025-07-26 =
+* added: new version of FL Selector
+
 = 0.16.16.1 - 2025-06-03 =
 * fixed: Squad - table-rows layout in mobile view
 

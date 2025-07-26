@@ -94,10 +94,10 @@ class AnWPFL_Shortcode_Staff {
 				<th scope="row">
 					<label for="fl-form-shortcode-staff_id"><?php echo esc_html__( 'Staff ID', 'anwp-football-leagues' ); ?></label></th>
 				<td>
-					<input name="staff_id" data-fl-type="text" type="text" id="fl-form-shortcode-staff_id" value="" class="fl-shortcode-attr code">
-					<button type="button" class="button anwp-fl-selector" data-context="staff" data-single="yes">
-						<span class="dashicons dashicons-search"></span>
-					</button>
+					<div class="anwp-x-selector" fl-x-data="selectorItem('staff',true)">
+						<input name="staff_id" id="fl-form-shortcode-staff_id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
+						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform"><span class="dashicons dashicons-search"></span></button>
+					</div>
 				</td>
 			</tr>
 			<tr>

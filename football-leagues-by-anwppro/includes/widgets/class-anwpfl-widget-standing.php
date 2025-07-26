@@ -64,15 +64,10 @@ class AnWPFL_Widget_Standing extends AnWPFL_Widget {
 				'default' => esc_html_x( 'Standing Table', 'widget default title', 'anwp-football-leagues' ),
 			],
 			[
-				'id'         => 'standing',
-				'type'       => 'select_posts',
-				'label'      => esc_html__( 'Standing Table:', 'anwp-football-leagues' ),
-				'show_empty' => esc_html__( '- select table -', 'anwp-football-leagues' ),
-				'default'    => '',
-				'args'       => [
-					'numberposts' => - 1,
-					'post_type'   => 'anwp_standing',
-				],
+				'id'      => 'standing',
+				'type'    => 'text',
+				'label'   => esc_html__( 'Standing Table ID:', 'anwp-football-leagues' ),
+				'default' => '',
 			],
 			[
 				'id'          => 'exclude_ids',

@@ -11,7 +11,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.5.0
  *
- * @version       0.16.16
+ * @version       0.16.17
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -173,15 +173,16 @@ if ( count( $squad_elements ) ) {
 							</div>
 						<?php endif; ?>
 
-						<div class="d-none anwp-grid-table__sm-flex align-items-center">
+						<div class="d-none anwp-grid-table__sm-flex align-items-center flex-wrap mx-n2">
 							<?php
 							if ( ( $player['nationalities'] ?? '' ) && in_array( 'nationalities', $squad_elements, true ) ) :
 								foreach ( $player['nationalities'] as $country_code ) :
 									anwp_fl()->load_partial(
 										[
-											'class'        => 'options__flag',
-											'size'         => 32,
-											'country_code' => $country_code,
+											'class'         => 'options__flag',
+											'wrapper_class' => 'ml-2',
+											'size'          => 32,
+											'country_code'  => $country_code,
 										],
 										'general/flag'
 									);
@@ -189,30 +190,36 @@ if ( count( $squad_elements ) ) {
 							endif;
 							?>
 							<?php if ( ! $squad_display->group && $player['position'] ) : ?>
-								<div class="anwp-opacity-70">
-									<?php echo esc_html( anwp_fl()->player->get_position_l10n( $player['position'] ) ); ?>
+								<div class="d-flex flex-wrap mx-2 align-items-center">
+									<div class="anwp-opacity-70">
+										<?php echo esc_html( anwp_fl()->player->get_position_l10n( $player['position'] ) ); ?>
+									</div>
+									<div class="anwp-text-xs anwp-opacity-30 mx-2">|</div>
 								</div>
-								<div class="anwp-text-xs anwp-opacity-30 mx-2">|</div>
 							<?php endif; ?>
 
 							<?php if ( in_array( 'age', $squad_elements, true ) ) : ?>
-								<div class="squad-rows__age-title-mobile mx-2 anwp-opacity-70">
-									<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?>:
+								<div class="d-flex flex-wrap mx-2 align-items-center">
+									<div class="squad-rows__age-title-mobile mr-2 anwp-opacity-70">
+										<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__age', __( 'Age', 'anwp-football-leagues' ) ) ); ?>:
+									</div>
+									<div class="squad-rows__age-mobile anwp-text-lg"><?php echo esc_html( $player['age'] ?: '-' ); ?></div>
 								</div>
-								<div class="squad-rows__age-mobile anwp-text-lg"><?php echo esc_html( $player['age'] ?: '-' ); ?></div>
 							<?php endif; ?>
 
 							<?php if ( in_array( 'date_of_birth', $squad_elements, true ) && $player['age2'] ) : ?>
-								<div class="squad-rows__age-title-mobile mx-2 anwp-opacity-70">
-									<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?>:
+								<div class="d-flex flex-wrap mx-2 align-items-center">
+									<div class="squad-rows__age-title-mobile mr-2 anwp-opacity-70">
+										<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?>:
+									</div>
+									<div class="squad-rows__age-mobile anwp-text-sm"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $player['age2'] ) ) ); ?></div>
 								</div>
-								<div class="squad-rows__age-mobile anwp-text-sm"><?php echo esc_html( $player['age2'] ); ?></div>
 							<?php endif; ?>
 						</div>
 					</div>
 					<?php if ( in_array( 'date_of_birth', $squad_elements, true ) ) : ?>
 						<div class="squad-rows__age px-2 pt-2 anwp-text-sm anwp-grid-table__sm-none d-flex align-items-center">
-							<?php echo esc_html( $player['age2'] ) ?: '-'; ?>
+							<?php echo esc_html( $player['age2'] ) ? esc_html( date_i18n( get_option( 'date_format' ), strtotime( $player['age2'] ) ) ) : '-'; ?>
 						</div>
 					<?php endif; ?>
 
@@ -320,13 +327,13 @@ if ( count( $squad_elements ) ) {
 							<div class="squad-rows__age-title-mobile mr-1 anwp-opacity-70">
 								<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?>:
 							</div>
-							<div class="squad-rows__age-mobile anwp-text-sm"><?php echo esc_html( $staff_member['age2'] ) ?: '-'; ?></div>
+							<div class="squad-rows__age-mobile anwp-text-sm"><?php echo esc_html( $staff_member['age2'] ) ? esc_html( date_i18n( get_option( 'date_format' ), strtotime( $staff_member['age2'] ) ) ) : '-'; ?></div>
 						<?php endif; ?>
 					</div>
 				</div>
 				<?php if ( in_array( 'date_of_birth', $squad_elements, true ) ) : ?>
 					<div class="squad-rows__age px-2 pt-2 anwp-text-sm anwp-grid-table__sm-none d-flex align-items-center">
-						<?php echo esc_html( $staff_member['age2'] ) ?: '-'; ?>
+						<?php echo esc_html( $staff_member['age2'] ) ? esc_html( date_i18n( get_option( 'date_format' ), strtotime( $staff_member['age2'] ) ) ) : '-'; ?>
 					</div>
 				<?php endif; ?>
 				<?php if ( in_array( 'age', $squad_elements, true ) ) : ?>
@@ -447,13 +454,13 @@ if ( count( $squad_elements ) ) {
 							<div class="squad-rows__age-title-mobile mr-1 anwp-opacity-70">
 								<?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?>:
 							</div>
-							<div class="squad-rows__age-mobile anwp-text-sm"><?php echo esc_html( $staff_group_item['age2'] ) ?: '-'; ?></div>
+							<div class="squad-rows__age-mobile anwp-text-sm"><?php echo esc_html( $staff_group_item['age2'] ) ? esc_html( date_i18n( get_option( 'date_format' ), strtotime( $staff_group_item['age2'] ) ) ) : '-'; ?></div>
 						<?php endif; ?>
 					</div>
 				</div>
 				<?php if ( in_array( 'date_of_birth', $squad_elements, true ) ) : ?>
 					<div class="squad-rows__age px-2 pt-2 anwp-text-sm anwp-grid-table__sm-none d-flex align-items-center">
-						<?php echo esc_html( $staff_group_item['age2'] ) ?: '-'; ?>
+						<?php echo esc_html( $staff_group_item['age2'] ) ? esc_html( date_i18n( get_option( 'date_format' ), strtotime( $staff_group_item['age2'] ) ) ) : '-'; ?>
 					</div>
 				<?php endif; ?>
 				<?php if ( in_array( 'age', $squad_elements, true ) ) : ?>

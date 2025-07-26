@@ -3051,21 +3051,6 @@ body.anwp-hide-titles.single-anwp_match h1.entry-title {
   color: #fff;
 }
 
-.anwpfl-not-ready {
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  visibility: hidden;
-}
-
-.anwpfl-ready .anwpfl-not-ready {
-  opacity: 1;
-  visibility: visible;
-}
-
-body:not(.anwpfl-ready) .anwpfl-not-ready-0 {
-  display: none !important;
-}
-
 .anwp-video-player {
   display: none;
 }

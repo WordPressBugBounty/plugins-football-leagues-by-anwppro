@@ -1905,7 +1905,7 @@ class AnWPFL_Club extends CPT_Core {
 			return $output_data[ $club_id ];
 		}
 
-		$club_cached_obj = isset( $clubs_cache[ $club_id ] ) ? $clubs_cache[ $club_id ] : false;
+		$club_cached_obj = $clubs_cache[ $club_id ] ?? false;
 
 		if ( empty( $club_cached_obj ) ) {
 			return false;

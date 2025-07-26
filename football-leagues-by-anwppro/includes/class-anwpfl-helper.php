@@ -19,7 +19,9 @@ class AnWPFL_Helper {
 	 * @var AnWP_Football_Leagues
 	 * @since  0.1.0
 	 */
-	protected $plugin = null;
+	protected ?AnWP_Football_Leagues $plugin = null;
+
+	private static array $selector_context = [ 'player', 'staff', 'referee', 'club', 'match', 'competition', 'main_stage', 'stage', 'season', 'league' ];
 
 	/**
 	 * Constructor.
@@ -39,9 +41,6 @@ class AnWPFL_Helper {
 	public function hooks() {
 
 		add_action( 'rest_api_init', [ $this, 'add_rest_routes' ] );
-
-		add_action( 'wp_ajax_anwp_fl_selector_data', [ $this, 'get_selector_data' ] );
-		add_action( 'wp_ajax_anwp_fl_selector_initial', [ $this, 'get_selector_initial' ] );
 
 		// Modify CMB2 metabox form
 		add_filter( 'cmb2_get_metabox_form_format', [ $this, 'modify_cmb2_metabox_form_format' ], 10, 3 );
@@ -166,6 +165,42 @@ class AnWPFL_Helper {
 			[
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'load_standing_data' ],
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+			]
+		);
+
+		register_rest_route(
+			'anwpfl',
+			'/helper/get-selector-data/(?P<args>[a-zA-Z0-9-_~:,]+)',
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, 'get_selector_data' ],
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+			]
+		);
+
+		register_rest_route(
+			'anwpfl',
+			'/helper/get-selector-initial/(?P<args>[a-zA-Z0-9-_~:,]+)',
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, 'get_selector_initial' ],
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+			]
+		);
+
+		register_rest_route(
+			'anwpfl',
+			'/helper/get-selector-global-options/',
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, 'get_selector_global_options' ],
 				'permission_callback' => function () {
 					return current_user_can( 'manage_options' );
 				},
@@ -783,14 +818,15 @@ class AnWPFL_Helper {
 	 * Converts a string to a bool.
 	 * From WOO
 	 *
+	 * @param string|int|bool $string_value String to convert.
+	 *
+	 * @return bool
 	 * @deprecated - use AnWP_Football_Leagues::string_to_bool
 	 *
-	 * @since 0.7.4
-	 * @param string $string String to convert.
-	 * @return bool
+	 * @since      0.7.4
 	 */
-	public function string_to_bool( $string ) {
-		return is_bool( $string ) ? $string : ( 1 === $string || 'yes' === $string || 'true' === $string || '1' === $string );
+	public function string_to_bool( $string_value ): bool {
+		return is_bool( $string_value ) ? $string_value : ( 1 === $string_value || 'yes' === $string_value || 'true' === $string_value || '1' === $string_value );
 	}
 
 	/**
@@ -839,1216 +875,78 @@ class AnWPFL_Helper {
 	}
 
 	/**
-	 * Get Instance Selector Data
+	 * Get array of dates.
 	 *
-	 * @since 0.11.7
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_Error|WP_HTTP_Response|WP_REST_Response
 	 */
-	public function get_selector_data() {
+	public function get_selector_data( WP_REST_Request $request ) {
 
-		// Check if our nonce is set.
-		if ( ! isset( $_POST['nonce'] ) ) {
-			wp_send_json_error( 'Error : Unauthorized action' );
-		}
+		$params = $request->get_params();
+		$args   = self::parse_rest_url_params( $params['args'] );
 
-		// Verify that the nonce is valid.
-		if ( ! wp_verify_nonce( $_POST['nonce'], 'ajax_anwpfl_nonce' ) ) {
-			wp_send_json_error( 'Error : Unauthorized action' );
-		}
-
-		// Check the user's permissions.
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( 'Error : Unauthorized action' );
-		}
-
-		// Get POST search data
-		$search_data = wp_parse_args(
-			isset( $_POST['search_data'] ) ? $this->recursive_sanitize( $_POST['search_data'] ) : [],
+		$args = wp_parse_args(
+			$args,
 			[
 				'context'   => '',
 				's'         => '',
-				'club'      => '',
-				'country'   => '',
+				'clubs'     => '',
+				'countries' => '',
 				'club_away' => '',
 				'club_home' => '',
-				'season'    => '',
-				'league'    => '',
+				'seasons'   => '',
+				'leagues'   => '',
 				'stages'    => '',
 			]
 		);
 
-		if ( ! in_array( $search_data['context'], [ 'player', 'staff', 'referee', 'club', 'match', 'competition', 'main_stage', 'stage', 'season', 'league' ], true ) ) {
-			wp_send_json_error();
+		if ( ! in_array( $args['context'], [ 'player', 'staff', 'referee', 'club', 'match', 'competition', 'main_stage', 'stage', 'season', 'league' ], true ) ) {
+			return rest_ensure_response( [] );
 		}
 
-		$html_output = '';
+		$items = [];
 
-		switch ( $search_data['context'] ) {
-			case 'referee':
-				$html_output = $this->get_selector_referee_data( $search_data );
-				break;
-
-			case 'staff':
-				$html_output = $this->get_selector_staff_data( $search_data );
-				break;
-
-			case 'player':
-				$html_output = $this->get_selector_player_data( $search_data );
-				break;
-
-			case 'club':
-				$html_output = $this->get_selector_club_data( $search_data );
-				break;
-
-			case 'match':
-				$html_output = $this->get_selector_game_data( $search_data );
-				break;
-
+		switch ( $args['context'] ) {
 			case 'competition':
-				$html_output = $this->get_selector_competition_data( $search_data );
+				$items = $this->get_selector_competition_data( $args );
 				break;
 
 			case 'main_stage':
 			case 'stage':
-				$html_output = $this->get_selector_stage_data( $search_data );
-				break;
-
-			case 'season':
-				$html_output = $this->get_selector_season_data( $search_data );
-				break;
-
-			case 'league':
-				$html_output = $this->get_selector_league_data( $search_data );
-				break;
-		}
-
-		wp_send_json_success( [ 'html' => $html_output ] );
-	}
-
-	/**
-	 * Get Instance Selector Data
-	 *
-	 * @since 0.11.7
-	 */
-	public function get_selector_initial() {
-
-		// Check if our nonce is set.
-		if ( ! isset( $_POST['nonce'] ) ) {
-			wp_send_json_error( 'Error : Unauthorized action' );
-		}
-
-		// Verify that the nonce is valid.
-		if ( ! wp_verify_nonce( $_POST['nonce'], 'ajax_anwpfl_nonce' ) ) {
-			wp_send_json_error( 'Error : Unauthorized action' );
-		}
-
-		// Check the user's permissions.
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( 'Error : Unauthorized action' );
-		}
-
-		// Get context
-		$data_context = isset( $_POST['data_context'] ) ? sanitize_text_field( $_POST['data_context'] ) : '';
-
-		if ( ! in_array( $data_context, [ 'player', 'staff', 'referee', 'club', 'match', 'competition', 'season', 'league' ], true ) ) {
-			wp_send_json_error();
-		}
-
-		// Initial
-		$data_initial = isset( $_POST['initial'] ) ? wp_parse_id_list( $_POST['initial'] ) : [];
-
-		if ( empty( $data_initial ) ) {
-			wp_send_json_error();
-		}
-
-		$output = '';
-
-		switch ( $data_context ) {
-			case 'player':
-				$output = $this->get_selector_player_initial( $data_initial );
-				break;
-
-			case 'staff':
-				$output = $this->get_selector_staff_initial( $data_initial );
-				break;
-
-			case 'referee':
-				$output = $this->get_selector_referee_initial( $data_initial );
+				$items = $this->get_selector_stage_data( $args );
 				break;
 
 			case 'club':
-				$output = $this->get_selector_club_initial( $data_initial );
+				$items = $this->get_selector_club_data( $args );
 				break;
 
-			case 'match':
-				$output = $this->get_selector_match_initial( $data_initial );
+			case 'player':
+				$items = $this->get_selector_player_data( $args );
 				break;
 
-			case 'competition':
-				$output = $this->get_selector_competition_initial( $data_initial );
+			case 'staff':
+				$items = $this->get_selector_staff_data( $args );
 				break;
 
-			case 'main_stage':
-			case 'stage':
-				$output = $this->get_selector_stage_initial( $data_initial );
+			case 'referee':
+				$items = $this->get_selector_referee_data( $args );
 				break;
 
 			case 'season':
-				$output = $this->get_selector_season_initial( $data_initial );
+				$items = $this->get_selector_season_data( $args );
 				break;
 
 			case 'league':
-				$output = $this->get_selector_league_initial( $data_initial );
+				$items = $this->get_selector_league_data( $args );
+				break;
+
+			case 'match':
+				$items = $this->get_selector_game_data( $args );
 				break;
 		}
 
-		wp_send_json_success( [ 'items' => $output ] );
-	}
-
-	/**
-	 * Get selector staff initial data.
-	 *
-	 * @param array $data_initial
-	 *
-	 * @return array
-	 * @since 0.12.4
-	 */
-	private function get_selector_staff_initial( $data_initial ) {
-
-		$query_args = [
-			'post_type'               => [ 'anwp_staff' ],
-			'posts_per_page'          => 30,
-			'include'                 => $data_initial,
-			'cache_results'           => false,
-			'update_post_meta_cache'  => false,
-			'update_post_term_cache ' => false,
-		];
-
-		$results = get_posts( $query_args );
-
-		if ( empty( $results ) || ! is_array( $results ) ) {
-			return [];
-		}
-
-		$output = [];
-
-		foreach ( $results as $result_item ) {
-			$output[] = [
-				'id'   => $result_item->ID,
-				'name' => $result_item->post_title,
-			];
-		}
-
-		return $output;
-	}
-
-	/**
-	 * Get selector referee initial data.
-	 *
-	 * @param array $data_initial
-	 *
-	 * @return array
-	 * @since 0.12.4
-	 */
-	private function get_selector_referee_initial( $data_initial ) {
-
-		$query_args = [
-			'post_type'               => [ 'anwp_referee' ],
-			'posts_per_page'          => 30,
-			'include'                 => $data_initial,
-			'cache_results'           => false,
-			'update_post_meta_cache'  => false,
-			'update_post_term_cache ' => false,
-		];
-
-		$results = get_posts( $query_args );
-
-		if ( empty( $results ) || ! is_array( $results ) ) {
-			return [];
-		}
-
-		$output = [];
-
-		foreach ( $results as $result_item ) {
-			$output[] = [
-				'id'   => $result_item->ID,
-				'name' => $result_item->post_title,
-			];
-		}
-
-		return $output;
-	}
-
-	/**
-	 * Get selector club initial data.
-	 *
-	 * @param array $data_initial
-	 *
-	 * @return array
-	 * @since 0.11.8
-	 */
-	private function get_selector_club_initial( $data_initial ) {
-
-		$query_args = [
-			'post_type'               => [ 'anwp_club' ],
-			'posts_per_page'          => 50,
-			'include'                 => $data_initial,
-			'cache_results'           => false,
-			'update_post_meta_cache'  => false,
-			'update_post_term_cache ' => false,
-		];
-
-		$results = get_posts( $query_args );
-
-		if ( empty( $results ) || ! is_array( $results ) ) {
-			return [];
-		}
-
-		$output = [];
-
-		foreach ( $results as $result_item ) {
-			$output[] = [
-				'id'   => $result_item->ID,
-				'name' => $result_item->post_title,
-			];
-		}
-
-		return $output;
-	}
-
-	/**
-	 * Get selector player initial data.
-	 *
-	 * @param array $data_initial
-	 *
-	 * @return array
-	 * @since 0.11.7
-	 */
-	private function get_selector_player_initial( $data_initial ) {
-
-		$results = anwp_fl()->player->get_players_by_ids( wp_parse_id_list( $data_initial ), false );
-
-		if ( empty( $results ) ) {
-			return [];
-		}
-
-		$output = [];
-
-		foreach ( $results as $result_item ) {
-			$output[] = [
-				'id'   => $result_item['player_id'],
-				'name' => $result_item['short_name'],
-			];
-		}
-
-		return $output;
-	}
-
-	/**
-	 * Get selector player data.
-	 *
-	 * @param array $search_data
-	 *
-	 * @return false|string
-	 * @since 0.11.7
-	 */
-	private function get_selector_player_data( $search_data ) {
-		global $wpdb;
-
-		$query =
-			$wpdb->prepare(
-				"
-				SELECT `player_id`, `short_name`, `date_of_birth`, `name`, `photo`, `position`, `team_id`, `nationality`
-				FROM $wpdb->anwpfl_player_data
-				WHERE `name` LIKE %s
-				",
-				'%' . $wpdb->esc_like( sanitize_text_field( $search_data['s'] ) ) . '%'
-			);
-
-		if ( ! empty( $search_data['country'] ) ) {
-			$query .= $wpdb->prepare( ' AND nationality = %s ', sanitize_text_field( $search_data['country'] ) );
-		}
-
-		if ( ! empty( $search_data['club'] ) && absint( $search_data['club'] ) ) {
-			$query .= $wpdb->prepare( ' AND team_id = %d ', absint( $search_data['club'] ) );
-		}
-
-		// bump query
-		$query .= ' ORDER BY name';
-		$query .= ' LIMIT 30';
-
-		$player_list   = $wpdb->get_results( $query ) ?: []; // phpcs:ignore WordPress.DB.PreparedSQL
-		$clubs_options = $this->plugin->club->get_clubs_options();
-
-		ob_start();
-
-		if ( ! empty( $player_list ) ) :
-			?>
-			<table class="wp-list-table widefat striped table-view-list">
-				<thead>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Player Name', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Date of Birth', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Club', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Country', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</thead>
-
-				<tbody>
-				<?php foreach ( $player_list as $player ) : ?>
-					<tr data-id="<?php echo absint( $player->player_id ); ?>" data-name="<?php echo esc_html( $player->short_name ); ?>">
-						<td>
-							<button type="button" class="button button-small anwp-fl-selector-action">
-								<span class="dashicons dashicons-plus"></span>
-							</button>
-						</td>
-						<td><?php echo esc_html( $player->short_name ); ?></td>
-						<td><?php echo esc_html( '0000-00-00' !== $player->date_of_birth ? $player->date_of_birth : '' ); ?></td>
-						<td>
-							<?php
-							if ( ! empty( $clubs_options[ $player->team_id ] ) ) {
-								echo esc_html( $clubs_options[ $player->team_id ] );
-							}
-							?>
-						</td>
-						<td style="text-transform: uppercase;">
-							<?php echo esc_html( $player->nationality ); ?>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-				</tbody>
-
-				<tfoot>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Player Name', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Date of Birth', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Club', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Country', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</tfoot>
-			</table>
-		<?php else : ?>
-			<div class="anwp-alert-warning">- <?php echo esc_html__( 'nothing found', 'anwp-football-leagues' ); ?> -</div>
-			<?php
-		endif;
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Get selector staff data.
-	 *
-	 * @param array $search_data
-	 *
-	 * @return false|string
-	 * @since 0.12.4
-	 */
-	private function get_selector_staff_data( $search_data ) {
-
-		$query_args = [
-			'post_type'      => [ 'anwp_staff' ],
-			'posts_per_page' => 30,
-			's'              => $search_data['s'],
-		];
-
-		$meta_query = [];
-
-		if ( ! empty( $search_data['club'] ) && absint( $search_data['club'] ) ) {
-			$meta_query[] = [
-				'key'   => '_anwpfl_current_club',
-				'value' => absint( $search_data['club'] ),
-			];
-		}
-
-
-		if ( ! empty( $meta_query ) ) {
-			$query_args['meta_query'] = $meta_query;
-		}
-
-		$results = get_posts( $query_args );
-
-		ob_start();
-
-		if ( ! empty( $results ) ) :
-			?>
-			<table class="wp-list-table widefat striped table-view-list">
-				<thead>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Staff Name', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Date of Birth', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Club', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</thead>
-
-				<tbody>
-				<?php foreach ( $results as $player ) : ?>
-					<tr data-id="<?php echo absint( $player->ID ); ?>" data-name="<?php echo esc_html( $player->post_title ); ?>">
-						<td>
-							<button type="button" class="button button-small anwp-fl-selector-action">
-								<span class="dashicons dashicons-plus"></span>
-							</button>
-						</td>
-						<td><?php echo esc_html( $player->post_title ); ?></td>
-						<td><?php echo esc_html( get_post_meta( $player->ID, '_anwpfl_date_of_birth', true ) ); ?></td>
-						<td>
-							<?php
-							$club_id       = (int) get_post_meta( $player->ID, '_anwpfl_current_club', true );
-							$clubs_options = $this->plugin->club->get_clubs_options();
-
-							if ( ! empty( $clubs_options[ $club_id ] ) ) {
-								echo esc_html( $clubs_options[ $club_id ] );
-							}
-							?>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-				</tbody>
-
-				<tfoot>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Staff Name', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Date of Birth', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Club', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</tfoot>
-			</table>
-		<?php else : ?>
-			<div class="anwp-alert-warning">- <?php echo esc_html__( 'nothing found', 'anwp-football-leagues' ); ?> -</div>
-			<?php
-		endif;
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Get selector referee data.
-	 *
-	 * @param array $search_data
-	 *
-	 * @return false|string
-	 * @since 0.12.4
-	 */
-	private function get_selector_referee_data( $search_data ) {
-
-		$query_args = [
-			'post_type'      => [ 'anwp_referee' ],
-			'posts_per_page' => 30,
-			's'              => $search_data['s'],
-		];
-
-		$meta_query = [];
-
-		if ( ! empty( $search_data['country'] ) ) {
-			$meta_query[] = [
-				'key'     => '_anwpfl_nationality',
-				'value'   => '"' . sanitize_text_field( $search_data['country'] ) . '"',
-				'compare' => 'LIKE',
-			];
-		}
-
-		if ( ! empty( $meta_query ) ) {
-			$query_args['meta_query'] = $meta_query;
-		}
-
-		$results = get_posts( $query_args );
-
-		ob_start();
-
-		if ( ! empty( $results ) ) :
-			?>
-			<table class="wp-list-table widefat striped table-view-list">
-				<thead>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Referee Name', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Date of Birth', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Country', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</thead>
-
-				<tbody>
-				<?php foreach ( $results as $player ) : ?>
-					<tr data-id="<?php echo absint( $player->ID ); ?>" data-name="<?php echo esc_html( $player->post_title ); ?>">
-						<td>
-							<button type="button" class="button button-small anwp-fl-selector-action">
-								<span class="dashicons dashicons-plus"></span>
-							</button>
-						</td>
-						<td><?php echo esc_html( $player->post_title ); ?></td>
-						<td><?php echo esc_html( get_post_meta( $player->ID, '_anwpfl_date_of_birth', true ) ); ?></td>
-						<td style="text-transform: uppercase;">
-							<?php
-							$nationality = maybe_unserialize( get_post_meta( $player->ID, '_anwpfl_nationality', true ) );
-
-							if ( ! empty( $nationality ) && is_array( $nationality ) ) {
-								echo esc_html( implode( ', ', $nationality ) );
-							}
-							?>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-				</tbody>
-
-				<tfoot>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Referee Name', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Date of Birth', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Country', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</tfoot>
-			</table>
-		<?php else : ?>
-			<div class="anwp-alert-warning">- <?php echo esc_html__( 'nothing found', 'anwp-football-leagues' ); ?> -</div>
-			<?php
-		endif;
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Get selector club data.
-	 *
-	 * @param array $search_data
-	 *
-	 * @return false|string
-	 * @since 0.11.8
-	 */
-	private function get_selector_club_data( $search_data ) {
-
-		$query_args = [
-			'post_type'      => [ 'anwp_club' ],
-			'posts_per_page' => 30,
-			's'              => $search_data['s'],
-		];
-
-		$meta_query = [];
-
-		if ( ! empty( $search_data['country'] ) ) {
-			$meta_query[] = [
-				'key'   => '_anwpfl_nationality',
-				'value' => sanitize_text_field( $search_data['country'] ),
-			];
-		}
-
-		if ( ! empty( $meta_query ) ) {
-			$query_args['meta_query'] = $meta_query;
-		}
-
-		$results = get_posts( $query_args );
-
-		ob_start();
-
-		if ( ! empty( $results ) ) :
-			?>
-			<table class="wp-list-table widefat striped table-view-list">
-				<thead>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Club Title', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'City', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Country', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</thead>
-
-				<tbody>
-				<?php foreach ( $results as $club ) : ?>
-					<tr data-id="<?php echo absint( $club->ID ); ?>" data-name="<?php echo esc_html( $club->post_title ); ?>">
-						<td>
-							<button type="button" class="button button-small anwp-fl-selector-action">
-								<span class="dashicons dashicons-plus"></span>
-							</button>
-						</td>
-						<td><?php echo esc_html( $club->post_title ); ?></td>
-						<td>
-							<?php echo esc_html( get_post_meta( $club->ID, '_anwpfl_city', true ) ); ?>
-						</td>
-						<td style="text-transform: uppercase;">
-							<?php echo esc_html( get_post_meta( $club->ID, '_anwpfl_nationality', true ) ); ?>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-				</tbody>
-
-				<tfoot>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Club Title', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'City', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Country', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</tfoot>
-			</table>
-		<?php else : ?>
-			<div class="anwp-alert-warning">- <?php echo esc_html__( 'nothing found', 'anwp-football-leagues' ); ?> -</div>
-			<?php
-		endif;
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Get selector games data.
-	 *
-	 * @param array $search_data
-	 *
-	 * @return false|string
-	 * @since 0.11.13
-	 */
-	private function get_selector_game_data( $search_data ) {
-
-		$args = [
-			'season_id'    => absint( $search_data['season'] ) ?: '',
-			'home_club'    => absint( $search_data['club_home'] ),
-			'away_club'    => absint( $search_data['club_away'] ),
-			'sort_by_date' => 'asc',
-			'limit'        => 40,
-		];
-
-		$games = anwp_football_leagues()->competition->tmpl_get_competition_matches_extended( $args, 'stats' );
-
-		ob_start();
-
-		if ( ! empty( $games ) ) :
-			?>
-			<table class="wp-list-table widefat striped table-view-list">
-				<thead>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Home Club', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'Away Club', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Date', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Scores', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</thead>
-
-				<tbody>
-				<?php
-				foreach ( $games as $game ) :
-
-					$club_home_title = anwp_football_leagues()->club->get_club_title_by_id( $game->home_club );
-					$club_away_title = anwp_football_leagues()->club->get_club_title_by_id( $game->away_club );
-					$game_date       = explode( ' ', $game->kickoff )[0];
-					$game_scores     = absint( $game->finished ) ? ( $game->home_goals . ':' . $game->away_goals ) : '?:?';
-
-					$game_title = $club_home_title . ' - ' . $club_away_title . ' - ' . $game_date . ' - ' . $game_scores;
-
-					?>
-					<tr data-id="<?php echo absint( $game->match_id ); ?>" data-name="<?php echo esc_html( $game_title ); ?>">
-						<td>
-							<button type="button" class="button button-small anwp-fl-selector-action">
-								<span class="dashicons dashicons-plus"></span>
-							</button>
-						</td>
-						<td><?php echo esc_html( $club_home_title ); ?></td>
-						<td><?php echo esc_html( $club_away_title ); ?></td>
-						<td><?php echo esc_html( $game_date ); ?></td>
-						<td><?php echo esc_html( $game_scores ); ?></td>
-					</tr>
-				<?php endforeach; ?>
-				</tbody>
-
-				<tfoot>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Home Club', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'Away Club', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Date', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column column-format"><?php echo esc_html__( 'Scores', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</tfoot>
-			</table>
-		<?php else : ?>
-			<div class="anwp-alert-warning">- <?php echo esc_html__( 'nothing found', 'anwp-football-leagues' ); ?> -</div>
-			<?php
-		endif;
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Get selector match initial data.
-	 *
-	 * @param array $data_initial
-	 *
-	 * @return array
-	 * @since 0.11.13
-	 */
-	private function get_selector_match_initial( $data_initial ) {
-
-		if ( empty( $data_initial ) || ! is_array( $data_initial ) ) {
-			return [];
-		}
-
-		$args = [
-			'include_ids'  => implode( ',', $data_initial ),
-			'sort_by_date' => 'asc',
-		];
-
-		$games = anwp_football_leagues()->competition->tmpl_get_competition_matches_extended( $args, 'stats' );
-
-		if ( empty( $games ) || ! is_array( $games ) ) {
-			return [];
-		}
-
-		$output = [];
-
-		foreach ( $games as $game ) {
-
-			$club_home_title = anwp_football_leagues()->club->get_club_title_by_id( $game->home_club );
-			$club_away_title = anwp_football_leagues()->club->get_club_title_by_id( $game->away_club );
-			$game_date       = explode( ' ', $game->kickoff )[0];
-			$game_scores     = absint( $game->finished ) ? ( $game->home_goals . ':' . $game->away_goals ) : '?:?';
-
-			$output[] = [
-				'id'   => $game->match_id,
-				'name' => $club_home_title . ' - ' . $club_away_title . ' - ' . $game_date . ' - ' . $game_scores,
-			];
-		}
-
-		return $output;
-	}
-
-	/**
-	 * Get selector competition initial data.
-	 *
-	 * @param array $data_initial
-	 *
-	 * @return array
-	 * @since 0.11.15
-	 */
-	private function get_selector_competition_initial( $data_initial ) {
-
-		$query_args = [
-			'post_type'               => [ 'anwp_competition' ],
-			'posts_per_page'          => 50,
-			'include'                 => $data_initial,
-			'cache_results'           => false,
-			'update_post_meta_cache'  => false,
-			'update_post_term_cache ' => false,
-			'post_status'             => [ 'publish', 'stage_secondary' ],
-		];
-
-		$results = get_posts( $query_args );
-
-		if ( empty( $results ) || ! is_array( $results ) ) {
-			return [];
-		}
-
-		$output = [];
-
-		foreach ( $results as $result_item ) {
-
-			$title_full = $result_item->post_title;
-			$multistage = get_post_meta( $result_item->ID, '_anwpfl_multistage', true );
-
-			if ( $multistage ) {
-				$stage_title = get_post_meta( $result_item->ID, '_anwpfl_stage_title', true );
-
-				if ( $stage_title ) {
-					$title_full .= ' - ' . $stage_title;
-				}
-
-				if ( 'stage_secondary' === $result_item->post_status ) {
-					$title_full = '- ' . $title_full;
-				}
-			}
-
-			$output[] = [
-				'id'   => $result_item->ID,
-				'name' => $title_full,
-			];
-		}
-
-		return $output;
-	}
-
-	/**
-	 * Get selector competition initial data.
-	 *
-	 * @param array $data_initial
-	 *
-	 * @return array
-	 * @since 0.16.13
-	 */
-	private function get_selector_stage_initial( $data_initial ) {
-
-		$query_args = [
-			'post_type'               => [ 'anwp_competition' ],
-			'posts_per_page'          => 50,
-			'include'                 => $data_initial,
-			'cache_results'           => false,
-			'update_post_meta_cache'  => false,
-			'update_post_term_cache ' => false,
-			'post_status'             => [ 'publish', 'stage_secondary' ],
-		];
-
-		$results = get_posts( $query_args );
-
-		if ( empty( $results ) || ! is_array( $results ) ) {
-			return [];
-		}
-
-		$output = [];
-
-		foreach ( $results as $result_item ) {
-
-			$title_full = $result_item->post_title;
-			$multistage = get_post_meta( $result_item->ID, '_anwpfl_multistage', true );
-
-			if ( $multistage ) {
-				$stage_title = get_post_meta( $result_item->ID, '_anwpfl_stage_title', true );
-
-				if ( $stage_title ) {
-					$title_full .= ' - ' . $stage_title;
-				}
-
-				if ( 'stage_secondary' === $result_item->post_status ) {
-					$title_full = '- ' . $title_full;
-				}
-			}
-
-			$output[] = [
-				'id'   => $result_item->ID,
-				'name' => $title_full,
-			];
-		}
-
-		return $output;
-	}
-
-	/**
-	 * Get selector Season initial data.
-	 *
-	 * @param array $data_initial
-	 *
-	 * @return array
-	 * @since 0.12.3
-	 */
-	private function get_selector_season_initial( $data_initial ) {
-
-		$query_args = [
-			'number'     => 50,
-			'include'    => $data_initial,
-			'orderby'    => 'name',
-			'taxonomy'   => 'anwp_season',
-			'hide_empty' => false,
-		];
-
-		$results = get_terms( $query_args );
-
-		if ( empty( $results ) || ! is_array( $results ) ) {
-			return [];
-		}
-
-		$output = [];
-
-		foreach ( $results as $season_obj ) {
-			$output[] = [
-				'id'   => $season_obj->term_id,
-				'name' => $season_obj->name,
-			];
-		}
-
-		return $output;
-	}
-
-	/**
-	 * Get selector League initial data.
-	 *
-	 * @param array $data_initial
-	 *
-	 * @return array
-	 * @since 0.12.3
-	 */
-	private function get_selector_league_initial( $data_initial ) {
-
-		$query_args = [
-			'number'     => 50,
-			'include'    => $data_initial,
-			'orderby'    => 'name',
-			'taxonomy'   => 'anwp_league',
-			'hide_empty' => false,
-		];
-
-		$results = get_terms( $query_args );
-
-		if ( empty( $results ) || ! is_array( $results ) ) {
-			return [];
-		}
-
-		$output = [];
-
-		foreach ( $results as $league_obj ) {
-			$output[] = [
-				'id'   => $league_obj->term_id,
-				'name' => $league_obj->name,
-			];
-		}
-
-		return $output;
-	}
-
-	/**
-	 * Get selector Season data.
-	 *
-	 * @param array $search_data
-	 *
-	 * @return false|string
-	 * @since 0.12.3
-	 */
-	private function get_selector_season_data( $search_data ) {
-
-		$output_data = [];
-		$all_seasons = get_terms(
-			[
-				'number'     => 50,
-				'search'     => $search_data['s'],
-				'orderby'    => 'name',
-				'taxonomy'   => 'anwp_season',
-				'hide_empty' => false,
-			]
-		);
-
-		/** @var WP_Term $season_obj */
-		foreach ( $all_seasons as $season_obj ) {
-			$output_data[] = (object) [
-				'id'   => $season_obj->term_id,
-				'name' => $season_obj->name,
-			];
-		}
-
-		ob_start();
-
-		if ( ! empty( $output_data ) ) :
-			?>
-			<table class="wp-list-table widefat striped table-view-list">
-				<thead>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Season', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'ID', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</thead>
-
-				<tbody>
-				<?php foreach ( $output_data as $season ) : ?>
-					<tr data-id="<?php echo absint( $season->id ); ?>" data-name="<?php echo esc_html( $season->name ); ?>">
-						<td>
-							<button type="button" class="button button-small anwp-fl-selector-action">
-								<span class="dashicons dashicons-plus"></span>
-							</button>
-						</td>
-						<td><?php echo esc_html( $season->name ); ?></td>
-						<td><?php echo esc_html( $season->id ); ?></td>
-					</tr>
-				<?php endforeach; ?>
-				</tbody>
-
-				<tfoot>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Season', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'ID', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</tfoot>
-			</table>
-		<?php else : ?>
-			<div class="anwp-alert-warning">- <?php echo esc_html__( 'nothing found', 'anwp-football-leagues' ); ?> -</div>
-			<?php
-		endif;
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Get selector League data.
-	 *
-	 * @param array $search_data
-	 *
-	 * @return false|string
-	 * @since 0.12.3
-	 */
-	private function get_selector_league_data( $search_data ) {
-
-		$output_data = [];
-		$all_seasons = get_terms(
-			[
-				'number'     => 50,
-				'search'     => $search_data['s'],
-				'orderby'    => 'name',
-				'taxonomy'   => 'anwp_league',
-				'hide_empty' => false,
-			]
-		);
-
-		/** @var WP_Term $league_obj */
-		foreach ( $all_seasons as $league_obj ) {
-
-			$country = get_term_meta( $league_obj->term_id, '_anwpfl_country', true );
-
-			if ( $country ) {
-				$country = anwp_football_leagues()->data->get_value_by_key( $country, 'country' );
-			}
-
-			$output_data[] = (object) [
-				'id'      => $league_obj->term_id,
-				'name'    => $league_obj->name,
-				'country' => $country,
-			];
-		}
-
-		ob_start();
-
-		if ( ! empty( $output_data ) ) :
-			?>
-			<table class="wp-list-table widefat striped table-view-list">
-				<thead>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'League', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'Country', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'ID', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</thead>
-
-				<tbody>
-				<?php foreach ( $output_data as $league ) : ?>
-					<tr data-id="<?php echo absint( $league->id ); ?>" data-name="<?php echo esc_html( $league->name ); ?>">
-						<td>
-							<button type="button" class="button button-small anwp-fl-selector-action">
-								<span class="dashicons dashicons-plus"></span>
-							</button>
-						</td>
-						<td><?php echo esc_html( $league->name ); ?></td>
-						<td style="text-transform: capitalize;"><?php echo esc_html( $league->country ); ?></td>
-						<td><?php echo esc_html( $league->id ); ?></td>
-					</tr>
-				<?php endforeach; ?>
-				</tbody>
-
-				<tfoot>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'League', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'Country', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'ID', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</tfoot>
-			</table>
-		<?php else : ?>
-			<div class="anwp-alert-warning">- <?php echo esc_html__( 'nothing found', 'anwp-football-leagues' ); ?> -</div>
-			<?php
-		endif;
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Get selector competition data.
-	 *
-	 * @param array $search_data
-	 *
-	 * @since 0.16.13
-	 * @return false|string
-	 */
-	private function get_selector_stage_data( array $search_data ) {
-
-		$search_data = wp_parse_args(
-			$search_data,
-			[
-				's'       => '',
-				'season'  => '',
-				'league'  => '',
-				'context' => '',
-			]
-		);
-
-		$competitions = array_filter(
-			anwp_fl()->competition->get_competitions_data(),
-			function ( $competition ) use ( $search_data ) {
-
-				if ( 'main_stage' === $search_data['context'] && 'secondary' === $competition['multistage'] ) {
-					return false;
-				}
-
-				if ( trim( $search_data['s'] ) && ! str_contains( mb_strtolower( $competition['title_full'] ), mb_strtolower( $search_data['s'] ) ) ) {
-					return false;
-				}
-
-				if ( absint( $search_data['league'] ) && absint( $search_data['league'] ) !== absint( $competition['league_id'] ) ) {
-					return false;
-				}
-
-				if ( absint( $search_data['season'] ) && absint( $search_data['season'] ) !== absint( $competition['season_ids'] ) ) {
-					return false;
-				}
-
-				return true;
-			}
-		);
-
-		$competitions = array_slice( wp_list_sort( $competitions, 'c_index' ), 0, 30 );
-
-		$competitions = array_map(
-			function ( $competition ) use ( $search_data ) {
-
-				if ( 'main_stage' === $search_data['context'] && 'secondary' !== $competition['multistage'] ) {
-					$competition['title_full'] = $competition['title'];
-				}
-
-				return $competition;
-			},
-			$competitions
-		);
-
-		ob_start();
-
-		if ( ! empty( $competitions ) ) :
-			?>
-			<table class="wp-list-table widefat striped table-view-list">
-				<thead>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Competition', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'Season', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'ID', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</thead>
-
-				<tbody>
-				<?php foreach ( $competitions as $competition ) : ?>
-					<tr data-id="<?php echo absint( $competition['id'] ); ?>" data-name="<?php echo esc_html( $competition['title_full'] ); ?>">
-						<td>
-							<button type="button" class="button button-small anwp-fl-selector-action">
-								<span class="dashicons dashicons-plus"></span>
-							</button>
-						</td>
-						<td><?php echo esc_html( $competition['title_full'] ); ?></td>
-						<td><?php echo esc_html( $competition['season_text'] ); ?></td>
-						<td><?php echo esc_html( $competition['id'] ); ?></td>
-					</tr>
-				<?php endforeach; ?>
-				</tbody>
-
-				<tfoot>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Competition', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'Season', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'ID', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</tfoot>
-			</table>
-		<?php else : ?>
-			<div class="anwp-alert-warning">- <?php echo esc_html__( 'nothing found', 'anwp-football-leagues' ); ?> -</div>
-			<?php
-		endif;
-
-		return ob_get_clean();
+		return rest_ensure_response( $items );
 	}
 
 	/**
@@ -2057,9 +955,9 @@ class AnWPFL_Helper {
 	 * @param array $search_data
 	 *
 	 * @since 0.11.15
-	 * @return false|string
+	 * @return array
 	 */
-	private function get_selector_competition_data( array $search_data ) {
+	private function get_selector_competition_data( array $search_data ): array {
 
 		$query_args = [
 			'post_type'   => [ 'anwp_competition' ],
@@ -2075,19 +973,19 @@ class AnWPFL_Helper {
 
 		$tax_query = [];
 
-		if ( ! empty( $search_data['season'] ) && absint( $search_data['season'] ) ) {
+		if ( absint( $search_data['seasons'] ?? 0 ) ) {
 			$tax_query[] =
 				[
 					'taxonomy' => 'anwp_season',
-					'terms'    => absint( $search_data['season'] ),
+					'terms'    => absint( $search_data['seasons'] ),
 				];
 		}
 
-		if ( ! empty( $search_data['league'] ) && absint( $search_data['league'] ) ) {
+		if ( absint( $search_data['leagues'] ?? 0 ) ) {
 			$tax_query[] =
 				[
 					'taxonomy' => 'anwp_league',
-					'terms'    => absint( $search_data['league'] ),
+					'terms'    => absint( $search_data['leagues'] ),
 				];
 		}
 
@@ -2108,6 +1006,7 @@ class AnWPFL_Helper {
 			$obj->multistage = get_post_meta( $competition->ID, '_anwpfl_multistage', true );
 
 			$obj->title_full = $obj->title;
+			$obj->logo       = anwp_fl()->competition->get_competition_data( $competition->ID )['logo'] ?? '';
 
 			// Check multistage
 			if ( '' !== $obj->multistage ) {
@@ -2152,50 +1051,1046 @@ class AnWPFL_Helper {
 			}
 		}
 
-		ob_start();
+		$output = [
+			'columns' => [
+				[
+					'slug'  => 'img',
+					'title' => '',
+				],
+				[
+					'slug'  => 'title',
+					'title' => esc_html__( 'Competition', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'season',
+					'title' => esc_html__( 'Season', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'id',
+					'title' => esc_html__( 'ID', 'anwp-football-leagues' ),
+				],
+			],
+			'rows'    => [],
+		];
 
-		if ( ! empty( $output_data ) ) :
-			?>
-			<table class="wp-list-table widefat striped table-view-list">
-				<thead>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Competition', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'Season', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'ID', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</thead>
+		foreach ( $output_data as $competition ) {
+			$output['rows'][] = [
+				'title'  => $competition->title_full,
+				'season' => $competition->season,
+				'id'     => $competition->id,
+				'img'    => $competition->logo,
+			];
+		}
 
-				<tbody>
-				<?php foreach ( $output_data as $competition ) : ?>
-					<tr data-id="<?php echo absint( $competition->id ); ?>" data-name="<?php echo esc_html( $competition->title_full ); ?>">
-						<td>
-							<button type="button" class="button button-small anwp-fl-selector-action">
-								<span class="dashicons dashicons-plus"></span>
-							</button>
-						</td>
-						<td><?php echo esc_html( $competition->title_full ); ?></td>
-						<td><?php echo esc_html( $competition->season ); ?></td>
-						<td><?php echo esc_html( $competition->id ); ?></td>
-					</tr>
-				<?php endforeach; ?>
-				</tbody>
+		return $output;
+	}
 
-				<tfoot>
-				<tr>
-					<td class="manage-column check-column"></td>
-					<td class="manage-column"><?php echo esc_html__( 'Competition', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'Season', 'anwp-football-leagues' ); ?></td>
-					<td class="manage-column"><?php echo esc_html__( 'ID', 'anwp-football-leagues' ); ?></td>
-				</tr>
-				</tfoot>
-			</table>
-		<?php else : ?>
-			<div class="anwp-alert-warning">- <?php echo esc_html__( 'nothing found', 'anwp-football-leagues' ); ?> -</div>
-			<?php
-		endif;
+	/**
+	 * Get Global Selector Data
+	 *
+	 * @return WP_Error|WP_HTTP_Response|WP_REST_Response
+	 */
+	public function get_selector_global_options() {
 
-		return ob_get_clean();
+		$options = [];
+
+		// Seasons
+		$options['seasons'] = anwp_fl()->helper->get_select2_formatted_options( anwp_fl()->season->get_seasons_options() );
+
+		// Leagues
+		$options['leagues'] = [];
+		foreach ( anwp_fl()->league->get_league_options() as $league_id => $league_title ) {
+			$country = anwp_fl()->data->get_value_by_key( anwp_fl()->league->get_league_country_code( $league_id ), 'country' );
+
+			$options['leagues'][] = [
+				'id'   => $league_id,
+				'text' => $league_title . ( $country ? " ($country)" : '' ),
+			];
+		}
+
+		$options['leagues'] = wp_list_sort( $options['leagues'], 'text' );
+
+		// Countries
+		$options['countries'] = [];
+		foreach ( anwp_fl()->data->cb_get_countries() as $option_key => $option_text ) {
+			$code_parsed = mb_strtolower( str_replace( '_', '-', $option_key ) );
+
+			if ( in_array( $option_key, [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
+				$code_parsed = '--world';
+			} elseif ( ! in_array( $option_key, anwp_fl()->data->get_available_circle_flags(), true ) ) {
+				$code_parsed = 'xx';
+			}
+
+			$options['countries'][] = [
+				'id'   => $option_key,
+				'text' => $option_text,
+				'flag' => AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) . '#fl-flag--' . $code_parsed,
+			];
+		}
+
+		$options['countries'] = wp_list_sort( $options['countries'], 'text' );
+
+		// Clubs
+		$options['clubs'] = [];
+		foreach ( anwp_fl()->club->get_clubs_options() as $option_key => $option_text ) {
+			$options['clubs'][] = [
+				'id'   => $option_key,
+				'text' => $option_text,
+				'img'  => anwp_fl()->club->get_club_logo_by_id( $option_key ),
+			];
+		}
+
+		$options['clubs'] = wp_list_sort( $options['clubs'], 'text' );
+
+		return rest_ensure_response( [ 'options' => $options ] );
+	}
+
+	/**
+	 * Get Instance Selector Data
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_Error|WP_HTTP_Response|WP_REST_Response
+	 */
+	public function get_selector_initial( WP_REST_Request $request ) {
+
+		$params = $request->get_params();
+		$args   = self::parse_rest_url_params( $params['args'] );
+
+		$args = wp_parse_args(
+			$args,
+			[
+				'context' => '',
+				'initial' => '',
+			]
+		);
+
+		if ( ! in_array( $args['context'], self::$selector_context, true ) ) {
+			return rest_ensure_response( [] );
+		}
+
+		if ( empty( trim( $args['initial'] ) ) ) {
+			return rest_ensure_response( [] );
+		}
+
+		$data_initial = wp_parse_id_list( $args['initial'] );
+		$output       = '';
+
+		switch ( $args['context'] ) {
+			case 'player':
+				$output = $this->get_selector_player_initial( $data_initial );
+				break;
+
+			case 'staff':
+				$output = $this->get_selector_staff_initial( $data_initial );
+				break;
+
+			case 'referee':
+				$output = $this->get_selector_referee_initial( $data_initial );
+				break;
+
+			case 'club':
+				$output = $this->get_selector_club_initial( $data_initial );
+				break;
+
+			case 'match':
+				$output = $this->get_selector_match_initial( $data_initial );
+				break;
+
+			case 'main_stage':
+			case 'stage':
+			case 'competition':
+				$output = $this->get_selector_competition_initial( $data_initial );
+				break;
+
+			case 'season':
+				$output = $this->get_selector_season_initial( $data_initial );
+				break;
+
+			case 'league':
+				$output = $this->get_selector_league_initial( $data_initial );
+				break;
+		}
+
+		return rest_ensure_response( [ 'items' => $output ] );
+	}
+
+	/**
+	 * Get selector staff initial data.
+	 *
+	 * @param array $data_initial
+	 *
+	 * @return array
+	 * @since 0.12.4
+	 */
+	private function get_selector_staff_initial( array $data_initial ): array {
+
+		$query_args = [
+			'post_type'               => [ 'anwp_staff' ],
+			'posts_per_page'          => 30,
+			'include'                 => $data_initial,
+			'cache_results'           => false,
+			'update_post_meta_cache'  => false,
+			'update_post_term_cache ' => false,
+		];
+
+		$results = get_posts( $query_args );
+
+		if ( empty( $results ) || ! is_array( $results ) ) {
+			return [];
+		}
+
+		$output = [];
+
+		foreach ( $results as $result_item ) {
+			$output[] = [
+				'id'    => $result_item->ID,
+				'title' => $result_item->post_title,
+			];
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector referee initial data.
+	 *
+	 * @param array $data_initial
+	 *
+	 * @return array
+	 * @since 0.12.4
+	 */
+	private function get_selector_referee_initial( array $data_initial ): array {
+
+		$query_args = [
+			'post_type'               => [ 'anwp_referee' ],
+			'posts_per_page'          => 30,
+			'include'                 => $data_initial,
+			'cache_results'           => false,
+			'update_post_meta_cache'  => false,
+			'update_post_term_cache ' => false,
+		];
+
+		$results = get_posts( $query_args );
+
+		if ( empty( $results ) || ! is_array( $results ) ) {
+			return [];
+		}
+
+		$output = [];
+
+		foreach ( $results as $result_item ) {
+			$output[] = [
+				'id'    => $result_item->ID,
+				'title' => $result_item->post_title,
+			];
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector club initial data.
+	 *
+	 * @param array $data_initial
+	 *
+	 * @return array
+	 * @since 0.11.8
+	 */
+	private function get_selector_club_initial( array $data_initial ): array {
+
+		$query_args = [
+			'post_type'               => [ 'anwp_club' ],
+			'posts_per_page'          => 50,
+			'include'                 => $data_initial,
+			'cache_results'           => false,
+			'update_post_meta_cache'  => false,
+			'update_post_term_cache ' => false,
+		];
+
+		$results = get_posts( $query_args );
+
+		if ( empty( $results ) || ! is_array( $results ) ) {
+			return [];
+		}
+
+		$output = [];
+
+		foreach ( $results as $result_item ) {
+			$output[] = [
+				'id'    => $result_item->ID,
+				'title' => $result_item->post_title,
+				'img'   => esc_html( get_post_meta( $result_item->ID, '_anwpfl_logo', true ) ) ?: '',
+			];
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector player initial data.
+	 *
+	 * @param array $data_initial
+	 *
+	 * @return array
+	 * @since 0.11.7
+	 */
+	private function get_selector_player_initial( array $data_initial ): array {
+
+		$results = anwp_fl()->player->get_players_by_ids( wp_parse_id_list( $data_initial ), false );
+
+		if ( empty( $results ) ) {
+			return [];
+		}
+
+		$output = [];
+
+		foreach ( $results as $result_item ) {
+			$output[] = [
+				'id'    => $result_item['player_id'],
+				'title' => $result_item['short_name'],
+				'img'   => $result_item['photo'] ? anwp_fl()->upload_dir . $result_item['photo'] : '',
+			];
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector player data.
+	 *
+	 * @param array $search_data
+	 *
+	 * @return array
+	 * @since 0.11.7
+	 */
+	private function get_selector_player_data( array $search_data ): array {
+		global $wpdb;
+
+		$query =
+			$wpdb->prepare(
+				"
+				SELECT `player_id`, `short_name`, `name`, `date_of_birth`, `name`, `photo`, `position`, `team_id`, `nationality`
+				FROM $wpdb->anwpfl_player_data
+				WHERE `name` LIKE %s
+				",
+				'%' . $wpdb->esc_like( sanitize_text_field( $search_data['s'] ) ) . '%'
+			);
+
+		if ( ! empty( $search_data['countries'] ) ) {
+			$query .= $wpdb->prepare( ' AND nationality = %s ', sanitize_text_field( $search_data['countries'] ) );
+		}
+
+		if ( ! empty( $search_data['clubs'] ) && absint( $search_data['clubs'] ) ) {
+			$query .= $wpdb->prepare( ' AND team_id = %d ', absint( $search_data['clubs'] ) );
+		}
+
+		// bump query
+		$query .= ' ORDER BY name';
+		$query .= ' LIMIT 30';
+
+		$player_list = $wpdb->get_results( $query ) ?: []; // phpcs:ignore WordPress.DB.PreparedSQL
+
+		$output = [
+			'columns' => [
+				[
+					'slug'  => 'img',
+					'title' => '',
+				],
+				[
+					'slug'  => 'title',
+					'title' => esc_html__( 'Player Name', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'date_of_birth',
+					'title' => esc_html__( 'Date of Birth', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'club',
+					'title' => esc_html__( 'Club', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'flag',
+					'title' => esc_html__( 'Country', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'id',
+					'title' => esc_html__( 'ID', 'anwp-football-leagues' ),
+				],
+			],
+			'rows'    => [],
+		];
+
+		foreach ( $player_list as $player ) {
+			$country_code = $player->nationality;
+			$code_parsed  = '';
+
+			if ( $country_code ) {
+				$code_parsed = mb_strtolower( str_replace( '_', '-', $country_code ) );
+
+				if ( in_array( $country_code, [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
+					$code_parsed = '--world';
+				} elseif ( ! in_array( $country_code, anwp_fl()->data->get_available_circle_flags(), true ) ) {
+					$code_parsed = 'xx';
+				}
+			}
+
+			$output['rows'][] = [
+				'title'         => $player->short_name ? : $player->name,
+				'id'            => $player->player_id,
+				'date_of_birth' => esc_html( '0000-00-00' !== $player->date_of_birth ? $player->date_of_birth : '' ),
+				'flag'          => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) . '#fl-flag--' . $code_parsed ) : '',
+				'country'       => $country_code ? ( anwp_fl()->data->get_value_by_key( $country_code, 'country' ) ) : '',
+				'img'           => $player->photo ? anwp_fl()->upload_dir . $player->photo : '',
+				'club'          => anwp_fl()->club->get_club_title_by_id( $player->team_id ),
+			];
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector staff data.
+	 *
+	 * @param array $search_data
+	 *
+	 * @return array
+	 * @since 0.12.4
+	 */
+	private function get_selector_staff_data( array $search_data ): array {
+
+		$query_args = [
+			'post_type'      => [ 'anwp_staff' ],
+			'posts_per_page' => 30,
+			's'              => $search_data['s'],
+		];
+
+		$meta_query = [];
+
+		if ( ! empty( $search_data['clubs'] ) && absint( $search_data['clubs'] ) ) {
+			$meta_query[] = [
+				'key'   => '_anwpfl_current_club',
+				'value' => absint( $search_data['clubs'] ),
+			];
+		}
+
+		if ( ! empty( $meta_query ) ) {
+			$query_args['meta_query'] = $meta_query;
+		}
+
+		$results = get_posts( $query_args );
+
+		$output = [
+			'columns' => [
+				[
+					'slug'  => 'title',
+					'title' => esc_html__( 'Staff Name', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'date_of_birth',
+					'title' => esc_html__( 'Date of Birth', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'club',
+					'title' => esc_html__( 'Club', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'flag',
+					'title' => esc_html__( 'Country', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'id',
+					'title' => esc_html__( 'ID', 'anwp-football-leagues' ),
+				],
+			],
+			'rows'    => [],
+		];
+
+		/** @var @WP_Post $staff_post */
+		foreach ( $results as $staff_post ) {
+			$country_code = get_post_meta( $staff_post->ID, '_anwpfl_nationality', true )[0] ?? '';
+			$code_parsed  = '';
+
+			if ( $country_code ) {
+				$code_parsed = mb_strtolower( str_replace( '_', '-', $country_code ) );
+
+				if ( in_array( $country_code, [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
+					$code_parsed = '--world';
+				} elseif ( ! in_array( $country_code, anwp_fl()->data->get_available_circle_flags(), true ) ) {
+					$code_parsed = 'xx';
+				}
+			}
+
+			$output['rows'][] = [
+				'title'         => $staff_post->post_title,
+				'id'            => $staff_post->ID,
+				'date_of_birth' => esc_html( get_post_meta( $staff_post->ID, '_anwpfl_date_of_birth', true ) ? : '' ),
+				'flag'          => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) . '#fl-flag--' . $code_parsed ) : '',
+				'country'       => $country_code ? ( anwp_fl()->data->get_value_by_key( $country_code, 'country' ) ) : '',
+				'club'          => anwp_fl()->club->get_club_title_by_id( get_post_meta( $staff_post->ID, '_anwpfl_current_club', true ) ),
+			];
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector referee data.
+	 *
+	 * @param array $search_data
+	 *
+	 * @return array
+	 * @since 0.12.4
+	 */
+	private function get_selector_referee_data( array $search_data ): array {
+
+		$query_args = [
+			'post_type'      => [ 'anwp_referee' ],
+			'posts_per_page' => 30,
+			's'              => $search_data['s'],
+		];
+
+		$meta_query = [];
+
+		if ( ! empty( $search_data['countries'] ) ) {
+			$meta_query[] = [
+				'key'     => '_anwpfl_nationality',
+				'value'   => '"' . sanitize_text_field( $search_data['countries'] ) . '"',
+				'compare' => 'LIKE',
+			];
+		}
+
+		if ( ! empty( $meta_query ) ) {
+			$query_args['meta_query'] = $meta_query;
+		}
+
+		$results = get_posts( $query_args );
+
+		$output = [
+			'columns' => [
+				[
+					'slug'  => 'title',
+					'title' => esc_html__( 'Referee Name', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'date_of_birth',
+					'title' => esc_html__( 'Date of Birth', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'flag',
+					'title' => esc_html__( 'Country', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'id',
+					'title' => esc_html__( 'ID', 'anwp-football-leagues' ),
+				],
+			],
+			'rows'    => [],
+		];
+
+		/** @var @WP_Post $referee_post */
+		foreach ( $results as $referee_post ) {
+			$country_code = get_post_meta( $referee_post->ID, '_anwpfl_nationality', true )[0] ?? '';
+			$code_parsed  = '';
+
+			if ( $country_code ) {
+				$code_parsed = mb_strtolower( str_replace( '_', '-', $country_code ) );
+
+				if ( in_array( $country_code, [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
+					$code_parsed = '--world';
+				} elseif ( ! in_array( $country_code, anwp_fl()->data->get_available_circle_flags(), true ) ) {
+					$code_parsed = 'xx';
+				}
+			}
+
+			$output['rows'][] = [
+				'title'         => $referee_post->post_title,
+				'id'            => $referee_post->ID,
+				'date_of_birth' => esc_html( get_post_meta( $referee_post->ID, '_anwpfl_date_of_birth', true ) ? : '' ),
+				'flag'          => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) . '#fl-flag--' . $code_parsed ) : '',
+				'country'       => $country_code ? ( anwp_fl()->data->get_value_by_key( $country_code, 'country' ) ) : '',
+			];
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector club data.
+	 *
+	 * @param array $search_data
+	 *
+	 * @return array
+	 */
+	private function get_selector_club_data( array $search_data ): array {
+
+		$query_args = [
+			'post_type'      => [ 'anwp_club' ],
+			'posts_per_page' => 30,
+			's'              => $search_data['s'],
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+		];
+
+		$meta_query = [];
+
+		if ( ! empty( $search_data['countries'] ) ) {
+			$meta_query[] = [
+				'key'   => '_anwpfl_nationality',
+				'value' => sanitize_text_field( $search_data['countries'] ),
+			];
+		}
+
+		if ( ! empty( $meta_query ) ) {
+			$query_args['meta_query'] = $meta_query;
+		}
+
+		$clubs = get_posts( $query_args );
+
+		$output = [
+			'columns' => [
+				[
+					'slug'  => 'img',
+					'title' => '',
+				],
+				[
+					'slug'  => 'title',
+					'title' => esc_html__( 'Club Title', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'city',
+					'title' => esc_html__( 'City', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'flag',
+					'title' => esc_html__( 'Country', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'id',
+					'title' => esc_html__( 'ID', 'anwp-football-leagues' ),
+				],
+			],
+			'rows'    => [],
+		];
+
+		/** @var WP_Post $club */
+		foreach ( $clubs as $club ) {
+			$country_code = get_post_meta( $club->ID, '_anwpfl_nationality', true );
+			$code_parsed  = '';
+
+			if ( $country_code ) {
+				$code_parsed = mb_strtolower( str_replace( '_', '-', $country_code ) );
+
+				if ( in_array( $country_code, [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
+					$code_parsed = '--world';
+				} elseif ( ! in_array( $country_code, anwp_fl()->data->get_available_circle_flags(), true ) ) {
+					$code_parsed = 'xx';
+				}
+			}
+
+			$output['rows'][] = [
+				'title'   => $club->post_title,
+				'id'      => $club->ID,
+				'city'    => esc_html( get_post_meta( $club->ID, '_anwpfl_city', true ) ),
+				'flag'    => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) . '#fl-flag--' . $code_parsed ) : '',
+				'country' => $country_code ? ( anwp_fl()->data->get_value_by_key( $country_code, 'country' ) ) : '',
+				'img'     => esc_html( get_post_meta( $club->ID, '_anwpfl_logo', true ) ) ?: '',
+			];
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector games data.
+	 *
+	 * @param array $search_data
+	 *
+	 * @return array
+	 * @since 0.11.13
+	 */
+	private function get_selector_game_data( array $search_data ): array {
+
+		$args = [
+			'season_id'    => absint( $search_data['seasons'] ) ?: '',
+			'league_id'    => absint( $search_data['leagues'] ) ?: '',
+			'home_club'    => absint( $search_data['club_home'] ),
+			'away_club'    => absint( $search_data['club_away'] ),
+			'sort_by_date' => 'asc',
+			'limit'        => 40,
+		];
+
+		$games = anwp_fl()->competition->tmpl_get_competition_matches_extended( $args, 'stats' );
+
+		$output = [
+			'columns' => [
+				[
+					'slug'  => 'title',
+					'title' => '',
+				],
+				[
+					'slug'  => 'id',
+					'title' => esc_html__( 'ID', 'anwp-football-leagues' ),
+				],
+			],
+			'rows'    => [],
+		];
+
+		foreach ( $games as $game ) {
+			$club_home_title = anwp_fl()->club->get_club_title_by_id( $game->home_club );
+			$club_away_title = anwp_fl()->club->get_club_title_by_id( $game->away_club );
+			$game_date       = '0000-00-00' === explode( ' ', $game->kickoff )[0] ? '' : explode( ' ', $game->kickoff )[0];
+			$game_scores     = absint( $game->finished ) ? ( $game->home_goals . ':' . $game->away_goals ) : '?:?';
+
+			$game_title = $club_home_title . ' - ' . $club_away_title . ' / ' . $game_date . ' / ' . $game_scores;
+
+			$output['rows'][] = [
+				'title' => $game_title,
+				'id'    => $game->match_id,
+			];
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector match initial data.
+	 *
+	 * @param array $data_initial
+	 *
+	 * @return array
+	 * @since 0.11.13
+	 */
+	private function get_selector_match_initial( array $data_initial ): array {
+		$args = [
+			'include_ids'  => implode( ',', $data_initial ),
+			'sort_by_date' => 'asc',
+		];
+
+		$games = anwp_fl()->competition->tmpl_get_competition_matches_extended( $args, 'stats' );
+
+		if ( empty( $games ) || ! is_array( $games ) ) {
+			return [];
+		}
+
+		$output = [];
+
+		foreach ( $games as $game ) {
+			$club_home_title = anwp_fl()->club->get_club_title_by_id( $game->home_club );
+			$club_away_title = anwp_fl()->club->get_club_title_by_id( $game->away_club );
+			$game_date       = '0000-00-00' === explode( ' ', $game->kickoff )[0] ? '' : explode( ' ', $game->kickoff )[0];
+			$game_scores     = absint( $game->finished ) ? ( $game->home_goals . ':' . $game->away_goals ) : '?:?';
+
+			$output[] = [
+				'id'    => $game->match_id,
+				'title' => $club_home_title . ' - ' . $club_away_title . ' / ' . $game_date . ' / ' . $game_scores,
+			];
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector competition initial data.
+	 *
+	 * @param array $data_initial
+	 *
+	 * @since 0.11.15
+	 * @return array
+	 */
+	private function get_selector_competition_initial( array $data_initial ): array {
+
+		$output = [];
+		foreach ( $data_initial as $id ) {
+			$competition_data = anwp_fl()->competition->get_competition_data( $id );
+
+			if ( $competition_data['id'] ?? 0 ) {
+				$output[] = [
+					'id'    => $competition_data['id'],
+					'title' => $competition_data['title'],
+					'img'   => $competition_data['logo'],
+				];
+			}
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector Season initial data.
+	 *
+	 * @param array $data_initial
+	 *
+	 * @return array
+	 * @since 0.12.3
+	 */
+	private function get_selector_season_initial( array $data_initial ): array {
+
+		$query_args = [
+			'number'     => 50,
+			'include'    => $data_initial,
+			'orderby'    => 'name',
+			'taxonomy'   => 'anwp_season',
+			'hide_empty' => false,
+		];
+
+		$results = get_terms( $query_args );
+
+		if ( empty( $results ) || ! is_array( $results ) ) {
+			return [];
+		}
+
+		$output = [];
+
+		foreach ( $results as $season_obj ) {
+			$output[] = [
+				'id'    => $season_obj->term_id,
+				'title' => $season_obj->name,
+			];
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector League initial data.
+	 *
+	 * @param array $data_initial
+	 *
+	 * @return array
+	 * @since 0.12.3
+	 */
+	private function get_selector_league_initial( array $data_initial ): array {
+		$query_args = [
+			'number'     => 50,
+			'include'    => $data_initial,
+			'orderby'    => 'name',
+			'taxonomy'   => 'anwp_league',
+			'hide_empty' => false,
+		];
+
+		$results = get_terms( $query_args );
+
+		if ( empty( $results ) || ! is_array( $results ) ) {
+			return [];
+		}
+
+		$output = [];
+
+		foreach ( $results as $league_obj ) {
+			$output[] = [
+				'id'    => $league_obj->term_id,
+				'title' => $league_obj->name,
+			];
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector Season data.
+	 *
+	 * @param array $search_data
+	 *
+	 * @return array
+	 * @since 0.12.3
+	 */
+	private function get_selector_season_data( array $search_data ): array {
+		$all_seasons = get_terms(
+			[
+				'number'     => 50,
+				'search'     => $search_data['s'],
+				'orderby'    => 'name',
+				'taxonomy'   => 'anwp_season',
+				'hide_empty' => false,
+			]
+		);
+
+		$output = [
+			'columns' => [
+				[
+					'slug'  => 'title',
+					'title' => esc_html__( 'Season', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'id',
+					'title' => esc_html__( 'ID', 'anwp-football-leagues' ),
+				],
+			],
+			'rows'    => [],
+		];
+
+		foreach ( $all_seasons as $season_obj ) {
+			$output['rows'][] = [
+				'id'    => $season_obj->term_id,
+				'title' => $season_obj->name,
+			];
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector League data.
+	 *
+	 * @param array $search_data
+	 *
+	 * @return array
+	 * @since 0.12.3
+	 */
+	private function get_selector_league_data( array $search_data ): array {
+		$all_leagues = get_terms(
+			[
+				'number'     => 50,
+				'search'     => $search_data['s'],
+				'orderby'    => 'name',
+				'taxonomy'   => 'anwp_league',
+				'hide_empty' => false,
+			]
+		);
+
+		$output = [
+			'columns' => [
+				[
+					'slug'  => 'title',
+					'title' => esc_html__( 'League', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'flag',
+					'title' => esc_html__( 'Country', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'id',
+					'title' => esc_html__( 'ID', 'anwp-football-leagues' ),
+				],
+			],
+			'rows'    => [],
+		];
+
+		foreach ( $all_leagues as $league_obj ) {
+			$country_code = anwp_fl()->league->get_league_country_code( $league_obj->term_id ) ?: '';
+			$code_parsed  = '';
+
+			if ( $country_code ) {
+				$code_parsed = mb_strtolower( str_replace( '_', '-', $country_code ) );
+
+				if ( in_array( $country_code, [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
+					$code_parsed = '--world';
+				} elseif ( ! in_array( $country_code, anwp_fl()->data->get_available_circle_flags(), true ) ) {
+					$code_parsed = 'xx';
+				}
+			}
+
+			$output['rows'][] = [
+				'id'      => $league_obj->term_id,
+				'title'   => $league_obj->name,
+				'flag'    => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) . '#fl-flag--' . $code_parsed ) : '',
+				'country' => $country_code ? ( anwp_fl()->data->get_value_by_key( $country_code, 'country' ) ) : '',
+			];
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get selector competition data.
+	 *
+	 * @param array $search_data
+	 *
+	 * @since 0.16.13
+	 * @return array
+	 */
+	private function get_selector_stage_data( array $search_data ): array {
+
+		$competitions = array_filter(
+			anwp_fl()->competition->get_competitions_data(),
+			function ( $competition ) use ( $search_data ) {
+
+				if ( 'main_stage' === $search_data['context'] && 'secondary' === $competition['multistage'] ) {
+					return false;
+				}
+
+				if ( trim( $search_data['s'] ) && ! str_contains( mb_strtolower( $competition['title_full'] ), mb_strtolower( $search_data['s'] ) ) ) {
+					return false;
+				}
+
+				if ( absint( $search_data['leagues'] ) && absint( $search_data['leagues'] ) !== absint( $competition['league_id'] ) ) {
+					return false;
+				}
+
+				if ( absint( $search_data['seasons'] ) && absint( $search_data['seasons'] ) !== absint( $competition['season_ids'] ) ) {
+					return false;
+				}
+
+				return true;
+			}
+		);
+
+		$competitions = array_slice( wp_list_sort( $competitions, 'c_index' ), 0, 30 );
+
+		$competitions = array_map(
+			function ( $competition ) use ( $search_data ) {
+
+				if ( 'main_stage' === $search_data['context'] && 'secondary' !== $competition['multistage'] ) {
+					$competition['title_full'] = $competition['title'];
+				}
+
+				return $competition;
+			},
+			$competitions
+		);
+
+		$output = [
+			'columns' => [
+				[
+					'slug'  => 'img',
+					'title' => '',
+				],
+				[
+					'slug'  => 'title',
+					'title' => esc_html__( 'Competition', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'season',
+					'title' => esc_html__( 'Season', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'flag',
+					'title' => esc_html__( 'Country', 'anwp-football-leagues' ),
+				],
+				[
+					'slug'  => 'id',
+					'title' => esc_html__( 'ID', 'anwp-football-leagues' ),
+				],
+			],
+			'rows'    => [],
+		];
+
+		foreach ( $competitions as $competition ) {
+			$country_code = anwp_fl()->league->get_league_country_code( $competition['league_id'] );
+			$code_parsed  = '';
+
+			if ( $country_code ) {
+				$code_parsed = mb_strtolower( str_replace( '_', '-', $country_code ) );
+
+				if ( in_array( $country_code, [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
+					$code_parsed = '--world';
+				} elseif ( ! in_array( $country_code, anwp_fl()->data->get_available_circle_flags(), true ) ) {
+					$code_parsed = 'xx';
+				}
+			}
+
+			$output['rows'][] = [
+				'title'   => $competition['title_full'],
+				'season'  => $competition['season_text'],
+				'id'      => $competition['id'],
+				'flag'    => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) . '#fl-flag--' . $code_parsed ) : '',
+				'country' => $country_code ? ( anwp_fl()->data->get_value_by_key( $country_code, 'country' ) ) : '',
+				'img'     => 'secondary' === $competition['multistage'] ? anwp_fl()->competition->get_competitions_data()[ $competition['multistage_main'] ]['logo'] ?? '' : $competition['logo'],
+			];
+		}
+
+		return $output;
 	}
 
 	/**
@@ -2299,37 +2194,50 @@ class AnWPFL_Helper {
 	 */
 	public function create_new_league( WP_REST_Request $request ) {
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( 'Access Denied !!!' );
-		}
-
 		$params      = $request->get_params();
 		$league_name = isset( $params['league_name'] ) ? sanitize_text_field( $params['league_name'] ) : '';
 
 		if ( empty( $league_name ) ) {
-			wp_send_json_error( 'Invalid League Name' );
+			return new WP_Error( 'rest_invalid', 'Invalid League Name', [ 'status' => 400 ] );
 		}
+
+		$base_slug = sanitize_title( $params['league_name'] );
+		if ( ! empty( $params['country_code'] ) ) {
+			$base_slug .= '-' . sanitize_title( $params['country_code'] );
+		}
+
+		$maybe_slug = anwp_fl()->league->generate_unique_league_slug( $base_slug );
 
 		$insert_result = wp_insert_term(
 			$league_name,
-			'anwp_league'
+			'anwp_league',
+			[
+				'slug' => $maybe_slug,
+			]
 		);
 
-		if ( ! empty( $insert_result ) && ! is_wp_error( $insert_result ) && ! empty( $insert_result['term_id'] ) ) {
-
-			if ( ! empty( $params['country_code'] ) ) {
-				update_term_meta( $insert_result['term_id'], '_anwpfl_country', $params['country_code'] );
+		// Handle all possible error cases
+		if ( is_wp_error( $insert_result ) ) {
+			if ( $insert_result->get_error_code() === 'term_exists' ) {
+				return new WP_Error( 'rest_duplicate', 'League already exists', [ 'status' => 409 ] );
 			}
-
-			return rest_ensure_response(
-				[
-					'leagues'           => anwp_football_leagues()->league->get_leagues_list(),
-					'created_league_id' => absint( $insert_result['term_id'] ),
-				]
-			);
+			return new WP_Error( 'rest_invalid', 'Failed to create league: ' . $insert_result->get_error_message(), [ 'status' => 500 ] );
 		}
 
-		return rest_ensure_response( new WP_Error( 'rest_invalid', esc_html__( 'Saving Data Error', 'anwp-football-leagues' ), [ 'status' => 400 ] ) );
+		if ( empty( $insert_result['term_id'] ) ) {
+			return new WP_Error( 'rest_invalid', 'Failed to create league', [ 'status' => 500 ] );
+		}
+
+		if ( ! empty( $params['country_code'] ) ) {
+			update_term_meta( $insert_result['term_id'], '_anwpfl_country', sanitize_text_field( $params['country_code'] ) );
+		}
+
+		return rest_ensure_response(
+			[
+				'leagues'           => anwp_football_leagues()->league->get_leagues_list(),
+				'created_league_id' => absint( $insert_result['term_id'] ),
+			]
+		);
 	}
 
 	/**
@@ -2719,5 +2627,27 @@ class AnWPFL_Helper {
 		}
 
 		return $all_meta_data;
+	}
+
+	/**
+	 * Parse Url params from WP Json request and return array with params.
+	 *
+	 * @param string $params_string
+	 *
+	 * @return array
+	 */
+	public static function parse_rest_url_params( string $params_string ): array {
+
+		$args = [];
+
+		foreach ( explode( '~', $params_string ) as $arg_string ) {
+			$arg_parsed = explode( ':', $arg_string );
+
+			if ( isset( $arg_parsed[1] ) ) {
+				$args[ sanitize_key( $arg_parsed[0] ) ] = sanitize_text_field( str_replace( '%20', ' ', $arg_parsed[1] ) );
+			}
+		}
+
+		return $args;
 	}
 }

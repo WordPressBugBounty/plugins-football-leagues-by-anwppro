@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.5.0
  *
- * @version       0.16.9
+ * @version       0.16.17
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -152,7 +152,7 @@ $squad_elements = wp_parse_list( anwp_fl()->customizer->get_value( 'squad', 'squ
 							<?php if ( $player['age2'] && in_array( 'date_of_birth', $squad_elements, true ) ) : ?>
 								<div class="squad-blocks__player-param d-flex anwp-border-light">
 									<span class="squad-blocks__player-param-title anwp-text-sm anwp-opacity-70"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?></span>
-									<span class="squad-blocks__player-param-value ml-auto anwp-text-base"><?php echo esc_html( $player['age2'] ); ?></span>
+									<span class="squad-blocks__player-param-value ml-auto anwp-text-base"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $player['age2'] ) ) ); ?></span>
 								</div>
 							<?php endif; ?>
 
@@ -217,7 +217,7 @@ $squad_elements = wp_parse_list( anwp_fl()->customizer->get_value( 'squad', 'squ
 						<?php if ( in_array( 'date_of_birth', $squad_elements, true ) && $staff_member['age2'] ) : ?>
 							<div class="squad-blocks__player-param d-flex anwp-border-light">
 								<span class="squad-blocks__player-param-title anwp-text-sm anwp-opacity-70"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?></span>
-								<span class="squad-blocks__player-param-value ml-auto anwp-text-base"><?php echo esc_html( $staff_member['age2'] ); ?></span>
+								<span class="squad-blocks__player-param-value ml-auto anwp-text-base"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $staff_member['age2'] ) ) ); ?></span>
 							</div>
 						<?php endif; ?>
 
@@ -302,7 +302,7 @@ $squad_elements = wp_parse_list( anwp_fl()->customizer->get_value( 'squad', 'squ
 					<?php if ( in_array( 'date_of_birth', $squad_elements, true ) && $staff_group_item['age2'] ) : ?>
 						<div class="squad-blocks__player-param d-flex anwp-border-light">
 							<span class="squad-blocks__player-param-title anwp-text-sm anwp-opacity-70"><?php echo esc_html( AnWPFL_Text::get_value( 'squad__shortcode__date_of_birth', __( 'Date of Birth', 'anwp-football-leagues' ) ) ); ?></span>
-							<span class="squad-blocks__player-param-value ml-auto anwp-text-base"><?php echo esc_html( $staff_group_item['age2'] ); ?></span>
+							<span class="squad-blocks__player-param-value ml-auto anwp-text-base"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $staff_group_item['age2'] ) ) ); ?></span>
 						</div>
 					<?php endif; ?>
 

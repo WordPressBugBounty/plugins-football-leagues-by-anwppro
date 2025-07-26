@@ -123,7 +123,7 @@ class AnWPFL_Match_Admin {
 
 			case '_fl_match_competition':
 				// Get competition title
-				$competition = anwp_fl()->competition->get_competition_data_full( $game_data[ $post_id ]['competition_id'] );
+				$competition = anwp_fl()->competition->get_competition_data_full( $game_data[ $post_id ]['competition_id'] ?? 0 );
 
 				if ( ! $competition ) {
 					return;
@@ -342,13 +342,15 @@ class AnWPFL_Match_Admin {
 			// phpcs:ignore WordPress.Security.NonceVerification
 			$competition_filter = empty( $_GET['_fl_competition_id'] ) ? '' : (int) $_GET['_fl_competition_id'];
 			?>
-			<input class="postform anwp-g-float-left anwp-g-admin-list-input anwp-w-120" name="_fl_competition_id" type="text" value="<?php echo esc_attr( $competition_filter ); ?>"
-					placeholder="<?php echo esc_attr__( 'Competition ID', 'anwp-football-leagues' ); ?>"/>
+			<div class="anwp-x-selector anwp-g-float-left" fl-x-data="selectorItem('competition',true)" fl-x-cloak>
+				<input fl-x-model.fill="selected" type="text" class="postform anwp-g-admin-list-input anwp-w-120"
+						placeholder="<?php echo esc_attr__( 'Competition ID', 'anwp-football-leagues' ); ?>"
+						name="_fl_competition_id" value="<?php echo esc_attr( $competition_filter ); ?>" />
+				<button fl-x-on:click="openModal()" type="button" class="button anwp-mr-2 postform">
+					<span class="dashicons dashicons-search"></span>
+				</button>
+			</div>
 
-			<button type="button" class="button anwp-fl-selector anwp-fl-selector--visible anwp-mr-2 postform anwp-g-float-left anwp-d-flex anwp-align-items-center"
-					style="display: none;" data-context="competition" data-single="yes">
-				<span class="dashicons dashicons-search"></span>
-			</button>
 			<?php
 			/*
 			|--------------------------------------------------------------------
@@ -398,14 +400,11 @@ class AnWPFL_Match_Admin {
 			// phpcs:ignore WordPress.Security.NonceVerification
 			$current_club_filter = empty( $_GET['_fl_team_id'] ) ? '' : (int) $_GET['_fl_team_id'];
 			?>
-			<input class="postform anwp-g-float-left anwp-g-admin-list-input anwp-w-120" name="_fl_team_id"
-					type="text" value="<?php echo esc_attr( $current_club_filter ); ?>"
-					placeholder="<?php echo esc_attr__( 'Club ID', 'anwp-football-leagues' ); ?>"/>
-
-			<button type='button' class='button anwp-fl-selector anwp-fl-selector--visible anwp-mr-2 postform anwp-g-float-left anwp-d-flex anwp-align-items-center'
-					style='display: none;' data-context='club' data-single='yes'>
-				<span class='dashicons dashicons-search'></span>
-			</button>
+			<div class="anwp-x-selector anwp-g-float-left" fl-x-data="selectorItem('club',true)" fl-x-cloak>
+				<input fl-x-model.fill="selected" type="text" class="postform anwp-g-admin-list-input anwp-w-120" placeholder="<?php echo esc_attr__( 'Club ID', 'anwp-football-leagues' ); ?>"
+					name="_fl_team_id" value="<?php echo esc_attr( $current_club_filter ); ?>" />
+				<button fl-x-on:click="openModal()" type="button" class="button anwp-mr-2 postform"><span class="dashicons dashicons-search"></span></button>
+			</div>
 			<?php
 
 			/*

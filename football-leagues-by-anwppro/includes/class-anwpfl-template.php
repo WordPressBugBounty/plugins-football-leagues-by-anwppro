@@ -131,7 +131,7 @@ class AnWPFL_Template extends Gamajo_Template_Loader {
 
 		global $post;
 
-		if ( $post && in_array( $post->post_type, $this->plugin->get_post_types(), true ) && is_singular() && is_main_query() && ! post_password_required() ) {
+		if ( $post && in_array( $post->post_type, $this->plugin->get_post_types(), true ) && is_singular() && is_main_query() && in_the_loop() && ! post_password_required() ) {
 
 			if ( apply_filters( 'anwpfl/template/load_default_template', true, $post->post_type, $post ) ) {
 				// Prepare layout

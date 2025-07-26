@@ -70,7 +70,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * @var    string
 	 * @since  0.1.0
 	 */
-	const VERSION = '0.16.16.1';
+	const VERSION = '0.16.17';
 
 	/**
 	 * Current DB structure version.
@@ -1132,70 +1132,173 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	public function include_selector_modaal() {
 		ob_start();
 		?>
-		<div id="anwp-fl-selector-modaal">
-			<div class="anwpfl-shortcode-modal__header">
-				<h3 style="margin: 0">AnWP Selector: <span id="anwp-fl-selector-modaal__header-context"></span></h3>
-			</div>
-			<div class="anwpfl-shortcode-modal__content" id="anwp-fl-selector-modaal__search-bar">
-				<div class="anwp-fl-selector-modaal__bar-group d-none anwp-fl-selector-modaal__bar-group--player anwp-fl-selector-modaal__bar-group--staff anwp-fl-selector-modaal__bar-group--referee anwp-fl-selector-modaal__bar-group--club anwp-fl-selector-modaal__bar-group--competition anwp-fl-selector-modaal__bar-group--league anwp-fl-selector-modaal__bar-group--season anwp-fl-selector-modaal__bar-group--stage anwp-fl-selector-modaal__bar-group--main_stage anwp-mr-2 anwp-mt-2">
-					<label for="anwp-fl-selector-modaal__search"><?php echo esc_html__( 'start typing name or title ...', 'anwp-football-leagues' ); ?></label>
-					<input name="s" type="text" id="anwp-fl-selector-modaal__search" value="" class="fl-shortcode-attr code">
+		<div fl-x-data fl-x-cloak fl-x-show="$store.selectorModal.isOpen" fl-x-trap.inert.noscroll="$store.selectorModal.isOpen" class="anwp-d-flex anwp-x-modal">
+			<div fl-x-show="$store.selectorModal.isOpen" class="anwp-d-flex anwp-x-modal__wrapper">
+				<div class="anwp-x-modal__header">
+					<h3 style="margin: 0">FL Selector: <span fl-x-text="$store.selectorModal.contextHeader"></span></h3>
 				</div>
-				<div class="anwp-fl-selector-modaal__bar-group d-none anwp-fl-selector-modaal__bar-group--player anwp-fl-selector-modaal__bar-group--staff anwp-mr-2 anwp-mt-2">
-					<label for="anwp-fl-selector-modaal__search-club"><?php echo esc_html__( 'Club', 'anwp-football-leagues' ); ?></label>
-					<select name="clubs" id="anwp-fl-selector-modaal__search-club" class="anwp-selector-select2">
-						<option value="">- select -</option>
-					</select>
+
+				<div fl-x-on:click="$store.selectorModal.closeModal()" class="anwp-x-modal__close-button">
+					<span>X</span>
 				</div>
-				<div class="anwp-fl-selector-modaal__bar-group d-none anwp-fl-selector-modaal__bar-group--match anwp-mr-2 anwp-mt-2">
-					<label for="anwp-fl-selector-modaal__search-club-home"><?php echo esc_html__( 'Home Club', 'anwp-football-leagues' ); ?></label>
-					<select name="clubs" id="anwp-fl-selector-modaal__search-club-home" class="anwp-selector-select2">
-						<option value="">- select -</option>
-					</select>
+
+				<div class="anwp-x-modal__section anwp-x-modal__search-bar">
+					<div class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
+						<label for="anwp-x-modal__field__search"><?php echo esc_html__( 'start typing name or title ...', 'anwp-football-leagues' ); ?></label>
+						<input fl-x-on:input.debounce="$store.selectorModal.sendSearchRequest()" fl-x-model="$store.selectorModal.s" name="s" type="text" id="anwp-x-modal__field__search" value="" class="fl-shortcode-attr code">
+					</div>
+					<div fl-x-show="['player','staff'].includes( $store.selectorModal.context ) && ! $store.selectorModal.isLoadingGlobals" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
+						<div class="anwp-d-flex">
+							<label for="anwp-x-modal__field__club"><?php echo esc_html__( 'Club', 'anwp-football-leagues' ); ?></label>
+							<span class="anwp-d-flex anwp-x-modal__clear-filter"
+								fl-x-on:click="$store.selectorModal.clearFilter('clubs')"
+								fl-x-show="$store.selectorModal.filterValues['clubs']">X</span>
+						</div>
+						<select name="clubs" id="anwp-x-modal__field__club" class="anwp-x-modal__select">
+							<option value="">- select -</option>
+						</select>
+					</div>
+					<div fl-x-show="['match'].includes( $store.selectorModal.context ) && ! $store.selectorModal.isLoadingGlobals" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
+						<div class="anwp-d-flex">
+							<label for="anwp-x-modal__field__club-home"><?php echo esc_html__( 'Home Club', 'anwp-football-leagues' ); ?></label>
+							<span class="anwp-d-flex anwp-x-modal__clear-filter"
+								fl-x-on:click="$store.selectorModal.clearFilter('club_home')"
+								fl-x-show="$store.selectorModal.filterValues['club_home']">X</span>
+						</div>
+						<select name="club_home" id="anwp-x-modal__field__club-home" class="anwp-x-modal__select">
+							<option value="">- select -</option>
+						</select>
+					</div>
+					<div fl-x-show="['match'].includes( $store.selectorModal.context ) && ! $store.selectorModal.isLoadingGlobals" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
+						<div class="anwp-d-flex">
+							<label for="anwp-x-modal__field__club-away"><?php echo esc_html__( 'Away Club', 'anwp-football-leagues' ); ?></label>
+							<span class="anwp-d-flex anwp-x-modal__clear-filter"
+								fl-x-on:click="$store.selectorModal.clearFilter('club_away')"
+								fl-x-show="$store.selectorModal.filterValues['club_away']">X</span>
+						</div>
+						<select name="club_away" id="anwp-x-modal__field__club-away" class="anwp-x-modal__select">
+							<option value="">- select -</option>
+						</select>
+					</div>
+					<div fl-x-show="['match','competition','stage','main_stage'].includes( $store.selectorModal.context ) && ! $store.selectorModal.isLoadingGlobals" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
+						<div class="anwp-d-flex">
+							<label for="anwp-x-modal__field__season">
+								<?php echo esc_html__( 'Season', 'anwp-football-leagues' ); ?>
+							</label>
+							<span class="anwp-d-flex anwp-x-modal__clear-filter"
+								fl-x-on:click="$store.selectorModal.clearFilter('seasons')"
+								fl-x-show="$store.selectorModal.filterValues['seasons']">X</span>
+						</div>
+
+						<select name="seasons" id="anwp-x-modal__field__season" class="anwp-x-modal__select"></select>
+					</div>
+					<div fl-x-show="['match','competition','stage','main_stage'].includes( $store.selectorModal.context ) && ! $store.selectorModal.isLoadingGlobals" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
+						<div class="anwp-d-flex">
+							<label for="anwp-x-modal__field__league"><?php echo esc_html__( 'League', 'anwp-football-leagues' ); ?></label>
+							<span class="anwp-d-flex anwp-x-modal__clear-filter"
+								fl-x-on:click="$store.selectorModal.clearFilter('leagues')"
+								fl-x-show="$store.selectorModal.filterValues['leagues']">X</span>
+						</div>
+						<select name="leagues" id="anwp-x-modal__field__league" class="anwp-x-modal__select"></select>
+					</div>
+					<div fl-x-show="['player','referee','club'].includes( $store.selectorModal.context ) && ! $store.selectorModal.isLoadingGlobals" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
+						<div class="anwp-d-flex">
+							<label for="anwp-x-modal__field__country"><?php echo esc_html__( 'Country/Nationality', 'anwp-football-leagues' ); ?></label>
+							<span class="anwp-d-flex anwp-x-modal__clear-filter"
+								fl-x-on:click="$store.selectorModal.clearFilter('countries')"
+								fl-x-show="$store.selectorModal.filterValues['countries']">X</span>
+						</div>
+						<select name="countries" id="anwp-x-modal__field__country" class="anwp-x-modal__select"></select>
+					</div>
+					<div fl-x-show="$store.selectorModal.isLoadingGlobals" class="anwp-mt-2 anwp-d-flex anwp-align-items-center">
+						<span class="spinner is-active" style="float: none; margin-top: 0;"></span>
+					</div>
 				</div>
-				<div class="anwp-fl-selector-modaal__bar-group d-none anwp-fl-selector-modaal__bar-group--match anwp-mr-2 anwp-mt-2">
-					<label for="anwp-fl-selector-modaal__search-club-away"><?php echo esc_html__( 'Away Club', 'anwp-football-leagues' ); ?></label>
-					<select name="clubs" id="anwp-fl-selector-modaal__search-club-away" class="anwp-selector-select2">
-						<option value="">- select -</option>
-					</select>
+
+				<div class="anwp-x-modal__section anwp-x-modal__section--secondary">
+					<h4 style="margin: 0"><?php echo esc_html__( 'Selected Values', 'anwp-football-leagues' ); ?><span fl-x-show="$store.selectorModal.single"> (max - 1)</span>:
+						<span fl-x-bind:class="$store.selectorModal.isLoadingInitial? 'is-active' : ''" class="spinner" style="float: none; margin-top: 0;"></span>
+					</h4>
+					<div fl-x-show="$store.selectorModal.selectedItems.length" fl-x-transition class="anwp-x-modal__selected-wrapper">
+						<template fl-x-for="selectedItem in $store.selectorModal.selectedItems">
+							<div class="anwp-x-modal__selected-item">
+								<img fl-x-show="selectedItem.img" fl-x-bind:src="selectedItem.img" class="anwp-mr-2" alt="logo" style="width: 25px; height: 25px; object-fit: contain;" />
+								<span fl-x-text="selectedItem.title"></span>
+								<button fl-x-on:click="$store.selectorModal.removeSelected( selectedItem.id )"
+									type="button" class="button button-small">
+									X
+								</button>
+							</div>
+						</template>
+					</div>
+					<div fl-x-show="!$store.selectorModal.selectedItems.length">
+						- <?php echo esc_html__( 'none', 'anwp-football-leagues' ); ?> -
+					</div>
 				</div>
-				<div class="anwp-fl-selector-modaal__bar-group d-none anwp-fl-selector-modaal__bar-group--match anwp-fl-selector-modaal__bar-group--competition anwp-fl-selector-modaal__bar-group--stage anwp-fl-selector-modaal__bar-group--main_stage anwp-mr-2 anwp-mt-2">
-					<label for="anwp-fl-selector-modaal__search-season"><?php echo esc_html__( 'Season', 'anwp-football-leagues' ); ?></label>
-					<select name="seasons" id="anwp-fl-selector-modaal__search-season" class="anwp-selector-select2">
-						<option value="">- select -</option>
-					</select>
+
+				<div class="anwp-x-modal__section anwp-x-modal__section-main">
+					<table fl-x-show="$store.selectorModal.rows.length && !$store.selectorModal.isLoadingContent" class="wp-list-table widefat striped table-view-list">
+						<thead>
+						<tr fl-x-show="$store.selectorModal.columns.length">
+							<td class="manage-column check-column"></td>
+							<template fl-x-for="column in $store.selectorModal.columns">
+								<td class="manage-column" fl-x-text="column.title"></td>
+							</template>
+						</tr>
+						</thead>
+
+						<tbody>
+						<template fl-x-for="row in $store.selectorModal.rows">
+							<tr>
+								<td>
+									<button
+										fl-x-on:click="$store.selectorModal.addToSelected( row.id, row.title, row.img || '' )"
+										fl-x-bind:disabled="$store.selectorModal.selectedItemIds.includes( row.id )"
+										type="button" class="button button-small anwp-x-modal__section-action">
+										+
+									</button>
+								</td>
+								<template fl-x-for="column in $store.selectorModal.columns">
+									<td fl-x-bind:class="'img' === column.slug ? 'anwp-w-10' : ''">
+										<template fl-x-if="'img' === column.slug && row.img">
+											<img fl-x-bind:src="row.img" class="anwp-admin-table-league-logo" alt="logo" style="width: 30px; height: 30px; object-fit: contain;" />
+										</template>
+										<template fl-x-if="'flag' === column.slug && row.flag">
+											<svg class="fl-flag--rounded " width="25" height="25"><use fl-x-bind:href="row.flag"></use></svg>
+										</template>
+										<template fl-x-if="'img' !== column.slug && 'flag' !== column.slug">
+											<span fl-x-text="row[column.slug]"></span>
+										</template>
+									</td>
+								</template>
+							</tr>
+						</template>
+						</tbody>
+
+						<tfoot>
+						<tr>
+							<td class="manage-column check-column"></td>
+							<template fl-x-for="column in $store.selectorModal.columns">
+								<td class="manage-column" fl-x-text="column.title"></td>
+							</template>
+						</tr>
+						</tfoot>
+					</table>
+					<div fl-x-show="!$store.selectorModal.rows.length && !$store.selectorModal.isLoadingContent"
+							class="anwp-alert-warning">- <?php echo esc_html__( 'nothing found', 'anwp-football-leagues' ); ?> -</div>
 				</div>
-				<div class="anwp-fl-selector-modaal__bar-group d-none anwp-fl-selector-modaal__bar-group--competition anwp-fl-selector-modaal__bar-group--stage anwp-fl-selector-modaal__bar-group--main_stage anwp-mr-2 anwp-mt-2">
-					<label for="anwp-fl-selector-modaal__search-league"><?php echo esc_html__( 'League', 'anwp-football-leagues' ); ?></label>
-					<select name="leagues" id="anwp-fl-selector-modaal__search-league" class="anwp-selector-select2">
-						<option value="">- select -</option>
-					</select>
+				<span fl-x-show="$store.selectorModal.isLoadingContent"
+						fl-x-bind:class="$store.selectorModal.isLoadingContent? 'is-active' : ''"
+						class="spinner anwp-x-modal__spinner"></span>
+
+				<div class="anwp-x-modal__footer">
+					<button fl-x-on:click="$store.selectorModal.closeModal()" class="button">
+						<?php echo esc_html__( 'Cancel', 'anwp-football-leagues' ); ?>
+					</button>
+					<button fl-x-on:click="$store.selectorModal.insertSelected()" class="button button-primary anwp-ml-2">
+						<?php echo esc_html__( 'Insert', 'anwp-football-leagues' ); ?>
+					</button>
 				</div>
-				<div class="anwp-fl-selector-modaal__bar-group d-none anwp-fl-selector-modaal__bar-group--competition anwp-mr-2 anwp-mt-2">
-					<label for="anwp-fl-selector-modaal__stages">
-						<input type="checkbox" id="anwp-fl-selector-modaal__stages" value="yes">
-						<?php echo esc_html__( 'Include secondary stages', 'anwp-football-leagues' ); ?>
-					</label>
-				</div>
-				<div class="anwp-fl-selector-modaal__bar-group d-none anwp-fl-selector-modaal__bar-group--player anwp-fl-selector-modaal__bar-group--referee anwp-fl-selector-modaal__bar-group--club anwp-mr-2 anwp-mt-2">
-					<label for="anwp-fl-selector-modaal__search-country"><?php echo esc_html__( 'Country/Nationality', 'anwp-football-leagues' ); ?></label>
-					<select name="countries" id="anwp-fl-selector-modaal__search-country" class="anwp-selector-select2">
-						<option value="">- select -</option>
-					</select>
-				</div>
-			</div>
-			<div class="anwpfl-shortcode-modal__footer">
-				<h4 style="margin: 0"><?php echo esc_html__( 'Selected Values', 'anwp-football-leagues' ); ?>:
-					<span class="spinner" id="anwp-fl-selector-modaal__initial-spinner" style="float: none; margin-top: 0;"></span>
-				</h4>
-				<div id="anwp-fl-selector-modaal__selected"></div>
-				<div id="anwp-fl-selector-modaal__selected-none">- <?php echo esc_html__( 'none', 'anwp-football-leagues' ); ?> -</div>
-			</div>
-			<div class="anwpfl-shortcode-modal__content" id="anwp-fl-selector-modaal__content"></div>
-			<span class="spinner" id="anwp-fl-selector-modaal__search-spinner"></span>
-			<div class="anwpfl-shortcode-modal__footer" id="anwp-fl-selector-modaal__footer">
-				<button id="anwp-fl-selector-modaal__cancel" class="button"><?php echo esc_html__( 'Cancel', 'anwp-football-leagues' ); ?></button>
-				<button id="anwp-fl-selector-modaal__insert" class="button button-primary"><?php echo esc_html__( 'Insert', 'anwp-football-leagues' ); ?></button>
 			</div>
 		</div>
 		<?php

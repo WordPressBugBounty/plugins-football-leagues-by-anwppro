@@ -449,6 +449,8 @@ class AnWPFL_Match extends AnWPFL_DB {
 							'short'
 						);
 
+						do_action( 'qm/debug', $home_players );
+
 						$away_players = $this->plugin->club->get_club_season_players(
 							[
 								'club' => $club_away_id,
@@ -472,18 +474,22 @@ class AnWPFL_Match extends AnWPFL_DB {
 						$squad_position_map = [];
 
 						foreach ( $home_players as $player ) {
-							$home_squad_numbers[ $player->id ] = isset( $player->number ) ? $player->number : '';
+							if ( 'left' !== ( $player->status ?? '' ) ) {
+								$home_squad_numbers[ $player->id ] = $player->number ?? '';
 
-							if ( ! empty( $player->position ) ) {
-								$squad_position_map[ $player->id ] = $player->position;
+								if ( ! empty( $player->position ) ) {
+									$squad_position_map[ $player->id ] = $player->position;
+								}
 							}
 						}
 
 						foreach ( $away_players as $player ) {
-							$away_squad_numbers[ $player->id ] = isset( $player->number ) ? $player->number : '';
+							if ( 'left' !== ( $player->status ?? '' ) ) {
+								$away_squad_numbers[ $player->id ] = $player->number ?? '';
 
-							if ( ! empty( $player->position ) ) {
-								$squad_position_map[ $player->id ] = $player->position;
+								if ( ! empty( $player->position ) ) {
+									$squad_position_map[ $player->id ] = $player->position;
+								}
 							}
 						}
 
