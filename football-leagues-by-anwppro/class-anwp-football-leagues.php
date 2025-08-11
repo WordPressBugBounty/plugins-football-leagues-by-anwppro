@@ -70,7 +70,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * @var    string
 	 * @since  0.1.0
 	 */
-	const VERSION = '0.16.17';
+	const VERSION = '0.16.18';
 
 	/**
 	 * Current DB structure version.
@@ -1120,6 +1120,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 			require_once self::dir( 'includes/cmb2-fields/class-anwp-cmb2-field-ajax-search.php' );
 			require_once self::dir( 'includes/cmb2-fields/class-anwp-fl-cmb2-field-select2.php' );
 			require_once self::dir( 'includes/cmb2-fields/cmb-field-translated-text.php' );
+			require_once self::dir( 'includes/cmb2-fields/cmb-field-anwp-fl-selector.php' );
 		}
 	}
 

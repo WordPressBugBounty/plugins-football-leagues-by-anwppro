@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.7.3
  *
- * @version       0.16.0
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -131,7 +131,7 @@ $col_span      = $hide_points ? 5 : 6;
 						<?php endforeach; ?>
 					</div>
 
-					<a class="anwp-link-cover anwp-link-without-effects" title="<?php echo esc_attr( $p->name ); ?>" href="<?php echo esc_url( $p->link ); ?>"></a>
+					<a class="anwp-link-cover anwp-link-without-effects" title="<?php echo esc_attr( $p->name ); ?>" aria-label="<?php echo esc_attr( $p->name ); ?>" href="<?php echo esc_url( $p->link ); ?>"></a>
 				</div>
 			<?php elseif ( 'clubs' === $data['type'] ) : ?>
 				<div class="d-flex align-items-center position-relative">
@@ -145,7 +145,7 @@ $col_span      = $hide_points ? 5 : 6;
 						<?php echo esc_html( anwp_fl()->club->get_club_title_by_id( $p->club_id ) ); ?>
 					</div>
 
-					<a class="anwp-link-cover anwp-link-without-effects" title="<?php echo esc_attr( anwp_fl()->club->get_club_title_by_id( $p->club_id ) ); ?>" href="<?php echo esc_url( anwp_fl()->club->get_club_link_by_id( $p->club_id ) ); ?>"></a>
+					<a class="anwp-link-cover anwp-link-without-effects" title="<?php echo esc_attr( anwp_fl()->club->get_club_title_by_id( $p->club_id ) ); ?>" aria-label="<?php echo esc_attr( anwp_fl()->club->get_club_title_by_id( $p->club_id ) ); ?>" href="<?php echo esc_url( anwp_fl()->club->get_club_link_by_id( $p->club_id ) ); ?>"></a>
 				</div>
 			<?php endif; ?>
 		</div>

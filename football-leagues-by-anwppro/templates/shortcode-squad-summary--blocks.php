@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.5.0
  *
- * @version       0.15.0
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -182,7 +182,7 @@ $positions_l10n = [
 									</div>
 								<?php endif; ?>
 							</div>
-							<a href="<?php echo esc_url( get_permalink( $player_id ) ); ?>" class="anwp-link-cover"></a>
+							<a href="<?php echo esc_url( get_permalink( $player_id ) ); ?>" class="anwp-link-cover" aria-label="<?php echo esc_attr( $player['name'] ); ?>"></a>
 						</div>
 						<?php
 					endforeach;
@@ -245,7 +245,7 @@ $positions_l10n = [
 								</div>
 							<?php endif; ?>
 						</div>
-						<a href="<?php echo esc_url( get_permalink( $staff_id ) ); ?>" class="anwp-link-cover"></a>
+						<a href="<?php echo esc_url( get_permalink( $staff_id ) ); ?>" class="anwp-link-cover" aria-label="<?php echo esc_attr( $team_squad_data['title'] ); ?>"></a>
 					</div>
 					<?php
 				endforeach;

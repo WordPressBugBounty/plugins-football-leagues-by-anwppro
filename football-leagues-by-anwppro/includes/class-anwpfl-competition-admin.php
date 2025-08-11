@@ -76,29 +76,19 @@ class AnWPFL_Competition_Admin {
 			| Filter By League
 			|--------------------------------------------------------------------
 			*/
-			$leagues = get_terms(
-				[
-					'taxonomy'   => 'anwp_league',
-					'hide_empty' => false,
-				]
-			);
+			// phpcs:ignore WordPress.Security.NonceVerification
+			$current_league_filter = empty( $_GET['_anwpfl_current_league'] ) ? '' : (int) $_GET['_anwpfl_current_league'];
+			?>
+			<div class="anwp-x-selector anwp-g-float-left" fl-x-data="selectorItem('league',true)" fl-x-cloak>
+				<input fl-x-model.fill="selected" type="text" class="postform anwp-g-admin-list-input anwp-w-120"
+					placeholder="<?php echo esc_attr__( 'League ID', 'anwp-football-leagues' ); ?>"
+					name="_anwpfl_current_league" value="<?php echo esc_attr( $current_league_filter ); ?>"/>
+				<button fl-x-on:click="openModal()" type="button" class="button anwp-mr-2 postform">
+					<span class="dashicons dashicons-search"></span>
+				</button>
+			</div>
 
-			if ( ! is_wp_error( $leagues ) && ! empty( $leagues ) ) {
-				// phpcs:ignore WordPress.Security.NonceVerification
-				$current_league_filter = empty( $_GET['_anwpfl_current_league'] ) ? '' : (int) $_GET['_anwpfl_current_league'];
-				?>
-
-				<select name='_anwpfl_current_league' id='anwp_league_filter' class='postform'>
-					<option value=''><?php echo esc_html__( 'All Leagues', 'anwp-football-leagues' ); ?></option>
-					<?php foreach ( $leagues as $league ) : ?>
-						<option value="<?php echo esc_attr( $league->term_id ); ?>" <?php selected( $league->term_id, $current_league_filter ); ?>>
-							- <?php echo esc_html( $league->name ); ?>
-						</option>
-					<?php endforeach; ?>
-				</select>
-				<?php
-			}
-
+			<?php
 			/*
 			|--------------------------------------------------------------------
 			| Filter By Season

@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.14.0
  *
- * @version       0.16.11
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -58,6 +58,6 @@ if ( empty( $club_obj->logo ) ) {
 	<?php echo $data['extra_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 	<?php if ( $show_link ) : ?>
-		<a class="anwp-link-cover anwp-link-without-effects anwp-cursor-pointer" href="<?php echo esc_url( $club_obj->link ); ?>"></a>
+		<a class="anwp-link-cover anwp-link-without-effects anwp-cursor-pointer" href="<?php echo esc_url( $club_obj->link ); ?>" aria-label="<?php echo esc_attr( $club_obj->title ); ?>"></a>
 	<?php endif; ?>
 </div>

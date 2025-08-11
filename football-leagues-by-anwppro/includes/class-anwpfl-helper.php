@@ -173,7 +173,7 @@ class AnWPFL_Helper {
 
 		register_rest_route(
 			'anwpfl',
-			'/helper/get-selector-data/(?P<args>[a-zA-Z0-9-_~:,]+)',
+			'/helper/get-selector-data/(?P<args>[a-zA-Z0-9-_~%:,]+)',
 			[
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'get_selector_data' ],
@@ -185,7 +185,7 @@ class AnWPFL_Helper {
 
 		register_rest_route(
 			'anwpfl',
-			'/helper/get-selector-initial/(?P<args>[a-zA-Z0-9-_~:,]+)',
+			'/helper/get-selector-initial/(?P<args>[a-zA-Z0-9-_~%:,]+)',
 			[
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'get_selector_initial' ],
@@ -2641,10 +2641,10 @@ class AnWPFL_Helper {
 		$args = [];
 
 		foreach ( explode( '~', $params_string ) as $arg_string ) {
-			$arg_parsed = explode( ':', $arg_string );
+			$arg_parsed = explode( ':', $arg_string, 2 );
 
 			if ( isset( $arg_parsed[1] ) ) {
-				$args[ sanitize_key( $arg_parsed[0] ) ] = sanitize_text_field( str_replace( '%20', ' ', $arg_parsed[1] ) );
+				$args[ sanitize_key( $arg_parsed[0] ) ] = sanitize_text_field( urldecode( $arg_parsed[1] ) );
 			}
 		}
 

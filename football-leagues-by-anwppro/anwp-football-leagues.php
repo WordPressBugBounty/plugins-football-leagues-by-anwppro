@@ -3,7 +3,7 @@
  * Plugin Name: AnWP Football Leagues
  * Plugin URI:  https://anwppro.userecho.com/communities/1-football-leagues
  * Description: Create and manage your own football club, competition, league or soccer news website. Knockout and round-robin stages, player profiles, standing tables and much more.
- * Version:     0.16.17
+ * Version:     0.16.18
  * Author:      Andrei Strekozov <anwppro>
  * Author URI:  https://anwp.pro
  * License:     GPLv3
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
-define( 'ANWP_FL_VERSION', '0.16.17' );
+define( 'ANWP_FL_VERSION', '0.16.18' );
 define( 'ANWP_FL_MIN_PHP_VERSION', '7.4' );
 
 // Check for required PHP version

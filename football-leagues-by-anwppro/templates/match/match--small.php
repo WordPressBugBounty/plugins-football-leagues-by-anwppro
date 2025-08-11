@@ -11,7 +11,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.14.0
  *
- * @version       0.16.4
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -291,5 +291,5 @@ $data->extra_actions_html = apply_filters( 'anwpfl/tmpl-match-small/extra_action
 		<?php endif; ?>
 	</div>
 
-	<a class="anwp-link-cover anwp-link-without-effects anwp-cursor-pointer" href="<?php echo esc_url( $data->permalink ); ?>"></a>
+	<a class="anwp-link-cover anwp-link-without-effects anwp-cursor-pointer" href="<?php echo esc_url( $data->permalink ); ?>" aria-label="<?php echo esc_attr( $data->club_home_title . ' - ' . $data->club_away_title ); ?>"></a>
 </div>

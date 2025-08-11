@@ -11,7 +11,7 @@
  * @since         0.5.1
  * @since         0.7.4 Added link wrapper
  *
- * @version       0.16.13.2
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -126,6 +126,6 @@ $competition_title = empty( $data['title'] ) ? ( 'competition' === $data['title_
 		</div>
 	</div>
 	<?php if ( $link_post_id ) : ?>
-		<a href="<?php echo esc_url( get_permalink( $link_post_id ) ); ?>" class="anwp-link-cover anwp-link-without-effects"></a>
+		<a href="<?php echo esc_url( get_permalink( $link_post_id ) ); ?>" aria-label="<?php echo esc_attr( $competition_title ); ?>" class="anwp-link-cover anwp-link-without-effects"></a>
 	<?php endif; ?>
 </div>

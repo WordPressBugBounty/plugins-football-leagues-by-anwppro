@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.10.23
  *
- * @version       0.14.11
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -83,7 +83,7 @@ if ( '' === $data->layout ) : ?>
 						</div>
 					<?php endif; ?>
 
-					<a class="anwp-link-without-effects anwp-link-cover" href="<?php echo esc_url( anwp_football_leagues()->club->get_club_link_by_id( $club->ID ) ); ?>"></a>
+					<a class="anwp-link-without-effects anwp-link-cover" aria-label="<?php echo esc_attr( $club->post_title ); ?>" href="<?php echo esc_url( anwp_football_leagues()->club->get_club_link_by_id( $club->ID ) ); ?>"></a>
 				</div>
 			<?php endforeach; ?>
 		</div>

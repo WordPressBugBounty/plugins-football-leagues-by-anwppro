@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.8.0
  *
- * @version       0.16.13
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -131,5 +131,5 @@ $matchweek_title = anwp_fl()->competition->tmpl_get_matchweek_round_text( $data-
 		</div>
 	<?php endif; ?>
 
-	<a class="anwp-link-cover anwp-link-without-effects" href="<?php echo esc_url( $data->permalink ); ?>"></a>
+	<a class="anwp-link-cover anwp-link-without-effects" href="<?php echo esc_url( $data->permalink ); ?>" aria-label="<?php echo esc_attr( $data->club_home_title . ' - ' . $data->club_away_title ); ?>"></a>
 </div>

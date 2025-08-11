@@ -10,7 +10,7 @@
  * @package        AnWP-Football-Leagues/Templates
  * @since          0.7.4
  *
- * @version        0.16.12
+ * @version        0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -152,5 +152,5 @@ $data = (object) wp_parse_args(
 			?>
 		</div>
 	<?php endif; ?>
-	<a class="anwp-link-cover anwp-link-without-effects" href="<?php echo esc_url( $data->permalink ); ?>"></a>
+	<a class="anwp-link-cover anwp-link-without-effects" href="<?php echo esc_url( $data->permalink ); ?>" aria-label="<?php echo esc_attr( $data->club_home_title . ' - ' . $data->club_away_title ); ?>"></a>
 </div>

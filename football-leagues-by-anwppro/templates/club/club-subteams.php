@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.15.0
  *
- * @version       0.15.0
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -43,7 +43,7 @@ if ( empty( $subteam_list ) ) {
 	<div class="m-1 club-subteams__item anwp-fl-btn d-flex align-items-center position-relative py-0 <?php echo 'root' === $subteam_status ? 'club-subteams__item--active anwp-cursor-default' : ''; ?>">
 		<?php echo esc_html( $root_team_title ); ?>
 		<?php if ( 'root' !== $subteam_status ) : ?>
-			<a href="<?php echo esc_url( get_permalink( $root_team_id ) ); ?>" class="anwp-link-without-effects text-decoration-none anwp-link-cover"></a>
+			<a href="<?php echo esc_url( get_permalink( $root_team_id ) ); ?>" class="anwp-link-without-effects text-decoration-none anwp-link-cover" aria-label="<?php echo esc_attr( $root_team_title ); ?>"></a>
 		<?php endif; ?>
 	</div>
 
@@ -51,7 +51,7 @@ if ( empty( $subteam_list ) ) {
 		<div class="m-1 club-subteams__item anwp-fl-btn d-flex align-items-center position-relative py-0 <?php echo absint( $data->club_id ) === absint( $subteam_item['subteam'] ) ? 'club-subteams__item--active anwp-cursor-default' : ''; ?>">
 			<?php echo esc_html( $subteam_item['title'] ); ?>
 			<?php if ( absint( $data->club_id ) !== absint( $subteam_item['subteam'] ) ) : ?>
-				<a href="<?php echo esc_url( get_permalink( $subteam_item['subteam'] ) ); ?>" class="anwp-link-without-effects text-decoration-none anwp-link-cover"></a>
+				<a href="<?php echo esc_url( get_permalink( $subteam_item['subteam'] ) ); ?>" class="anwp-link-without-effects text-decoration-none anwp-link-cover" aria-label="<?php echo esc_attr( $subteam_item['title'] ); ?>"></a>
 			<?php endif; ?>
 		</div>
 	<?php endforeach; ?>

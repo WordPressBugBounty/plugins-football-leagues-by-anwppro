@@ -357,25 +357,18 @@ class AnWPFL_Match_Admin {
 			| Filter By League
 			|--------------------------------------------------------------------
 			*/
-			$leagues = anwp_fl()->league->get_league_options();
-
-			if ( ! is_wp_error( $leagues ) && ! empty( $leagues ) ) {
-				// phpcs:ignore WordPress.Security.NonceVerification
-				$league_filter = empty( $_GET['_fl_league'] ) ? '' : (int) $_GET['_fl_league'];
-
-				asort( $leagues );
-				?>
-
-				<select name='_fl_league' id='anwp_league_filter' class='postform'>
-					<option value=''><?php echo esc_html__( 'All Leagues', 'anwp-football-leagues' ); ?></option>
-					<?php foreach ( $leagues as $league_id => $league_name ) : ?>
-						<option value="<?php echo esc_attr( $league_id ); ?>" <?php selected( $league_id, $league_filter ); ?>>
-							<?php echo esc_html( $league_name ); ?>
-						</option>
-					<?php endforeach; ?>
-				</select>
-				<?php
-			}
+			// phpcs:ignore WordPress.Security.NonceVerification
+			$league_filter = empty( $_GET['_fl_league'] ) ? '' : (int) $_GET['_fl_league'];
+			?>
+			<div class="anwp-x-selector anwp-g-float-left" fl-x-data="selectorItem('league',true)" fl-x-cloak>
+				<input fl-x-model.fill="selected" type="text" class="postform anwp-g-admin-list-input anwp-w-120"
+					placeholder="<?php echo esc_attr__( 'League ID', 'anwp-football-leagues' ); ?>"
+					name="_fl_league" value="<?php echo esc_attr( $league_filter ); ?>"/>
+				<button fl-x-on:click="openModal()" type="button" class="button anwp-mr-2 postform">
+					<span class="dashicons dashicons-search"></span>
+				</button>
+			</div>
+			<?php
 
 			// Seasons dropdown
 			$seasons = anwp_fl()->season->get_seasons_list();

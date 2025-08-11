@@ -244,10 +244,12 @@ class AnWPFL_Data_Port {
 		header( 'Expires: 0' );
 		header( 'Pragma: public' );
 
-		fputcsv( $fh, $header_row );
+		$safe_header = array_map( [ $this, 'csv_sanitize_cell' ], $header_row );
+		fputcsv( $fh, $safe_header );
 
 		foreach ( $data_rows as $data_row ) {
-			fputcsv( $fh, $data_row );
+			$safe_row = array_map( [ $this, 'csv_sanitize_cell' ], $data_row );
+			fputcsv( $fh, $safe_row );
 		}
 
 		fclose( $fh ); // phpcs:ignore
@@ -353,10 +355,12 @@ class AnWPFL_Data_Port {
 		header( 'Expires: 0' );
 		header( 'Pragma: public' );
 
-		fputcsv( $fh, $header_row );
+		$safe_header = array_map( [ $this, 'csv_sanitize_cell' ], $header_row );
+		fputcsv( $fh, $safe_header );
 
 		foreach ( $data_rows as $data_row ) {
-			fputcsv( $fh, $data_row );
+			$safe_row = array_map( [ $this, 'csv_sanitize_cell' ], $data_row );
+			fputcsv( $fh, $safe_row );
 		}
 
 		fclose( $fh ); // phpcs:ignore
@@ -2373,5 +2377,37 @@ class AnWPFL_Data_Port {
 		$import_status['post_edit']  = get_edit_post_link( $post_obj );
 
 		return $import_status;
+	}
+
+	/**
+	 * Neutralize spreadsheet formula injection in CSV cells.
+	 * If a value begins (after optional whitespace) with =, +, -, or @,
+	 * prefix it with a single quote to force literal interpretation.
+	 *
+	 * @param mixed $value
+	 *
+	 * @return string
+	 */
+	private function csv_sanitize_cell( $value ): string {
+		// Normalize to string
+		if ( is_null( $value ) ) {
+			$value = '';
+		} elseif ( is_bool( $value ) ) {
+			$value = $value ? '1' : '0';
+		} elseif ( is_array( $value ) || is_object( $value ) ) {
+			$value = (string) wp_json_encode( $value );
+		} else {
+			$value = (string) $value;
+		}
+
+		// Remove any NUL bytes
+		$value = str_replace( "\0", '', $value );
+
+		// If the value starts with optional whitespace followed by a formula-triggering character, neutralize it
+		if ( preg_match( '/^\s*[=\+\-@]/u', $value ) ) {
+			$value = "'" . $value;
+		}
+
+		return $value;
 	}
 }

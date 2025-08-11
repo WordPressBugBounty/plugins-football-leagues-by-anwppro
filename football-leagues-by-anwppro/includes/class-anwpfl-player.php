@@ -14,6 +14,8 @@
 class AnWPFL_Player extends AnWPFL_DB {
 
 	/**
+	 * Core plugin
+	 *
 	 * @var AnWP_Football_Leagues
 	 */
 	protected $plugin = null;
@@ -26,7 +28,6 @@ class AnWPFL_Player extends AnWPFL_DB {
 	/**
 	 * Constructor.
 	 *
-	 * @since  0.1.0
 	 * @param AnWP_Football_Leagues $plugin Main plugin object.
 	 */
 	public function __construct( AnWP_Football_Leagues $plugin ) {
@@ -150,6 +151,20 @@ class AnWPFL_Player extends AnWPFL_DB {
 		add_filter( 'cmb2_override_meta_value', [ $this, 'get_cmb2_player_data' ], 10, 4 );
 
 		add_action( 'save_post_anwp_player', [ $this, 'change_player_title_on_inline_save' ], 10, 3 );
+		add_filter( 'disable_months_dropdown', [ $this, 'disable_months_dropdown' ], 10, 2 );
+	}
+
+	/**
+	 * Filters whether to remove the 'Months' drop-down from the post list table.
+	 *
+	 * @param bool   $disable   Whether to disable the drop-down. Default false.
+	 * @param string $post_type The post type.
+	 *
+	 * @return bool
+	 */
+	public function disable_months_dropdown( bool $disable, string $post_type ): bool {
+
+		return 'anwp_player' === $post_type ? true : $disable;
 	}
 
 	/**
@@ -183,7 +198,7 @@ class AnWPFL_Player extends AnWPFL_DB {
 	/**
 	 * Filter CPT title entry placeholder text
 	 *
-	 * @param  string $title Original placeholder text
+	 * @param string $title Original placeholder text.
 	 *
 	 * @return string        Modified placeholder text
 	 */
@@ -270,10 +285,8 @@ class AnWPFL_Player extends AnWPFL_DB {
 				break;
 
 			case '_fl_player_team_id':
-				$clubs_options = $this->plugin->club->get_clubs_options();
-
-				if ( ! empty( $clubs_options[ $post->_fl_player_team_id ] ) ) {
-					echo esc_html( $clubs_options[ $post->_fl_player_team_id ] );
+				if ( ! empty( $post->_fl_player_team_id ) ) {
+					echo esc_html( anwp_fl()->club->get_club_title_by_id( $post->_fl_player_team_id ) );
 				}
 
 				break;
@@ -296,23 +309,18 @@ class AnWPFL_Player extends AnWPFL_DB {
 	 *
 	 * @param string $post_type The post type slug.
 	 */
-	public function custom_admin_filters( $post_type ) {
+	public function custom_admin_filters( string $post_type ) {
 		if ( 'anwp_player' === $post_type ) {
-			$clubs = $this->plugin->club->get_clubs_options();
 
 			// phpcs:ignore WordPress.Security.NonceVerification
-			$filter_fl_team_id = $_GET['_fl_team_id'] ?? '';
+			$filter_fl_team_id = empty( $_GET['_fl_team_id'] ) ? '' : (int) $_GET['_fl_team_id'];
 			ob_start();
 			?>
-
-			<select name='_fl_team_id' id='fl-team-filter' class='postform'>
-				<option value=''>All Clubs</option>
-				<?php foreach ( $clubs as $club_id => $club_title ) : ?>
-					<option value="<?php echo esc_attr( $club_id ); ?>" <?php selected( $club_id, absint( $filter_fl_team_id ) ); ?>>
-						<?php echo esc_html( $club_title ); ?>
-					</option>
-				<?php endforeach; ?>
-			</select>
+			<div class="anwp-x-selector anwp-g-float-left" fl-x-data="selectorItem('club',true)" fl-x-cloak>
+				<input fl-x-model.fill="selected" type="text" class="postform anwp-g-admin-list-input anwp-w-120" placeholder="<?php echo esc_attr__( 'Club ID', 'anwp-football-leagues' ); ?>"
+					name="_fl_team_id" value="<?php echo esc_attr( $filter_fl_team_id ); ?>" />
+				<button fl-x-on:click="openModal()" type="button" class="button anwp-mr-2 postform"><span class="dashicons dashicons-search"></span></button>
+			</div>
 			<?php
 			echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
@@ -540,11 +548,10 @@ class AnWPFL_Player extends AnWPFL_DB {
 	 * @param int     $post_id The ID of the post being saved.
 	 * @param WP_Post $post_obj
 	 *
-	 * @since  0.13.7
 	 * @return int
+	 * @since  0.13.7
 	 */
 	public function save_metabox( int $post_id, WP_Post $post_obj ): int {
-
 		/*
 		 * We need to verify this came from the our screen and with proper authorization,
 		 * because save_post can be triggered at other times.
@@ -556,12 +563,12 @@ class AnWPFL_Player extends AnWPFL_DB {
 		}
 
 		// Verify that the nonce is valid.
-		if ( ! wp_verify_nonce( $_POST['anwp_metabox_nonce'], 'anwp_save_metabox_' . $post_id ) ) {
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['anwp_metabox_nonce'] ) ), 'anwp_save_metabox_' . $post_id ) ) {
 			return $post_id;
 		}
 
 		// Check post type
-		if ( 'anwp_player' !== $_POST['post_type'] ) {
+		if ( 'anwp_player' !== sanitize_text_field( wp_unslash( $_POST['post_type'] ?? '' ) ) ) {
 			return $post_id;
 		}
 
@@ -744,8 +751,8 @@ class AnWPFL_Player extends AnWPFL_DB {
 	 * @param int $player_id
 	 * @param int $season_id
 	 *
+	 * @return array
 	 * @since 0.13.7
-	 *@return array
 	 */
 	public function get_manual_stats( $player_id, $season_id = 0 ) {
 
@@ -848,8 +855,8 @@ class AnWPFL_Player extends AnWPFL_DB {
 	 *
 	 * @param WP_REST_Request $request
 	 *
-	 * @since 0.12.6
 	 * @return WP_REST_Response | WP_Error
+	 * @since 0.12.6
 	 */
 	public function get_player_actions_data( WP_REST_Request $request ) {
 
@@ -881,8 +888,8 @@ class AnWPFL_Player extends AnWPFL_DB {
 	 *
 	 * @param WP_REST_Request $request
 	 *
-	 * @since 0.12.3
 	 * @return WP_REST_Response | WP_Error
+	 * @since 0.12.3
 	 */
 	public function update_player_current_club( WP_REST_Request $request ) {
 		global $wpdb;
@@ -914,8 +921,8 @@ class AnWPFL_Player extends AnWPFL_DB {
 	 *
 	 * @param WP_REST_Request $request
 	 *
+	 * @return WP_REST_Response | WP_Error
 	 * @since 0.12.3
-	 *@return WP_REST_Response | WP_Error
 	 */
 	public function add_player_to_squad( WP_REST_Request $request ) {
 
@@ -1113,14 +1120,11 @@ class AnWPFL_Player extends AnWPFL_DB {
 
 		$cmb->add_field(
 			[
-				'name'       => esc_html__( 'Current Club', 'anwp-football-leagues' ),
+				'name'       => esc_html__( 'Current Club ID', 'anwp-football-leagues' ),
 				'id'         => $prefix . 'team_id',
-				'save_field' => false,
-				'options_cb' => [ $this->plugin->club, 'get_clubs_options' ],
-				'type'       => 'anwp_fl_select',
-				'attributes' => [
-					'placeholder' => esc_html__( '- not selected -', 'anwp-football-leagues' ),
-				],
+				'type'       => 'anwp_fl_selector',
+				'fl_single'  => 'true',
+				'fl_context' => 'club',
 			]
 		);
 

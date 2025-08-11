@@ -1032,6 +1032,33 @@ class AnWPFL_Customizer {
 
 		/*
 		|--------------------------------------------------------------------
+		| template_loading_check
+		|--------------------------------------------------------------------
+		*/
+		$wp_customize->add_setting(
+			'anwp-fl-customizer[general][template_loading_check]',
+			[
+				'default' => '',
+				'type'    => 'option',
+			]
+		);
+
+		$wp_customize->add_control(
+			'anwp-fl-customizer[general][template_loading_check]',
+			[
+				'type'     => 'select',
+				'label'    => esc_html__( 'Strict Template Loading Check', 'anwp-football-leagues' ),
+				'section'  => 'fl_general',
+				'settings' => 'anwp-fl-customizer[general][template_loading_check]',
+				'choices'  => [
+					''   => __( 'Yes', 'anwp-football-leagues' ),
+					'no' => __( 'No', 'anwp-football-leagues' ),
+				],
+			]
+		);
+
+		/*
+		|--------------------------------------------------------------------
 		| hide_post_titles
 		|--------------------------------------------------------------------
 		*/

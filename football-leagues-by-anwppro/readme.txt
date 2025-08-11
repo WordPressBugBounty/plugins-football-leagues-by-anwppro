@@ -5,7 +5,7 @@ Tags:              football, soccer, sport
 Requires at least: 5.7
 Requires PHP:      7.4
 Tested up to:      6.8
-Stable tag:        0.16.17
+Stable tag:        0.16.18
 License:           GPLv3
 License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -149,6 +149,10 @@ Yes! The plugin works with most themes out of the box. If you have any CSS styli
 17. Admin >> Edit Match (Events)
 
 == Changelog ==
+
+= 0.16.18 - 2025-08-11 =
+* fixed: FL Selector - problem with non-Latin characters in Search field
+* improved: accessibility improvements
 
 = 0.16.17 - 2025-07-26 =
 * added: new version of FL Selector

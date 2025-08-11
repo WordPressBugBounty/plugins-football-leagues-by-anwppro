@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.6.1
  *
- * @version       0.16.12
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -127,7 +127,7 @@ $data = wp_parse_args(
 					<span class="match__scores-number"><?php echo (int) $data['home_goals']; ?></span>
 				</div>
 			<?php endif; ?>
-			<a class="anwp-link-cover anwp-link-without-effects anwp-cursor-pointer" href="<?php echo esc_url( $data['club_home_link'] ); ?>"></a>
+			<a class="anwp-link-cover anwp-link-without-effects anwp-cursor-pointer" href="<?php echo esc_url( $data['club_home_link'] ); ?>" aria-label="<?php echo esc_attr( $data['club_home_title'] ); ?>"></a>
 		</div>
 
 		<?php if ( '1' === $data['finished'] ) : ?>
@@ -161,7 +161,7 @@ $data = wp_parse_args(
 					<span class="match__scores-number"><?php echo (int) $data['away_goals']; ?></span>
 				</div>
 			<?php endif; ?>
-			<a class="anwp-link-cover anwp-link-without-effects anwp-cursor-pointer" href="<?php echo esc_url( $data['club_away_link'] ); ?>"></a>
+			<a class="anwp-link-cover anwp-link-without-effects anwp-cursor-pointer" href="<?php echo esc_url( $data['club_away_link'] ); ?>" aria-label="<?php echo esc_attr( $data['club_away_title'] ); ?>"></a>
 		</div>
 	</div>
 

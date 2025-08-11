@@ -11,7 +11,7 @@
  * @since         0.4.2 Modified multistage logic
  * @since         0.7.2 Modified logic and structure
  *
- * @version       0.15.0
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -97,7 +97,7 @@ do_action( 'anwpfl/tmpl-competition/before_wrapper', $competition_post_id );
 					<div class="position-relative anwp-text-sm anwp-fl-tabs__item anwp-bg-gray-light anwp-fl-border anwp-border-light anwp-flex-1 d-flex align-items-center justify-content-center"
 						data-target="#anwp_c_id_<?php echo (int) $c->ID; ?>" id="anwp_id_<?php echo (int) $c->ID; ?>-tab">
 						<span><?php echo esc_html( get_post_meta( $c->ID, '_anwpfl_stage_title', true ) ); ?></span>
-						<a class="anwp-link-without-effects anwp-link-cover" href="#"></a>
+						<a class="anwp-link-without-effects anwp-link-cover" href="#" aria-label="<?php echo esc_attr( get_post_meta( $c->ID, '_anwpfl_stage_title', true ) ); ?>"></a>
 					</div>
 				<?php endforeach; ?>
 			</div>
@@ -170,7 +170,7 @@ do_action( 'anwpfl/tmpl-competition/before_wrapper', $competition_post_id );
 								<div class="position-relative anwp-text-sm anwp-fl-tabs__item anwp-bg-gray-light anwp-fl-border anwp-border-light anwp-flex-1 d-flex align-items-center justify-content-center"
 									data-target="#anwp_c_id_<?php echo (int) $competition->ID; ?>_round_id_<?php echo (int) $c->id; ?>">
 									<span><?php echo esc_html( $c->title ); ?></span>
-									<a class="anwp-link-without-effects anwp-link-cover" href="#"></a>
+									<a class="anwp-link-without-effects anwp-link-cover" href="#" aria-label="<?php echo esc_attr( $c->title ); ?>"></a>
 								</div>
 							<?php endforeach; ?>
 						</div>

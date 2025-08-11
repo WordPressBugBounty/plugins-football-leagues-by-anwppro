@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.4.3
  *
- * @version       0.14.5
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -98,7 +98,7 @@ $matches = anwp_football_leagues()->competition->tmpl_get_competition_matches_ex
 <?php if ( ! empty( $data->link_text ) && ! empty( $data->link_target ) ) : ?>
 	<div class="position-relative anwp-fl-btn-outline anwp-text-sm w-100 match-list__link-btn mt-2">
 		<?php echo esc_html( $data->link_text ); ?>
-		<a href="<?php echo esc_url( get_permalink( (int) $data->link_target ) ); ?>" class="anwp-link-cover anwp-link-without-effects"></a>
+		<a href="<?php echo esc_url( get_permalink( (int) $data->link_target ) ); ?>" class="anwp-link-cover anwp-link-without-effects" aria-label="<?php echo esc_attr( $data->link_text ); ?>"></a>
 	</div>
 	<?php
 endif;

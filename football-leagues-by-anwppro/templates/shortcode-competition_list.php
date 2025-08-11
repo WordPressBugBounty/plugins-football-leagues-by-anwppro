@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.12.3
  *
- * @version       0.16.0
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -94,7 +94,7 @@ $country_classes      = $is_country_collapsed ? 'anwp-cursor-pointer competition
 						</div>
 					<?php endif; ?>
 
-					<a href="<?php echo esc_url( $competition['link'] ); ?>" class="anwp-link-cover anwp-link-without-effects"></a>
+					<a href="<?php echo esc_url( $competition['link'] ); ?>" class="anwp-link-cover anwp-link-without-effects" aria-label="<?php echo esc_attr( $competition['title'] ); ?>"></a>
 				</div>
 			<?php endforeach; ?>
 		<?php endforeach; ?>

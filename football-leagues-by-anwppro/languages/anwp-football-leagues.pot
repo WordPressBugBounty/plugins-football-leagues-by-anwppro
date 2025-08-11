@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: AnWP Football Leagues\n"
-"POT-Creation-Date: 2025-07-26 17:57+0200\n"
+"POT-Creation-Date: 2025-08-11 12:24+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -162,38 +162,38 @@ msgstr ""
 
 #: admin/views/tools-import.php:35 includes/class-anwpfl-club.php:440
 #: includes/class-anwpfl-data.php:280 includes/class-anwpfl-helper.php:1402
-#: includes/class-anwpfl-player.php:192
+#: includes/class-anwpfl-player.php:207
 msgid "Player Name"
 msgstr ""
 
 #: admin/views/tools-import.php:42 admin/views/tools-import.php:273
-#: admin/views/tools-import.php:376 includes/class-anwpfl-player.php:1065
+#: admin/views/tools-import.php:376 includes/class-anwpfl-player.php:1072
 #: includes/class-anwpfl-referee.php:208 includes/class-anwpfl-staff.php:274
 msgid "Short Name"
 msgstr ""
 
-#: admin/views/tools-import.php:47 includes/class-anwpfl-customizer.php:1422
-#: includes/class-anwpfl-customizer.php:1449
-#: includes/class-anwpfl-customizer.php:1913
-#: includes/class-anwpfl-player.php:1076 includes/class-anwpfl-referee.php:218
+#: admin/views/tools-import.php:47 includes/class-anwpfl-customizer.php:1449
+#: includes/class-anwpfl-customizer.php:1476
+#: includes/class-anwpfl-customizer.php:1940
+#: includes/class-anwpfl-player.php:1083 includes/class-anwpfl-referee.php:218
 #: includes/class-anwpfl-text.php:709 templates/player/player-header.php:139
 #: templates/referee/referee-header.php:79
 msgid "Full Name"
 msgstr ""
 
-#: admin/views/tools-import.php:52 includes/class-anwpfl-player.php:1086
+#: admin/views/tools-import.php:52 includes/class-anwpfl-player.php:1093
 #: includes/class-anwpfl-text.php:790 templates/player/player-header.php:274
 msgid "Weight (kg)"
 msgstr ""
 
-#: admin/views/tools-import.php:59 includes/class-anwpfl-player.php:1096
+#: admin/views/tools-import.php:59 includes/class-anwpfl-player.php:1103
 #: includes/class-anwpfl-text.php:799 templates/player/player-header.php:283
 msgid "Height (cm)"
 msgstr ""
 
 #: admin/views/tools-import.php:66 includes/class-anwpfl-club.php:441
-#: includes/class-anwpfl-data.php:288 includes/class-anwpfl-player.php:221
-#: includes/class-anwpfl-player.php:1105 includes/class-anwpfl-text.php:700
+#: includes/class-anwpfl-data.php:288 includes/class-anwpfl-player.php:236
+#: includes/class-anwpfl-player.php:1112 includes/class-anwpfl-text.php:700
 #: includes/class-anwpfl-text.php:1465 templates/player/player-header.php:148
 #: templates/shortcode-squad--blocks.php:140
 #: templates/shortcode-squad-summary--blocks.php:153
@@ -201,22 +201,21 @@ msgid "Position"
 msgstr ""
 
 #: admin/views/tools-import.php:75 admin/views/tools-import.php:277
-#: includes/class-anwpfl-club.php:426 includes/class-anwpfl-player.php:222
-#: includes/class-anwpfl-player.php:1116 includes/class-anwpfl-staff.php:283
-#: includes/class-anwpfl-staff.php:604 includes/class-anwpfl-text.php:718
-#: includes/class-anwpfl-text.php:1195 templates/player/player-header.php:175
-#: templates/staff/staff-header.php:96
+#: includes/class-anwpfl-club.php:426 includes/class-anwpfl-player.php:237
+#: includes/class-anwpfl-staff.php:283 includes/class-anwpfl-staff.php:604
+#: includes/class-anwpfl-text.php:718 includes/class-anwpfl-text.php:1195
+#: templates/player/player-header.php:175 templates/staff/staff-header.php:96
 msgid "Current Club"
 msgstr ""
 
 #: admin/views/tools-import.php:82 admin/views/tools-import.php:491
-#: includes/class-anwpfl-club.php:710 includes/class-anwpfl-player.php:1129
+#: includes/class-anwpfl-club.php:710 includes/class-anwpfl-player.php:1133
 #: includes/class-anwpfl-text.php:727 templates/player/player-header.php:158
 msgid "National Team"
 msgstr ""
 
 #: admin/views/tools-import.php:89 admin/views/tools-import.php:289
-#: admin/views/tools-import.php:380 includes/class-anwpfl-player.php:1143
+#: admin/views/tools-import.php:380 includes/class-anwpfl-player.php:1147
 #: includes/class-anwpfl-referee.php:227 includes/class-anwpfl-staff.php:317
 msgid "Place of Birth"
 msgstr ""
@@ -224,7 +223,7 @@ msgstr ""
 #: admin/views/tools-import.php:93 admin/views/tools-import.php:293
 #: admin/views/tools-import.php:384 includes/class-anwpfl-helper.php:1406
 #: includes/class-anwpfl-helper.php:1491 includes/class-anwpfl-helper.php:1577
-#: includes/class-anwpfl-player.php:223 includes/class-anwpfl-player.php:1164
+#: includes/class-anwpfl-player.php:238 includes/class-anwpfl-player.php:1168
 #: includes/class-anwpfl-referee.php:236 includes/class-anwpfl-staff.php:326
 #: includes/class-anwpfl-text.php:1447
 #: templates/shortcode-squad--blocks.php:154
@@ -239,13 +238,13 @@ msgstr ""
 msgid "Date of Death"
 msgstr ""
 
-#: admin/views/tools-import.php:105 includes/class-anwpfl-player.php:1153
+#: admin/views/tools-import.php:105 includes/class-anwpfl-player.php:1157
 msgid "Country of Birth"
 msgstr ""
 
 #: admin/views/tools-import.php:112 admin/views/tools-import.php:305
-#: admin/views/tools-import.php:395 includes/class-anwpfl-customizer.php:1254
-#: includes/class-anwpfl-match.php:520 includes/class-anwpfl-player.php:1185
+#: admin/views/tools-import.php:395 includes/class-anwpfl-customizer.php:1281
+#: includes/class-anwpfl-match.php:520 includes/class-anwpfl-player.php:1189
 #: includes/class-anwpfl-referee.php:255 includes/class-anwpfl-staff.php:345
 #: includes/class-anwpfl-text.php:736 includes/class-anwpfl-text.php:1060
 #: includes/class-anwpfl-text.php:1213 includes/class-anwpfl-text.php:1393
@@ -266,7 +265,7 @@ msgid "Nationality"
 msgstr ""
 
 #: admin/views/tools-import.php:119 admin/views/tools-import.php:312
-#: includes/class-anwpfl-player.php:990 includes/class-anwpfl-referee.php:139
+#: includes/class-anwpfl-player.php:997 includes/class-anwpfl-referee.php:139
 #: includes/class-anwpfl-staff.php:205
 msgid "Bio"
 msgstr ""
@@ -350,7 +349,7 @@ msgid "Surface"
 msgstr ""
 
 #: admin/views/tools-import.php:209 includes/class-anwpfl-club.php:1004
-#: includes/class-anwpfl-player.php:1206 includes/class-anwpfl-referee.php:313
+#: includes/class-anwpfl-player.php:1210 includes/class-anwpfl-referee.php:313
 #: includes/class-anwpfl-stadium.php:295 includes/class-anwpfl-staff.php:394
 #: includes/shortcodes/class-anwpfl-shortcode-club.php:122
 #: includes/shortcodes/class-anwpfl-shortcode-player-data.php:122
@@ -381,7 +380,7 @@ msgstr ""
 msgid "Job Title"
 msgstr ""
 
-#: admin/views/tools-import.php:299 includes/class-anwpfl-player.php:1175
+#: admin/views/tools-import.php:299 includes/class-anwpfl-player.php:1179
 #: includes/class-anwpfl-referee.php:246 includes/class-anwpfl-staff.php:336
 msgid "Date of death"
 msgstr ""
@@ -415,9 +414,9 @@ msgid "Club Title"
 msgstr ""
 
 #: admin/views/tools-import.php:463 includes/class-anwpfl-club.php:633
-#: includes/class-anwpfl-customizer.php:1421
 #: includes/class-anwpfl-customizer.php:1448
-#: includes/class-anwpfl-customizer.php:1912
+#: includes/class-anwpfl-customizer.php:1475
+#: includes/class-anwpfl-customizer.php:1939
 #: includes/class-anwpfl-options.php:1019
 #: includes/class-anwpfl-options.php:1057
 #: includes/class-anwpfl-options.php:1095
@@ -444,7 +443,8 @@ msgstr ""
 
 #: admin/views/tools-import.php:497 admin/views/tools-import.php:910
 #: admin/views/tools-import.php:986 admin/views/tools-import.php:1066
-#: admin/views/tools-import.php:1119 includes/class-anwpfl-match-admin.php:404
+#: admin/views/tools-import.php:1119 includes/class-anwpfl-match-admin.php:397
+#: includes/class-anwpfl-player.php:320
 #: includes/shortcodes/class-anwpfl-shortcode-cards.php:162
 #: includes/shortcodes/class-anwpfl-shortcode-club.php:96
 #: includes/shortcodes/class-anwpfl-shortcode-match-last.php:98
@@ -686,7 +686,7 @@ msgctxt "admin page title"
 msgid "Football Leagues"
 msgstr ""
 
-#: class-anwp-football-leagues.php:834 class-anwp-football-leagues.php:1817
+#: class-anwp-football-leagues.php:834 class-anwp-football-leagues.php:1818
 #: includes/class-anwpfl-assets.php:242
 msgctxt "admin menu title"
 msgid "Football Leagues"
@@ -725,7 +725,7 @@ msgctxt "admin page title"
 msgid "Settings & Tools"
 msgstr ""
 
-#: class-anwp-football-leagues.php:929 class-anwp-football-leagues.php:1827
+#: class-anwp-football-leagues.php:929 class-anwp-football-leagues.php:1828
 #: includes/class-anwpfl-assets.php:243
 msgctxt "admin menu title"
 msgid "Settings & Tools"
@@ -739,16 +739,16 @@ msgstr ""
 msgid "Data Import"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1147
+#: class-anwp-football-leagues.php:1148
 msgid "start typing name or title ..."
 msgstr ""
 
-#: class-anwp-football-leagues.php:1152 includes/class-anwpfl-assets.php:215
-#: includes/class-anwpfl-club.php:48 includes/class-anwpfl-customizer.php:1066
+#: class-anwp-football-leagues.php:1153 includes/class-anwpfl-assets.php:215
+#: includes/class-anwpfl-club.php:48 includes/class-anwpfl-customizer.php:1093
 #: includes/class-anwpfl-data.php:158 includes/class-anwpfl-helper.php:1410
 #: includes/class-anwpfl-helper.php:1495 includes/class-anwpfl-options.php:710
 #: includes/class-anwpfl-options.php:894 includes/class-anwpfl-staff.php:465
-#: includes/class-anwpfl-standing.php:1004 includes/class-anwpfl-text.php:1267
+#: includes/class-anwpfl-standing.php:980 includes/class-anwpfl-text.php:1267
 #: includes/class-anwpfl-text.php:1312 includes/class-anwpfl-text.php:1384
 #: includes/class-anwpfl-text.php:1474
 #: includes/shortcodes/class-anwpfl-shortcode-club.php:76
@@ -762,22 +762,22 @@ msgstr ""
 msgid "Club"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1163 includes/class-anwpfl-data.php:223
+#: class-anwp-football-leagues.php:1164 includes/class-anwpfl-data.php:223
 msgid "Home Club"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1174 includes/class-anwpfl-data.php:148
+#: class-anwp-football-leagues.php:1175 includes/class-anwpfl-data.php:148
 msgid "Away Club"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1186 includes/class-anwpfl-club.php:447
+#: class-anwp-football-leagues.php:1187 includes/class-anwpfl-club.php:447
 #: includes/class-anwpfl-competition.php:417 includes/class-anwpfl-data.php:310
 #: includes/class-anwpfl-helper.php:1066 includes/class-anwpfl-helper.php:1913
 #: includes/class-anwpfl-helper.php:2055
 #: includes/class-anwpfl-match-admin.php:141
 #: includes/class-anwpfl-match.php:276 includes/class-anwpfl-match.php:712
-#: includes/class-anwpfl-player.php:493 includes/class-anwpfl-season.php:44
-#: includes/class-anwpfl-standing.php:963
+#: includes/class-anwpfl-player.php:501 includes/class-anwpfl-season.php:44
+#: includes/class-anwpfl-standing.php:939
 #: includes/shortcodes/class-anwpfl-shortcode-competition-list.php:164
 #: includes/widgets/class-anwpfl-widget-cards.php:95
 #: includes/widgets/class-anwpfl-widget-competition-list.php:93
@@ -788,10 +788,10 @@ msgstr ""
 msgid "Season"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1197 includes/class-anwpfl-data.php:235
+#: class-anwp-football-leagues.php:1198 includes/class-anwpfl-data.php:235
 #: includes/class-anwpfl-helper.php:1956 includes/class-anwpfl-league.php:43
 #: includes/class-anwpfl-match.php:271 includes/class-anwpfl-match.php:706
-#: includes/class-anwpfl-standing.php:959
+#: includes/class-anwpfl-standing.php:935
 #: includes/shortcodes/class-anwpfl-shortcode-competition-list.php:163
 #: includes/shortcodes/class-anwpfl-shortcode-competition-list.php:164
 #: includes/widgets/class-anwpfl-widget-cards.php:89
@@ -802,15 +802,15 @@ msgstr ""
 msgid "League"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1206
+#: class-anwp-football-leagues.php:1207
 msgid "Country/Nationality"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1219
+#: class-anwp-football-leagues.php:1220
 msgid "Selected Values"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1235 includes/class-anwpfl-club.php:434
+#: class-anwp-football-leagues.php:1236 includes/class-anwpfl-club.php:434
 #: includes/shortcodes/class-anwpfl-shortcode-competition-list.php:151
 #: includes/shortcodes/class-anwpfl-shortcode-matches.php:317
 #: includes/shortcodes/class-anwpfl-shortcode-matches.php:328
@@ -824,39 +824,39 @@ msgstr ""
 msgid "none"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1288
+#: class-anwp-football-leagues.php:1289
 msgid "nothing found"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1296 includes/class-anwpfl-club.php:417
+#: class-anwp-football-leagues.php:1297 includes/class-anwpfl-club.php:417
 msgid "Cancel"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1299
+#: class-anwp-football-leagues.php:1300
 msgid "Insert"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1769
+#: class-anwp-football-leagues.php:1770
 msgid "Activate plugin"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1771
+#: class-anwp-football-leagues.php:1772
 msgid "Install plugin"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1774
+#: class-anwp-football-leagues.php:1775
 msgid "Plugin page at wp.org"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1802
+#: class-anwp-football-leagues.php:1803
 msgid "Database Updater"
 msgstr ""
 
-#: class-anwp-football-leagues.php:1918
+#: class-anwp-football-leagues.php:1919
 msgid "It is prohibited to delete a Competition with Games. First, remove the attached Games."
 msgstr ""
 
-#: class-anwp-football-leagues.php:1953
+#: class-anwp-football-leagues.php:1954
 msgid "It is prohibited to delete a League or a Season that has Competitions linked to it."
 msgstr ""
 
@@ -884,13 +884,13 @@ msgstr ""
 
 #: includes/class-anwpfl-assets.php:216
 #: includes/class-anwpfl-competition.php:58
-#: includes/class-anwpfl-customizer.php:1601 includes/class-anwpfl-data.php:167
+#: includes/class-anwpfl-customizer.php:1628 includes/class-anwpfl-data.php:167
 #: includes/class-anwpfl-helper.php:1062 includes/class-anwpfl-helper.php:2051
 #: includes/class-anwpfl-match-admin.php:76 includes/class-anwpfl-match.php:267
 #: includes/class-anwpfl-match.php:701 includes/class-anwpfl-options.php:729
-#: includes/class-anwpfl-player.php:492 includes/class-anwpfl-standing.php:950
-#: includes/class-anwpfl-standing.php:1121
-#: includes/class-anwpfl-standing.php:1368 includes/class-anwpfl-text.php:952
+#: includes/class-anwpfl-player.php:500 includes/class-anwpfl-standing.php:926
+#: includes/class-anwpfl-standing.php:1111
+#: includes/class-anwpfl-standing.php:1359 includes/class-anwpfl-text.php:952
 #: includes/shortcodes/class-anwpfl-shortcode-competition-list.php:162
 #: includes/shortcodes/class-anwpfl-shortcode-matches.php:344
 #: includes/widgets/class-anwpfl-widget-competition-list.php:91
@@ -902,7 +902,7 @@ msgid "Main Stage"
 msgstr ""
 
 #: includes/class-anwpfl-assets.php:218
-#: includes/class-anwpfl-customizer.php:1331
+#: includes/class-anwpfl-customizer.php:1358
 #: includes/class-anwpfl-match-admin.php:77
 #: includes/class-anwpfl-options.php:691
 #: includes/shortcodes/class-anwpfl-shortcode-match.php:85
@@ -921,8 +921,8 @@ msgid "Player"
 msgstr ""
 
 #: includes/class-anwpfl-assets.php:220
-#: includes/class-anwpfl-customizer.php:1543
-#: includes/class-anwpfl-customizer.php:1589
+#: includes/class-anwpfl-customizer.php:1570
+#: includes/class-anwpfl-customizer.php:1616
 #: includes/class-anwpfl-match.php:368 includes/class-anwpfl-match.php:523
 #: includes/class-anwpfl-options.php:767 includes/class-anwpfl-options.php:933
 #: includes/class-anwpfl-referee.php:47 includes/class-anwpfl-referee.php:48
@@ -954,7 +954,7 @@ msgstr ""
 
 #: includes/class-anwpfl-club.php:49 includes/class-anwpfl-club.php:66
 #: includes/class-anwpfl-data.php:162 includes/class-anwpfl-stadium.php:208
-#: includes/class-anwpfl-standing.php:1083 includes/class-anwpfl-text.php:1105
+#: includes/class-anwpfl-standing.php:1059 includes/class-anwpfl-text.php:1105
 #: includes/class-anwpfl-text.php:1303
 #: includes/shortcodes/class-anwpfl-shortcode-cards.php:112
 #: includes/shortcodes/class-anwpfl-shortcode-clubs.php:81
@@ -993,7 +993,7 @@ msgid "Club Squad"
 msgstr ""
 
 #: includes/class-anwpfl-club.php:329
-#: includes/class-anwpfl-competition-admin.php:447
+#: includes/class-anwpfl-competition-admin.php:437
 #: includes/class-anwpfl-data.php:303 includes/class-anwpfl-match.php:334
 msgid "Save"
 msgstr ""
@@ -1001,21 +1001,21 @@ msgstr ""
 #: includes/class-anwpfl-club.php:339 includes/class-anwpfl-club.php:639
 #: includes/class-anwpfl-customizer.php:974 includes/class-anwpfl-data.php:213
 #: includes/class-anwpfl-options.php:389 includes/class-anwpfl-options.php:646
-#: includes/class-anwpfl-player.php:982 includes/class-anwpfl-referee.php:131
+#: includes/class-anwpfl-player.php:989 includes/class-anwpfl-referee.php:131
 #: includes/class-anwpfl-stadium.php:129 includes/class-anwpfl-staff.php:193
 msgid "General"
 msgstr ""
 
 #: includes/class-anwpfl-club.php:344 includes/class-anwpfl-club.php:731
-#: includes/class-anwpfl-match-admin.php:618
-#: includes/class-anwpfl-match.php:378 includes/class-anwpfl-player.php:986
+#: includes/class-anwpfl-match-admin.php:611
+#: includes/class-anwpfl-match.php:378 includes/class-anwpfl-player.php:993
 #: includes/class-anwpfl-referee.php:135 includes/class-anwpfl-stadium.php:133
 #: includes/class-anwpfl-staff.php:201
 msgid "Media"
 msgstr ""
 
 #: includes/class-anwpfl-club.php:349 includes/class-anwpfl-club.php:825
-#: includes/class-anwpfl-player.php:994 includes/class-anwpfl-text.php:223
+#: includes/class-anwpfl-player.php:1001 includes/class-anwpfl-text.php:223
 #: templates/club/club-header.php:167 templates/player/player-header.php:331
 msgid "Social"
 msgstr ""
@@ -1030,7 +1030,7 @@ msgid "Info"
 msgstr ""
 
 #: includes/class-anwpfl-club.php:364 includes/class-anwpfl-club.php:1042
-#: includes/class-anwpfl-options.php:401 includes/class-anwpfl-player.php:998
+#: includes/class-anwpfl-options.php:401 includes/class-anwpfl-player.php:1005
 #: includes/class-anwpfl-referee.php:143 includes/class-anwpfl-stadium.php:141
 #: includes/class-anwpfl-staff.php:209
 msgid "Custom Fields"
@@ -1038,12 +1038,12 @@ msgstr ""
 
 #: includes/class-anwpfl-club.php:369 includes/class-anwpfl-club.php:1121
 #: includes/class-anwpfl-competition.php:456
-#: includes/class-anwpfl-player.php:1002 includes/class-anwpfl-referee.php:147
+#: includes/class-anwpfl-player.php:1009 includes/class-anwpfl-referee.php:147
 #: includes/class-anwpfl-stadium.php:145 includes/class-anwpfl-staff.php:213
 msgid "Bottom Content"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:374 includes/class-anwpfl-customizer.php:1194
+#: includes/class-anwpfl-club.php:374 includes/class-anwpfl-customizer.php:1221
 #: includes/class-anwpfl-text.php:1411
 #: includes/shortcodes/class-anwpfl-shortcode-club.php:126
 #: includes/shortcodes/class-anwpfl-shortcode-squad.php:80
@@ -1084,7 +1084,7 @@ msgstr ""
 
 #: includes/class-anwpfl-club.php:418 includes/class-anwpfl-competition.php:429
 #: includes/class-anwpfl-data.php:157 includes/class-anwpfl-match.php:514
-#: includes/class-anwpfl-standing.php:1003
+#: includes/class-anwpfl-standing.php:979
 #: includes/shortcodes/class-anwpfl-shortcode.php:178
 msgid "Close"
 msgstr ""
@@ -1138,12 +1138,13 @@ msgid "Next"
 msgstr ""
 
 #: includes/class-anwpfl-club.php:433 includes/class-anwpfl-customizer.php:1027
-#: includes/class-anwpfl-customizer.php:1054
-#: includes/class-anwpfl-customizer.php:1092
-#: includes/class-anwpfl-customizer.php:1292
+#: includes/class-anwpfl-customizer.php:1055
+#: includes/class-anwpfl-customizer.php:1081
+#: includes/class-anwpfl-customizer.php:1119
 #: includes/class-anwpfl-customizer.php:1319
-#: includes/class-anwpfl-customizer.php:1665 includes/class-anwpfl-data.php:258
-#: includes/class-anwpfl-match-admin.php:831
+#: includes/class-anwpfl-customizer.php:1346
+#: includes/class-anwpfl-customizer.php:1692 includes/class-anwpfl-data.php:258
+#: includes/class-anwpfl-match-admin.php:824
 #: includes/class-anwpfl-options.php:513 includes/class-anwpfl-options.php:533
 #: includes/class-anwpfl-options.php:1387
 #: includes/shortcodes/class-anwpfl-shortcode-cards.php:132
@@ -1253,12 +1254,13 @@ msgid "Use separate group"
 msgstr ""
 
 #: includes/class-anwpfl-club.php:454 includes/class-anwpfl-customizer.php:1028
-#: includes/class-anwpfl-customizer.php:1055
-#: includes/class-anwpfl-customizer.php:1093
-#: includes/class-anwpfl-customizer.php:1293
+#: includes/class-anwpfl-customizer.php:1054
+#: includes/class-anwpfl-customizer.php:1082
+#: includes/class-anwpfl-customizer.php:1120
 #: includes/class-anwpfl-customizer.php:1320
-#: includes/class-anwpfl-customizer.php:1666 includes/class-anwpfl-data.php:370
-#: includes/class-anwpfl-match-admin.php:832
+#: includes/class-anwpfl-customizer.php:1347
+#: includes/class-anwpfl-customizer.php:1693 includes/class-anwpfl-data.php:370
+#: includes/class-anwpfl-match-admin.php:825
 #: includes/class-anwpfl-options.php:517 includes/class-anwpfl-options.php:537
 #: includes/class-anwpfl-options.php:1391
 #: includes/shortcodes/class-anwpfl-shortcode-cards.php:133
@@ -1316,22 +1318,21 @@ msgid "Home Stadium"
 msgstr ""
 
 #: includes/class-anwpfl-club.php:670 includes/class-anwpfl-club.php:928
-#: includes/class-anwpfl-club.php:992 includes/class-anwpfl-match-admin.php:855
-#: includes/class-anwpfl-match-admin.php:875
-#: includes/class-anwpfl-options.php:498 includes/class-anwpfl-player.php:1109
-#: includes/class-anwpfl-player.php:1122 includes/class-anwpfl-player.php:1135
-#: includes/class-anwpfl-staff.php:288 includes/class-anwpfl-staff.php:300
-#: includes/class-anwpfl-staff.php:470
+#: includes/class-anwpfl-club.php:992 includes/class-anwpfl-match-admin.php:848
+#: includes/class-anwpfl-match-admin.php:868
+#: includes/class-anwpfl-options.php:498 includes/class-anwpfl-player.php:1116
+#: includes/class-anwpfl-player.php:1139 includes/class-anwpfl-staff.php:288
+#: includes/class-anwpfl-staff.php:300 includes/class-anwpfl-staff.php:470
 msgid "- not selected -"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:701 includes/class-anwpfl-player.php:1195
+#: includes/class-anwpfl-club.php:701 includes/class-anwpfl-player.php:1199
 #: includes/class-anwpfl-referee.php:273 includes/class-anwpfl-stadium.php:272
 #: includes/class-anwpfl-staff.php:354
 msgid "External ID"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:704 includes/class-anwpfl-player.php:1198
+#: includes/class-anwpfl-club.php:704 includes/class-anwpfl-player.php:1202
 #: includes/class-anwpfl-referee.php:276 includes/class-anwpfl-stadium.php:275
 #: includes/class-anwpfl-staff.php:357
 msgid "Used on Data Import"
@@ -1361,8 +1362,8 @@ msgstr ""
 msgid "Club Main Color"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:789 includes/class-anwpfl-match-admin.php:687
-#: includes/class-anwpfl-player.php:1254 includes/class-anwpfl-stadium.php:342
+#: includes/class-anwpfl-club.php:789 includes/class-anwpfl-match-admin.php:680
+#: includes/class-anwpfl-player.php:1258 includes/class-anwpfl-stadium.php:342
 #: includes/class-anwpfl-text.php:151 includes/class-anwpfl-text.php:358
 #: includes/class-anwpfl-text.php:691
 #: includes/shortcodes/class-anwpfl-shortcode-club.php:123
@@ -1372,36 +1373,36 @@ msgstr ""
 msgid "Gallery"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:806 includes/class-anwpfl-match-admin.php:704
-#: includes/class-anwpfl-player.php:1271 includes/class-anwpfl-stadium.php:359
+#: includes/class-anwpfl-club.php:806 includes/class-anwpfl-match-admin.php:697
+#: includes/class-anwpfl-player.php:1275 includes/class-anwpfl-stadium.php:359
 msgid "Text below gallery"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:820 includes/class-anwpfl-player.php:1285
+#: includes/class-anwpfl-club.php:820 includes/class-anwpfl-player.php:1289
 msgid "Twitter"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:836 includes/class-anwpfl-player.php:1295
+#: includes/class-anwpfl-club.php:836 includes/class-anwpfl-player.php:1299
 msgid "Facebook"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:845 includes/class-anwpfl-player.php:1304
+#: includes/class-anwpfl-club.php:845 includes/class-anwpfl-player.php:1308
 msgid "YouTube"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:854 includes/class-anwpfl-player.php:1313
+#: includes/class-anwpfl-club.php:854 includes/class-anwpfl-player.php:1317
 msgid "LinkedIn"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:863 includes/class-anwpfl-player.php:1322
+#: includes/class-anwpfl-club.php:863 includes/class-anwpfl-player.php:1326
 msgid "TikTok"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:872 includes/class-anwpfl-player.php:1331
+#: includes/class-anwpfl-club.php:872 includes/class-anwpfl-player.php:1335
 msgid "VKontakte"
 msgstr ""
 
-#: includes/class-anwpfl-club.php:881 includes/class-anwpfl-player.php:1340
+#: includes/class-anwpfl-club.php:881 includes/class-anwpfl-player.php:1344
 msgid "Instagram"
 msgstr ""
 
@@ -1458,8 +1459,8 @@ msgid "Subteam"
 msgstr ""
 
 #: includes/class-anwpfl-club.php:1037 includes/class-anwpfl-club.php:1060
-#: includes/class-anwpfl-club.php:1076 includes/class-anwpfl-player.php:1355
-#: includes/class-anwpfl-player.php:1372 includes/class-anwpfl-player.php:1388
+#: includes/class-anwpfl-club.php:1076 includes/class-anwpfl-player.php:1359
+#: includes/class-anwpfl-player.php:1376 includes/class-anwpfl-player.php:1392
 #: includes/class-anwpfl-referee.php:340 includes/class-anwpfl-referee.php:357
 #: includes/class-anwpfl-referee.php:373 includes/class-anwpfl-stadium.php:373
 #: includes/class-anwpfl-stadium.php:390 includes/class-anwpfl-stadium.php:406
@@ -1479,8 +1480,8 @@ msgid "Title"
 msgstr ""
 
 #: includes/class-anwpfl-club.php:1052 includes/class-anwpfl-club.php:1068
-#: includes/class-anwpfl-club.php:1084 includes/class-anwpfl-player.php:1364
-#: includes/class-anwpfl-player.php:1380 includes/class-anwpfl-player.php:1396
+#: includes/class-anwpfl-club.php:1084 includes/class-anwpfl-player.php:1368
+#: includes/class-anwpfl-player.php:1384 includes/class-anwpfl-player.php:1400
 #: includes/class-anwpfl-referee.php:349 includes/class-anwpfl-referee.php:365
 #: includes/class-anwpfl-referee.php:381 includes/class-anwpfl-stadium.php:382
 #: includes/class-anwpfl-stadium.php:398 includes/class-anwpfl-stadium.php:414
@@ -1490,14 +1491,14 @@ msgid "Value"
 msgstr ""
 
 #: includes/class-anwpfl-club.php:1093 includes/class-anwpfl-options.php:1534
-#: includes/class-anwpfl-player.php:1405 includes/class-anwpfl-referee.php:390
+#: includes/class-anwpfl-player.php:1409 includes/class-anwpfl-referee.php:390
 #: includes/class-anwpfl-stadium.php:423 includes/class-anwpfl-staff.php:532
 msgid "Dynamic Custom Fields"
 msgstr ""
 
 #: includes/class-anwpfl-club.php:1104
 #: includes/class-anwpfl-competition.php:584
-#: includes/class-anwpfl-player.php:1421 includes/class-anwpfl-referee.php:406
+#: includes/class-anwpfl-player.php:1425 includes/class-anwpfl-referee.php:406
 #: includes/class-anwpfl-stadium.php:439 includes/class-anwpfl-staff.php:548
 msgid "Content"
 msgstr ""
@@ -1518,9 +1519,9 @@ msgstr ""
 #: includes/class-anwpfl-helper.php:1917 includes/class-anwpfl-helper.php:1964
 #: includes/class-anwpfl-helper.php:2063 includes/class-anwpfl-league.php:153
 #: includes/class-anwpfl-match-admin.php:79
-#: includes/class-anwpfl-player.php:224 includes/class-anwpfl-referee.php:461
+#: includes/class-anwpfl-player.php:239 includes/class-anwpfl-referee.php:461
 #: includes/class-anwpfl-season.php:231 includes/class-anwpfl-stadium.php:588
-#: includes/class-anwpfl-staff.php:605 includes/class-anwpfl-standing.php:1370
+#: includes/class-anwpfl-staff.php:605 includes/class-anwpfl-standing.php:1361
 msgid "ID"
 msgstr ""
 
@@ -1532,42 +1533,44 @@ msgstr ""
 msgid "Club Color"
 msgstr ""
 
-#: includes/class-anwpfl-competition-admin.php:92
-#: includes/class-anwpfl-league.php:54
-#: includes/class-anwpfl-match-admin.php:370
-#: includes/class-anwpfl-standing.php:238
-msgid "All Leagues"
+#: includes/class-anwpfl-competition-admin.php:84
+#: includes/class-anwpfl-match-admin.php:365
+#: includes/class-anwpfl-standing.php:230
+#: includes/shortcodes/class-anwpfl-shortcode-cards.php:150
+#: includes/shortcodes/class-anwpfl-shortcode-matches.php:191
+#: includes/shortcodes/class-anwpfl-shortcode-players.php:152
+msgid "League ID"
 msgstr ""
 
-#: includes/class-anwpfl-competition-admin.php:120
+#: includes/class-anwpfl-competition-admin.php:110
 #: includes/class-anwpfl-helper.php:487
-#: includes/class-anwpfl-match-admin.php:390
-#: includes/class-anwpfl-season.php:55 includes/class-anwpfl-standing.php:266
+#: includes/class-anwpfl-match-admin.php:383
+#: includes/class-anwpfl-season.php:55 includes/class-anwpfl-standing.php:256
 #: includes/class-anwpfl-text.php:1627
 msgid "All Seasons"
 msgstr ""
 
-#: includes/class-anwpfl-competition-admin.php:218
+#: includes/class-anwpfl-competition-admin.php:208
 msgid "Competition Stages"
 msgstr ""
 
-#: includes/class-anwpfl-competition-admin.php:227
+#: includes/class-anwpfl-competition-admin.php:217
 msgid "Related Tutorials"
 msgstr ""
 
-#: includes/class-anwpfl-competition-admin.php:321
+#: includes/class-anwpfl-competition-admin.php:311
 msgid "Regular Season"
 msgstr ""
 
-#: includes/class-anwpfl-competition-admin.php:510
+#: includes/class-anwpfl-competition-admin.php:500
 msgid "How to Create Round-Robin Competition"
 msgstr ""
 
-#: includes/class-anwpfl-competition-admin.php:516
+#: includes/class-anwpfl-competition-admin.php:506
 msgid "How to Create Knockout Competition"
 msgstr ""
 
-#: includes/class-anwpfl-competition-admin.php:522
+#: includes/class-anwpfl-competition-admin.php:512
 msgid "How to Create Multistage Competition"
 msgstr ""
 
@@ -1585,12 +1588,12 @@ msgid "Add New Competition"
 msgstr ""
 
 #: includes/class-anwpfl-competition.php:79
-#: includes/class-anwpfl-standing.php:966
+#: includes/class-anwpfl-standing.php:942
 msgid "Edit Competition"
 msgstr ""
 
 #: includes/class-anwpfl-competition.php:80
-#: includes/class-anwpfl-player.php:508
+#: includes/class-anwpfl-player.php:516
 msgid "New Competition"
 msgstr ""
 
@@ -1630,7 +1633,7 @@ msgid "two-legged"
 msgstr ""
 
 #: includes/class-anwpfl-competition.php:119
-#: includes/class-anwpfl-customizer.php:1628
+#: includes/class-anwpfl-customizer.php:1655
 #: includes/shortcodes/class-anwpfl-shortcode-competition-header.php:124
 msgid "Competition Title"
 msgstr ""
@@ -1774,7 +1777,7 @@ msgstr ""
 #: includes/class-anwpfl-customizer.php:906
 #: includes/class-anwpfl-customizer.php:933
 #: includes/class-anwpfl-customizer.php:960
-#: includes/class-anwpfl-customizer.php:1472
+#: includes/class-anwpfl-customizer.php:1499
 #: includes/shortcodes/class-anwpfl-shortcode-standing.php:139
 msgid "default"
 msgstr ""
@@ -1823,47 +1826,51 @@ msgid "Load alternative page layout (experimental)"
 msgstr ""
 
 #: includes/class-anwpfl-customizer.php:1050
+msgid "Strict Template Loading Check"
+msgstr ""
+
+#: includes/class-anwpfl-customizer.php:1077
 msgid "Hide post title for Match and Competition"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1088
+#: includes/class-anwpfl-customizer.php:1115
 msgid "Show default club logo"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1111
+#: includes/class-anwpfl-customizer.php:1138
 msgid "will be visible if club logo is not set"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1136
+#: includes/class-anwpfl-customizer.php:1163
 msgid "Custom Default Club Logo"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1159
+#: includes/class-anwpfl-customizer.php:1186
 msgid "Default Home Club Color"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1182
+#: includes/class-anwpfl-customizer.php:1209
 msgid "Default Away Club Color"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1216
+#: includes/class-anwpfl-customizer.php:1243
 msgid "Squad Layout"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1220
+#: includes/class-anwpfl-customizer.php:1247
 msgid "Table (default)"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1221
+#: includes/class-anwpfl-customizer.php:1248
 #: includes/shortcodes/class-anwpfl-shortcode-squad.php:138
 msgid "Blocks"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1245
+#: includes/class-anwpfl-customizer.php:1272
 msgid "Squad Elements"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1252 includes/class-anwpfl-text.php:754
+#: includes/class-anwpfl-customizer.php:1279 includes/class-anwpfl-text.php:754
 #: includes/class-anwpfl-text.php:1078 includes/class-anwpfl-text.php:1231
 #: templates/player/player-header.php:235
 #: templates/referee/referee-header.php:127
@@ -1871,7 +1878,7 @@ msgstr ""
 msgid "Date Of Birth"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1253 includes/class-anwpfl-text.php:772
+#: includes/class-anwpfl-customizer.php:1280 includes/class-anwpfl-text.php:772
 #: includes/class-anwpfl-text.php:781 includes/class-anwpfl-text.php:1087
 #: includes/class-anwpfl-text.php:1240 includes/class-anwpfl-text.php:1438
 #: templates/player/player-header.php:246
@@ -1891,28 +1898,28 @@ msgstr ""
 msgid "Age"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1266
+#: includes/class-anwpfl-customizer.php:1293
 #: includes/class-anwpfl-options.php:824 includes/class-anwpfl-options.php:1195
 msgid "Standing"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1288
+#: includes/class-anwpfl-customizer.php:1315
 msgid "Use monospace font-family"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1315
+#: includes/class-anwpfl-customizer.php:1342
 msgid "Use Club abbreviation in Mini layout (widget)"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1353
+#: includes/class-anwpfl-customizer.php:1380
 msgid "Countdown in match fixture"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1357
-#: includes/class-anwpfl-customizer.php:1383
-#: includes/class-anwpfl-customizer.php:1829
+#: includes/class-anwpfl-customizer.php:1384
+#: includes/class-anwpfl-customizer.php:1410
 #: includes/class-anwpfl-customizer.php:1856
-#: includes/class-anwpfl-customizer.php:1885
+#: includes/class-anwpfl-customizer.php:1883
+#: includes/class-anwpfl-customizer.php:1912
 #: includes/class-anwpfl-options.php:698 includes/class-anwpfl-options.php:717
 #: includes/class-anwpfl-options.php:736 includes/class-anwpfl-options.php:755
 #: includes/class-anwpfl-options.php:774 includes/class-anwpfl-options.php:793
@@ -1924,9 +1931,9 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1358
-#: includes/class-anwpfl-customizer.php:1384
-#: includes/class-anwpfl-customizer.php:1828
+#: includes/class-anwpfl-customizer.php:1385
+#: includes/class-anwpfl-customizer.php:1411
+#: includes/class-anwpfl-customizer.php:1855
 #: includes/class-anwpfl-options.php:702 includes/class-anwpfl-options.php:721
 #: includes/class-anwpfl-options.php:740 includes/class-anwpfl-options.php:759
 #: includes/class-anwpfl-options.php:778 includes/class-anwpfl-options.php:797
@@ -1938,43 +1945,43 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1379
+#: includes/class-anwpfl-customizer.php:1406
 msgid "Minutes in Lineups Events"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1395
+#: includes/class-anwpfl-customizer.php:1422
 msgid "Match List"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1417
+#: includes/class-anwpfl-customizer.php:1444
 msgid "Team Name in \"Simple Layout\""
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1444
+#: includes/class-anwpfl-customizer.php:1471
 msgid "Team Name in \"Modern Layout\""
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1473
+#: includes/class-anwpfl-customizer.php:1500
 msgid "Kickoff section Minimum Width"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1497
+#: includes/class-anwpfl-customizer.php:1524
 msgid "Bottom Line Info"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1520
-#: includes/class-anwpfl-customizer.php:1639 includes/class-anwpfl-data.php:340
+#: includes/class-anwpfl-customizer.php:1547
+#: includes/class-anwpfl-customizer.php:1666 includes/class-anwpfl-data.php:340
 #: includes/class-anwpfl-options.php:805 includes/class-anwpfl-options.php:907
 #: includes/class-anwpfl-stadium.php:47 includes/class-anwpfl-text.php:205
 #: templates/club/club-header.php:121
 msgid "Stadium"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1566
+#: includes/class-anwpfl-customizer.php:1593
 msgid "Referee Assistants"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1589
+#: includes/class-anwpfl-customizer.php:1616
 #: includes/class-anwpfl-match.php:525 includes/class-anwpfl-text.php:529
 #: templates/match/match--slim-footer.php:134
 #: templates/match/match--small.php:231 templates/match/match-referees.php:76
@@ -1983,81 +1990,81 @@ msgstr ""
 msgid "Fourth official"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1623
+#: includes/class-anwpfl-customizer.php:1650
 #: includes/shortcodes/class-anwpfl-shortcode-competition-header.php:119
 msgid "Competition Title in Competition Header"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1627 includes/class-anwpfl-data.php:236
+#: includes/class-anwpfl-customizer.php:1654 includes/class-anwpfl-data.php:236
 #: includes/shortcodes/class-anwpfl-shortcode-competition-header.php:123
 msgid "League Name"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1661
+#: includes/class-anwpfl-customizer.php:1688
 msgid "Require consent before loading Map"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1688
+#: includes/class-anwpfl-customizer.php:1715
 msgid "Map consent - Text"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1711
+#: includes/class-anwpfl-customizer.php:1738
 msgid "Map consent - Button Text"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1734
+#: includes/class-anwpfl-customizer.php:1761
 msgid "Matchweeks order"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1738
 #: includes/class-anwpfl-customizer.php:1765
+#: includes/class-anwpfl-customizer.php:1792
 msgid "Ascending (1...30)"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1739
 #: includes/class-anwpfl-customizer.php:1766
+#: includes/class-anwpfl-customizer.php:1793
 msgid "Descending (30...1)"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1761
+#: includes/class-anwpfl-customizer.php:1788
 msgid "Rounds order"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1777
+#: includes/class-anwpfl-customizer.php:1804
 msgid "Player & Staff"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1801
+#: includes/class-anwpfl-customizer.php:1828
 msgid "Default Player Photo"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1824
+#: includes/class-anwpfl-customizer.php:1851
 msgid "Main photo caption"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1851
+#: includes/class-anwpfl-customizer.php:1878
 msgid "Current Team"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1855
-#: includes/class-anwpfl-customizer.php:1884
+#: includes/class-anwpfl-customizer.php:1882
+#: includes/class-anwpfl-customizer.php:1911
 msgid "Show (by value)"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1857
-#: includes/class-anwpfl-customizer.php:1886
+#: includes/class-anwpfl-customizer.php:1884
+#: includes/class-anwpfl-customizer.php:1913
 msgid "Show (by last game)"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1858
+#: includes/class-anwpfl-customizer.php:1885
 msgid "Show (by last game) + Save (Fix)"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1880
+#: includes/class-anwpfl-customizer.php:1907
 msgid "Staff - Current Team"
 msgstr ""
 
-#: includes/class-anwpfl-customizer.php:1908
+#: includes/class-anwpfl-customizer.php:1935
 msgid "Opposite club name in Latest Player Matches"
 msgstr ""
 
@@ -2130,7 +2137,7 @@ msgctxt "Lost - in club form"
 msgid "l"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:123 includes/class-anwpfl-standing.php:1100
+#: includes/class-anwpfl-data.php:123 includes/class-anwpfl-standing.php:1076
 msgid "You can add or remove clubs only on Competition page"
 msgstr ""
 
@@ -2138,7 +2145,7 @@ msgstr ""
 msgid "add event"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:125 includes/class-anwpfl-standing.php:996
+#: includes/class-anwpfl-data.php:125 includes/class-anwpfl-standing.php:972
 msgid "Add Initial Points"
 msgstr ""
 
@@ -2158,11 +2165,11 @@ msgstr ""
 msgid "Add Player"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:130 includes/class-anwpfl-standing.php:997
+#: includes/class-anwpfl-data.php:130 includes/class-anwpfl-standing.php:973
 msgid "add color"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:131 includes/class-anwpfl-standing.php:998
+#: includes/class-anwpfl-data.php:131 includes/class-anwpfl-standing.php:974
 msgid "add points"
 msgstr ""
 
@@ -2170,7 +2177,7 @@ msgstr ""
 msgid "Add Missing Player"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:133 includes/class-anwpfl-standing.php:999
+#: includes/class-anwpfl-data.php:133 includes/class-anwpfl-standing.php:975
 msgid "Add Table Color"
 msgstr ""
 
@@ -2204,15 +2211,15 @@ msgstr ""
 msgid "Attendance"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:145 includes/class-anwpfl-standing.php:1000
+#: includes/class-anwpfl-data.php:145 includes/class-anwpfl-standing.php:976
 msgid "Automatic Position Calculation"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:146 includes/class-anwpfl-standing.php:1001
+#: includes/class-anwpfl-data.php:146 includes/class-anwpfl-standing.php:977
 msgid "Available placeholders"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:147 includes/class-anwpfl-standing.php:1002
+#: includes/class-anwpfl-data.php:147 includes/class-anwpfl-standing.php:978
 msgid "Available rules"
 msgstr ""
 
@@ -2245,7 +2252,7 @@ msgstr ""
 msgid "Click \"Create New Season\" to add a new one."
 msgstr ""
 
-#: includes/class-anwpfl-data.php:159 includes/class-anwpfl-standing.php:1005
+#: includes/class-anwpfl-data.php:159 includes/class-anwpfl-standing.php:981
 msgid "Club initial points"
 msgstr ""
 
@@ -2254,11 +2261,11 @@ msgstr ""
 msgid "Coach"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:164 includes/class-anwpfl-standing.php:1006
+#: includes/class-anwpfl-data.php:164 includes/class-anwpfl-standing.php:982
 msgid "Color"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:165 includes/class-anwpfl-standing.php:1007
+#: includes/class-anwpfl-data.php:165 includes/class-anwpfl-standing.php:983
 msgid "Color by"
 msgstr ""
 
@@ -2306,7 +2313,7 @@ msgstr ""
 msgid "Create New Season"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:181 includes/class-anwpfl-standing.php:1008
+#: includes/class-anwpfl-data.php:181 includes/class-anwpfl-standing.php:984
 msgid "Current standing ranking rules"
 msgstr ""
 
@@ -2330,17 +2337,17 @@ msgstr ""
 msgid "Delete Missing Player"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:188 includes/class-anwpfl-standing.php:1010
+#: includes/class-anwpfl-data.php:188 includes/class-anwpfl-standing.php:986
 msgid "Disable"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:190 includes/class-anwpfl-data.php:763
-#: includes/class-anwpfl-match-admin.php:857
-#: includes/class-anwpfl-match-admin.php:877
+#: includes/class-anwpfl-data.php:190 includes/class-anwpfl-data.php:765
+#: includes/class-anwpfl-match-admin.php:850
+#: includes/class-anwpfl-match-admin.php:870
 #: includes/class-anwpfl-options.php:1243
 #: includes/class-anwpfl-options.php:1247
 #: includes/class-anwpfl-options.php:1253
-#: includes/class-anwpfl-standing.php:1011
+#: includes/class-anwpfl-standing.php:987
 msgid "Drawn"
 msgstr ""
 
@@ -2360,7 +2367,7 @@ msgstr ""
 msgid "Edit Squad"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:195 includes/class-anwpfl-standing.php:1012
+#: includes/class-anwpfl-data.php:195 includes/class-anwpfl-standing.php:988
 msgid "Enable"
 msgstr ""
 
@@ -2376,7 +2383,7 @@ msgstr ""
 msgid "You can add events only for finished matches."
 msgstr ""
 
-#: includes/class-anwpfl-data.php:199 includes/class-anwpfl-match-admin.php:812
+#: includes/class-anwpfl-data.php:199 includes/class-anwpfl-match-admin.php:805
 msgid "Extra Time"
 msgstr ""
 
@@ -2419,23 +2426,23 @@ msgstr ""
 msgid "from previous round"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:210 includes/class-anwpfl-match-admin.php:796
+#: includes/class-anwpfl-data.php:210 includes/class-anwpfl-match-admin.php:789
 #: includes/class-anwpfl-text.php:313 templates/match/match.php:98
 #: templates/match/match.php:175
 msgid "Full Time"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:211 includes/class-anwpfl-standing.php:1013
+#: includes/class-anwpfl-data.php:211 includes/class-anwpfl-standing.php:989
 msgctxt "table - goals against"
 msgid "GA"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:212 includes/class-anwpfl-standing.php:1014
+#: includes/class-anwpfl-data.php:212 includes/class-anwpfl-standing.php:990
 msgctxt "table - goals diff"
 msgid "GD"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:214 includes/class-anwpfl-standing.php:1015
+#: includes/class-anwpfl-data.php:214 includes/class-anwpfl-standing.php:991
 msgctxt "table - goals for"
 msgid "GF"
 msgstr ""
@@ -2452,17 +2459,17 @@ msgstr ""
 msgid "GOALS"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:218 includes/class-anwpfl-standing.php:1016
+#: includes/class-anwpfl-data.php:218 includes/class-anwpfl-standing.php:992
 msgid "Goals Difference"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:219 includes/class-anwpfl-standing.php:1017
+#: includes/class-anwpfl-data.php:219 includes/class-anwpfl-standing.php:993
 msgid "Goals Scored"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:220 includes/class-anwpfl-standing.php:1122
-#: includes/class-anwpfl-standing.php:1369
-#: includes/class-anwpfl-standing.php:1613
+#: includes/class-anwpfl-data.php:220 includes/class-anwpfl-standing.php:1112
+#: includes/class-anwpfl-standing.php:1360
+#: includes/class-anwpfl-standing.php:1604
 msgid "Group"
 msgstr ""
 
@@ -2484,11 +2491,11 @@ msgstr ""
 msgid "inherit (from settings)"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:228 includes/class-anwpfl-standing.php:1018
+#: includes/class-anwpfl-data.php:228 includes/class-anwpfl-standing.php:994
 msgid "Initial points"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:229 includes/class-anwpfl-standing.php:1019
+#: includes/class-anwpfl-data.php:229 includes/class-anwpfl-standing.php:995
 msgid "Initial Standing Table Data"
 msgstr ""
 
@@ -2516,13 +2523,13 @@ msgstr ""
 msgid "Line Ups"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:240 includes/class-anwpfl-data.php:767
-#: includes/class-anwpfl-match-admin.php:858
-#: includes/class-anwpfl-match-admin.php:878
+#: includes/class-anwpfl-data.php:240 includes/class-anwpfl-data.php:769
+#: includes/class-anwpfl-match-admin.php:851
+#: includes/class-anwpfl-match-admin.php:871
 #: includes/class-anwpfl-options.php:1263
 #: includes/class-anwpfl-options.php:1267
 #: includes/class-anwpfl-options.php:1273
-#: includes/class-anwpfl-standing.php:1022
+#: includes/class-anwpfl-standing.php:998
 msgid "Lost"
 msgstr ""
 
@@ -2542,8 +2549,8 @@ msgstr ""
 msgid "Match Events"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:245 includes/class-anwpfl-data.php:982
-#: includes/class-anwpfl-data.php:1005 includes/class-anwpfl-text.php:295
+#: includes/class-anwpfl-data.php:245 includes/class-anwpfl-data.php:984
+#: includes/class-anwpfl-data.php:1007 includes/class-anwpfl-text.php:295
 msgid "Match Postponed"
 msgstr ""
 
@@ -2562,7 +2569,7 @@ msgstr ""
 msgid "Match Stats"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:249 includes/class-anwpfl-data.php:983
+#: includes/class-anwpfl-data.php:249 includes/class-anwpfl-data.php:985
 msgid "Time To Be Defined"
 msgstr ""
 
@@ -2591,7 +2598,7 @@ msgstr ""
 msgid "How To Setup Competition With Multiple Stages"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:259 includes/class-anwpfl-player.php:71
+#: includes/class-anwpfl-data.php:259 includes/class-anwpfl-player.php:72
 msgid "No players found."
 msgstr ""
 
@@ -2607,11 +2614,11 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:263 includes/class-anwpfl-standing.php:1023
+#: includes/class-anwpfl-data.php:263 includes/class-anwpfl-standing.php:999
 msgid "not specified"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:264 includes/class-anwpfl-standing.php:1024
+#: includes/class-anwpfl-data.php:264 includes/class-anwpfl-standing.php:1000
 msgid "Notes (below table)"
 msgstr ""
 
@@ -2644,7 +2651,7 @@ msgstr ""
 msgid "Penalty Shootout"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:275 includes/class-anwpfl-standing.php:1025
+#: includes/class-anwpfl-data.php:275 includes/class-anwpfl-standing.php:1001
 msgid "Place"
 msgstr ""
 
@@ -2652,7 +2659,7 @@ msgstr ""
 msgid "Place and Time"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:277 includes/class-anwpfl-standing.php:1026
+#: includes/class-anwpfl-data.php:277 includes/class-anwpfl-standing.php:1002
 #: includes/shortcodes/class-anwpfl-shortcode-players.php:247
 #: includes/widgets/class-anwpfl-widget-players.php:158
 msgid "Played"
@@ -2678,23 +2685,23 @@ msgstr ""
 msgid "Players"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:284 includes/class-anwpfl-data.php:783
+#: includes/class-anwpfl-data.php:284 includes/class-anwpfl-data.php:785
 #: includes/class-anwpfl-options.php:1343
 #: includes/class-anwpfl-options.php:1347
 #: includes/class-anwpfl-options.php:1353
-#: includes/class-anwpfl-standing.php:1027
+#: includes/class-anwpfl-standing.php:1003
 msgid "Points"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:285 includes/class-anwpfl-standing.php:1028
+#: includes/class-anwpfl-data.php:285 includes/class-anwpfl-standing.php:1004
 msgid "Points for a draw"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:286 includes/class-anwpfl-standing.php:1029
+#: includes/class-anwpfl-data.php:286 includes/class-anwpfl-standing.php:1005
 msgid "Points for a loss"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:287 includes/class-anwpfl-standing.php:1030
+#: includes/class-anwpfl-data.php:287 includes/class-anwpfl-standing.php:1006
 msgid "Points for a win"
 msgstr ""
 
@@ -2702,15 +2709,15 @@ msgstr ""
 msgid "Quickly create players with \"Import Data\" Tool"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:290 includes/class-anwpfl-standing.php:1032
+#: includes/class-anwpfl-data.php:290 includes/class-anwpfl-standing.php:1008
 msgid "Ranking Rules"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:291 includes/class-anwpfl-standing.php:1033
+#: includes/class-anwpfl-data.php:291 includes/class-anwpfl-standing.php:1009
 msgid "Ranking rules are used to determine the position of the team in the Standing Table (from top to bottom)."
 msgstr ""
 
-#: includes/class-anwpfl-data.php:292 includes/class-anwpfl-standing.php:1034
+#: includes/class-anwpfl-data.php:292 includes/class-anwpfl-standing.php:1010
 msgid "Click on arrows to change ranking rules order."
 msgstr ""
 
@@ -2722,7 +2729,7 @@ msgstr ""
 msgid "Red"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:295 includes/class-anwpfl-player.php:500
+#: includes/class-anwpfl-data.php:295 includes/class-anwpfl-player.php:508
 #: includes/class-anwpfl-text.php:619 templates/match/match-stats.php:136
 msgid "Red Cards"
 msgstr ""
@@ -2756,11 +2763,11 @@ msgstr ""
 msgid "Round-Robin Format"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:304 includes/class-anwpfl-standing.php:1035
+#: includes/class-anwpfl-data.php:304 includes/class-anwpfl-standing.php:1011
 msgid "Save changes"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:305 includes/class-anwpfl-standing.php:1123
+#: includes/class-anwpfl-data.php:305 includes/class-anwpfl-standing.php:1113
 msgid "Save & Continue"
 msgstr ""
 
@@ -2792,7 +2799,7 @@ msgstr ""
 msgid "Select and Continue"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:315 includes/class-anwpfl-standing.php:1036
+#: includes/class-anwpfl-data.php:315 includes/class-anwpfl-standing.php:1012
 msgid "Select club"
 msgstr ""
 
@@ -2804,7 +2811,7 @@ msgstr ""
 msgid "Select Competition & Clubs"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:318 includes/class-anwpfl-standing.php:1120
+#: includes/class-anwpfl-data.php:318 includes/class-anwpfl-standing.php:1110
 msgid "Select Competition Group"
 msgstr ""
 
@@ -2832,11 +2839,11 @@ msgstr ""
 msgid "Select reason"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:325 includes/class-anwpfl-standing.php:1037
+#: includes/class-anwpfl-data.php:325 includes/class-anwpfl-standing.php:1013
 msgid "Select appropriate rules from the list below."
 msgstr ""
 
-#: includes/class-anwpfl-data.php:326 includes/class-anwpfl-player.php:507
+#: includes/class-anwpfl-data.php:326 includes/class-anwpfl-player.php:515
 msgid "select season"
 msgstr ""
 
@@ -2898,15 +2905,15 @@ msgid "Stage Title"
 msgstr ""
 
 #: includes/class-anwpfl-data.php:343 includes/class-anwpfl-standing.php:47
-#: includes/class-anwpfl-standing.php:883
-#: includes/class-anwpfl-standing.php:1038
+#: includes/class-anwpfl-standing.php:873
+#: includes/class-anwpfl-standing.php:1014
 #: includes/shortcodes/class-anwpfl-shortcode-standing.php:87
 #: includes/shortcodes/class-anwpfl-shortcode-standing.php:99
 #: includes/shortcodes/class-anwpfl-shortcode-standing.php:112
 msgid "Standing Table"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:344 includes/class-anwpfl-standing.php:1039
+#: includes/class-anwpfl-data.php:344 includes/class-anwpfl-standing.php:1015
 msgid "Standing Table Colors"
 msgstr ""
 
@@ -2980,17 +2987,17 @@ msgstr ""
 msgid "Do you really want to delete Missing Player?"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:364 includes/class-anwpfl-standing.php:1041
+#: includes/class-anwpfl-data.php:364 includes/class-anwpfl-standing.php:1017
 msgid "Wins"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:365 includes/class-anwpfl-data.php:759
-#: includes/class-anwpfl-match-admin.php:856
-#: includes/class-anwpfl-match-admin.php:876
+#: includes/class-anwpfl-data.php:365 includes/class-anwpfl-data.php:761
+#: includes/class-anwpfl-match-admin.php:849
+#: includes/class-anwpfl-match-admin.php:869
 #: includes/class-anwpfl-options.php:1223
 #: includes/class-anwpfl-options.php:1227
 #: includes/class-anwpfl-options.php:1233
-#: includes/class-anwpfl-standing.php:1042
+#: includes/class-anwpfl-standing.php:1018
 msgid "Won"
 msgstr ""
 
@@ -2998,7 +3005,7 @@ msgstr ""
 msgid "Yellow"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:367 includes/class-anwpfl-player.php:498
+#: includes/class-anwpfl-data.php:367 includes/class-anwpfl-player.php:506
 #: includes/class-anwpfl-text.php:601 templates/match/match-stats.php:122
 msgid "Yellow Cards"
 msgstr ""
@@ -3007,7 +3014,7 @@ msgstr ""
 msgid "2nd Yellow > Red"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:369 includes/class-anwpfl-player.php:499
+#: includes/class-anwpfl-data.php:369 includes/class-anwpfl-player.php:507
 #: includes/class-anwpfl-text.php:610 templates/match/match-stats.php:129
 msgid "2d Yellow > Red Cards"
 msgstr ""
@@ -4315,7 +4322,7 @@ msgctxt "country"
 msgid "Soviet Union"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:755 includes/class-anwpfl-options.php:1203
+#: includes/class-anwpfl-data.php:757 includes/class-anwpfl-options.php:1203
 #: includes/class-anwpfl-options.php:1207
 #: includes/class-anwpfl-options.php:1213
 #: includes/shortcodes/class-anwpfl-shortcode-players.php:233
@@ -4323,82 +4330,82 @@ msgstr ""
 msgid "Matches played"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:756 includes/class-anwpfl-options.php:1217
+#: includes/class-anwpfl-data.php:758 includes/class-anwpfl-options.php:1217
 msgctxt "Matches played - on standing page"
 msgid "M"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:760 includes/class-anwpfl-options.php:1237
+#: includes/class-anwpfl-data.php:762 includes/class-anwpfl-options.php:1237
 msgctxt "Won - on standing page"
 msgid "W"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:764 includes/class-anwpfl-options.php:1257
+#: includes/class-anwpfl-data.php:766 includes/class-anwpfl-options.php:1257
 msgctxt "Drawn"
 msgid "D"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:768 includes/class-anwpfl-options.php:1277
+#: includes/class-anwpfl-data.php:770 includes/class-anwpfl-options.php:1277
 msgctxt "Lost - on standing page"
 msgid "L"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:771 includes/class-anwpfl-options.php:1283
+#: includes/class-anwpfl-data.php:773 includes/class-anwpfl-options.php:1283
 #: includes/class-anwpfl-options.php:1287
 #: includes/class-anwpfl-options.php:1293
 msgid "Goals for"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:772 includes/class-anwpfl-options.php:1297
+#: includes/class-anwpfl-data.php:774 includes/class-anwpfl-options.php:1297
 msgid "GF"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:775 includes/class-anwpfl-options.php:1303
+#: includes/class-anwpfl-data.php:777 includes/class-anwpfl-options.php:1303
 #: includes/class-anwpfl-options.php:1307
 #: includes/class-anwpfl-options.php:1313
 msgid "Goals against"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:776 includes/class-anwpfl-options.php:1317
+#: includes/class-anwpfl-data.php:778 includes/class-anwpfl-options.php:1317
 msgid "GA"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:779 includes/class-anwpfl-options.php:1323
+#: includes/class-anwpfl-data.php:781 includes/class-anwpfl-options.php:1323
 #: includes/class-anwpfl-options.php:1327
 #: includes/class-anwpfl-options.php:1333
 msgid "Goal difference"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:780 includes/class-anwpfl-options.php:1337
+#: includes/class-anwpfl-data.php:782 includes/class-anwpfl-options.php:1337
 msgid "GD"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:784 includes/class-anwpfl-options.php:1358
+#: includes/class-anwpfl-data.php:786 includes/class-anwpfl-options.php:1358
 msgctxt "Points - on standing page"
 msgid "Pt"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:863 includes/class-anwpfl-options.php:1023
+#: includes/class-anwpfl-data.php:865 includes/class-anwpfl-options.php:1023
 msgctxt "goalkeeper - player position Letter"
 msgid "g"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:864 includes/class-anwpfl-options.php:1061
+#: includes/class-anwpfl-data.php:866 includes/class-anwpfl-options.php:1061
 msgctxt "defender - player position Letter"
 msgid "d"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:865 includes/class-anwpfl-options.php:1099
+#: includes/class-anwpfl-data.php:867 includes/class-anwpfl-options.php:1099
 msgctxt "midfielder - player position Letter"
 msgid "m"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:866 includes/class-anwpfl-options.php:1137
+#: includes/class-anwpfl-data.php:868 includes/class-anwpfl-options.php:1137
 msgctxt "forward - player position Letter"
 msgid "f"
 msgstr ""
 
-#: includes/class-anwpfl-data.php:984 includes/class-anwpfl-data.php:1006
+#: includes/class-anwpfl-data.php:986 includes/class-anwpfl-data.php:1008
 #: includes/class-anwpfl-text.php:304
 msgid "Match Cancelled"
 msgstr ""
@@ -4418,6 +4425,10 @@ msgstr ""
 
 #: includes/class-anwpfl-league.php:53
 msgid "Search Leagues"
+msgstr ""
+
+#: includes/class-anwpfl-league.php:54
+msgid "All Leagues"
 msgstr ""
 
 #: includes/class-anwpfl-league.php:55
@@ -4448,158 +4459,158 @@ msgstr ""
 msgid "Kick Off Time"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:422
+#: includes/class-anwpfl-match-admin.php:415
 #: includes/shortcodes/class-anwpfl-shortcode-matches.php:225
 #: includes/widgets/class-anwpfl-widget-matches.php:203
 msgid "Date From"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:424
+#: includes/class-anwpfl-match-admin.php:417
 #: includes/shortcodes/class-anwpfl-shortcode-matches.php:232
 #: includes/widgets/class-anwpfl-widget-matches.php:210
 msgid "Date To"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:434
+#: includes/class-anwpfl-match-admin.php:427
 msgid "All Matchweeks"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:513
+#: includes/class-anwpfl-match-admin.php:506
 msgid "Edit structure"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:562
+#: includes/class-anwpfl-match-admin.php:555
 msgid "Text 1"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:562
+#: includes/class-anwpfl-match-admin.php:555
 msgid "Match Preview or Summary"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:579
+#: includes/class-anwpfl-match-admin.php:572
 msgid "Text Content"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:588
+#: includes/class-anwpfl-match-admin.php:581
 msgid "Text 2"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:588
+#: includes/class-anwpfl-match-admin.php:581
 msgid "Custom Content"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:612
-#: includes/class-anwpfl-match-admin.php:735
+#: includes/class-anwpfl-match-admin.php:605
+#: includes/class-anwpfl-match-admin.php:728
 msgid "Video Source"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:624
-#: includes/class-anwpfl-match-admin.php:740
+#: includes/class-anwpfl-match-admin.php:617
+#: includes/class-anwpfl-match-admin.php:733
 msgid "- select source -"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:625
-#: includes/class-anwpfl-match-admin.php:741
+#: includes/class-anwpfl-match-admin.php:618
+#: includes/class-anwpfl-match-admin.php:734
 msgid "Media Library"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:626
-#: includes/class-anwpfl-match-admin.php:742
+#: includes/class-anwpfl-match-admin.php:619
+#: includes/class-anwpfl-match-admin.php:735
 msgid "Youtube"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:627
-#: includes/class-anwpfl-match-admin.php:743
+#: includes/class-anwpfl-match-admin.php:620
+#: includes/class-anwpfl-match-admin.php:736
 msgid "Vimeo"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:634
+#: includes/class-anwpfl-match-admin.php:627
 msgid "YouTube Image Format"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:639
+#: includes/class-anwpfl-match-admin.php:632
 msgid "- default -"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:648
-#: includes/class-anwpfl-match-admin.php:751
+#: includes/class-anwpfl-match-admin.php:641
+#: includes/class-anwpfl-match-admin.php:744
 msgid "Video ID (or URL)"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:652
-#: includes/class-anwpfl-match-admin.php:755
+#: includes/class-anwpfl-match-admin.php:645
+#: includes/class-anwpfl-match-admin.php:748
 msgid "for Youtube or Vimeo"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:658
-#: includes/class-anwpfl-match-admin.php:762
+#: includes/class-anwpfl-match-admin.php:651
+#: includes/class-anwpfl-match-admin.php:755
 msgid "Video File"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:662
-#: includes/class-anwpfl-match-admin.php:766
+#: includes/class-anwpfl-match-admin.php:655
+#: includes/class-anwpfl-match-admin.php:759
 msgid "for Media Library"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:667
-#: includes/class-anwpfl-match-admin.php:771
+#: includes/class-anwpfl-match-admin.php:660
+#: includes/class-anwpfl-match-admin.php:764
 msgid "Open Media Library"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:678
-#: includes/class-anwpfl-match-admin.php:783
+#: includes/class-anwpfl-match-admin.php:671
+#: includes/class-anwpfl-match-admin.php:776
 msgid "Video Description"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:721
+#: includes/class-anwpfl-match-admin.php:714
 msgid "Additional videos"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:723
+#: includes/class-anwpfl-match-admin.php:716
 msgid "Additional Video"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:724
+#: includes/class-anwpfl-match-admin.php:717
 msgid "Add Another Video"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:725
+#: includes/class-anwpfl-match-admin.php:718
 msgid "Remove Video"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:727
+#: includes/class-anwpfl-match-admin.php:720
 #: includes/class-anwpfl-options.php:967
 msgid "Are you sure you want to remove?"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:803
+#: includes/class-anwpfl-match-admin.php:796
 #: includes/class-anwpfl-match.php:383
 msgid "Match Duration"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:827
-#: includes/class-anwpfl-match-admin.php:842
+#: includes/class-anwpfl-match-admin.php:820
+#: includes/class-anwpfl-match-admin.php:835
 #: includes/class-anwpfl-match.php:388
 msgid "Custom Outcome"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:851
+#: includes/class-anwpfl-match-admin.php:844
 msgid "Outcome for home team"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:871
+#: includes/class-anwpfl-match-admin.php:864
 msgid "Outcome for away team"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:891
+#: includes/class-anwpfl-match-admin.php:884
 msgid "Points for home team"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:906
+#: includes/class-anwpfl-match-admin.php:899
 msgid "Points for away team"
 msgstr ""
 
-#: includes/class-anwpfl-match-admin.php:921
+#: includes/class-anwpfl-match-admin.php:914
 msgid "Outcome Text"
 msgstr ""
 
@@ -5203,104 +5214,104 @@ msgstr ""
 msgid "Flush"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:60
+#: includes/class-anwpfl-player.php:61
 msgctxt "Post type general name"
 msgid "Players"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:61
+#: includes/class-anwpfl-player.php:62
 msgctxt "Post type singular name"
 msgid "Player"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:62
+#: includes/class-anwpfl-player.php:63
 msgctxt "Admin Menu text"
 msgid "Players"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:63
+#: includes/class-anwpfl-player.php:64
 msgctxt "Add New on Toolbar"
 msgid "Player"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:64 includes/class-anwpfl-player.php:65
+#: includes/class-anwpfl-player.php:65 includes/class-anwpfl-player.php:66
 msgid "Add New Player"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:66
+#: includes/class-anwpfl-player.php:67
 msgid "New Player"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:67
+#: includes/class-anwpfl-player.php:68
 msgid "Edit Player"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:68
+#: includes/class-anwpfl-player.php:69
 msgid "View Player"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:69
+#: includes/class-anwpfl-player.php:70
 msgid "All Players"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:70
+#: includes/class-anwpfl-player.php:71
 msgid "Search Players"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:72
+#: includes/class-anwpfl-player.php:73
 msgid "No players found in Trash."
 msgstr ""
 
-#: includes/class-anwpfl-player.php:465
+#: includes/class-anwpfl-player.php:473
 msgid "Manual Statistics"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:487
+#: includes/class-anwpfl-player.php:495
 msgid "Add New Record"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:488
+#: includes/class-anwpfl-player.php:496
 msgid "the maximum value is 65535"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:489
+#: includes/class-anwpfl-player.php:497
 msgid "Season and Competition are required fields. The data will not be saved if you do not fill them."
 msgstr ""
 
-#: includes/class-anwpfl-player.php:490
+#: includes/class-anwpfl-player.php:498
 msgid "You can select an existing Competition or add a text title of a new one without creation."
 msgstr ""
 
-#: includes/class-anwpfl-player.php:491
+#: includes/class-anwpfl-player.php:499
 msgid "\"Goals Conceded\" and \"Clean Sheets\" - for goalkeepers only"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:494 includes/class-anwpfl-text.php:961
+#: includes/class-anwpfl-player.php:502 includes/class-anwpfl-text.php:961
 #: templates/player/player-stats-all.php:108
 #: templates/player/player-stats.php:70
 msgid "Played Matches"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:495 includes/class-anwpfl-text.php:970
+#: includes/class-anwpfl-player.php:503 includes/class-anwpfl-text.php:970
 #: templates/player/player-stats-all.php:114
 #: templates/player/player-stats.php:76
 msgid "Started"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:496 includes/class-anwpfl-text.php:979
+#: includes/class-anwpfl-player.php:504 includes/class-anwpfl-text.php:979
 #: templates/player/player-stats-all.php:120
 #: templates/player/player-stats.php:82
 msgid "Substituted In"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:497 includes/class-anwpfl-text.php:862
+#: includes/class-anwpfl-player.php:505 includes/class-anwpfl-text.php:862
 #: includes/class-anwpfl-text.php:988 templates/player/player-matches.php:67
 #: templates/player/player-stats-all.php:126
 #: templates/player/player-stats.php:88
 msgid "Minutes"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:501 includes/class-anwpfl-text.php:367
+#: includes/class-anwpfl-player.php:509 includes/class-anwpfl-text.php:367
 #: includes/class-anwpfl-text.php:880 includes/class-anwpfl-text.php:1339
 #: includes/shortcodes/class-anwpfl-shortcode-match.php:155
 #: templates/match/match-goals.php:76 templates/player/player-matches.php:80
@@ -5309,11 +5320,11 @@ msgstr ""
 msgid "Goals"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:502
+#: includes/class-anwpfl-player.php:510
 msgid "Goals from penalty"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:503 includes/class-anwpfl-text.php:889
+#: includes/class-anwpfl-player.php:511 includes/class-anwpfl-text.php:889
 #: includes/class-anwpfl-text.php:1033 includes/class-anwpfl-text.php:1348
 #: includes/class-anwpfl-text.php:1357
 #: includes/shortcodes/class-anwpfl-shortcode-players.php:114
@@ -5326,34 +5337,38 @@ msgstr ""
 msgid "Assists"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:504 includes/class-anwpfl-text.php:1042
+#: includes/class-anwpfl-player.php:512 includes/class-anwpfl-text.php:1042
 #: templates/player/player-stats-all.php:167
 #: templates/player/player-stats.php:129
 msgid "Own Goals"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:505 includes/class-anwpfl-text.php:871
+#: includes/class-anwpfl-player.php:513 includes/class-anwpfl-text.php:871
 #: includes/class-anwpfl-text.php:1006 templates/player/player-matches.php:74
 #: templates/player/player-stats-all.php:143
 #: templates/player/player-stats.php:105
 msgid "Goals Conceded"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:506 includes/class-anwpfl-text.php:1015
+#: includes/class-anwpfl-player.php:514 includes/class-anwpfl-text.php:1015
 #: templates/player/player-stats-all.php:149
 #: templates/player/player-stats.php:111
 msgid "Clean Sheets"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:509
+#: includes/class-anwpfl-player.php:517
 msgid "Existing Competition"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:1053
+#: includes/class-anwpfl-player.php:1060
 msgid "Player Info"
 msgstr ""
 
-#: includes/class-anwpfl-player.php:1235 includes/class-anwpfl-referee.php:290
+#: includes/class-anwpfl-player.php:1123
+msgid "Current Club ID"
+msgstr ""
+
+#: includes/class-anwpfl-player.php:1239 includes/class-anwpfl-referee.php:290
 #: includes/class-anwpfl-stadium.php:324 includes/class-anwpfl-stadium.php:589
 #: includes/class-anwpfl-staff.php:371
 msgid "Photo"
@@ -5513,35 +5528,35 @@ msgstr ""
 msgid "Standing Table Title"
 msgstr ""
 
-#: includes/class-anwpfl-standing.php:919
-msgid "There are no available \"Round-Robin\" competitions."
-msgstr ""
-
-#: includes/class-anwpfl-standing.php:978
+#: includes/class-anwpfl-standing.php:954
 msgid "Selected Standing group doesn't have any club. Please add clubs to the Competition group first."
 msgstr ""
 
-#: includes/class-anwpfl-standing.php:1009
+#: includes/class-anwpfl-standing.php:985
 msgid "custom"
 msgstr ""
 
-#: includes/class-anwpfl-standing.php:1020
+#: includes/class-anwpfl-standing.php:996
 msgid "Load Data"
 msgstr ""
 
-#: includes/class-anwpfl-standing.php:1021
+#: includes/class-anwpfl-standing.php:997
 msgid "Load initial data from another Standing table"
 msgstr ""
 
-#: includes/class-anwpfl-standing.php:1031
+#: includes/class-anwpfl-standing.php:1007
 msgid "predefined"
 msgstr ""
 
-#: includes/class-anwpfl-standing.php:1040
+#: includes/class-anwpfl-standing.php:1016
 msgid "Standing Table Is Not Selected"
 msgstr ""
 
-#: includes/class-anwpfl-standing.php:1124
+#: includes/class-anwpfl-standing.php:1098
+msgid "There are no available \"Round-Robin\" competitions."
+msgstr ""
+
+#: includes/class-anwpfl-standing.php:1114
 msgid "Some options will be copied from"
 msgstr ""
 
@@ -5923,12 +5938,6 @@ msgstr ""
 #: includes/shortcodes/class-anwpfl-shortcode-players.php:141
 #: includes/shortcodes/class-anwpfl-shortcode-squad.php:99
 msgid "Season ID"
-msgstr ""
-
-#: includes/shortcodes/class-anwpfl-shortcode-cards.php:150
-#: includes/shortcodes/class-anwpfl-shortcode-matches.php:191
-#: includes/shortcodes/class-anwpfl-shortcode-players.php:152
-msgid "League ID"
 msgstr ""
 
 #: includes/shortcodes/class-anwpfl-shortcode-cards.php:174

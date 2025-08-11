@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.5.0
  *
- * @version       0.16.17
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -176,7 +176,7 @@ $squad_elements = wp_parse_list( anwp_fl()->customizer->get_value( 'squad', 'squ
 								</div>
 							<?php endif; ?>
 						</div>
-						<a href="<?php echo esc_url( $player['link'] ); ?>" class="anwp-link-cover"></a>
+						<a href="<?php echo esc_url( $player['link'] ); ?>" class="anwp-link-cover" aria-label="<?php echo esc_attr( $player['name'] ?? '' ); ?>"></a>
 					</div>
 					<?php
 				endforeach;
@@ -241,7 +241,7 @@ $squad_elements = wp_parse_list( anwp_fl()->customizer->get_value( 'squad', 'squ
 							</div>
 						<?php endif; ?>
 					</div>
-					<a href="<?php echo esc_url( get_permalink( $staff_id ) ); ?>" class="anwp-link-cover"></a>
+					<a href="<?php echo esc_url( get_permalink( $staff_id ) ); ?>" class="anwp-link-cover" aria-label="<?php echo esc_attr( $staff_member['name'] ); ?>"></a>
 				</div>
 			<?php endforeach; ?>
 		</div>
@@ -326,7 +326,7 @@ $squad_elements = wp_parse_list( anwp_fl()->customizer->get_value( 'squad', 'squ
 						</div>
 					<?php endif; ?>
 				</div>
-				<a href="<?php echo esc_url( get_permalink( $staff_group_item_id ) ); ?>" class="anwp-link-cover"></a>
+				<a href="<?php echo esc_url( get_permalink( $staff_group_item_id ) ); ?>" class="anwp-link-cover" aria-label="<?php echo esc_attr( $staff_group_item['name'] ); ?>"></a>
 			</div>
 		<?php endforeach; ?>
 	</div>

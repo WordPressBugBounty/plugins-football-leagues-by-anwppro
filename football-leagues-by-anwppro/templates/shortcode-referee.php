@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.12.4
  *
- * @version       0.16.0
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -111,7 +111,7 @@ $job_title = AnWP_Football_Leagues::string_to_bool( $data->show_job ) ? get_post
 			<div class="player-block__profile-link anwp-fl-border-top anwp-border-light p-2">
 				<div class="position-relative anwp-fl-btn-outline anwp-text-sm w-100 player-block__profile-link-btn">
 					<?php echo esc_html( $data->profile_link_text ); ?>
-					<a href="<?php echo esc_url( get_permalink( $referee ) ); ?>" class="anwp-link-cover anwp-link-without-effects"></a>
+					<a href="<?php echo esc_url( get_permalink( $referee ) ); ?>" class="anwp-link-cover anwp-link-without-effects" aria-label="<?php echo esc_attr( $referee->post_title ); ?>"></a>
 				</div>
 			</div>
 		<?php endif; ?>

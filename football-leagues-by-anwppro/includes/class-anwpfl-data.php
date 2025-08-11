@@ -742,6 +742,8 @@ class AnWPFL_Data {
 
 	public function cb_get_countries() {
 		$this->init_countries();
+		asort( $this->countries );
+
 		return $this->countries;
 	}
 

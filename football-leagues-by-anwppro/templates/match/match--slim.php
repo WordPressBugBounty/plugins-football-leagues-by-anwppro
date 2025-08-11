@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.6.1
  *
- * @version       0.16.13.2
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -155,5 +155,5 @@ $render_match_time  = AnWP_Football_Leagues::string_to_bool( $data->show_match_d
 		</div>
 	</div>
 
-	<a class="anwp-link-cover anwp-link-without-effects anwp-cursor-pointer" href="<?php echo esc_url( $data->permalink ); ?>"></a>
+	<a class="anwp-link-cover anwp-link-without-effects anwp-cursor-pointer" href="<?php echo esc_url( $data->permalink ); ?>" aria-label="<?php echo esc_attr( $data->club_home_title . ' - ' . $data->club_away_title ); ?>"></a>
 </div>

@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.7.3
  *
- * @version       0.14.0
+ * @version       0.16.18
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -34,7 +34,7 @@ $data = (object) wp_parse_args(
 if ( ! empty( $data->link_text ) && ! empty( $data->link_target ) ) : ?>
 	<div class="anwp-b-wrap mt-2 position-relative anwp-fl-btn-outline anwp-text-sm w-100 widget-cards__link">
 		<?php echo esc_html( $data->link_text ); ?>
-		<a class="anwp-link-cover anwp-link-without-effects" target="_blank" href="<?php echo esc_url( get_permalink( (int) $data->link_target ) ); ?>"></a>
+		<a class="anwp-link-cover anwp-link-without-effects" target="_blank" href="<?php echo esc_url( get_permalink( (int) $data->link_target ) ); ?>" aria-label="<?php echo esc_attr( $data->link_text ); ?>"></a>
 	</div>
 	<?php
 endif;

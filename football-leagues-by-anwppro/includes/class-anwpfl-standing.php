@@ -69,7 +69,7 @@ class AnWPFL_Standing extends CPT_Core {
 	/**
 	 * Filter CPT title entry placeholder text
 	 *
-	 * @param  string $title Original placeholder text
+	 * @param string $title Original placeholder text
 	 *
 	 * @return string        Modified placeholder text
 	 */
@@ -125,7 +125,7 @@ class AnWPFL_Standing extends CPT_Core {
 	/**
 	 * Filters the array of row action links on the Pages list table.
 	 *
-	 * @param array $actions
+	 * @param array   $actions
 	 * @param WP_Post $post
 	 *
 	 * @return array
@@ -222,29 +222,19 @@ class AnWPFL_Standing extends CPT_Core {
 			| Filter By League
 			|--------------------------------------------------------------------
 			*/
-			$leagues = get_terms(
-				[
-					'taxonomy'   => 'anwp_league',
-					'hide_empty' => false,
-				]
-			);
+			// phpcs:ignore WordPress.Security.NonceVerification
+			$current_league_filter = empty( $_GET['_anwpfl_current_league'] ) ? '' : (int) $_GET['_anwpfl_current_league'];
+			?>
+			<div class="anwp-x-selector anwp-g-float-left" fl-x-data="selectorItem('league',true)" fl-x-cloak>
+				<input fl-x-model.fill="selected" type="text" class="postform anwp-g-admin-list-input anwp-w-120"
+					placeholder="<?php echo esc_attr__( 'League ID', 'anwp-football-leagues' ); ?>"
+					name="_anwpfl_current_league" value="<?php echo esc_attr( $current_league_filter ); ?>"/>
+				<button fl-x-on:click="openModal()" type="button" class="button anwp-mr-2 postform">
+					<span class="dashicons dashicons-search"></span>
+				</button>
+			</div>
 
-			if ( ! is_wp_error( $leagues ) && ! empty( $leagues ) ) {
-				// phpcs:ignore WordPress.Security.NonceVerification
-				$current_league_filter = empty( $_GET['_anwpfl_current_league'] ) ? '' : (int) $_GET['_anwpfl_current_league'];
-				?>
-
-				<select name='_anwpfl_current_league' id='anwp_league_filter' class='postform'>
-					<option value=''><?php echo esc_html__( 'All Leagues', 'anwp-football-leagues' ); ?></option>
-					<?php foreach ( $leagues as $league ) : ?>
-						<option value="<?php echo esc_attr( $league->term_id ); ?>" <?php selected( $league->term_id, $current_league_filter ); ?>>
-							- <?php echo esc_html( $league->name ); ?>
-						</option>
-					<?php endforeach; ?>
-				</select>
-				<?php
-			}
-
+			<?php
 			/*
 			|--------------------------------------------------------------------
 			| Filter By Season
@@ -283,7 +273,7 @@ class AnWPFL_Standing extends CPT_Core {
 	 *
 	 * @param WP_Query $query
 	 */
-	public function handle_custom_filter( $query ) {
+	public function handle_custom_filter( WP_Query $query ) {
 		global $post_type, $pagenow;
 
 		// Check main query in admin
@@ -903,25 +893,11 @@ class AnWPFL_Standing extends CPT_Core {
 		// Add nonce for security and authentication.
 		wp_nonce_field( 'anwp_save_metabox_' . $post->ID, 'anwp_metabox_nonce' );
 
-		$app_id                 = apply_filters( 'anwpfl/standing/vue_app_id', 'fl-app-standing' );
-		$fixed                  = 'true' === get_post_meta( $post->ID, '_anwpfl_fixed', true );
-		$competition_id         = get_post_meta( $post->ID, '_anwpfl_competition', true );
-		$group_id               = get_post_meta( $post->ID, '_anwpfl_competition_group', true );
-		$available_competitions = anwp_football_leagues()->competition->get_competition_groups_without_standing();
+		$app_id         = apply_filters( 'anwpfl/standing/vue_app_id', 'fl-app-standing' );
+		$fixed          = 'true' === get_post_meta( $post->ID, '_anwpfl_fixed', true );
+		$competition_id = get_post_meta( $post->ID, '_anwpfl_competition', true );
+		$group_id       = get_post_meta( $post->ID, '_anwpfl_competition_group', true );
 
-		if ( ! $fixed && empty( $available_competitions ) ) :
-			?>
-			<div class="anwp-b-wrap anwpfl-standing-metabox-wrapper">
-				<div class="alert alert-warning border-warning d-flex align-items-center" role="alert">
-					<svg class="anwp-icon mr-2 anwp-icon--octi anwp-icon--s16">
-						<use xlink:href="#icon-alert"></use>
-					</svg>
-					<?php echo esc_html__( 'There are no available "Round-Robin" competitions.', 'anwp-football-leagues' ); ?>
-				</div>
-			</div>
-			<?php
-			return;
-		endif;
 		?>
 		<div class="anwp-b-wrap anwpfl-standing-metabox-wrapper">
 			<?php if ( $fixed ) : ?>
@@ -1107,41 +1083,56 @@ class AnWPFL_Standing extends CPT_Core {
 					</script>
 
 					<div id="<?php echo esc_attr( $app_id ); ?>"></div>
+					<?php
+				endif;
+			else :
+				$available_competitions = anwp_football_leagues()->competition->get_competition_groups_without_standing();
+
+				if ( empty( $available_competitions ) ) :
+					?>
+					<div class="anwp-b-wrap anwpfl-standing-metabox-wrapper">
+						<div class="alert alert-warning border-warning d-flex align-items-center" role="alert">
+							<svg class="anwp-icon mr-2 anwp-icon--octi anwp-icon--s16">
+								<use xlink:href="#icon-alert"></use>
+							</svg>
+							<?php echo esc_html__( 'There are no available "Round-Robin" competitions.', 'anwp-football-leagues' ); ?>
+						</div>
+					</div>
+					<?php
+				else :
+					/*
+					|--------------------------------------------------------------------
+					| Standing Setup
+					|--------------------------------------------------------------------
+					*/
+
+					$standing_l10n = [
+						'select_competition_group'         => __( 'Select Competition Group', 'anwp-football-leagues' ),
+						'competition'                      => __( 'Competition', 'anwp-football-leagues' ),
+						'group'                            => __( 'Group', 'anwp-football-leagues' ),
+						'save_continue'                    => __( 'Save & Continue', 'anwp-football-leagues' ),
+						'some_options_will_be_copied_from' => __( 'Some options will be copied from', 'anwp-football-leagues' ),
+					];
+
+					$cloned = get_post_meta( $post->ID, '_anwpfl_cloned', true );
+
+					if ( intval( $cloned ) ) {
+						$cloned = get_the_title( $cloned ) . ' (ID: ' . intval( $cloned ) . ')';
+					}
+
+					$setup_data = [
+						'optionsClub' => $this->plugin->club->get_clubs_list(),
+						'cloned'      => $cloned ?: '',
+						'l10n'        => anwp_fl()->helper->entity_decode( $standing_l10n ),
+					];
+					?>
+					<script type="text/javascript">
+						window._AnWP_FL_Competitions = <?php echo wp_json_encode( $available_competitions ); ?>;
+						window._AnWP_FL_Standing_Setup = <?php echo wp_json_encode( $setup_data ); ?>;
+					</script>
+
+					<div id="<?php echo esc_attr( apply_filters( 'anwpfl/standing/vue_app_setup_id', 'fl-app-standing-setup' ) ); ?>"></div>
 				<?php endif; ?>
-			<?php else : ?>
-				<?php
-				/*
-				|--------------------------------------------------------------------
-				| Standing Setup
-				|--------------------------------------------------------------------
-				*/
-
-				$standing_l10n = [
-					'select_competition_group'         => __( 'Select Competition Group', 'anwp-football-leagues' ),
-					'competition'                      => __( 'Competition', 'anwp-football-leagues' ),
-					'group'                            => __( 'Group', 'anwp-football-leagues' ),
-					'save_continue'                    => __( 'Save & Continue', 'anwp-football-leagues' ),
-					'some_options_will_be_copied_from' => __( 'Some options will be copied from', 'anwp-football-leagues' ),
-				];
-
-				$cloned = get_post_meta( $post->ID, '_anwpfl_cloned', true );
-
-				if ( intval( $cloned ) ) {
-					$cloned = get_the_title( $cloned ) . ' (ID: ' . intval( $cloned ) . ')';
-				}
-
-				$setup_data = [
-					'optionsClub' => $this->plugin->club->get_clubs_list(),
-					'cloned'      => $cloned ?: '',
-					'l10n'        => anwp_fl()->helper->entity_decode( $standing_l10n ),
-				];
-				?>
-				<script type="text/javascript">
-					window._AnWP_FL_Competitions = <?php echo wp_json_encode( $available_competitions ); ?>;
-					window._AnWP_FL_Standing_Setup = <?php echo wp_json_encode( $setup_data ); ?>;
-				</script>
-
-				<div id="<?php echo esc_attr( apply_filters( 'anwpfl/standing/vue_app_setup_id', 'fl-app-standing-setup' ) ); ?>"></div>
 			<?php endif; ?>
 		</div>
 		<?php
