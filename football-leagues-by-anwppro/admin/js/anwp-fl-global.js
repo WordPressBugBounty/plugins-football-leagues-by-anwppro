@@ -8016,11 +8016,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     module_default$1.plugin(module_default);
     module_default$1.store("selectorModal", {
       isOpen: false,
-      isReact: false,
+      libUsed: "",
       single: true,
       context: "",
       filters: [],
       s: "",
+      date: "",
       filterValues: [],
       rows: [],
       columns: [],
@@ -8050,6 +8051,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         this.isLoadingContent = true;
         const requestSignal = this.requestController.signal;
         let urlParams = "context:" + this.context + "~s:" + this.s;
+        if ("match" === this.context) {
+          urlParams += "~date:" + this.date;
+        }
         this.filters.forEach((f) => {
           if (f.tomSelect.getValue()) {
             urlParams += "~" + f.context + ":" + f.tomSelect.getValue();
@@ -8248,12 +8252,22 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
        */
       openModalReact(context, targetEl, single) {
         if (!this.isOpen) {
-          this.isReact = true;
+          this.libUsed = "react";
           this.context = context;
           this.targetEl = targetEl;
           this.single = single;
           this.isOpen = true;
           this.initModal(targetEl.current.value);
+        }
+      },
+      openModalVue(context, targetEl, single) {
+        if (!this.isOpen) {
+          this.libUsed = "vue";
+          this.context = context;
+          this.targetEl = targetEl;
+          this.single = single;
+          this.isOpen = true;
+          this.initModal(targetEl.value);
         }
       },
       openModal(targetEl) {
@@ -8264,10 +8278,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           this.isOpen = true;
           this.initModal(targetEl.selected);
         }
-        this.isReact = false;
+        this.libUsed = "";
       },
       initModal(selected) {
         this.s = "";
+        this.date = "";
         this.rows = [];
         this.columns = [];
         this.selectedItems = [];
@@ -8322,10 +8337,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         this.selectedItems = this.selectedItems.filter((i) => Number(i.id) !== Number(id));
       },
       insertSelected() {
-        if (this.isReact) {
+        if ("react" === this.libUsed) {
           this.targetEl.current.value = this.selectedItems.map((s) => s.id).join(",");
           const newEvent = new Event("update-x-fl-selector");
           this.targetEl.current.dispatchEvent(newEvent);
+        } else if ("vue" === this.libUsed) {
+          this.targetEl.value = this.selectedItems.map((s) => s.id).join(",");
+          const newEvent = new Event("update-x-fl-selector");
+          this.targetEl.dispatchEvent(newEvent);
         } else {
           this.targetEl.selected = this.selectedItems.map((s) => s.id).join(",");
         }
@@ -8341,7 +8360,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         this.isOpen = false;
       },
       cleanup() {
-        this.isReact = false;
+        this.libUsed = "";
         this.targetEl = {};
         this.selectedItems = [];
         this.filterValues = [];

@@ -272,27 +272,31 @@ class AnWPFL_Player extends AnWPFL_DB {
 	 * @param integer $post_id ID of post to display column for.
 	 */
 	public function columns_display( $column, $post_id ) {
-		global $post;
+		static $player_data = [];
+
+		if ( ! isset( $player_data[ $post_id ] ) ) {
+			$player_data[ $post_id ] = anwp_fl()->player->get_player_data( $post_id );
+		}
 
 		switch ( $column ) {
 			case '_fl_player_position':
 				$position_options = $this->plugin->data->get_positions();
 
-				if ( ! empty( $position_options[ $post->_fl_player_position ] ) ) {
-					echo esc_html( $position_options[ $post->_fl_player_position ] );
+				if ( ! empty( $position_options[ $player_data[ $post_id ]['position'] ?? '' ] ) ) {
+					echo esc_html( $position_options[ $player_data[ $post_id ]['position'] ?? '' ] );
 				}
 
 				break;
 
 			case '_fl_player_team_id':
-				if ( ! empty( $post->_fl_player_team_id ) ) {
-					echo esc_html( anwp_fl()->club->get_club_title_by_id( $post->_fl_player_team_id ) );
+				if ( ! empty( $player_data[ $post_id ]['team_id'] ) ) {
+					echo esc_html( anwp_fl()->club->get_club_title_by_id( $player_data[ $post_id ]['team_id'] ) );
 				}
 
 				break;
 
 			case '_fl_player_birthdate':
-				echo $post->_fl_player_birthdate && '0000-00-00' !== $post->_fl_player_birthdate ? esc_html( date_i18n( get_option( 'date_format' ), strtotime( $post->_fl_player_birthdate ) ) ) : '';
+				echo ( $player_data[ $post_id ]['date_of_birth'] ?? '' ) && '0000-00-00' !== $player_data[ $post_id ]['date_of_birth'] ? esc_html( date_i18n( get_option( 'date_format' ), strtotime( $player_data[ $post_id ]['date_of_birth'] ) ) ) : '';
 				break;
 
 			case '_fl_player_id':
@@ -355,16 +359,6 @@ class AnWPFL_Player extends AnWPFL_DB {
 		}
 
 		if ( 'edit.php' === $pagenow && 'anwp_player' === $post_type ) {
-			$clauses['join'] .= " LEFT JOIN {$wpdb->prefix}anwpfl_player_data fl_player ON fl_player.player_id = {$wpdb->posts}.ID";
-
-			$player_fields = [
-				'fl_player.position        _fl_player_position',
-				'fl_player.team_id         _fl_player_team_id',
-				'fl_player.date_of_birth   _fl_player_birthdate',
-			];
-
-			$clauses['fields'] .= ',' . implode( ',', $player_fields );
-
 			$get_data = wp_parse_args(
 				$_GET, // phpcs:ignore WordPress.Security.NonceVerification
 				[
@@ -373,7 +367,14 @@ class AnWPFL_Player extends AnWPFL_DB {
 			);
 
 			if ( absint( $get_data['_fl_team_id'] ) ) {
-				$clauses['where'] .= $wpdb->prepare( ' AND fl_player.team_id = %d ', absint( $get_data['_fl_team_id'] ) );
+				$clauses['join'] .= " LEFT JOIN {$wpdb->prefix}anwpfl_player_data fl_player ON fl_player.player_id = {$wpdb->posts}.ID";
+
+				$player_fields = [
+					'fl_player.team_id _fl_player_team_id',
+				];
+
+				$clauses['fields'] .= ',' . implode( ',', $player_fields );
+				$clauses['where']  .= $wpdb->prepare( ' AND fl_player.team_id = %d ', absint( $get_data['_fl_team_id'] ) );
 			}
 		}
 
@@ -1582,7 +1583,6 @@ class AnWPFL_Player extends AnWPFL_DB {
 	 *       'place_of_birth' => 'Manisa',
 	 *       'player_external_id' => '',
 	 *       'player_id' => 0,
-	 *       'position' => 'm',
 	 *       'position' => 'm',
 	 *       'short_name' => 'J. Doe',
 	 *       'team_id' => 12211,

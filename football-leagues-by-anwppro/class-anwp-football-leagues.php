@@ -70,7 +70,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * @var    string
 	 * @since  0.1.0
 	 */
-	const VERSION = '0.16.18';
+	const VERSION = '0.16.19';
 
 	/**
 	 * Current DB structure version.
@@ -1201,6 +1201,12 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 								fl-x-show="$store.selectorModal.filterValues['leagues']">X</span>
 						</div>
 						<select name="leagues" id="anwp-x-modal__field__league" class="anwp-x-modal__select"></select>
+					</div>
+					<div fl-x-show="['match'].includes( $store.selectorModal.context )" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
+						<div class="anwp-d-flex">
+							<label for="anwp-x-modal__field__date"><?php echo esc_html__( 'Date', 'anwp-football-leagues' ); ?></label>
+						</div>
+						<input fl-x-on:change="$store.selectorModal.sendSearchRequest()" fl-x-model="$store.selectorModal.date" name="date" type="date" id="anwp-x-modal__field__date" value="" class="fl-shortcode-attr code">
 					</div>
 					<div fl-x-show="['player','referee','club'].includes( $store.selectorModal.context ) && ! $store.selectorModal.isLoadingGlobals" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
 						<div class="anwp-d-flex">

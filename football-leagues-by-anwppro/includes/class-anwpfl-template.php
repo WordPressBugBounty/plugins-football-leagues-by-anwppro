@@ -131,6 +131,10 @@ class AnWPFL_Template extends Gamajo_Template_Loader {
 
 		global $post;
 
+		if ( empty( $post->post_type) ) {
+			return $content;
+		}
+
 		$template_loading_check = [
 			(bool) $post,
 			in_array( $post->post_type, $this->plugin->get_post_types(), true ),

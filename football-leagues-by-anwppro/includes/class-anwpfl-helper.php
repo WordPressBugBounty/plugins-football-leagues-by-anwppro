@@ -1720,6 +1720,11 @@ class AnWPFL_Helper {
 			'limit'        => 40,
 		];
 
+		if ( ! empty( $search_data['date'] ) ) {
+			$args['date_to']   = sanitize_text_field( $search_data['date'] );
+			$args['date_from'] = sanitize_text_field( $search_data['date'] );
+		}
+
 		$games = anwp_fl()->competition->tmpl_get_competition_matches_extended( $args, 'stats' );
 
 		$output = [

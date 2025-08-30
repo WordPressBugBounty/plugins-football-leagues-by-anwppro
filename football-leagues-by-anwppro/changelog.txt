@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 0.16.19 - 2025-08-30 =
+* added: FL Selector - date field on Match search
+* fixed: minor fixes
+
 = 0.16.18 - 2025-08-11 =
 * fixed: FL Selector - problem with non-Latin characters in Search field
 * improved: accessibility improvements
