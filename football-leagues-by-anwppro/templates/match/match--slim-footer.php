@@ -167,7 +167,7 @@ if ( empty( $data['extra_actions_html'] ) && empty( $stadium_title ) && empty( $
 		<?php if ( $stadium_title ) : ?>
 			<div class="match-slim__stadium anwp-text-xs d-flex align-items-center justify-content-center mt-1">
 				<svg class="anwp-icon anwp-icon--octi mr-2 anwp-w-20 anwp-fill-current">
-					<use xlink:href="#icon-stadium"></use>
+					<use href="#icon-stadium"></use>
 				</svg>
 				<?php echo esc_html( $stadium_title ); ?>
 			</div>
@@ -178,7 +178,7 @@ if ( empty( $data['extra_actions_html'] ) && empty( $stadium_title ) && empty( $
 			?>
 			<div class="match-slim__referees anwp-text-xs d-flex align-items-center justify-content-center mt-1">
 				<svg class="anwp-icon anwp-icon--octi mr-1 anwp-w-20 anwp-fill-current">
-					<use xlink:href="#icon-whistle"></use>
+					<use href="#icon-whistle"></use>
 				</svg>
 				<?php echo esc_html( anwp_football_leagues()->referee->get_referee_name_by_id( $data['referee'] ) ); ?>
 			</div>

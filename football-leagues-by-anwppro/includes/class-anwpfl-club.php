@@ -54,9 +54,8 @@ class AnWPFL_Club extends CPT_Core {
 					'title',
 					'comments',
 				],
-				'show_in_menu'        => true,
+				'show_in_menu'        => 'edit.php?post_type=anwp_player',
 				'rewrite'             => [ 'slug' => $permalink_slug ],
-				'menu_position'       => 35,
 				'show_in_rest'        => true,
 				'rest_base'           => 'anwp_clubs',
 				'menu_icon'           => 'dashicons-shield',
@@ -325,7 +324,7 @@ class AnWPFL_Club extends CPT_Core {
 					<div class="anwp-fl-menu-wrapper mr-3 d-none d-md-block sticky-top align-self-start anwp-flex-none <?php echo esc_attr( $is_menu_collapsed ? 'anwp-fl-collapsed-menu' : '' ); ?>" style="top: 50px;">
 
 						<button id="anwp-fl-publish-click-proxy" class="w-100 button button-primary py-2 mb-4 d-flex align-items-center justify-content-center" type="submit">
-							<svg class="anwp-icon anwp-icon--feather anwp-icon--s16"><use xlink:href="#icon-save"></use></svg>
+							<svg class="anwp-icon anwp-icon--feather anwp-icon--s16"><use href="#icon-save"></use></svg>
 							<span class="ml-2"><?php echo esc_html__( 'Save', 'anwp-football-leagues' ); ?></span>
 							<span class="spinner m-0"></span>
 						</button>
@@ -502,7 +501,7 @@ class AnWPFL_Club extends CPT_Core {
 				<div class="anwp-border anwp-border-gray-500">
 					<div class="anwp-border-bottom anwp-border-gray-500 bg-white d-flex align-items-center px-3 py-2 anwp-text-gray-700 anwp-font-semibold">
 						<svg class="anwp-icon anwp-icon--octi anwp-icon--s16 mr-2 anwp-fill-current">
-							<use xlink:href="#icon-jersey"></use>
+							<use href="#icon-jersey"></use>
 						</svg>
 						<?php echo esc_html__( 'Club Squad', 'anwp-football-leagues' ); ?>
 					</div>
@@ -1938,6 +1937,31 @@ class AnWPFL_Club extends CPT_Core {
 				$external_id
 			)
 		);
+	}
+
+	/**
+	 * Get Club ID by title.
+	 *
+	 * @param string $title Club title to search for.
+	 *
+	 * @return int Club ID or 0 if not found.
+	 * @since 0.17.2
+	 */
+	public function get_club_id_by_title( $title ) {
+
+		if ( empty( $title ) ) {
+			return 0;
+		}
+
+		$title = trim( $title );
+
+		foreach ( $this->get_all_clubs_data() as $club_id => $club_data ) {
+			if ( $club_data['title'] === $title ) {
+				return (int) $club_id;
+			}
+		}
+
+		return 0;
 	}
 
 	/**

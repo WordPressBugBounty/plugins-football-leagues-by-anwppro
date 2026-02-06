@@ -47,7 +47,7 @@ $photo_id  = get_post_meta( $referee->ID, '_anwpfl_photo_id', true );
 $job_title = AnWP_Football_Leagues::string_to_bool( $data->show_job ) ? get_post_meta( $referee->ID, '_anwpfl_job_title', true ) : '';
 ?>
 <div class="anwp-b-wrap">
-	<div class="player-block anwp-fl-border anwp-border-light context--<?php echo esc_attr( $data->context ); ?>">
+	<div class="player-block anwp-border anwp-border-light context--<?php echo esc_attr( $data->context ); ?>">
 		<div class="d-flex align-items-center p-2 anwp-bg-light player-block__header">
 			<?php if ( $photo_id ) : ?>
 				<?php echo wp_get_attachment_image( $photo_id, 'medium', false, [ 'class' => 'anwp-w-80 anwp-h-80 anwp-object-contain m-0' ] ); ?>
@@ -98,7 +98,7 @@ $job_title = AnWP_Football_Leagues::string_to_bool( $data->show_job ) ? get_post
 
 					list( $label, $value ) = explode( ':', $referee_option );
 					?>
-					<div class="player-block__option d-flex align-items-center anwp-fl-border-top anwp-border-light py-2">
+					<div class="player-block__option d-flex align-items-center anwp-border-top anwp-border-light py-2">
 						<div class="player-block__option-label flex-grow-1 anwp-text-sm"><?php echo esc_html( trim( $label ) ); ?></div>
 						<div class="player-block__option-value border-left anwp-text-sm"><?php echo esc_html( trim( $value ) ); ?></div>
 					</div>
@@ -108,7 +108,7 @@ $job_title = AnWP_Football_Leagues::string_to_bool( $data->show_job ) ? get_post
 		</div>
 
 		<?php if ( AnWP_Football_Leagues::string_to_bool( $data->profile_link ) ) : ?>
-			<div class="player-block__profile-link anwp-fl-border-top anwp-border-light p-2">
+			<div class="player-block__profile-link anwp-border-top anwp-border-light p-2">
 				<div class="position-relative anwp-fl-btn-outline anwp-text-sm w-100 player-block__profile-link-btn">
 					<?php echo esc_html( $data->profile_link_text ); ?>
 					<a href="<?php echo esc_url( get_permalink( $referee ) ); ?>" class="anwp-link-cover anwp-link-without-effects" aria-label="<?php echo esc_attr( $referee->post_title ); ?>"></a>

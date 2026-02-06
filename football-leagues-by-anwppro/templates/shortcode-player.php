@@ -40,7 +40,7 @@ if ( empty( $player ) || absint( $player['player_id'] ) !== absint( $data['playe
 }
 ?>
 <div class="anwp-b-wrap">
-	<div class="player-block anwp-fl-border anwp-border-light context--<?php echo esc_attr( $data['context'] ); ?>">
+	<div class="player-block anwp-border anwp-border-light context--<?php echo esc_attr( $data['context'] ); ?>">
 		<div class="d-flex align-items-center p-2 anwp-bg-light player-block__header">
 			<?php if ( $player['photo'] ) : ?>
 				<img loading="lazy" class="anwp-w-80 anwp-h-80 anwp-object-contain m-0"
@@ -73,7 +73,7 @@ if ( empty( $player ) || absint( $player['player_id'] ) !== absint( $data['playe
 		<div class="player-block__options">
 
 			<?php if ( AnWP_Football_Leagues::string_to_bool( $data['show_club'] ) && $player['team_id'] ) : ?>
-				<div class="player-block__option d-flex align-items-center anwp-fl-border-top anwp-border-light py-1">
+				<div class="player-block__option d-flex align-items-center anwp-border-top anwp-border-light py-1">
 					<div class="player-block__option-label flex-grow-1 anwp-text-sm"><?php echo esc_html( AnWPFL_Text::get_value( 'player__shortcode__club', __( 'Club', 'anwp-football-leagues' ) ) ); ?></div>
 					<div class="player-block__option-value player-block__option-value--wide px-1 d-flex align-items-center flex-wrap">
 						<?php
@@ -108,7 +108,7 @@ if ( empty( $player ) || absint( $player['player_id'] ) !== absint( $data['playe
 
 					list( $label, $value ) = explode( ':', $player_option );
 					?>
-					<div class="player-block__option d-flex align-items-center anwp-fl-border-top anwp-border-light py-2">
+					<div class="player-block__option d-flex align-items-center anwp-border-top anwp-border-light py-2">
 						<div class="player-block__option-label flex-grow-1 anwp-text-sm"><?php echo esc_html( trim( $label ) ); ?></div>
 						<div class="player-block__option-value border-left anwp-text-sm"><?php echo esc_html( trim( $value ) ); ?></div>
 					</div>
@@ -118,7 +118,7 @@ if ( empty( $player ) || absint( $player['player_id'] ) !== absint( $data['playe
 		</div>
 
 		<?php if ( AnWP_Football_Leagues::string_to_bool( $data['profile_link'] ) ) : ?>
-			<div class="player-block__profile-link anwp-fl-border-top anwp-border-light p-2">
+			<div class="player-block__profile-link anwp-border-top anwp-border-light p-2">
 				<div class="position-relative anwp-fl-btn-outline anwp-text-sm w-100 player-block__profile-link-btn">
 					<?php echo esc_html( $data['profile_link_text'] ); ?>
 					<a href="<?php echo esc_url( get_permalink( $player['player_id'] ) ); ?>" class="anwp-link-cover anwp-link-without-effects" aria-label="<?php echo esc_attr( $data['profile_link_text'] ); ?>"></a>

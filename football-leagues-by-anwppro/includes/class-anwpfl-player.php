@@ -67,7 +67,7 @@ class AnWPFL_Player extends AnWPFL_DB {
 			'new_item'           => __( 'New Player', 'anwp-football-leagues' ),
 			'edit_item'          => __( 'Edit Player', 'anwp-football-leagues' ),
 			'view_item'          => __( 'View Player', 'anwp-football-leagues' ),
-			'all_items'          => __( 'All Players', 'anwp-football-leagues' ),
+			'all_items'          => __( 'Players', 'anwp-football-leagues' ),
 			'search_items'       => __( 'Search Players', 'anwp-football-leagues' ),
 			'not_found'          => __( 'No players found.', 'anwp-football-leagues' ),
 			'not_found_in_trash' => __( 'No players found in Trash.', 'anwp-football-leagues' ),
@@ -78,8 +78,7 @@ class AnWPFL_Player extends AnWPFL_DB {
 			'public'              => true,
 			'publicly_queryable'  => true,
 			'show_ui'             => true,
-			'show_in_menu'        => true,
-			'menu_position'       => 34,
+			'show_in_menu'        => 'edit.php?post_type=anwp_player',
 			'menu_icon'           => 'dashicons-groups',
 			'query_var'           => true,
 			'rewrite'             => [ 'slug' => $permalink_slug ],
@@ -986,27 +985,27 @@ class AnWPFL_Player extends AnWPFL_DB {
 			<div class="anwp-metabox-tabs d-sm-flex">
 				<div class="anwp-metabox-tabs__controls d-flex flex-sm-column flex-wrap">
 					<div class="p-3 anwp-metabox-tabs__control-item" data-target="#anwp-tabs-general-player_metabox">
-						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use xlink:href="#icon-gear"></use></svg>
+						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use href="#icon-gear"></use></svg>
 						<span class="d-block"><?php echo esc_html__( 'General', 'anwp-football-leagues' ); ?></span>
 					</div>
 					<div class="p-3 anwp-metabox-tabs__control-item" data-target="#anwp-tabs-media-player_metabox">
-						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use xlink:href="#icon-device-camera"></use></svg>
+						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use href="#icon-device-camera"></use></svg>
 						<span class="d-block"><?php echo esc_html__( 'Media', 'anwp-football-leagues' ); ?></span>
 					</div>
 					<div class="p-3 anwp-metabox-tabs__control-item" data-target="#anwp-tabs-desc-player_metabox">
-						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use xlink:href="#icon-note"></use></svg>
+						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use href="#icon-note"></use></svg>
 						<span class="d-block"><?php echo esc_html__( 'Bio', 'anwp-football-leagues' ); ?></span>
 					</div>
 					<div class="p-3 anwp-metabox-tabs__control-item" data-target="#anwp-tabs-social-club_metabox">
-						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use xlink:href="#icon-repo-forked"></use></svg>
+						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use href="#icon-repo-forked"></use></svg>
 						<span class="d-block"><?php echo esc_html__( 'Social', 'anwp-football-leagues' ); ?></span>
 					</div>
 					<div class="p-3 anwp-metabox-tabs__control-item" data-target="#anwp-tabs-custom_fields-player_metabox">
-						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use xlink:href="#icon-server"></use></svg>
+						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use href="#icon-server"></use></svg>
 						<span class="d-block"><?php echo esc_html__( 'Custom Fields', 'anwp-football-leagues' ); ?></span>
 					</div>
 					<div class="p-3 anwp-metabox-tabs__control-item" data-target="#anwp-tabs-bottom_content-player_metabox">
-						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use xlink:href="#icon-repo-push"></use></svg>
+						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use href="#icon-repo-push"></use></svg>
 						<span class="d-block"><?php echo esc_html__( 'Bottom Content', 'anwp-football-leagues' ); ?></span>
 					</div>
 					<?php

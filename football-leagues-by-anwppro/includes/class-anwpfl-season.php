@@ -49,7 +49,7 @@ class AnWPFL_Season extends Taxonomy_Core {
 				'hierarchical'      => false,
 				'show_in_nav_menus' => false,
 				'rewrite'           => [ 'slug' => 'season' ],
-				'show_in_menu'      => 'anwp-football-leagues',
+				'show_in_menu'      => false,
 				'labels'            => [
 					'search_items'  => esc_html__( 'Search Seasons', 'anwp-football-leagues' ),
 					'all_items'     => esc_html__( 'All Seasons', 'anwp-football-leagues' ),

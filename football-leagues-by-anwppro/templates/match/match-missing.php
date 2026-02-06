@@ -104,7 +104,7 @@ $data['players'] += anwp_fl()->player->get_players_by_ids( wp_list_pluck( $missi
 					continue;
 				}
 				?>
-				<div class="match__player-wrapper d-flex flex-wrap align-items-center anwp-fl-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
+				<div class="match__player-wrapper d-flex flex-wrap align-items-center anwp-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
 					<div class="d-flex align-items-center">
 						<div class="match__player-number anwp-bg-light anwp-leading-1-25 mr-2">
 							<?php
@@ -134,7 +134,7 @@ $data['players'] += anwp_fl()->player->get_players_by_ids( wp_list_pluck( $missi
 						<?php endif; ?>
 
 						<?php if ( ! empty( $home_squad[ $player_id ] ) && isset( $positions_l10n[ $home_squad[ $player_id ]['position'] ] ) ) : ?>
-							<div class="match__player-position mr-2 anwp-text-nowrap anwp-fl-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
+							<div class="match__player-position mr-2 anwp-text-nowrap anwp-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
 								<?php echo esc_html( $positions_l10n[ $home_squad[ $player_id ]['position'] ] ); ?>
 							</div>
 						<?php endif; ?>
@@ -187,7 +187,7 @@ $data['players'] += anwp_fl()->player->get_players_by_ids( wp_list_pluck( $missi
 					continue;
 				}
 				?>
-				<div class="match__player-wrapper d-flex flex-wrap align-items-center anwp-fl-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
+				<div class="match__player-wrapper d-flex flex-wrap align-items-center anwp-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
 					<div class="d-flex align-items-center">
 						<div class="match__player-number anwp-bg-light anwp-leading-1-25 mr-2">
 							<?php
@@ -218,7 +218,7 @@ $data['players'] += anwp_fl()->player->get_players_by_ids( wp_list_pluck( $missi
 
 
 						<?php if ( ! empty( $away_squad[ $player_id ] ) && isset( $positions_l10n[ $away_squad[ $player_id ]['position'] ] ) ) : ?>
-							<div class="match__player-position mr-2 anwp-text-nowrap anwp-fl-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
+							<div class="match__player-position mr-2 anwp-text-nowrap anwp-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
 								<?php echo esc_html( $positions_l10n[ $away_squad[ $player_id ]['position'] ] ); ?>
 							</div>
 						<?php endif; ?>

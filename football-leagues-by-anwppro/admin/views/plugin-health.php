@@ -73,8 +73,8 @@ $plugin_health_app_data = [
 		<h1 class="h4 font-weight-normal text-uppercase mb-0"><?php echo esc_html__( 'Plugin Health', 'anwp-football-leagues' ); ?></h1>
 	</div>
 
-	<div class="row">
-		<div class="col-md-9 anwp-import-api-wrapper">
+	<div class="anwp-row">
+		<div class="anwp-col-md-9 anwp-import-api-wrapper">
 			<div id="<?php echo esc_attr( $app_id ); ?>"></div>
 		</div>
 	</div>

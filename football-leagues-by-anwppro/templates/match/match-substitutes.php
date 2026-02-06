@@ -69,7 +69,7 @@ $temp_players  = anwp_football_leagues()->match->get_temp_players( $data['match_
 	?>
 
 	<?php foreach ( $data['parsed_events']['subs'] as $e_index => $e ) : ?>
-		<div class="match__event-team-row match__event-row py-1 d-flex align-items-center flex-row-reverse flex-sm-row anwp-fl-border-bottom anwp-border-light <?php echo $e_index ? '' : 'anwp-fl-border-top'; ?>">
+		<div class="match__event-team-row match__event-row py-1 d-flex align-items-center flex-row-reverse flex-sm-row anwp-border-bottom anwp-border-light <?php echo $e_index ? '' : 'anwp-border-top'; ?>">
 			<div class="anwp-flex-1 d-sm-flex flex-column flex-sm-row align-items-center <?php echo $e->club === (int) $data['away_club'] ? 'd-none' : 'flex-wrap'; ?>">
 
 				<?php if ( $e->club === (int) $data['home_club'] ) : ?>
@@ -78,7 +78,7 @@ $temp_players  = anwp_football_leagues()->match->get_temp_players( $data['match_
 						<div class="match__event-icon--subs-wrapper mx-sm-2 anwp-flex-none anwp-leading-1">
 							<div class="match__event-icon mt-1 mb-sm-2">
 								<svg class="icon__subs-out">
-									<use xlink:href="#icon-arrow-o-down"></use>
+									<use href="#icon-arrow-o-down"></use>
 								</svg>
 							</div>
 						</div>
@@ -105,7 +105,7 @@ $temp_players  = anwp_football_leagues()->match->get_temp_players( $data['match_
 						<div class="match__event-icon--subs-wrapper mx-sm-2 anwp-flex-none anwp-leading-1">
 							<div class="match__event-icon">
 								<svg class="icon__subs-in">
-									<use xlink:href="#icon-arrow-o-up"></use>
+									<use href="#icon-arrow-o-up"></use>
 								</svg>
 							</div>
 						</div>
@@ -160,7 +160,7 @@ $temp_players  = anwp_football_leagues()->match->get_temp_players( $data['match_
 						<div class="match__event-icon--subs-wrapper ml-1 ml-sm-0 anwp-flex-none anwp-leading-1">
 							<div class="match__event-icon mt-1 mb-sm-2">
 								<svg class="icon__subs-out">
-									<use xlink:href="#icon-arrow-o-down"></use>
+									<use href="#icon-arrow-o-down"></use>
 								</svg>
 							</div>
 						</div>
@@ -187,7 +187,7 @@ $temp_players  = anwp_football_leagues()->match->get_temp_players( $data['match_
 						<div class="match__event-icon--subs-wrapper ml-1 ml-sm-0 anwp-flex-none anwp-leading-1">
 							<div class="match__event-icon">
 								<svg class="icon__subs-in">
-									<use xlink:href="#icon-arrow-o-up"></use>
+									<use href="#icon-arrow-o-up"></use>
 								</svg>
 							</div>
 						</div>

@@ -6,52 +6,65 @@
  * @package AnWP_Football_Leagues
  */
 
+if ( class_exists( 'AnWPFL_Shortcode_Clubs' ) ) {
+	return;
+}
+
 /**
  * AnWP Football Leagues :: Shortcode > Clubs.
  *
  * @since 0.4.3
  */
-class AnWPFL_Shortcode_Clubs {
-
-	private $shortcode = 'anwpfl-clubs';
+class AnWPFL_Shortcode_Clubs extends AnWPFL_Shortcode_Base {
 
 	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		$this->hooks();
-	}
-
-	/**
-	 * Initiate our hooks.
-	 */
-	public function hooks() {
-		add_action( 'init', [ $this, 'shortcode_init' ] );
-
-		// Load shortcode form
-		add_action( 'anwpfl/shortcode/get_shortcode_form_clubs', [ $this, 'load_shortcode_form' ] );
-
-		// Add shortcode option
-		add_filter( 'anwpfl/shortcode/get_shortcode_options', [ $this, 'add_shortcode_option' ] );
-	}
-
-	/**
-	 * Add shortcode.
-	 */
-	public function shortcode_init() {
-		add_shortcode( $this->shortcode, [ $this, 'render_shortcode' ] );
-	}
-
-	/**
-	 * Rendering shortcode.
-	 *
-	 * @param $atts
+	 * Get the shortcode tag.
 	 *
 	 * @return string
+	 * @since 0.17.0
 	 */
-	public function render_shortcode( $atts ) {
+	protected function get_shortcode_tag(): string {
+		return 'anwpfl-clubs';
+	}
 
-		$defaults = [
+	/**
+	 * Get the shortcode key.
+	 *
+	 * @return string
+	 * @since 0.17.0
+	 */
+	protected function get_shortcode_key(): string {
+		return 'clubs';
+	}
+
+	/**
+	 * Get the shortcode label.
+	 *
+	 * @return string
+	 * @since 0.17.0
+	 */
+	protected function get_shortcode_label(): string {
+		return __( 'Clubs', 'anwp-football-leagues' );
+	}
+
+	/**
+	 * Get documentation URL.
+	 *
+	 * @return string
+	 * @since 0.17.0
+	 */
+	protected function get_docs_url(): string {
+		return '';
+	}
+
+	/**
+	 * Get default attribute values.
+	 *
+	 * @return array
+	 * @since 0.17.0
+	 */
+	protected function get_defaults(): array {
+		return [
 			'competition_id' => '',
 			'logo_size'      => 'big',
 			'layout'         => '',
@@ -61,128 +74,90 @@ class AnWPFL_Shortcode_Clubs {
 			'include_ids'    => '',
 			'show_club_name' => false,
 		];
-
-		// Parse defaults and create a shortcode.
-		$atts = shortcode_atts( $defaults, (array) $atts, $this->shortcode );
-
-		return anwp_football_leagues()->template->shortcode_loader( 'clubs', $atts );
 	}
 
 	/**
-	 * Add shortcode options.
-	 * Used in Shortcode Builder and Shortcode TinyMCE tool.
-	 *
-	 * @param array $data Shortcode options.
+	 * Get form field definitions.
 	 *
 	 * @return array
-	 * @since 0.12.7
+	 * @since 0.17.0
 	 */
-	public function add_shortcode_option( $data ) {
-		$data['clubs'] = __( 'Clubs', 'anwp-football-leagues' );
+	protected function get_form_fields(): array {
+		return [
+			// == Selection Section ==
+			[
+				'name'     => 'competition_id',
+				'type'     => 'selector',
+				'entity'   => 'competition',
+				'multiple' => false,
+				'label'    => __( 'Competition ID', 'anwp-football-leagues' ),
+			],
+			[
+				'name'        => 'include_ids',
+				'type'        => 'selector',
+				'entity'      => 'club',
+				'multiple'    => true,
+				'label'       => __( 'Include Clubs', 'anwp-football-leagues' ),
+				'description' => __( 'comma-separated list of IDs', 'anwp-football-leagues' ),
+			],
+			[
+				'name'        => 'exclude_ids',
+				'type'        => 'selector',
+				'entity'      => 'club',
+				'multiple'    => true,
+				'label'       => __( 'Exclude Clubs', 'anwp-football-leagues' ),
+				'description' => __( 'comma-separated list of IDs', 'anwp-football-leagues' ),
+			],
 
-		return $data;
-	}
-
-	/**
-	 * Load shortcode form with options.
-	 * Used in Shortcode Builder and Shortcode TinyMCE tool.
-	 */
-	public function load_shortcode_form() {
-
-		$shortcode_link  = 'https://anwppro.userecho.com/knowledge-bases/2/articles/158-clubs-shortcode';
-		$shortcode_title = esc_html__( 'Shortcodes', 'anwp-football-leagues' ) . ' :: ' . esc_html__( 'Clubs', 'anwp-football-leagues' );
-
-		anwp_football_leagues()->helper->render_docs_template( $shortcode_link, $shortcode_title );
-		?>
-		<table class="form-table">
-			<tbody>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-competition_id"><?php echo esc_html__( 'Competition ID', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('competition',true)">
-						<input name="competition_id" id="fl-form-shortcode-competition_id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-logo_size"><?php echo esc_html__( 'Logo Size', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="logo_size" data-fl-type="select" id="fl-form-shortcode-logo_size" class="postform fl-shortcode-attr">
-						<option value="small"><?php echo esc_html__( 'Small', 'anwp-football-leagues' ); ?></option>
-						<option value="big" selected><?php echo esc_html__( 'Big', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-layout"><?php echo esc_html__( 'Layout', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="layout" data-fl-type="select" id="fl-form-shortcode-layout" class="postform fl-shortcode-attr">
-						<option value="" selected><?php echo esc_html__( 'Custom Height and Width', 'anwp-football-leagues' ); ?></option>
-						<option value="2col"><?php echo esc_html__( '2 Columns', 'anwp-football-leagues' ); ?></option>
-						<option value="3col"><?php echo esc_html__( '3 Columns', 'anwp-football-leagues' ); ?></option>
-						<option value="4col"><?php echo esc_html__( '4 Columns', 'anwp-football-leagues' ); ?></option>
-						<option value="6col"><?php echo esc_html__( '6 Columns', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-logo_height"><?php echo esc_html__( 'Logo Height', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<input name="logo_height" data-fl-type="text" type="text" id="fl-form-shortcode-logo_height" value="50px" class="fl-shortcode-attr regular-text code">
-					<span class="anwp-option-desc"><?php echo esc_html__( 'Height value with units. Example: "50px" or "3rem".', 'anwp-football-leagues' ); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-logo_width"><?php echo esc_html__( 'Logo Width', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<input name="logo_width" data-fl-type="text" type="text" id="fl-form-shortcode-logo_width" value="50px" class="fl-shortcode-attr regular-text code">
-					<span class="anwp-option-desc"><?php echo esc_html__( 'Width value with units. Example: "50px" or "3rem".', 'anwp-football-leagues' ); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-exclude_ids"><?php echo esc_html__( 'Exclude Clubs', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('club',false)">
-						<input name="exclude_ids" id="fl-form-shortcode-exclude_ids" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-
-					<span class="anwp-option-desc"><?php echo esc_html__( 'comma-separated list of IDs', 'anwp-football-leagues' ); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-include_ids"><?php echo esc_html__( 'Include Clubs', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('club',false)">
-						<input name="include_ids" id="fl-form-shortcode-include_ids" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-
-					<span class="anwp-option-desc"><?php echo esc_html__( 'comma-separated list of IDs', 'anwp-football-leagues' ); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-show_club_name"><?php echo esc_html__( 'Show club name', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<select name="show_club_name" data-fl-type="select" id="fl-form-shortcode-show_club_name" class="postform fl-shortcode-attr">
-						<option value="1"><?php echo esc_html__( 'Yes', 'anwp-football-leagues' ); ?></option>
-						<option value="0" selected><?php echo esc_html__( 'No', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			</tbody>
-		</table>
-		<input type="hidden" class="fl-shortcode-name" name="fl-slug" value="anwpfl-clubs">
-		<?php
+			// == Logo Settings Section ==
+			[
+				'type'  => 'section_header',
+				'label' => __( 'Logo Settings', 'anwp-football-leagues' ),
+			],
+			[
+				'name'    => 'layout',
+				'type'    => 'select',
+				'label'   => __( 'Layout', 'anwp-football-leagues' ),
+				'default' => '',
+				'options' => [
+					''     => __( 'Custom Height and Width', 'anwp-football-leagues' ),
+					'2col' => __( '2 Columns', 'anwp-football-leagues' ),
+					'3col' => __( '3 Columns', 'anwp-football-leagues' ),
+					'4col' => __( '4 Columns', 'anwp-football-leagues' ),
+					'6col' => __( '6 Columns', 'anwp-football-leagues' ),
+				],
+			],
+			[
+				'name'    => 'logo_size',
+				'type'    => 'select',
+				'label'   => __( 'Logo Size', 'anwp-football-leagues' ),
+				'default' => 'big',
+				'options' => [
+					'small' => __( 'Small', 'anwp-football-leagues' ),
+					'big'   => __( 'Big', 'anwp-football-leagues' ),
+				],
+			],
+			[
+				'name'        => 'logo_height',
+				'type'        => 'text',
+				'label'       => __( 'Logo Height', 'anwp-football-leagues' ),
+				'default'     => '50px',
+				'description' => __( 'Height value with units. Example: "50px" or "3rem".', 'anwp-football-leagues' ),
+			],
+			[
+				'name'        => 'logo_width',
+				'type'        => 'text',
+				'label'       => __( 'Logo Width', 'anwp-football-leagues' ),
+				'default'     => '50px',
+				'description' => __( 'Width value with units. Example: "50px" or "3rem".', 'anwp-football-leagues' ),
+			],
+			[
+				'name'    => 'show_club_name',
+				'type'    => 'yes_no',
+				'label'   => __( 'Show club name', 'anwp-football-leagues' ),
+				'default' => '0',
+			],
+		];
 	}
 }
 

@@ -23,11 +23,11 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : '';
 <div class="anwp-b-wrap wrap" id="anwpfl-import-wrapper">
 
 	<h2 class="nav-tab-wrapper">
-		<a class="nav-tab text-dark <?php echo esc_attr( '' === $active_tab ? 'nav-tab-active' : '' ); ?>"
+		<a class="nav-tab anwp-text-gray-900 <?php echo esc_attr( '' === $active_tab ? 'nav-tab-active' : '' ); ?>"
 			href="<?php echo esc_url( admin_url( 'admin.php?page=anwp-settings-tools' ) ); ?>">
 			<?php echo esc_html__( 'Batch Import', 'anwp-football-leagues' ); ?>
 		</a>
-		<a class="nav-tab text-dark <?php echo esc_attr( 'csv-export' === $active_tab ? 'nav-tab-active' : '' ); ?>"
+		<a class="nav-tab anwp-text-gray-900 <?php echo esc_attr( 'csv-export' === $active_tab ? 'nav-tab-active' : '' ); ?>"
 			href="<?php echo esc_url( admin_url( 'admin.php?page=anwp-settings-tools&tab=csv-export' ) ); ?>">
 			<?php echo esc_html__( 'CSV Export', 'anwp-football-leagues' ); ?>
 		</a>

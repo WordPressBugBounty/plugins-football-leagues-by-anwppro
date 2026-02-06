@@ -81,13 +81,13 @@ $temp_players = anwp_football_leagues()->match->get_temp_players( $data['match_i
 	?>
 
 	<?php foreach ( $data['parsed_events']['goals'] as $e_index => $e ) : ?>
-		<div class="match__event-row py-1 d-flex align-items-center flex-row-reverse flex-sm-row anwp-fl-border-bottom anwp-border-light <?php echo $e_index ? '' : 'anwp-fl-border-top'; ?>">
+		<div class="match__event-row py-1 d-flex align-items-center flex-row-reverse flex-sm-row anwp-border-bottom anwp-border-light <?php echo $e_index ? '' : 'anwp-border-top'; ?>">
 			<div class="match__event-team-row anwp-flex-1 align-items-center <?php echo $e->club === (int) $data['away_club'] ? 'd-none d-sm-flex' : 'd-flex'; ?>">
 
 				<?php if ( $e->club === (int) $data['home_club'] ) : ?>
 					<div class="match__event-icon mx-2 anwp-flex-none anwp-leading-1">
 						<svg class="icon__ball <?php echo esc_attr( 'yes' === $e->ownGoal ? 'icon__ball--own' : '' ); ?>">
-							<use xlink:href="#<?php echo esc_attr( 'yes' === $e->fromPenalty ? 'icon-ball_penalty' : 'icon-ball' ); ?>"></use>
+							<use href="#<?php echo esc_attr( 'yes' === $e->fromPenalty ? 'icon-ball_penalty' : 'icon-ball' ); ?>"></use>
 						</svg>
 					</div>
 
@@ -151,7 +151,7 @@ $temp_players = anwp_football_leagues()->match->get_temp_players( $data['match_i
 				<?php if ( $e->club === (int) $data['away_club'] ) : ?>
 					<div class="match__event-icon mx-2 anwp-flex-none anwp-leading-1">
 						<svg class="icon__ball <?php echo esc_attr( 'yes' === $e->ownGoal ? 'icon__ball--own' : '' ); ?>">
-							<use xlink:href="#<?php echo esc_attr( 'yes' === $e->fromPenalty ? 'icon-ball_penalty' : 'icon-ball' ); ?>"></use>
+							<use href="#<?php echo esc_attr( 'yes' === $e->fromPenalty ? 'icon-ball_penalty' : 'icon-ball' ); ?>"></use>
 						</svg>
 					</div>
 

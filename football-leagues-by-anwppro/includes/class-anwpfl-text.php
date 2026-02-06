@@ -86,7 +86,7 @@ class AnWPFL_Text {
 		<div class="cmb2-wrap form-table anwp-b-wrap anwp-settings">
 
 			<div class="alert alert-info border-info mt-n2 mb-3">
-				<svg class="anwp-icon anwp-icon--s14 anwp-icon--octi mr-1"><use xlink:href="#icon-light-bulb"></use></svg>
+				<svg class="anwp-icon anwp-icon--s14 anwp-icon--octi mr-1"><use href="#icon-light-bulb"></use></svg>
 				Some system text strings (such as "Matchweek", Standing columns and Player positions) are available to translate at the settings page - <a href="<?php echo esc_url( $admin_system_texts ); ?>" target="_blank">link</a>
 			</div>
 
@@ -97,10 +97,10 @@ class AnWPFL_Text {
 
 			<div class="cmb2-metabox cmb-field-list">
 				<div class="cmb-row bg-light">
-					<div class="row align-items-center">
-						<div class="col-sm-4"><?php echo esc_html__( 'Default', 'anwp-football-leagues' ); ?></div>
-						<div class="col-sm-4"><?php echo esc_html__( 'New', 'anwp-football-leagues' ); ?></div>
-						<div class="col-sm-4"><?php echo esc_html__( 'Context', 'anwp-football-leagues' ); ?></div>
+					<div class="anwp-row anwp-items-center">
+						<div class="anwp-col-sm-4"><?php echo esc_html__( 'Default', 'anwp-football-leagues' ); ?></div>
+						<div class="anwp-col-sm-4"><?php echo esc_html__( 'New', 'anwp-football-leagues' ); ?></div>
+						<div class="anwp-col-sm-4"><?php echo esc_html__( 'Context', 'anwp-football-leagues' ); ?></div>
 					</div>
 				</div>
 			</div>
@@ -124,8 +124,8 @@ class AnWPFL_Text {
 				'option_key'   => self::$key,
 				'show_names'   => false,
 				'capability'   => 'manage_options',
-				'parent_slug'  => 'anwp-settings-tools',
-				'menu_title'   => esc_html__( 'Text Options', 'anwp-football-leagues' ),
+				'parent_slug'  => 'admin.php?page=anwp_fl_text',
+				'menu_title'   => esc_html__( 'Text Strings', 'anwp-football-leagues' ),
 			]
 		);
 

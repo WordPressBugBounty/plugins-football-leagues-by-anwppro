@@ -23,8 +23,12 @@ function anwp_football_leagues_autoload_classes( $class_name ) {
 	// Set up our filename.
 	$filename = strtolower( str_replace( '_', '-', substr( $class_name, strlen( 'AnWPFL_' ) ) ) );
 
-	// Include our file.
-	AnWP_Football_Leagues::include_file( 'includes/class-anwpfl-' . $filename );
+	// Shortcode classes are in the shortcodes subdirectory.
+	if ( 0 === strpos( $filename, 'shortcode' ) ) {
+		AnWP_Football_Leagues::include_file( 'includes/shortcodes/class-anwpfl-' . $filename );
+	} else {
+		AnWP_Football_Leagues::include_file( 'includes/class-anwpfl-' . $filename );
+	}
 }
 
 spl_autoload_register( 'anwp_football_leagues_autoload_classes' );
@@ -70,7 +74,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * @var    string
 	 * @since  0.1.0
 	 */
-	const VERSION = '0.16.19';
+	const VERSION = '0.17.2';
 
 	/**
 	 * Current DB structure version.
@@ -86,9 +90,9 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * @var    string
 	 * @since  0.1.0
 	 */
-	const SVG_BALL = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJmaWxsOm5vbmUiIHZpZXdCb3g9IjAgLTAuMDE2IDIwIDIwIj48cGF0aCBkPSJNMCA5Ljk4NGMwIDUuNTE5IDQuNDgxIDEwIDEwIDEwczEwLTQuNDgxIDEwLTEwYzAtNS41Mi00LjQ4MS0xMC0xMC0xMHMtMTAgNC40OC0xMCAxMHptNy41My0uMjE5bC0yLjMxOCAyLjEwNiAxLjA0NSAzLjk1MSAzLjE2NSAxLjA5NyAzLjEwMi0yLjg4NC0xLjE4OS0yLjkzNUw3LjUzIDkuNzY1ek0zLjE5OSA0LjA5MWE4Ljk4NyA4Ljk4NyAwIDAgMSA2LjE4NC0zLjA4N2wuMTQ1Ljc3MS0zLjQyMSAzLjYwMS0yLjE2Ny4xMjItLjc0MS0xLjQwN3ptNC40NjYgNC42NjFMNi45NSA1LjkzOWwzLjE4OS0zLjM1NWMuNjkuMDU5IDEuNTE1LjI3NSAyLjM1My42NDYuMzgxLjE2OS43MzcuMzU3IDEuMDYuNTU3bC4zMzYgNC40NzItMi4xODEgMS45MTEtNC4wNDItMS40MTh6TTIuNTI5IDQuOTY2QTguOTQ5IDguOTQ5IDAgMCAwIDEuMDAxIDkuODZsMS4xMjgtLjMzNS44ODMtMy42NDMtLjQ4My0uOTE2ek0xLjA0NSAxMC44OWE4Ljk5IDguOTkgMCAwIDAgMy40NzMgNi4yMjlsLjc2OC0xLjA2LTEuMDgxLTQuMDgzLTEuNjk0LTEuNTIxLTEuNDY2LjQzNXptOS4xNjEgOC4wOTFhOC45NzUgOC45NzUgMCAwIDAgNi40MDQtMi44OTNsLS44NDUtMS40ODUtMi4zODcuMDA0LTMuMzQgMy4xMDQuMTY4IDEuMjd6bTguNzAxLTEwLjI5NmE4Ljk4NSA4Ljk4NSAwIDAgMC0yLjkzNS01LjQzMmwtMS40MDcuNjY4LjMxNSA0LjE5NSAyLjEzNSAxLjY2MiAxLjg5Mi0xLjA5M3ptLjA5MSAxLjEwM2wuMDAyLjE5NmE4Ljk2IDguOTYgMCAwIDEtMS43MSA1LjI3NmwtLjcxMi0xLjI1Ljk5Ny0zLjQwMSAxLjQyMy0uODIxeiIgZmlsbC1ydWxlPSJldmVub2RkIi8+PC9zdmc+';
-	const SVG_CUP  = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAuNDc5IDEuMDY0IDE5LjA5OSAxOC45MzYiPjxwYXRoIGZpbGw9Im5vbmUiIGQ9Ik02IDE5SDV2MWgxMHYtMWgtMXYtMWgtMS4xMzVhNy4xNjQgNy4xNjQgMCAwIDEtLjc2NS0xLjUgMTAuMTkgMTAuMTkgMCAwIDEtLjU1My0yLjQ3MWMxLjc4LS42MzkgMy4xMjMtMi4zNDcgMy4zOTEtNC40MzcgMS40NjctLjgyOCAzLjIyMi0yLjA2NyAzLjkwNi0zLjMwNS45OC0xLjY1Ny45OC0zLjMxNCAwLTQuMTQzLS45NTUtLjgwNy0yLjg0MS0uODI4LTMuODQ0LjcwM1YxLjA2NEg1LjAxNnYxLjcxOWMtMS4wMTQtMS40NjYtMi44Ni0xLjQzNC0zLjgwMS0uNjM5LS45ODEuODI5LS45ODEgMi40ODYgMCA0LjE0My42NzQgMS4yMjEgMi4zODkgMi40NDEgMy44NDIgMy4yNjguMjU3IDIuMTA3IDEuNjA2IDMuODMxIDMuMzk2IDQuNDc0QTEwLjE5IDEwLjE5IDAgMCAxIDcuOSAxNi41YTcuMTY0IDcuMTY0IDAgMCAxLS43NjUgMS41SDZ2MXoiLz48L3N2Zz4=';
-	const SVG_VS   = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJmaWxsOm5vbmUiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGRlZnM+PGNsaXBQYXRoIGlkPSJhIj48cGF0aCBkPSJNMCAwaDIwdjIwSDB6Ii8+PC9jbGlwUGF0aD48L2RlZnM+PGcgY2xpcC1wYXRoPSJ1cmwoI2EpIj48cGF0aCBkPSJNNi42NjcgMXMyLjg1NyAyLjEyNSA2LjY2NiAyLjEyNUMxMy4zMzMgMTQuODEyIDYuNjY3IDE4IDYuNjY3IDE4UzAgMTQuODEyIDAgMy4xMjVDMy44MSAzLjEyNSA2LjY2NyAxIDYuNjY3IDF6Ii8+PHBhdGggZD0iTTEzLjMzMyAxUzE2LjE5IDMuMTI1IDIwIDMuMTI1QzIwIDE0LjgxMiAxMy4zMzMgMTggMTMuMzMzIDE4UzYuNjY3IDE0LjgxMiA2LjY2NyAzLjEyNUMxMC40NzYgMy4xMjUgMTMuMzMzIDEgMTMuMzMzIDF6IiBmaWxsLW9wYWNpdHk9Ii40Ii8+PC9nPjwvc3ZnPg==';
+	const SVG_BALL = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAyMCI+PHBhdGggZmlsbD0iI2E3YWFhZCIgZD0iTTAsMCBIMjAgVjIwIEgwIFogTTEsMSBWMTkgSDE5IFYxIFoiLz48cGF0aCBmaWxsPSIjYTdhYWFkIiBkPSJNMy4wMDQyNyAxNS4wMDAxVjQuODE4MjRIOS41MjdWNi4zNjQ0SDQuODQ4NzNWOS4xMjg2MUg5LjA3OTU2VjEwLjY3NDhINC44NDg3M1YxNS4wMDAxSDMuMDA0MjdaIi8+PHBhdGggZmlsbD0iI2E3YWFhZCIgZD0iTTExLjIwNzQgMTUuMDAwMVY0LjgxODI0SDEzLjA1MTlWMTMuNDUzOUgxNy41MzYyVjE1LjAwMDFIMTEuMjA3NFoiLz48L3N2Zz4=';
+	const SVG_VS   = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAyMCI+PHBhdGggZmlsbD0iI2E3YWFhZCIgZD0iTTYuNjY3IDFzMi44NTcgMi4xMjUgNi42NjYgMi4xMjVDMTMuMzMzIDE0LjgxMiA2LjY2NyAxOCA2LjY2NyAxOFMwIDE0LjgxMiAwIDMuMTI1QzMuODEgMy4xMjUgNi42NjcgMSA2LjY2NyAxeiIvPjxwYXRoIGZpbGw9IiNhN2FhYWQiIGZpbGwtb3BhY2l0eT0iLjQiIGQ9Ik0xMy4zMzMgMVMxNi4xOSAzLjEyNSAyMCAzLjEyNUMyMCAxNC44MTIgMTMuMzMzIDE4IDEzLjMzMyAxOFM2LjY2NyAxNC44MTIgNi42NjcgMy4xMjVDMTAuNDc2IDMuMTI1IDEzLjMzMyAxIDEzLjMzMyAxeiIvPjwvc3ZnPg==';
+	const SVG_CUP  = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE0LjU2NDIgMTguMTI1SDUuMTAzN1YyMEgxNC41NjQyVjE4LjEyNVoiIGZpbGw9IiNBN0FBQUQiLz4KPHBhdGggZD0iTTE1LjcyNjEgMC42NDM5MDZDMTUuNzI2MSAwLjI0NjcxOSAxNS43MjYxIDAgMTUuNzI2MSAwSDkuNzUxMDNIMy43NzU5MUMzLjc3NTkxIDAgMy43NzU5MSAwLjI0NjcxOSAzLjc3NTkxIDAuNjQzOTA2SDAuMDE3OTcySDAuMDEwMjY5N0gwVjMuNzg3ODFDMCA0LjkwODQ0IDAuNDM5MDI5IDUuOTQyOTcgMS4yMzYyNiA2LjcwMTAxQzIuMDQ3NDMgNy40NzIzNCAzLjE3NzE0IDcuOTM2ODMgNC42MDI0IDguMDg4NTFDNS45NjY2OSAxMC4wMzcyIDguNTQxMTMgMTEuMTA5MyA4LjU0MTEzIDEyLjAxMTRDOC41NDExMyAxMy4yMzg3IDcuMTk2NjUgMTUuMzI1IDcuMTk2NjUgMTUuMzI1VjE2LjY2MjlWMTYuNjY1NlYxNi42NzUxSDEyLjMwNTRWMTUuMzI1QzEyLjMwNTQgMTUuMzI1IDEwLjk2MTEgMTMuMjM4NyAxMC45NjExIDEyLjAxMTRDMTAuOTYxMSAxMS4xMTU0IDEzLjQ5OTYgMTAuMDUxOSAxNC44NzA5IDguMTI4NjdDMTYuNTQ2NSA4LjA0MzI0IDE3Ljg1NTIgNy41NjUgMTguNzYzNyA2LjcwMTA1QzE5LjU2MSA1Ljk0MzAxIDIwIDQuOTA4NDcgMjAgMy43ODc4NVYwLjY0MzkwNkgxNS43MjYxWk0xLjU3Njc4IDMuNzg3ODVWMi4wODMyOEgzLjc3NTkxQzMuNzc1OTEgMy4yNjUyMyAzLjc3NTkxIDQuNjg3MTkgMy43NzU5MSA1LjYwNjA5QzMuNzc1OTEgNS44Njg4MyAzLjgwNjE2IDYuMTE4MDQgMy44NTI1NCA2LjM1OTU3QzMuODU5NDggNi40MDQ3MiAzLjg2MzU4IDYuNDQ5NzIgMy44NzE2MyA2LjQ5NTA4QzEuODM2OSA1Ljk1MjYxIDEuNTc2NzggNC40OTM3MSAxLjU3Njc4IDMuNzg3ODVaTTE4LjQyMzIgMy43ODc4NUMxOC40MjMyIDQuNDA3MDcgMTguMjIzMSA1LjYwNTQ3IDE2LjgwMDkgNi4yNTY3MkMxNi40NzA4IDYuNDA2ODcgMTYuMDc0NyA2LjUyNzExIDE1LjYwMDQgNi42MDM1NUMxNS42ODEgNi4yODk1MyAxNS43MjYxIDUuOTU3ODEgMTUuNzI2MSA1LjYwNjA5QzE1LjcyNjEgNC42ODcxOSAxNS43MjYxIDMuMjY1MjMgMTUuNzI2MSAyLjA4MzI4SDE4LjQyMzJMMTguNDIzMiAzLjc4Nzg1WiIgZmlsbD0iI0E3QUFBRCIvPgo8L3N2Zz4K';
 
 	/**
 	 * URL of plugin directory.
@@ -374,23 +378,157 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 		$this->upgrade = new AnWPFL_Upgrade( $this );
 
 		// Shortcodes
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-standing.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-club.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-clubs.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-matches.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-match.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-squad.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-competition-header.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-competition-list.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-players.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-cards.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-player.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-staff.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-referee.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-player-data.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-match-next.php' );
-		require self::dir( 'includes/shortcodes/class-anwpfl-shortcode-match-last.php' );
+		$this->load_shortcodes();
+	}
+
+	/**
+	 * Get shortcode definitions array.
+	 *
+	 * Single source of truth for shortcode file paths, class names, and labels.
+	 * Used by both load_shortcodes() and get_shortcode_options().
+	 *
+	 * @since 0.17.0
+	 * @return array
+	 */
+	protected function get_shortcode_definitions(): array {
+		return [
+			'standing'          => [
+				'file'  => 'class-anwpfl-shortcode-standing.php',
+				'class' => 'AnWPFL_Shortcode_Standing',
+				'label' => __( 'Standing Table', 'anwp-football-leagues' ),
+			],
+			'club'              => [
+				'file'  => 'class-anwpfl-shortcode-club.php',
+				'class' => 'AnWPFL_Shortcode_Club',
+				'label' => __( 'Club', 'anwp-football-leagues' ),
+			],
+			'clubs'             => [
+				'file'  => 'class-anwpfl-shortcode-clubs.php',
+				'class' => 'AnWPFL_Shortcode_Clubs',
+				'label' => __( 'Clubs', 'anwp-football-leagues' ),
+			],
+			'matches'           => [
+				'file'  => 'class-anwpfl-shortcode-matches.php',
+				'class' => 'AnWPFL_Shortcode_Matches',
+				'label' => __( 'Matches', 'anwp-football-leagues' ),
+			],
+			'match'             => [
+				'file'  => 'class-anwpfl-shortcode-match.php',
+				'class' => 'AnWPFL_Shortcode_Match',
+				'label' => __( 'Match', 'anwp-football-leagues' ),
+			],
+			'squad'             => [
+				'file'  => 'class-anwpfl-shortcode-squad.php',
+				'class' => 'AnWPFL_Shortcode_Squad',
+				'label' => __( 'Squad', 'anwp-football-leagues' ),
+			],
+			'competition-header' => [
+				'file'  => 'class-anwpfl-shortcode-competition-header.php',
+				'class' => 'AnWPFL_Shortcode_Competition_Header',
+				'label' => __( 'Competition Header', 'anwp-football-leagues' ),
+			],
+			'competition-list'  => [
+				'file'  => 'class-anwpfl-shortcode-competition-list.php',
+				'class' => 'AnWPFL_Shortcode_Competition_List',
+				'label' => __( 'Competition List', 'anwp-football-leagues' ),
+			],
+			'players'           => [
+				'file'  => 'class-anwpfl-shortcode-players.php',
+				'class' => 'AnWPFL_Shortcode_Players',
+				'label' => __( 'Players', 'anwp-football-leagues' ),
+			],
+			'cards'             => [
+				'file'  => 'class-anwpfl-shortcode-cards.php',
+				'class' => 'AnWPFL_Shortcode_Cards',
+				'label' => __( 'Cards', 'anwp-football-leagues' ),
+			],
+			'player'            => [
+				'file'  => 'class-anwpfl-shortcode-player.php',
+				'class' => 'AnWPFL_Shortcode_Player',
+				'label' => __( 'Player Card', 'anwp-football-leagues' ),
+			],
+			'staff'             => [
+				'file'  => 'class-anwpfl-shortcode-staff.php',
+				'class' => 'AnWPFL_Shortcode_Staff',
+				'label' => __( 'Staff', 'anwp-football-leagues' ),
+			],
+			'referee'           => [
+				'file'  => 'class-anwpfl-shortcode-referee.php',
+				'class' => 'AnWPFL_Shortcode_Referee',
+				'label' => __( 'Referee', 'anwp-football-leagues' ),
+			],
+			'player-data'       => [
+				'file'  => 'class-anwpfl-shortcode-player-data.php',
+				'class' => 'AnWPFL_Shortcode_Player_Data',
+				'label' => __( 'Player Data', 'anwp-football-leagues' ),
+			],
+			'match-next'        => [
+				'file'  => 'class-anwpfl-shortcode-match-next.php',
+				'class' => 'AnWPFL_Shortcode_Match_Next',
+				'label' => __( 'Next Match', 'anwp-football-leagues' ),
+			],
+			'match-last'        => [
+				'file'  => 'class-anwpfl-shortcode-match-last.php',
+				'class' => 'AnWPFL_Shortcode_Match_Last',
+				'label' => __( 'Last Match', 'anwp-football-leagues' ),
+			],
+		];
+	}
+
+	/**
+	 * Get shortcode options for UI (dropdown labels).
+	 *
+	 * Direct method call - no filter timing issues.
+	 *
+	 * @since 0.17.0
+	 * @return array Key => label pairs for shortcode dropdown.
+	 */
+	public function get_shortcode_options(): array {
+		$options = [];
+
+		foreach ( $this->get_shortcode_definitions() as $key => $def ) {
+			if ( ! empty( $def['label'] ) ) {
+				$options[ $key ] = $def['label'];
+			}
+		}
+
+		asort( $options );
+
+		return $options;
+	}
+
+	/**
+	 * Load all core shortcodes.
+	 *
+	 * @since 0.17.0
+	 */
+	protected function load_shortcodes(): void {
+		$shortcodes_dir = self::dir( 'includes/shortcodes/' );
+
+		// Load base classes first (required for inheritance).
+		require_once $shortcodes_dir . 'class-anwpfl-shortcode-base.php';
+		require_once $shortcodes_dir . 'class-anwpfl-shortcode-field-renderer.php';
+		require_once $shortcodes_dir . 'class-anwpfl-shortcode.php';
+
+		// Instantiate main shortcode controller (TinyMCE, REST API).
+		new AnWPFL_Shortcode();
+
+		// Load shortcode preview REST endpoint.
+		require_once $shortcodes_dir . 'class-anwpfl-shortcode-preview.php';
+		new AnWPFL_Shortcode_Preview();
+
+		// Load and instantiate shortcodes from definitions.
+		foreach ( $this->get_shortcode_definitions() as $def ) {
+			$file_path = $shortcodes_dir . $def['file'];
+
+			if ( file_exists( $file_path ) ) {
+				require_once $file_path;
+
+				if ( class_exists( $def['class'], false ) ) {
+					new $def['class']();
+				}
+			}
+		}
 	}
 
 	/**
@@ -417,9 +555,13 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 		 * Register menu pages.
 		 *
 		 * @since  0.1.0 (2017-10-17)
+		 * @since  0.17.0 Added register_entity_menus for reorganized menu structure
 		 */
 		add_action( 'admin_menu', [ $this, 'register_menus' ], 5 );
 		add_action( 'admin_menu', [ $this, 'register_alt_menus' ], 5 );
+		add_action( 'admin_menu', [ $this, 'register_entity_menus' ], 5 );
+		add_filter( 'parent_file', [ $this, 'fix_parent_highlight' ] );
+		add_filter( 'submenu_file', [ $this, 'fix_submenu_highlight' ] );
 
 		add_action( 'wp_footer', [ $this, 'render_modal_wrappers' ], 99 );
 
@@ -792,7 +934,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 
 		$field->peform_param_callback( 'before_row' );
 		?>
-		<div class="form-group <?php echo esc_attr( $field->row_classes() ); ?>" data-fieldtype="<?php echo esc_attr( $field->type() ); ?>">
+		<div class="anwp-mb-3 <?php echo esc_attr( $field->row_classes() ); ?>" data-fieldtype="<?php echo esc_attr( $field->type() ); ?>">
 			<label for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $label ); ?></label>
 
 			<?php $field->peform_param_callback( 'before' ); ?>
@@ -826,6 +968,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * Register menu pages.
 	 *
 	 * @since 0.1.0 (2017-10-17)
+	 * @since 0.17.0 Changed menu position from 32 to 26
 	 */
 	public function register_menus() {
 
@@ -836,7 +979,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 			'anwp-football-leagues',
 			[ $this, 'render_tutorials_page' ],
 			self::SVG_BALL,
-			32
+			26
 		);
 
 		/*
@@ -847,8 +990,8 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 		$submenu_pages = [
 			'tutorials'     => [
 				'parent_slug' => 'anwp-football-leagues',
-				'page_title'  => esc_html__( 'Documentation', 'anwp-football-leagues' ),
-				'menu_title'  => esc_html__( 'Documentation', 'anwp-football-leagues' ),
+				'page_title'  => esc_html__( 'Dashboard', 'anwp-football-leagues' ),
+				'menu_title'  => esc_html__( 'Dashboard', 'anwp-football-leagues' ),
 				'capability'  => 'manage_options',
 				'menu_slug'   => 'anwp-football-leagues',
 				'output_func' => '',
@@ -921,9 +1064,11 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * Register settings menu pages.
 	 *
 	 * @since 0.10.14
+	 * @since 0.17.0 Changed menu position from 32 to 27, added Translations menu
 	 */
 	public function register_alt_menus() {
 
+		// Settings & Tools (position 27)
 		add_menu_page(
 			esc_html_x( 'Settings & Tools', 'admin page title', 'anwp-football-leagues' ),
 			esc_html_x( 'Settings & Tools', 'admin menu title', 'anwp-football-leagues' ),
@@ -931,7 +1076,19 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 			'anwp-settings-tools',
 			'',
 			self::SVG_BALL,
-			32
+			27
+		);
+
+		// Translations (position 28)
+		// Uses CMB2 page URL as slug - clicking menu goes directly to Text Options
+		add_menu_page(
+			esc_html_x( 'Translations', 'admin page title', 'anwp-football-leagues' ),
+			esc_html_x( 'Translations', 'admin page title', 'anwp-football-leagues' ),
+			'manage_options',
+			'admin.php?page=anwp_fl_text',
+			'',
+			'dashicons-translation',
+			28
 		);
 
 		/*
@@ -965,6 +1122,187 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	}
 
 	/**
+	 * Register entity group menus.
+	 *
+	 * Creates parent menus for grouping CPTs:
+	 * - Teams & People: Clubs, Players, Staff, Referees, Stadiums
+	 * - Competitions: Competitions, Matches
+	 *
+	 * @since 0.17.0
+	 */
+	public function register_entity_menus() {
+
+		// Clubs & People (position 30)
+		// Uses CPT edit URL as slug - clicking menu goes directly to Players list
+		add_menu_page(
+			esc_html__( 'Clubs & People', 'anwp-football-leagues' ),
+			esc_html__( 'Clubs & People', 'anwp-football-leagues' ),
+			'edit_posts',
+			'edit.php?post_type=anwp_player',
+			'',
+			self::SVG_VS,
+			30
+		);
+
+		// Competitions (position 31)
+		// Uses CPT edit URL as slug - clicking menu goes directly to Competitions list
+		add_menu_page(
+			esc_html__( 'Competitions', 'anwp-football-leagues' ),
+			esc_html__( 'Competitions', 'anwp-football-leagues' ),
+			'edit_posts',
+			'edit.php?post_type=anwp_competition',
+			'',
+			self::SVG_CUP,
+			31
+		);
+
+		// Add Leagues taxonomy to Competitions menu
+		add_submenu_page(
+			'edit.php?post_type=anwp_competition',
+			esc_html__( 'Leagues', 'anwp-football-leagues' ),
+			esc_html__( 'Leagues', 'anwp-football-leagues' ),
+			'manage_categories',
+			'edit-tags.php?taxonomy=anwp_league&post_type=anwp_competition'
+		);
+
+		// Add Seasons taxonomy to Competitions menu
+		add_submenu_page(
+			'edit.php?post_type=anwp_competition',
+			esc_html__( 'Seasons', 'anwp-football-leagues' ),
+			esc_html__( 'Seasons', 'anwp-football-leagues' ),
+			'manage_categories',
+			'edit-tags.php?taxonomy=anwp_season&post_type=anwp_competition'
+		);
+
+		// Remove duplicate first submenu items (WordPress auto-creates them)
+		add_action( 'admin_menu', [ $this, 'remove_duplicate_submenus' ], 999 );
+	}
+
+	/**
+	 * Remove duplicate submenu items and reorder Competitions menu.
+	 *
+	 * When using page URLs as menu slugs, WordPress creates an auto-generated
+	 * first submenu item. This removes duplicates for Translations, Clubs & People,
+	 * and Competitions menus, and ensures proper ordering (Competitions first, then Matches, etc.).
+	 *
+	 * @since 0.17.0
+	 */
+	public function remove_duplicate_submenus() {
+		global $submenu;
+
+		// Translations menu: remove auto-generated "Translations" duplicate
+		$trans_slug  = 'admin.php?page=anwp_fl_text';
+		$trans_title = esc_html_x( 'Translations', 'admin page title', 'anwp-football-leagues' );
+
+		if ( isset( $submenu[ $trans_slug ] ) ) {
+			foreach ( $submenu[ $trans_slug ] as $key => $item ) {
+				if ( $item[0] === $trans_title ) {
+					// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+					unset( $submenu[ $trans_slug ][ $key ] );
+					break;
+				}
+			}
+		}
+
+		// Clubs & People menu: remove auto-generated "Clubs & People" duplicate
+		$clubs_slug  = 'edit.php?post_type=anwp_player';
+		$clubs_title = esc_html__( 'Clubs & People', 'anwp-football-leagues' );
+
+		if ( isset( $submenu[ $clubs_slug ] ) ) {
+			foreach ( $submenu[ $clubs_slug ] as $key => $item ) {
+				if ( $item[0] === $clubs_title ) {
+					// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+					unset( $submenu[ $clubs_slug ][ $key ] );
+					break;
+				}
+			}
+		}
+
+		// Competitions menu: deduplicate and put Competitions first
+		$comp_slug = 'edit.php?post_type=anwp_competition';
+
+		if ( ! isset( $submenu[ $comp_slug ] ) ) {
+			return;
+		}
+
+		$comp_title = esc_html__( 'Competitions', 'anwp-football-leagues' );
+		$comp_item  = null;
+		$other      = [];
+
+		foreach ( $submenu[ $comp_slug ] as $item ) {
+			if ( $item[0] === $comp_title ) {
+				$comp_item = $item; // Keep last match (deduplicates)
+			} else {
+				$other[] = $item;
+			}
+		}
+
+		// Rebuild: Competitions first, then others
+		$new_order = $comp_item ? array_merge( [ $comp_item ], $other ) : $other;
+
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$submenu[ $comp_slug ] = [];
+		$pos                   = 5;
+
+		foreach ( $new_order as $item ) {
+			// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+			$submenu[ $comp_slug ][ $pos ] = $item;
+			$pos                          += 5;
+		}
+	}
+
+	/**
+	 * Fix parent menu highlighting for taxonomy pages.
+	 *
+	 * @param string $parent_file The parent file.
+	 *
+	 * @return string
+	 * @since 0.17.0
+	 */
+	public function fix_parent_highlight( string $parent_file ): string {
+		global $pagenow;
+
+		// phpcs:ignore WordPress.Security.NonceVerification
+		$taxonomy = isset( $_GET['taxonomy'] ) ? sanitize_text_field( wp_unslash( $_GET['taxonomy'] ) ) : '';
+
+		// Fix Competitions menu parent highlighting for League/Season taxonomy pages
+		if ( 'edit-tags.php' === $pagenow && in_array( $taxonomy, [ 'anwp_league', 'anwp_season' ], true ) ) {
+			$parent_file = 'edit.php?post_type=anwp_competition';
+		}
+
+		return $parent_file;
+	}
+
+	/**
+	 * Fix submenu highlighting for menus using page URLs as slugs.
+	 *
+	 * @param string|null $submenu_file The submenu file.
+	 *
+	 * @return string|null
+	 * @since 0.17.0
+	 */
+	public function fix_submenu_highlight( ?string $submenu_file ): ?string {
+		global $pagenow;
+
+		// phpcs:ignore WordPress.Security.NonceVerification
+		$page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification
+		$taxonomy = isset( $_GET['taxonomy'] ) ? sanitize_text_field( wp_unslash( $_GET['taxonomy'] ) ) : '';
+
+		// Fix Translations menu highlighting
+		if ( 'admin.php' === $pagenow && in_array( $page, [ 'anwp_fl_text', 'anwp_fl_text_countries' ], true ) ) {
+			$submenu_file = $page;
+		}
+
+		// Fix Competitions submenu highlighting for League/Season taxonomy pages
+		if ( 'edit-tags.php' === $pagenow && in_array( $taxonomy, [ 'anwp_league', 'anwp_season' ], true ) ) {
+			$submenu_file = 'edit-tags.php?taxonomy=' . $taxonomy . '&post_type=anwp_competition';
+		}
+
+		return $submenu_file;
+	}
+
+	/**
 	 * Rendering Tutorials page
 	 *
 	 * @since 0.1.0
@@ -977,6 +1315,121 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 		}
 
 		self::include_file( 'admin/views/tutorials' );
+	}
+
+	/**
+	 * Get dashboard data for admin dashboard page.
+	 *
+	 * @since 0.17.0
+	 * @return array Dashboard data including counts and dependency checks.
+	 */
+	public function get_dashboard_data(): array {
+		global $wpdb;
+
+		// Entity counts (WordPress caches these internally)
+		$counts = [
+			'leagues'      => absint( wp_count_terms( [ 'taxonomy' => 'anwp_league', 'hide_empty' => false ] ) ),
+			'seasons'      => absint( wp_count_terms( [ 'taxonomy' => 'anwp_season', 'hide_empty' => false ] ) ),
+			'clubs'        => absint( wp_count_posts( 'anwp_club' )->publish ?? 0 ),
+			'players'      => absint( wp_count_posts( 'anwp_player' )->publish ?? 0 ),
+			'competitions' => absint( wp_count_posts( 'anwp_competition' )->publish ?? 0 ),
+			'stadiums'     => absint( wp_count_posts( 'anwp_stadium' )->publish ?? 0 ),
+			'staff'        => absint( wp_count_posts( 'anwp_staff' )->publish ?? 0 ),
+			'referees'     => absint( wp_count_posts( 'anwp_referee' )->publish ?? 0 ),
+			'matches'      => absint( $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->anwpfl_matches}" ) ?? 0 ),
+		];
+
+		// Dependency checks for conditional Add buttons
+		$can_add = [
+			'competitions' => ( $counts['leagues'] > 0 && $counts['seasons'] > 0 ),
+			'matches'      => ( $counts['competitions'] > 0 && $counts['clubs'] >= 2 ),
+		];
+
+		// New user detection (no matches = new user)
+		$is_new_user = ( 0 === $counts['matches'] );
+
+		// Premium API Import check
+		$is_premium_new = false;
+
+		if ( function_exists( 'anwp_fl_pro' ) ) {
+			$api_config     = get_option( 'anwpfl_api_import_config', [] );
+			$is_premium_new = empty( $api_config['key'] ?? '' );
+		}
+
+		return [
+			'counts'         => $counts,
+			'can_add'        => $can_add,
+			'is_new_user'    => $is_new_user,
+			'is_premium_new' => $is_premium_new,
+		];
+	}
+
+	/**
+	 * Parse changelog file and return structured version data with color emojis.
+	 *
+	 * @since 0.17.0
+	 *
+	 * @param string $file_path Path to changelog.txt file.
+	 * @param int    $limit     Number of versions to return. Default 3.
+	 *
+	 * @return array Array of version data with 'version', 'date', and 'changes' keys.
+	 */
+	public function parse_changelog( string $file_path, int $limit = 3 ): array {
+		if ( ! file_exists( $file_path ) ) {
+			return [];
+		}
+
+		// Emoji map for change type prefixes (supports both Title Case and lowercase)
+		$emoji_map = [
+			'add'         => '🟢',
+			'fix'         => '🟠',
+			'fixed'       => '🟠',
+			'performance' => '🟡',
+			'update'      => '🔵',
+			'improved'    => '🔵',
+			'tweak'       => '⚪',
+			'changed'     => '🔵',
+		];
+
+		$content  = file_get_contents( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$versions = [];
+
+		// Match version blocks: = X.Y.Z - DATE = or = X.Y.Z - WIP =
+		preg_match_all( '/^= ([0-9.]+) - ([^=]+) =\s*\n((?:\* .+\n?)+)/m', $content, $matches, PREG_SET_ORDER );
+
+		foreach ( array_slice( $matches, 0, $limit ) as $match ) {
+			$version = $match[1];
+			$date    = trim( $match[2] );
+			$changes = array_filter( array_map( 'trim', explode( "\n", trim( $match[3] ) ) ) );
+
+			// Process each change line: remove "* ", add emoji based on prefix
+			$changes = array_map(
+				function ( $line ) use ( $emoji_map ) {
+					$line = preg_replace( '/^\*\s*/', '', $line );
+
+					// Extract prefix (first word before " - " or ": ")
+					if ( preg_match( '/^(\w+)\s*[-:]\s*/', $line, $prefix_match ) ) {
+						$prefix = strtolower( $prefix_match[1] );
+						$emoji  = $emoji_map[ $prefix ] ?? '';
+
+						if ( $emoji ) {
+							$line = $emoji . ' ' . $line;
+						}
+					}
+
+					return $line;
+				},
+				$changes
+			);
+
+			$versions[] = [
+				'version' => $version,
+				'date'    => $date,
+				'changes' => array_values( $changes ),
+			];
+		}
+
+		return $versions;
 	}
 
 	/**
@@ -1133,8 +1586,8 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	public function include_selector_modaal() {
 		ob_start();
 		?>
-		<div fl-x-data fl-x-cloak fl-x-show="$store.selectorModal.isOpen" fl-x-trap.inert.noscroll="$store.selectorModal.isOpen" class="anwp-d-flex anwp-x-modal">
-			<div fl-x-show="$store.selectorModal.isOpen" class="anwp-d-flex anwp-x-modal__wrapper">
+		<div fl-x-data fl-x-cloak fl-x-show="$store.selectorModal.isOpen" fl-x-trap.inert.noscroll="$store.selectorModal.isOpen" class="anwp-x-modal">
+			<div fl-x-show="$store.selectorModal.isOpen" class="anwp-d-flex--noimp anwp-x-modal__wrapper">
 				<div class="anwp-x-modal__header">
 					<h3 style="margin: 0">FL Selector: <span fl-x-text="$store.selectorModal.contextHeader"></span></h3>
 				</div>
@@ -1149,9 +1602,9 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 						<input fl-x-on:input.debounce="$store.selectorModal.sendSearchRequest()" fl-x-model="$store.selectorModal.s" name="s" type="text" id="anwp-x-modal__field__search" value="" class="fl-shortcode-attr code">
 					</div>
 					<div fl-x-show="['player','staff'].includes( $store.selectorModal.context ) && ! $store.selectorModal.isLoadingGlobals" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
-						<div class="anwp-d-flex">
+						<div class="anwp-d-flex--noimp">
 							<label for="anwp-x-modal__field__club"><?php echo esc_html__( 'Club', 'anwp-football-leagues' ); ?></label>
-							<span class="anwp-d-flex anwp-x-modal__clear-filter"
+							<span class="anwp-d-flex--noimp anwp-x-modal__clear-filter"
 								fl-x-on:click="$store.selectorModal.clearFilter('clubs')"
 								fl-x-show="$store.selectorModal.filterValues['clubs']">X</span>
 						</div>
@@ -1160,9 +1613,9 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 						</select>
 					</div>
 					<div fl-x-show="['match'].includes( $store.selectorModal.context ) && ! $store.selectorModal.isLoadingGlobals" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
-						<div class="anwp-d-flex">
+						<div class="anwp-d-flex--noimp">
 							<label for="anwp-x-modal__field__club-home"><?php echo esc_html__( 'Home Club', 'anwp-football-leagues' ); ?></label>
-							<span class="anwp-d-flex anwp-x-modal__clear-filter"
+							<span class="anwp-d-flex--noimp anwp-x-modal__clear-filter"
 								fl-x-on:click="$store.selectorModal.clearFilter('club_home')"
 								fl-x-show="$store.selectorModal.filterValues['club_home']">X</span>
 						</div>
@@ -1171,9 +1624,9 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 						</select>
 					</div>
 					<div fl-x-show="['match'].includes( $store.selectorModal.context ) && ! $store.selectorModal.isLoadingGlobals" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
-						<div class="anwp-d-flex">
+						<div class="anwp-d-flex--noimp">
 							<label for="anwp-x-modal__field__club-away"><?php echo esc_html__( 'Away Club', 'anwp-football-leagues' ); ?></label>
-							<span class="anwp-d-flex anwp-x-modal__clear-filter"
+							<span class="anwp-d-flex--noimp anwp-x-modal__clear-filter"
 								fl-x-on:click="$store.selectorModal.clearFilter('club_away')"
 								fl-x-show="$store.selectorModal.filterValues['club_away']">X</span>
 						</div>
@@ -1182,11 +1635,11 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 						</select>
 					</div>
 					<div fl-x-show="['match','competition','stage','main_stage'].includes( $store.selectorModal.context ) && ! $store.selectorModal.isLoadingGlobals" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
-						<div class="anwp-d-flex">
+						<div class="anwp-d-flex--noimp">
 							<label for="anwp-x-modal__field__season">
 								<?php echo esc_html__( 'Season', 'anwp-football-leagues' ); ?>
 							</label>
-							<span class="anwp-d-flex anwp-x-modal__clear-filter"
+							<span class="anwp-d-flex--noimp anwp-x-modal__clear-filter"
 								fl-x-on:click="$store.selectorModal.clearFilter('seasons')"
 								fl-x-show="$store.selectorModal.filterValues['seasons']">X</span>
 						</div>
@@ -1194,30 +1647,30 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 						<select name="seasons" id="anwp-x-modal__field__season" class="anwp-x-modal__select"></select>
 					</div>
 					<div fl-x-show="['match','competition','stage','main_stage'].includes( $store.selectorModal.context ) && ! $store.selectorModal.isLoadingGlobals" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
-						<div class="anwp-d-flex">
+						<div class="anwp-d-flex--noimp">
 							<label for="anwp-x-modal__field__league"><?php echo esc_html__( 'League', 'anwp-football-leagues' ); ?></label>
-							<span class="anwp-d-flex anwp-x-modal__clear-filter"
+							<span class="anwp-d-flex--noimp anwp-x-modal__clear-filter"
 								fl-x-on:click="$store.selectorModal.clearFilter('leagues')"
 								fl-x-show="$store.selectorModal.filterValues['leagues']">X</span>
 						</div>
 						<select name="leagues" id="anwp-x-modal__field__league" class="anwp-x-modal__select"></select>
 					</div>
 					<div fl-x-show="['match'].includes( $store.selectorModal.context )" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
-						<div class="anwp-d-flex">
+						<div class="anwp-d-flex--noimp">
 							<label for="anwp-x-modal__field__date"><?php echo esc_html__( 'Date', 'anwp-football-leagues' ); ?></label>
 						</div>
 						<input fl-x-on:change="$store.selectorModal.sendSearchRequest()" fl-x-model="$store.selectorModal.date" name="date" type="date" id="anwp-x-modal__field__date" value="" class="fl-shortcode-attr code">
 					</div>
 					<div fl-x-show="['player','referee','club'].includes( $store.selectorModal.context ) && ! $store.selectorModal.isLoadingGlobals" class="anwp-x-modal__bar-group anwp-mr-2 anwp-mt-2">
-						<div class="anwp-d-flex">
+						<div class="anwp-d-flex--noimp">
 							<label for="anwp-x-modal__field__country"><?php echo esc_html__( 'Country/Nationality', 'anwp-football-leagues' ); ?></label>
-							<span class="anwp-d-flex anwp-x-modal__clear-filter"
+							<span class="anwp-d-flex--noimp anwp-x-modal__clear-filter"
 								fl-x-on:click="$store.selectorModal.clearFilter('countries')"
 								fl-x-show="$store.selectorModal.filterValues['countries']">X</span>
 						</div>
 						<select name="countries" id="anwp-x-modal__field__country" class="anwp-x-modal__select"></select>
 					</div>
-					<div fl-x-show="$store.selectorModal.isLoadingGlobals" class="anwp-mt-2 anwp-d-flex anwp-align-items-center">
+					<div fl-x-show="$store.selectorModal.isLoadingGlobals" class="anwp-mt-2 anwp-d-flex--noimp anwp-align-items-center">
 						<span class="spinner is-active" style="float: none; margin-top: 0;"></span>
 					</div>
 				</div>
@@ -1695,7 +2148,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 
 		// Check tooltip
 		if ( ! empty( $field->args( 'label_tooltip' ) ) ) {
-			$output .= '<span data-anwpfl_tippy data-tippy-content="' . esc_attr( $field->args( 'label_tooltip' ) ) . '"><svg class="anwp-icon anwp-icon--octi"><use xlink:href="#icon-info"></use></svg></span>';
+			$output .= '<span data-anwp-tooltip="' . esc_attr( $field->args( 'label_tooltip' ) ) . '"><svg class="anwp-icon anwp-icon--octi"><use href="#icon-info"></use></svg></span>';
 		}
 
 		$output .= '</label>' . "\n";

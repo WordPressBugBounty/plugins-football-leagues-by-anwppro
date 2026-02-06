@@ -74,9 +74,71 @@ class AnWPFL_Assets {
 	public function public_enqueue_scripts() {
 
 		if ( is_rtl() ) {
-			wp_enqueue_style( 'anwpfl_styles_rtl', AnWP_Football_Leagues::url( 'public/css/styles-rtl.css' ), [], AnWP_Football_Leagues::VERSION );
+			wp_enqueue_style( 'anwpfl_styles_rtl', AnWP_Football_Leagues::url( 'public/css/styles-rtl.min.css' ), [], AnWP_Football_Leagues::VERSION );
 		} else {
 			wp_enqueue_style( 'anwpfl_styles', AnWP_Football_Leagues::url( 'public/css/styles.min.css' ), [], AnWP_Football_Leagues::VERSION );
+		}
+
+		/*
+		|--------------------------------------------------------------------------
+		| Legacy Bootstrap CSS (for backwards compatibility)
+		|--------------------------------------------------------------------------
+		*/
+		$load_legacy_bootstrap = 'no' !== anwp_football_leagues()->customizer->get_value( 'advanced_css', 'load_legacy_bootstrap' );
+
+		/**
+		 * Filter whether to load legacy Bootstrap CSS.
+		 *
+		 * @since 0.17.0
+		 *
+		 * @param bool $load_legacy_bootstrap Whether to load legacy Bootstrap CSS.
+		 */
+		$load_legacy_bootstrap = apply_filters( 'anwpfl/assets/load_legacy_bootstrap', $load_legacy_bootstrap );
+
+		if ( $load_legacy_bootstrap ) {
+			if ( is_rtl() ) {
+				wp_enqueue_style( 'anwpfl_legacy_bootstrap_rtl', AnWP_Football_Leagues::url( 'public/css/styles-legacy-bootstrap-rtl.min.css' ), [ 'anwpfl_styles_rtl' ], AnWP_Football_Leagues::VERSION );
+			} else {
+				wp_enqueue_style( 'anwpfl_legacy_bootstrap', AnWP_Football_Leagues::url( 'public/css/styles-legacy-bootstrap.min.css' ), [ 'anwpfl_styles' ], AnWP_Football_Leagues::VERSION );
+			}
+
+			/**
+			 * Fires after legacy Bootstrap CSS is enqueued.
+			 *
+			 * @since 0.17.0
+			 */
+			do_action( 'anwpfl_legacy_bootstrap_enqueued' );
+		}
+
+		/*
+		|--------------------------------------------------------------------------
+		| Legacy Grid CSS (for backwards compatibility)
+		|--------------------------------------------------------------------------
+		*/
+		$load_legacy_grid = 'no' !== anwp_football_leagues()->customizer->get_value( 'advanced_css', 'load_legacy_grid' );
+
+		/**
+		 * Filter whether to load legacy Grid CSS.
+		 *
+		 * @since 0.17.0
+		 *
+		 * @param bool $load_legacy_grid Whether to load legacy Grid CSS.
+		 */
+		$load_legacy_grid = apply_filters( 'anwpfl/assets/load_legacy_grid', $load_legacy_grid );
+
+		if ( $load_legacy_grid ) {
+			if ( is_rtl() ) {
+				wp_enqueue_style( 'anwpfl_legacy_grid_rtl', AnWP_Football_Leagues::url( 'public/css/styles-legacy-grid-rtl.min.css' ), [ 'anwpfl_styles_rtl' ], AnWP_Football_Leagues::VERSION );
+			} else {
+				wp_enqueue_style( 'anwpfl_legacy_grid', AnWP_Football_Leagues::url( 'public/css/styles-legacy-grid.min.css' ), [ 'anwpfl_styles' ], AnWP_Football_Leagues::VERSION );
+			}
+
+			/**
+			 * Fires after legacy Grid CSS is enqueued.
+			 *
+			 * @since 0.17.0
+			 */
+			do_action( 'anwpfl_legacy_grid_enqueued' );
 		}
 
 		/*
@@ -133,8 +195,8 @@ class AnWPFL_Assets {
 		|--------------------------------------------------------------------------
 		*/
 		if ( apply_filters( 'anwpfl/config/load_plyr', true ) && 'youtube' !== AnWPFL_Options::get_value( 'preferred_video_player' ) ) {
-			wp_register_script( 'plyr', AnWP_Football_Leagues::url( 'vendor/plyr/plyr.polyfilled.min.js' ), [], '3.7.8', false );
-			wp_register_style( 'plyr', AnWP_Football_Leagues::url( 'vendor/plyr/plyr.css' ), [], '3.7.8' );
+			wp_register_script( 'plyr', AnWP_Football_Leagues::url( 'vendor/plyr/plyr.polyfilled.min.js' ), [], '3.8.3', false );
+			wp_register_style( 'plyr', AnWP_Football_Leagues::url( 'vendor/plyr/plyr.min.css' ), [], '3.8.3' );
 		}
 
 		/*
@@ -241,6 +303,7 @@ class AnWPFL_Assets {
 
 		$page_prefix          = sanitize_title( _x( 'Football Leagues', 'admin menu title', 'anwp-football-leagues' ) );
 		$page_settings_prefix = sanitize_title( _x( 'Settings & Tools', 'admin menu title', 'anwp-football-leagues' ) );
+		$page_l10n_prefix     = sanitize_title( _x( 'Translations', 'admin menu title', 'anwp-football-leagues' ) );
 
 		$plugin_pages = [
 
@@ -266,13 +329,13 @@ class AnWPFL_Assets {
 			'football-leagues_page_anwpfl-toolbox',
 			$page_prefix . '_page_anwpfl-toolbox',
 
-			// Text page
-			'settings-tools_page_anwp_fl_text',
-			$page_settings_prefix . '_page_anwp_fl_text',
+			// Text Strings (Translations)
+			'translations_page_anwp_fl_text',
+			$page_l10n_prefix . '_page_anwp_fl_text',
 
-			// Countries page
-			'settings-tools_page_anwp_fl_text_countries',
-			$page_settings_prefix . '_page_anwp_fl_text_countries',
+			// Countries (Translations)
+			'translations_page_anwp_fl_text_countries',
+			$page_l10n_prefix . '_page_anwp_fl_text_countries',
 
 			// Tools page
 			'settings-tools_page_anwp-settings-tools',
@@ -283,8 +346,8 @@ class AnWPFL_Assets {
 			$page_prefix . '_page_anwpfl_premium',
 
 			// Support page
-			'football-leagues_page_support',
-			$page_prefix . '_page_support',
+			'football-leagues_page_anwpfl-support',
+			$page_prefix . '_page_anwpfl-support',
 
 			// Shortcodes page
 			'football-leagues_page_anwpfl-shortcodes',
@@ -332,19 +395,24 @@ class AnWPFL_Assets {
 
 			/*
 			|--------------------------------------------------------------------------
+			| Migration CSS (deprecated Bootstrap grid from anwp-css)
+			|
+			| Provides .anwp-row, .anwp-col-*, .anwp-container classes for admin pages
+			| that still use Bootstrap-style grid layout.
+			|
+			| @since 0.17.0
+			| @deprecated Will be removed when all admin pages migrate to CSS Grid.
+			|--------------------------------------------------------------------------
+			*/
+			wp_enqueue_style( 'anwpfl_migration', AnWP_Football_Leagues::url( 'admin/css/styles-migration.min.css' ), [], AnWP_Football_Leagues::VERSION );
+
+			/*
+			|--------------------------------------------------------------------------
 			| World Flags Sprite
 			|--------------------------------------------------------------------------
 			*/
 			wp_enqueue_style( 'anwpfl_flags', AnWP_Football_Leagues::url( 'vendor/world-flags-sprite/stylesheets/flags32.css' ), [], AnWP_Football_Leagues::VERSION );
 			wp_enqueue_style( 'anwpfl_flags_16', AnWP_Football_Leagues::url( 'vendor/world-flags-sprite/stylesheets/flags16.css' ), [], AnWP_Football_Leagues::VERSION );
-
-			/*
-			|--------------------------------------------------------------------------
-			| FlatPickrStyles
-			|--------------------------------------------------------------------------
-			*/
-			wp_enqueue_style( 'anwpfl_flatpickr', AnWP_Football_Leagues::url( 'admin/css/flatpickr.min.css' ), [], AnWP_Football_Leagues::VERSION );
-			wp_enqueue_style( 'anwpfl_flatpickr_theme', AnWP_Football_Leagues::url( 'admin/css/flatpickr_airbnb.css' ), [], AnWP_Football_Leagues::VERSION );
 
 			/*
 			|--------------------------------------------------------------------------
@@ -365,24 +433,6 @@ class AnWPFL_Assets {
 			|--------------------------------------------------------------------------
 			*/
 			wp_enqueue_script( 'notyf', AnWP_Football_Leagues::url( 'vendor/notyf/notyf.min.js' ), [], '3.10.0', false );
-
-			/*
-			|--------------------------------------------------------------------------
-			| Tippy.js
-			| * (c) 2017-2019 atomiks
-			| * MIT
-			|--------------------------------------------------------------------------
-			*/
-			wp_enqueue_script( 'tippy', AnWP_Football_Leagues::url( 'vendor/tippy/tippy-bundle.umd.min.js' ), [ 'popperjs' ], '6.1.1', true );
-
-			/*
-			|--------------------------------------------------------------------------
-			| Popper.js (UMD)
-			| * (c) Federico Zivolo
-			| * MIT
-			|--------------------------------------------------------------------------
-			*/
-			wp_enqueue_script( 'popperjs', AnWP_Football_Leagues::url( 'vendor/popperjs/popper.min.js' ), [], '2.2.3', true );
 
 			/*
 			|--------------------------------------------------------------------------
@@ -448,20 +498,7 @@ class AnWPFL_Assets {
 			}
 		}
 
-		/*
-		|--------------------------------------------------------------------------
-		| Jspreadsheet CE (jExcel)
-		| * Author: Paul Hodel <paul.hodel@gmail.com>
-		| * Website: https://github.com/jspreadsheet/ce
-		| * MIT License
-		|--------------------------------------------------------------------------
-		*/
-		wp_register_style( 'jexcel-v4', AnWP_Football_Leagues::url( 'vendor/jexcel/jexcel.min.css' ), [], '4.13.4' );
-		wp_register_script( 'jexcel-v4', AnWP_Football_Leagues::url( 'vendor/jexcel/jexcel.min.js' ), [ 'jexcel-suites-v4' ], '4.13.4', true );
-		wp_register_style( 'jexcel-suites-v4', AnWP_Football_Leagues::url( 'vendor/jexcel/jsuites.css' ), [], '4.17.5' );
-		wp_register_script( 'jexcel-suites-v4', AnWP_Football_Leagues::url( 'vendor/jexcel/jsuites.js' ), [], '4.17.5', true );
-
-		if ( false !== mb_strpos( $current_screen->id, '_page_anwp-settings-tools' ) ) {
+		if ( str_contains( $current_screen->id, '_page_anwp-settings-tools' ) ) {
 			wp_localize_script(
 				'anwpfl_admin',
 				'anwpImportOptions',

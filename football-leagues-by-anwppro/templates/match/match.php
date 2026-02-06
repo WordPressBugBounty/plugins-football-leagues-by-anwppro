@@ -232,7 +232,7 @@ $data = wp_parse_args(
 				?>
 				<div class="match__stadium mx-3 anwp-text-sm d-flex align-items-center justify-content-center">
 					<svg class="anwp-icon anwp-icon--octi mr-2 anwp-w-20 anwp-fill-current">
-						<use xlink:href="#icon-stadium"></use>
+						<use href="#icon-stadium"></use>
 					</svg>
 					<a class="match__stadium-title anwp-link anwp-link-without-effects" href="<?php echo esc_url( get_permalink( $stadium ) ); ?>">
 						<?php echo esc_html( $stadium->post_title ); ?>
@@ -248,7 +248,7 @@ $data = wp_parse_args(
 				?>
 				<div class="match__referee mx-3 anwp-text-sm d-flex align-items-center justify-content-center">
 					<svg class="anwp-icon anwp-icon--octi mr-1 anwp-w-20 anwp-fill-current">
-						<use xlink:href="#icon-whistle"></use>
+						<use href="#icon-whistle"></use>
 					</svg>
 					<?php echo esc_html( get_the_title( $data['referee'] ) ); ?>
 				</div>

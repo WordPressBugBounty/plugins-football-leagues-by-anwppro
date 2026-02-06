@@ -18,18 +18,18 @@ if ( ! current_user_can( 'manage_options' ) ) {
 }
 ?>
 
-<h1 class="my-3">Export CSV files</h1>
+<h1 class="anwp-my-3">Export CSV files</h1>
 
 <h3>Export Players</h3>
-<div class="d-inline-block">
-	<a href="<?php echo esc_url( admin_url( 'admin.php?page=anwp-settings-tools&tab=csv-export&anwp_export=players' ) ); ?>" class="button button-secondary anwp-w-300 py-2 my-2 text-center">Export Players</a>
+<div class="anwp-d-inline-block">
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=anwp-settings-tools&tab=csv-export&anwp_export=players' ) ); ?>" class="button button-secondary anwp-w-300 anwp-py-2 anwp-my-2 anwp-text-center">Export Players</a>
 </div>
 
 <hr>
 
 <h3>Export Games</h3>
-<p class="my-2 anwp-text-xs">* competition required</p>
-<div class="d-flex flex-column">
+<p class="anwp-my-2 anwp-text-xs">* competition required</p>
+<div class="anwp-d-flex anwp-flex-col">
 	<select id="anwp-import-games-competition">
 		<option value="">- select competition -</option>
 		<?php foreach ( anwp_fl()->competition->get_competitions() as $competition ) : ?>
@@ -37,10 +37,10 @@ if ( ! current_user_can( 'manage_options' ) ) {
 		<?php endforeach; ?>
 	</select>
 
-	<div class="d-inline-block">
-		<a id="anwp-import-games" href="#" class="button button-secondary anwp-w-300 py-2 my-2 text-center">Export Games</a>
+	<div class="anwp-d-inline-block">
+		<a id="anwp-import-games" href="#" class="button button-secondary anwp-w-300 anwp-py-2 anwp-my-2 anwp-text-center">Export Games</a>
 	</div>
-	<a id="anwp-import-games-download" href="#" data-href="<?php echo esc_url( admin_url( 'admin.php?page=anwp-settings-tools&tab=csv-export&anwp_export=games&competition_id=' ) ); ?>" class="d-none anwp-opacity-0"></a>
+	<a id="anwp-import-games-download" href="#" data-href="<?php echo esc_url( admin_url( 'admin.php?page=anwp-settings-tools&tab=csv-export&anwp_export=games&competition_id=' ) ); ?>" class="anwp-d-none anwp-opacity-0"></a>
 </div>
 
 <br>

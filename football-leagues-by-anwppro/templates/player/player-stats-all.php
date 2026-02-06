@@ -107,25 +107,25 @@ $col_span = 'g' === $data->position_code ? 10 : 11;
 		<div class="anwp-grid-table__th" data-toggle="anwp-tooltip"
 			data-tippy-content="<?php echo esc_html( AnWPFL_Text::get_value( 'player__stats__played_matches', __( 'Played Matches', 'anwp-football-leagues' ) ) ); ?>">
 			<svg class="anwp-icon--s20 anwp-icon--trans">
-				<use xlink:href="#icon-field"></use>
+				<use href="#icon-field"></use>
 			</svg>
 		</div>
 		<div class="anwp-grid-table__th" data-toggle="anwp-tooltip"
 			data-tippy-content="<?php echo esc_html( AnWPFL_Text::get_value( 'player__stats__started', __( 'Started', 'anwp-football-leagues' ) ) ); ?>">
 			<svg class="anwp-icon--s20 anwp-icon--trans">
-				<use xlink:href="#icon-field-shirt"></use>
+				<use href="#icon-field-shirt"></use>
 			</svg>
 		</div>
 		<div class="anwp-grid-table__th" data-toggle="anwp-tooltip"
 			data-tippy-content="<?php echo esc_html( AnWPFL_Text::get_value( 'player__stats__substituted_in', __( 'Substituted In', 'anwp-football-leagues' ) ) ); ?>">
 			<svg class="anwp-icon--s20 anwp-icon--trans">
-				<use xlink:href="#icon-field-shirt-in"></use>
+				<use href="#icon-field-shirt-in"></use>
 			</svg>
 		</div>
 		<div class="anwp-grid-table__th" data-toggle="anwp-tooltip"
 			data-tippy-content="<?php echo esc_html( AnWPFL_Text::get_value( 'player__stats__minutes', __( 'Minutes', 'anwp-football-leagues' ) ) ); ?>">
 			<svg class="anwp-icon--s20 anwp-icon--gray-900">
-				<use xlink:href="#icon-watch"></use>
+				<use href="#icon-watch"></use>
 			</svg>
 		</div>
 		<div class="anwp-grid-table__th">
@@ -142,31 +142,31 @@ $col_span = 'g' === $data->position_code ? 10 : 11;
 			<div class="anwp-grid-table__th" data-toggle="anwp-tooltip"
 				data-tippy-content="<?php echo esc_html( AnWPFL_Text::get_value( 'player__stats__goals_conceded', __( 'Goals Conceded', 'anwp-football-leagues' ) ) ); ?>">
 				<svg class="icon__ball icon__ball--conceded">
-					<use xlink:href="#icon-ball"></use>
+					<use href="#icon-ball"></use>
 				</svg>
 			</div>
 			<div class="anwp-grid-table__th" data-toggle="anwp-tooltip"
 				data-tippy-content="<?php echo esc_html( AnWPFL_Text::get_value( 'player__stats__clean_sheets', __( 'Clean Sheets', 'anwp-football-leagues' ) ) ); ?>">
 				<svg class="icon__ball">
-					<use xlink:href="#icon-ball_canceled"></use>
+					<use href="#icon-ball_canceled"></use>
 				</svg>
 			</div>
 		<?php else : ?>
 			<div class="anwp-grid-table__th" data-toggle="anwp-tooltip"
 				data-tippy-content="<?php echo esc_html( AnWPFL_Text::get_value( 'player__stats__goals_from_penalty', __( 'Goals (from penalty)', 'anwp-football-leagues' ) ) ); ?>">
 				<svg class="icon__ball anwp-icon--stats-goal">
-					<use xlink:href="#icon-ball"></use>
+					<use href="#icon-ball"></use>
 				</svg>
 			</div>
 			<div class="anwp-grid-table__th" data-toggle="anwp-tooltip"
 				data-tippy-content="<?php echo esc_html( AnWPFL_Text::get_value( 'player__stats__assists', __( 'Assists', 'anwp-football-leagues' ) ) ); ?>">
-				<svg class="anwp-w-25 anwp-h-25">
-					<use xlink:href="#icon-assist"></use>
+				<svg class="icon__assist anwp-w-25 anwp-h-25">
+					<use href="#icon-assist"></use>
 				</svg>
 			</div>
 			<div class="anwp-grid-table__th" data-toggle="anwp-tooltip" data-tippy-content="<?php echo esc_html( AnWPFL_Text::get_value( 'player__stats__own_goals', __( 'Own Goals', 'anwp-football-leagues' ) ) ); ?>">
 				<svg class="icon__ball icon__ball--own">
-					<use xlink:href="#icon-ball"></use>
+					<use href="#icon-ball"></use>
 				</svg>
 			</div>
 		<?php endif; ?>

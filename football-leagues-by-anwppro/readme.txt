@@ -2,10 +2,10 @@
 Contributors:      anwppro
 Donate link:       https://anwppro.userecho.com/communities/1-football-leagues
 Tags:              football, soccer, sport
-Requires at least: 5.7
+Requires at least: 5.9
 Requires PHP:      7.4
-Tested up to:      6.8
-Stable tag:        0.16.19
+Tested up to:      6.9
+Stable tag:        0.17.2
 License:           GPLv3
 License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -73,9 +73,12 @@ Want more? Football Leagues has also a [Premium Addon](https://anwp.pro/football
 &#128310; Calendar Slider
 &#128310; Card Suspension
 &#128310; Transfers
-&#128310; Dynamic SEO Options
+&#128310; [Dynamic SEO Options](https://anwp.pro/seo-options-in-layout-builder-title-and-description/)
 &#128310; Send Game Report by Email
-&#128310; Automatic User’s Timezone
+&#128310; [Automatic User's Timezone](https://anwp.pro/docs/football-leagues/pro-features/user-timezone/)
+&#128310; [AI Match Reports](https://anwp.pro/docs/football-leagues/pro-features/ai-writer/)
+&#128310; [Club History](https://anwp.pro/docs/football-leagues/pro-features/club-history-historical-logos-names/) – Historical logos and names
+&#128310; [Entity Links](https://anwp.pro/docs/football-leagues/pro-features/entity-links/) – Custom links for clubs, players, and more
 &#128310; Advanced Statistics
 &#128310; Charts: Team Default Statistics & Goals per 15 min. interval
 &#128310; Player stats section in Club
@@ -150,115 +153,128 @@ Yes! The plugin works with most themes out of the box. If you have any CSS styli
 
 == Changelog ==
 
+= 0.17.2 - 2026-02-06 =
+* Fix - Import tool now correctly maps pasted team/country/position names to IDs
+
+= 0.17.1 - 2026-01-22 =
+* Fix - Some SVG icons not displaying correctly
+
+= 0.17.0 - 2026-01-20 =
+* Update - Shortcode Builder with collapsible sections and modern field layout
+* Add - Live preview panel in Shortcode Builder with width toggle
+* Add - Parse existing shortcode to populate form fields
+* Update - Admin menu reorganization
+* Update - Improved Data Import tool with batch mode for match events and better UX
+
 = 0.16.19 - 2025-08-30 =
-* added: FL Selector - date field on Match search
-* fixed: minor fixes
+* Add - FL Selector date field on Match search
+* Fix - Minor fixes
 
 = 0.16.18 - 2025-08-11 =
-* fixed: FL Selector - problem with non-Latin characters in Search field
-* improved: accessibility improvements
+* Fix - FL Selector problem with non-Latin characters in Search field
+* Update - Accessibility improvements
 
 = 0.16.17 - 2025-07-26 =
-* added: new version of FL Selector
+* Add - New version of FL Selector
 
 = 0.16.16.1 - 2025-06-03 =
-* fixed: Squad - table-rows layout in mobile view
+* Fix - Squad table-rows layout in mobile view
 
 = 0.16.16 - 2025-06-03 =
-* added: option in Squad to show/hide - age/birth date/nationality (Customizer > Football Leagues > Squad)
-* improved: plugin caching system (added object cache support + automatic detection of what to use: transients or object cache)
-* improved: minor performance improvements
-* updated: Syria flag (rounded flags)
-* improved: Game Edit - custom numbers are automatically filled on adding a player to the lineups (if squad number is set)
+* Add - Option in Squad to show/hide age/birth date/nationality (Customizer > Football Leagues > Squad)
+* Update - Plugin caching system with object cache support and automatic detection
+* Performance - Minor performance improvements
+* Update - Syria flag (rounded flags)
+* Update - Game Edit custom numbers auto-fill on adding player to lineups
 
 = 0.16.15 - 2025-05-08 =
-* added: new option - Simple Permalink Slug Building (BETA)
-* improved: minor performance improvements
+* Add - New option Simple Permalink Slug Building (BETA)
+* Performance - Minor performance improvements
 
 = 0.16.14 - 2025-03-24 =
-* added: tool to update player's 'Current Team' based on the last game played
-* added: new option to show player's current team by last game with save/fix (if incorrect) in the Player Profile
-* added: option in Customizer to change default home/away team colors used in teams statistics
+* Add - Tool to update player's Current Team based on the last game played
+* Add - Option to show player's current team by last game with save/fix in Player Profile
+* Add - Customizer option to change default home/away team colors in statistics
 
 = 0.16.13 - 2025-02-26 =
-* added: new Gutenberg block - FL Games
+* Add - New Gutenberg block FL Games
 
 = 0.16.12 - 2025-01-27 =
-* improved: Game Substitutes in mobile view
-* added: filters on selecting a league in the Competition edit page
-* fixed: incorrect and duplicated Competition title (secondary stage) in the Game header
+* Update - Game Substitutes improved in mobile view
+* Add - Filters on selecting a league in the Competition edit page
+* Fix - Incorrect and duplicated Competition title (secondary stage) in the Game header
 
 = 0.16.11 - 2024-12-09 =
-* added: Player - All Season - season combine options if many seasons
-* fixed: duplicated stage title
-* fixed: game team stats with 0 is not shown
-* fixed: not finished games affect player statistics
-* fixed: Data Import - error on Player update with custom fields only
-* improved: game outcome label (highlighted score)
-* added: red card in game slim layout (right after team name)
-* added: Staff - Current Team display options (by value, hide, last game)
-* improved: Cards Shortcode - added support for several club IDs in club_id argument
-* improved: Player Statistics - removed zeros for better readability
+* Add - Player All Season with season combine options if many seasons
+* Fix - Duplicated stage title
+* Fix - Game team stats with 0 is not shown
+* Fix - Not finished games affect player statistics
+* Fix - Data Import error on Player update with custom fields only
+* Update - Game outcome label (highlighted score)
+* Add - Red card in game slim layout (right after team name)
+* Add - Staff Current Team display options (by value, hide, last game)
+* Update - Cards Shortcode added support for several club IDs in club_id argument
+* Update - Player Statistics removed zeros for better readability
 
 = 0.16.10 - 2024-10-31 =
-* fixed: inline search on Standing Setup in "Select Competition Group"
-* added: Admin Club - players per page option in Attach Player to Squad
+* Fix - Inline search on Standing Setup in Select Competition Group
+* Add - Admin Club players per page option in Attach Player to Squad
 
 = 0.16.9 - 2024-10-25 =
-* added: custom squad status
-* fixed: Safari 18 conflict with WordPress classic editor layout
+* Add - Custom squad status
+* Fix - Safari 18 conflict with WordPress classic editor layout
 
 = 0.16.8 - 2024-09-18 =
-* fixed: security fix
-* fixed: minor fixes
+* Fix - Security fix
+* Fix - Minor fixes
 
 = 0.16.7 - 2024-08-22 =
-* added: new admin Competition UI
-* added: possibility to fix incorrect status (official/friendly) of the games
-* improved: admin UI code has been rewritten
+* Add - New admin Competition UI
+* Add - Possibility to fix incorrect status (official/friendly) of the games
+* Update - Admin UI code has been rewritten
 
 = 0.16.6 - 2024-06-12 =
-* added: new Gutenberg Block: Cards (based on Cards shortcode)
-* fixed: minor fixes
+* Add - New Gutenberg Block Cards (based on Cards shortcode)
+* Fix - Minor fixes
 
 = 0.16.5 - 2024-04-30 =
-* added: option to hide migration notice
+* Add - Option to hide migration notice
 
 = 0.16.4 - 2024-04-10 =
-* fixed: Game list footer - show "penalties" scores if extra time is not set
-* fixed: updated Twitter icon in Player and Club profile
-* fixed: referee saving on Data Import tool
-* added: option to show Player's Current Club based on the last game (Customizer >> Football Leagues >> Player & Staff)
+* Fix - Game list footer show penalties scores if extra time is not set
+* Fix - Updated Twitter icon in Player and Club profile
+* Fix - Referee saving on Data Import tool
+* Add - Option to show Player's Current Club based on the last game (Customizer >> Football Leagues >> Player & Staff)
 
 = 0.16.3 - 2024-02-20 =
-* fixed: Game Edit admin  - show save button on mobile
-* fixed: game status "penalties" if extra time is not set
-* fixed: errors in Game >> Missed Penalties
-* fixed: lineup data migration of non-existent games (removed)
-* fixed: show multiple player nationalities in the Squad section and in Players shortcode
+* Fix - Game Edit admin show save button on mobile
+* Fix - Game status penalties if extra time is not set
+* Fix - Errors in Game Missed Penalties
+* Fix - Lineup data migration of non-existent games (removed)
+* Fix - Show multiple player nationalities in Squad section and Players shortcode
 
 = 0.16.2 - 2024-02-09 =
-* fixed: problem with rendering default player photo on Birthdays
-* fixed: problem with rendering player's age in the Player Header
-* improved: migration process: added possibility to show subtask IDs and skip current subtask ID
-* fixed: colors in the circle flag of Kazakhstan
+* Fix - Problem with rendering default player photo on Birthdays
+* Fix - Problem with rendering player's age in the Player Header
+* Update - Migration process added possibility to show subtask IDs and skip current subtask ID
+* Fix - Colors in the circle flag of Kazakhstan
 
 = 0.16.1 - 2024-02-08 =
-* fixed: migration issues with too long lineups
-* fixed: migration problem with too long events list
-* fixed: incorrect referee's games rendering on the Referee Page
-* fixed: missing temp players in the game lineups
-* fixed: date of death incorrectly calculated in some cases
+* Fix - Migration issues with too long lineups
+* Fix - Migration problem with too long events list
+* Fix - Incorrect referee's games rendering on the Referee Page
+* Fix - Missing temp players in the game lineups
+* Fix - Date of death incorrectly calculated in some cases
 
 = 0.16.0 - 2024-02-06 =
-* introduced a new database structure. To complete the update, a migration process will be necessary.
-* changed: increased the minimal version to PHP 7.0
-* improved: performance improvements
-* added: new circle flags - https://github.com/HatScripts/circle-flags
-* improved: Data Import tool
-* improved: moved player metadata from "postmeta" to new "player_data" table
-* improved: moved games metadata from "postmeta" to "matches" table.
-* improved: moved lineups from "postmeta" to the new "lineups" table
+* Add - New database structure (migration process required to complete the update)
+* Update - Increased minimal version to PHP 7.0
+* Performance - Performance improvements
+* Add - New circle flags from HatScripts/circle-flags
+* Update - Data Import tool
+* Update - Moved player metadata from postmeta to new player_data table
+* Update - Moved games metadata from postmeta to matches table
+* Update - Moved lineups from postmeta to the new lineups table
 
 == Upgrade Notice ==
 

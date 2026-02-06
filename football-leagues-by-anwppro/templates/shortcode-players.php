@@ -216,7 +216,7 @@ $default_photo = anwp_fl()->helper->get_default_player_photo();
 			<?php
 			echo absint( $p->countable );
 
-			if ( $data['penalty_goals'] && $p->penalty ) {
+			if ( $data['penalty_goals'] && ( $p->penalty ?? 0 ) ) {
 				echo ' (' . absint( $p->penalty ) . ')';
 			}
 			?>

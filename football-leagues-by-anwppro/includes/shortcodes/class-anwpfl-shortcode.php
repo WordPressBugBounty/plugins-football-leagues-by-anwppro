@@ -27,21 +27,118 @@ class AnWPFL_Shortcode {
 		add_action( 'after_wp_tiny_mce', [ $this, 'tinymce_l10n_vars' ] );
 		add_action( 'enqueue_block_assets', [ $this, 'add_scripts_to_gutenberg' ] );
 
-		// Ajax request
-		add_action( 'wp_ajax_fl_shortcodes_modal_structure', [ $this, 'get_modal_structure' ] );
-		add_action( 'wp_ajax_fl_shortcodes_modal_form', [ $this, 'get_modal_form' ] );
+		// REST API route for shortcode form.
+		add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
+	}
+
+	/**
+	 * Register REST API routes.
+	 *
+	 * @since 0.17.0
+	 */
+	public function register_rest_routes() {
+		register_rest_route(
+			'anwpfl',
+			'/shortcode-form/(?P<shortcode>[a-z0-9_-]+)',
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, 'rest_get_shortcode_form' ],
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' ) || current_user_can( 'edit_pages' );
+				},
+				'args'                => [
+					'shortcode' => [
+						'required'          => true,
+						'type'              => 'string',
+						'sanitize_callback' => 'sanitize_key',
+					],
+				],
+			]
+		);
+	}
+
+	/**
+	 * REST callback: Get shortcode form HTML.
+	 *
+	 * @param WP_REST_Request $request REST request.
+	 *
+	 * @return WP_REST_Response
+	 * @since 0.17.0
+	 */
+	public function rest_get_shortcode_form( WP_REST_Request $request ) {
+		$shortcode = $request->get_param( 'shortcode' );
+
+		if ( empty( $shortcode ) ) {
+			return new WP_REST_Response(
+				[ 'message' => 'Shortcode parameter required' ],
+				400
+			);
+		}
+
+		ob_start();
+
+		/**
+		 * Render form with shortcode options (core shortcodes).
+		 *
+		 * @since 0.12.7
+		 */
+		do_action( 'anwpfl/shortcode/get_shortcode_form_' . $shortcode );
+
+		/**
+		 * Hook: anwpfl/shortcodes/modal_form_shortcode
+		 *
+		 * Legacy hook that triggers premium shortcode forms via
+		 * AnWPFL_Premium_Shortcode::get_modal_form() which fires
+		 * 'anwpfl/shortcode-pro/get_shortcode_form_' . $shortcode.
+		 *
+		 * @since 0.10.8
+		 */
+		do_action( 'anwpfl/shortcodes/modal_form_shortcode', $shortcode );
+
+		$html_output = ob_get_clean();
+
+		return new WP_REST_Response(
+			[
+				'success' => true,
+				'html'    => $html_output,
+			],
+			200
+		);
 	}
 
 	/**
 	 * Load TinyMCE localized vars
 	 *
 	 * @since 0.5.5
+	 * @since 0.17.0 Added shortcode options and additional l10n strings for Alpine component
 	 */
 	public function tinymce_l10n_vars() {
 
+		// Get core shortcode options (sorted alphabetically)
+		$core_options = apply_filters( 'anwpfl/shortcode/get_shortcode_options', [] );
+
+		if ( ! empty( $core_options ) && is_array( $core_options ) ) {
+			asort( $core_options );
+		}
+
+		// Get premium shortcode options (sorted alphabetically)
+		$premium_options = apply_filters( 'anwpfl/shortcode-pro/get_shortcode_options', [] );
+
+		if ( ! empty( $premium_options ) && is_array( $premium_options ) ) {
+			asort( $premium_options );
+		}
+
 		$vars = [
-			'football_leagues' => esc_html__( 'Football Leagues', 'anwp-football-leagues' ),
-			'nonce'            => wp_create_nonce( 'fl_shortcodes_nonce' ),
+			'football_leagues'          => esc_html__( 'Football Leagues', 'anwp-football-leagues' ),
+			'nonce'                     => wp_create_nonce( 'fl_shortcodes_nonce' ),
+			'shortcode_options'         => $core_options,
+			'shortcode_options_premium' => $premium_options,
+			'shortcode'                 => esc_html__( 'Shortcode', 'anwp-football-leagues' ),
+			'select'                    => esc_html__( 'select', 'anwp-football-leagues' ),
+			'insert'                    => esc_html__( 'Insert Shortcode', 'anwp-football-leagues' ),
+			'copy'                      => esc_html__( 'Copy', 'anwp-football-leagues' ),
+			'cancel'                    => esc_html__( 'Close', 'anwp-football-leagues' ),
+			'copied_to_clipboard'       => esc_html__( 'Copied to Clipboard', 'anwp-football-leagues' ),
 		];
 
 		?>
@@ -116,123 +213,4 @@ class AnWPFL_Shortcode {
 		}
 	}
 
-	/**
-	 * Get results for ajax request.
-	 *
-	 * @since 0.10.8
-	 */
-	public function get_modal_structure() {
-
-		// Check if our nonce is set.
-		if ( ! isset( $_POST['nonce'] ) ) {
-			wp_send_json_error( 'Error : Unauthorized action' );
-		}
-
-		// Verify that the nonce is valid.
-		if ( ! wp_verify_nonce( $_POST['nonce'], 'fl_shortcodes_nonce' ) ) {
-			wp_send_json_error( 'Error : Unauthorized action' );
-		}
-
-		// Check the user's permissions.
-		if ( ! current_user_can( 'edit_posts' ) && ! current_user_can( 'edit_pages' ) ) {
-			wp_send_json_error( 'Error : Unauthorized action' );
-		}
-
-		/**
-		 * Get all core shortcode options.
-		 *
-		 * @param array $data Options
-		 *
-		 * @since 0.12.7
-		 */
-		$available_core_shortcodes = apply_filters( 'anwpfl/shortcode/get_shortcode_options', [] );
-
-		if ( ! empty( $available_core_shortcodes ) && is_array( $available_core_shortcodes ) ) {
-			asort( $available_core_shortcodes );
-		}
-
-		ob_start();
-		?>
-		<div class="anwpfl-shortcode-modal__header">
-			<label for="anwpfl-shortcode-modal__selector"><?php echo esc_html__( 'Shortcode', 'anwp-football-leagues' ); ?></label>
-			<select id="anwpfl-shortcode-modal__selector">
-				<option value="">- <?php echo esc_html__( 'select', 'anwp-football-leagues' ); ?> -</option>
-
-				<?php foreach ( $available_core_shortcodes as $shortcode_slug => $shortcode_name ) : ?>
-					<option value="<?php echo esc_attr( $shortcode_slug ); ?>"><?php echo esc_html( $shortcode_name ); ?></option>
-					<?php
-				endforeach;
-
-				/**
-				 * Hook: anwpfl/shortcodes/selector_bottom
-				 *
-				 * @since 0.10.8
-				 */
-				do_action( 'anwpfl/shortcodes/selector_bottom' );
-				?>
-			</select>
-			<span class="spinner"></span>
-		</div>
-		<div class="anwpfl-shortcode-modal__content"></div>
-		<div class="anwpfl-shortcode-modal__footer">
-			<button id="anwpfl-shortcode-modal__cancel" class="button"><?php echo esc_html__( 'Close', 'anwp-football-leagues' ); ?></button>
-			<button id="anwpfl-shortcode-modal__insert" class="button button-primary"><?php echo esc_html__( 'Insert Shortcode', 'anwp-football-leagues' ); ?></button>
-		</div>
-		<?php
-		$html_output = ob_get_clean();
-
-		wp_send_json_success( [ 'html' => $html_output ] );
-	}
-
-	/**
-	 * Get results for ajax request.
-	 *
-	 * @since 0.10.8
-	 */
-	public function get_modal_form() {
-
-		// Check if our nonce is set.
-		if ( ! isset( $_POST['nonce'] ) ) {
-			wp_send_json_error( 'Error : Unauthorized action' );
-		}
-
-		// Verify that the nonce is valid.
-		if ( ! wp_verify_nonce( $_POST['nonce'], 'fl_shortcodes_nonce' ) ) {
-			wp_send_json_error( 'Error : Unauthorized action' );
-		}
-
-		// Check the user's permissions.
-		if ( ! current_user_can( 'edit_posts' ) && ! current_user_can( 'edit_pages' ) ) {
-			wp_send_json_error( 'Error : Unauthorized action' );
-		}
-
-		$shortcode = isset( $_POST['shortcode'] ) ? sanitize_key( $_POST['shortcode'] ) : '';
-
-		if ( ! $shortcode ) {
-			wp_send_json_error( 'Error : Incorrect Data' );
-		}
-
-		ob_start();
-
-		/**
-		 * Render form with shortcode options.
-		 *
-		 * @since 0.12.7
-		 */
-		do_action( 'anwpfl/shortcode/get_shortcode_form_' . sanitize_text_field( $shortcode ) );
-
-		/**
-		 * Hook: anwpfl/shortcodes/modal_form_shortcode
-		 *
-		 * @since 0.10.8
-		 */
-		do_action( 'anwpfl/shortcodes/modal_form_shortcode', $shortcode );
-
-		$html_output = ob_get_clean();
-
-		wp_send_json_success( [ 'html' => $html_output ] );
-	}
 }
-
-// Bump
-new AnWPFL_Shortcode();

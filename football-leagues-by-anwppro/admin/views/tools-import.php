@@ -17,11 +17,6 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'anwp-football-leagues' ) );
 }
 
-wp_enqueue_script( 'jexcel-v4' );
-wp_enqueue_style( 'jexcel-v4' );
-wp_enqueue_script( 'jexcel-suites-v4' );
-wp_enqueue_style( 'jexcel-suites-v4' );
-
 $import_options = anwp_fl()->data->get_import_options();
 
 /*
@@ -52,14 +47,12 @@ $columns_player = [
 		'title'   => __( 'Weight (kg)', 'anwp-football-leagues' ),
 		'visible' => true,
 		'type'    => 'numeric',
-		'mask'    => '0',
 	],
 	[
 		'name'    => 'height',
 		'title'   => __( 'Height (cm)', 'anwp-football-leagues' ),
 		'visible' => true,
 		'type'    => 'numeric',
-		'mask'    => '0',
 	],
 	[
 		'name'         => 'position',
@@ -89,16 +82,18 @@ $columns_player = [
 		'title' => __( 'Place of Birth', 'anwp-football-leagues' ),
 	],
 	[
-		'name'  => 'date_of_birth',
-		'title' => __( 'Date of Birth', 'anwp-football-leagues' ),
-		'mask'  => 'yyyy-mm-dd',
-		'type'  => 'numeric',
+		'name'        => 'date_of_birth',
+		'title'       => __( 'Date of Birth', 'anwp-football-leagues' ),
+		'mask'        => '9999-99-99',
+		'type'        => 'input',
+		'placeholder' => 'YYYY-MM-DD',
 	],
 	[
-		'name'  => 'date_of_death',
-		'title' => __( 'Date of Death', 'anwp-football-leagues' ),
-		'mask'  => 'yyyy-mm-dd',
-		'type'  => 'numeric',
+		'name'        => 'date_of_death',
+		'title'       => __( 'Date of Death', 'anwp-football-leagues' ),
+		'mask'        => '9999-99-99',
+		'type'        => 'input',
+		'placeholder' => 'YYYY-MM-DD',
 	],
 	[
 		'name'         => 'country_of_birth',
@@ -116,6 +111,7 @@ $columns_player = [
 	],
 	[
 		'name'  => 'bio',
+		'type'  => 'textarea',
 		'title' => __( 'Bio', 'anwp-football-leagues' ),
 	],
 	[
@@ -206,6 +202,7 @@ $columns_stadium = [
 	],
 	[
 		'name'  => 'description',
+		'type'  => 'textarea',
 		'title' => __( 'Description', 'anwp-football-leagues' ),
 	],
 	[
@@ -289,16 +286,18 @@ $columns_staff = [
 		'title' => __( 'Place of Birth', 'anwp-football-leagues' ),
 	],
 	[
-		'name'  => 'date_of_birth',
-		'title' => __( 'Date of Birth', 'anwp-football-leagues' ),
-		'type'  => 'numeric',
-		'mask'  => 'yyyy-mm-dd',
+		'name'        => 'date_of_birth',
+		'title'       => __( 'Date of Birth', 'anwp-football-leagues' ),
+		'mask'        => '9999-99-99',
+		'type'        => 'input',
+		'placeholder' => 'YYYY-MM-DD',
 	],
 	[
-		'name'  => 'date_of_death',
-		'title' => __( 'Date of death', 'anwp-football-leagues' ),
-		'type'  => 'numeric',
-		'mask'  => 'yyyy-mm-dd',
+		'name'        => 'date_of_death',
+		'title'       => __( 'Date of death', 'anwp-football-leagues' ),
+		'mask'        => '9999-99-99',
+		'type'        => 'input',
+		'placeholder' => 'YYYY-MM-DD',
 	],
 	[
 		'name'         => 'nationality_1',
@@ -380,10 +379,11 @@ $columns_referee = [
 		'title' => __( 'Place of Birth', 'anwp-football-leagues' ),
 	],
 	[
-		'name'  => 'date_of_birth',
-		'title' => __( 'Date of Birth', 'anwp-football-leagues' ),
-		'mask'  => 'yyyy-mm-dd',
-		'type'  => 'numeric',
+		'name'        => 'date_of_birth',
+		'title'       => __( 'Date of Birth', 'anwp-football-leagues' ),
+		'mask'        => '9999-99-99',
+		'type'        => 'input',
+		'placeholder' => 'YYYY-MM-DD',
 	],
 	[
 		'name'    => 'job_title',
@@ -552,7 +552,6 @@ $columns_game_insert = [
 		'title'   => __( 'Competition ID', 'anwp-football-leagues' ),
 		'visible' => true,
 		'type'    => 'numeric',
-		'mask'    => '0',
 		'fl_tool' => 'competition_id',
 	],
 	[
@@ -560,14 +559,12 @@ $columns_game_insert = [
 		'title'   => __( 'Round ID', 'anwp-football-leagues' ),
 		'visible' => true,
 		'type'    => 'numeric',
-		'mask'    => '0',
 	],
 	[
 		'name'    => 'club_home_id',
 		'title'   => __( 'Club Home ID', 'anwp-football-leagues' ),
 		'visible' => true,
 		'type'    => 'numeric',
-		'mask'    => '0',
 	],
 	[
 		'name'  => 'club_home_external_id',
@@ -578,7 +575,6 @@ $columns_game_insert = [
 		'title'   => __( 'Club Away ID', 'anwp-football-leagues' ),
 		'visible' => true,
 		'type'    => 'numeric',
-		'mask'    => '0',
 	],
 	[
 		'name'  => 'club_away_external_id',
@@ -591,80 +587,70 @@ $columns_game_insert = [
 		'source' => [ 'yes', 'no' ],
 	],
 	[
-		'name'    => 'kickoff',
-		'title'   => __( 'Kickoff (YYYY-MM-DD HH:MM)', 'anwp-football-leagues' ),
-		'width'   => 140,
-		'type'    => 'numeric',
-		'mask'    => 'yyyy-mm-dd hh:mi',
-		'visible' => true,
+		'name'        => 'kickoff',
+		'title'       => __( 'Kickoff (YYYY-MM-DD HH:MM)', 'anwp-football-leagues' ),
+		'width'       => 140,
+		'visible'     => true,
+		'mask'        => '9999-99-99 99:99',
+		'type'        => 'input',
+		'placeholder' => 'YYYY-MM-DD HH:MM',
 	],
 	[
 		'name'  => 'matchweek',
 		'title' => __( 'MatchWeek', 'anwp-football-leagues' ),
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'    => 'home_goals',
 		'title'   => 'home_goals',
 		'type'    => 'numeric',
-		'mask'    => '0',
 		'visible' => true,
 	],
 	[
 		'name'    => 'away_goals',
 		'title'   => 'away_goals',
 		'type'    => 'numeric',
-		'mask'    => '0',
 		'visible' => true,
 	],
 	[
 		'name'  => 'home_goals_half',
 		'title' => 'home_goals_half',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'away_goals_half',
 		'title' => 'away_goals_half',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'home_goals_ft',
 		'title' => 'home_goals_ft',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'away_goals_ft',
 		'title' => 'away_goals_ft',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'home_goals_e',
 		'title' => 'home_goals_e',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'away_goals_e',
 		'title' => 'away_goals_e',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'home_goals_p',
 		'title' => 'home_goals_p',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'away_goals_p',
 		'title' => 'away_goals_p',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'aggtext',
@@ -674,7 +660,6 @@ $columns_game_insert = [
 		'name'  => 'stadium_id',
 		'title' => __( 'Stadium ID', 'anwp-football-leagues' ),
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'stadium_external_id',
@@ -719,6 +704,7 @@ $columns_game_insert = [
 	[
 		'name'  => 'match_summary',
 		'title' => 'Match Summary',
+		'type'  => 'textarea',
 	],
 	[
 		'name'    => 'match_external_id',
@@ -752,74 +738,65 @@ $columns_game_update = [
 		'source' => [ 'yes', 'no' ],
 	],
 	[
-		'name'    => 'kickoff',
-		'title'   => __( 'Kickoff (YYYY-MM-DD HH:MM)', 'anwp-football-leagues' ),
-		'width'   => 140,
-		'type'    => 'numeric',
-		'mask'    => 'yyyy-mm-dd hh:mi',
-		'visible' => true,
+		'name'        => 'kickoff',
+		'title'       => __( 'Kickoff (YYYY-MM-DD HH:MM)', 'anwp-football-leagues' ),
+		'width'       => 140,
+		'visible'     => true,
+		'mask'        => '9999-99-99 99:99',
+		'type'        => 'input',
+		'placeholder' => 'YYYY-MM-DD HH:MM',
 	],
 	[
 		'name'    => 'home_goals',
 		'title'   => 'home_goals',
 		'type'    => 'numeric',
-		'mask'    => '0',
 		'visible' => true,
 	],
 	[
 		'name'    => 'away_goals',
 		'title'   => 'away_goals',
 		'type'    => 'numeric',
-		'mask'    => '0',
 		'visible' => true,
 	],
 	[
 		'name'  => 'home_goals_half',
 		'title' => 'home_goals_half',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'away_goals_half',
 		'title' => 'away_goals_half',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'home_goals_ft',
 		'title' => 'home_goals_ft',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'away_goals_ft',
 		'title' => 'away_goals_ft',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'home_goals_e',
 		'title' => 'home_goals_e',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'away_goals_e',
 		'title' => 'away_goals_e',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'home_goals_p',
 		'title' => 'home_goals_p',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'away_goals_p',
 		'title' => 'away_goals_p',
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'aggtext',
@@ -829,7 +806,6 @@ $columns_game_update = [
 		'name'  => 'stadium_id',
 		'title' => __( 'Stadium ID', 'anwp-football-leagues' ),
 		'type'  => 'numeric',
-		'mask'  => '0',
 	],
 	[
 		'name'  => 'stadium_external_id',
@@ -1218,21 +1194,6 @@ $available_options = [
 	window._flImportTool.rest_nonce = '<?php echo wp_create_nonce( 'wp_rest' ); ?>';
 </script>
 <style>
-    table.jexcel {
-        table-layout: auto;
-    }
-
-    table.jexcel thead td[data-x] {
-        padding-left: 20px;
-        padding-right: 20px;
-        white-space: nowrap;
-    }
-
-    table.jexcel td.jexcel_dropdown {
-        padding-right: 35px;
-        text-align: left;
-    }
-
     .sl-toggle-green-blue {
         --toggle-bg-on: #00733a;
         --toggle-border-on: #00733a;
@@ -1241,8 +1202,21 @@ $available_options = [
         --toggle-text-off: #fff;
     }
 
+    .sl-toggle-blue-green {
+        --toggle-bg-on: #0d37a1;
+        --toggle-border-on: #0d37a1;
+        --toggle-bg-off: #00733a;
+        --toggle-border-off: #00733a;
+        --toggle-text-on: #fff;
+        --toggle-text-off: #fff;
+    }
+
     .anwp-toggle-w-80 .toggle {
         width: 80px !important;
+    }
+
+    .anwp-toggle-w-100 .toggle {
+        width: 100px !important;
     }
 
     .toggle-label {
@@ -1250,19 +1224,14 @@ $available_options = [
         padding-left: 5px;
         padding-right: 5px;
     }
-
-    .jexcel > tbody > tr > td.readonly {
-        color: rgb(0 0 0 / 50%) !important;
-    }
 </style>
-<p class="my-4"><span class="anwp-text-base">⚠️</span> <b>Beta version:</b> create database backup before import</p>
-<div class="alert alert-info my-4" role="alert">
-	<div class="d-block mb-1 w-100">
+<div class="anwp-bg-blue-50 anwp-border anwp-border-blue-300 anwp-text-blue-800 anwp-rounded anwp-p-3 anwp-my-4 anwp-w-max-800" role="alert">
+	<div class="anwp-d-block anwp-mb-1 anwp-w-full">
 		<?php echo esc_html__( 'Select import type. Then copy and paste data from your source into the table below.', 'anwp-football-leagues' ); ?>
 	</div>
-	<div class="d-flex align-items-center">
-		<svg class="anwp-icon anwp-icon--s14 anwp-icon--octi mr-1">
-			<use xlink:href="#icon-info"></use>
+	<div class="anwp-d-flex anwp-items-center">
+		<svg class="anwp-icon anwp-icon--s14 anwp-icon--octi anwp-mr-1">
+			<use href="#icon-info"></use>
 		</svg>
 		<a href="https://anwppro.userecho.com/knowledge-bases/6/articles/86-data-import-tool" target="_blank"><?php echo esc_html__( 'more info', 'anwp-football-leagues' ); ?></a><br>
 	</div>

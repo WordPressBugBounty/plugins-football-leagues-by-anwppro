@@ -94,7 +94,7 @@ class AnWPFL_Helper {
 			<li class="anwp-fl-metabox-page-nav__item d-block m-0 anwp-border anwp-border-gray-500 <?php echo $nav_item_index ? 'anwp-border-top-0' : ''; ?>">
 				<a class="anwp-fl-smooth-scroll d-flex align-items-center text-decoration-none anwp-link-without-effects anwp-text-gray-800 py-2 px-1 <?php echo esc_attr( $nav_item['classes'] ); ?>" href="#<?php echo esc_attr( $nav_item['slug'] ); ?>">
 					<svg class="anwp-icon anwp-icon--s16 d-inline-block mx-2 anwp-flex-none anwp-fill-current <?php echo esc_attr( $nav_item['icon_classes'] ); ?>">
-						<use xlink:href="#icon-<?php echo esc_attr( $nav_item['icon'] ); ?>"></use>
+						<use href="#icon-<?php echo esc_attr( $nav_item['icon'] ); ?>"></use>
 					</svg>
 					<span class="ml-1"><?php echo esc_html( $nav_item['label'] ); ?></span>
 				</a>
@@ -106,7 +106,7 @@ class AnWPFL_Helper {
 		<li class="anwp-fl-metabox-page-nav__item d-block m-0 anwp-border anwp-border-gray-500 anwp-border-top-0">
 			<a class="d-flex align-items-center text-decoration-none anwp-link-without-effects anwp-text-gray-800 py-2 px-1 anwp-fl-collapse-menu" href="#">
 				<svg class="anwp-icon anwp-icon--s16 anwp-icon--feather d-inline-block mx-2 anwp-flex-none">
-					<use xlink:href="#icon-arrow-left-circle"></use>
+					<use href="#icon-arrow-left-circle"></use>
 				</svg>
 				<span class="ml-1"><?php echo esc_html__( 'Collapse menu' ); ?></span>
 			</a>
@@ -1124,7 +1124,7 @@ class AnWPFL_Helper {
 			$options['countries'][] = [
 				'id'   => $option_key,
 				'text' => $option_text,
-				'flag' => AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) . '#fl-flag--' . $code_parsed,
+				'flag' => AnWP_Football_Leagues::url( 'public/img/flags-v3.svg' ) . '#fl-flag--' . $code_parsed,
 			];
 		}
 
@@ -1439,7 +1439,7 @@ class AnWPFL_Helper {
 				'title'         => $player->short_name ? : $player->name,
 				'id'            => $player->player_id,
 				'date_of_birth' => esc_html( '0000-00-00' !== $player->date_of_birth ? $player->date_of_birth : '' ),
-				'flag'          => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) . '#fl-flag--' . $code_parsed ) : '',
+				'flag'          => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v3.svg' ) . '#fl-flag--' . $code_parsed ) : '',
 				'country'       => $country_code ? ( anwp_fl()->data->get_value_by_key( $country_code, 'country' ) ) : '',
 				'img'           => $player->photo ? anwp_fl()->upload_dir . $player->photo : '',
 				'club'          => anwp_fl()->club->get_club_title_by_id( $player->team_id ),
@@ -1525,7 +1525,7 @@ class AnWPFL_Helper {
 				'title'         => $staff_post->post_title,
 				'id'            => $staff_post->ID,
 				'date_of_birth' => esc_html( get_post_meta( $staff_post->ID, '_anwpfl_date_of_birth', true ) ? : '' ),
-				'flag'          => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) . '#fl-flag--' . $code_parsed ) : '',
+				'flag'          => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v3.svg' ) . '#fl-flag--' . $code_parsed ) : '',
 				'country'       => $country_code ? ( anwp_fl()->data->get_value_by_key( $country_code, 'country' ) ) : '',
 				'club'          => anwp_fl()->club->get_club_title_by_id( get_post_meta( $staff_post->ID, '_anwpfl_current_club', true ) ),
 			];
@@ -1607,7 +1607,7 @@ class AnWPFL_Helper {
 				'title'         => $referee_post->post_title,
 				'id'            => $referee_post->ID,
 				'date_of_birth' => esc_html( get_post_meta( $referee_post->ID, '_anwpfl_date_of_birth', true ) ? : '' ),
-				'flag'          => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) . '#fl-flag--' . $code_parsed ) : '',
+				'flag'          => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v3.svg' ) . '#fl-flag--' . $code_parsed ) : '',
 				'country'       => $country_code ? ( anwp_fl()->data->get_value_by_key( $country_code, 'country' ) ) : '',
 			];
 		}
@@ -1692,7 +1692,7 @@ class AnWPFL_Helper {
 				'title'   => $club->post_title,
 				'id'      => $club->ID,
 				'city'    => esc_html( get_post_meta( $club->ID, '_anwpfl_city', true ) ),
-				'flag'    => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) . '#fl-flag--' . $code_parsed ) : '',
+				'flag'    => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v3.svg' ) . '#fl-flag--' . $code_parsed ) : '',
 				'country' => $country_code ? ( anwp_fl()->data->get_value_by_key( $country_code, 'country' ) ) : '',
 				'img'     => esc_html( get_post_meta( $club->ID, '_anwpfl_logo', true ) ) ?: '',
 			];
@@ -1989,7 +1989,7 @@ class AnWPFL_Helper {
 			$output['rows'][] = [
 				'id'      => $league_obj->term_id,
 				'title'   => $league_obj->name,
-				'flag'    => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) . '#fl-flag--' . $code_parsed ) : '',
+				'flag'    => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v3.svg' ) . '#fl-flag--' . $code_parsed ) : '',
 				'country' => $country_code ? ( anwp_fl()->data->get_value_by_key( $country_code, 'country' ) ) : '',
 			];
 		}
@@ -2089,7 +2089,7 @@ class AnWPFL_Helper {
 				'title'   => $competition['title_full'],
 				'season'  => $competition['season_text'],
 				'id'      => $competition['id'],
-				'flag'    => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) . '#fl-flag--' . $code_parsed ) : '',
+				'flag'    => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v3.svg' ) . '#fl-flag--' . $code_parsed ) : '',
 				'country' => $country_code ? ( anwp_fl()->data->get_value_by_key( $country_code, 'country' ) ) : '',
 				'img'     => 'secondary' === $competition['multistage'] ? anwp_fl()->competition->get_competitions_data()[ $competition['multistage_main'] ]['logo'] ?? '' : $competition['logo'],
 			];
@@ -2310,7 +2310,7 @@ class AnWPFL_Helper {
 		?>
 		<div class="anwp-border-bottom anwp-border-gray-500 bg-white d-flex align-items-center px-1 py-2 anwp-text-gray-700 anwp-font-semibold">
 			<svg class="anwp-icon anwp-icon--s16 mx-2 anwp-fill-current <?php echo esc_attr( $data['icon_classes'] ); ?>">
-				<use xlink:href="#icon-<?php echo esc_attr( $data['icon'] ); ?>"></use>
+				<use href="#icon-<?php echo esc_attr( $data['icon'] ); ?>"></use>
 			</svg>
 			<span><?php echo esc_html( $data['label'] ); ?></span>
 		</div>
@@ -2394,11 +2394,15 @@ class AnWPFL_Helper {
 	 * @since 0.12.7
 	 */
 	public function render_docs_template( $shortcode_link, $shortcode_title ) {
+		if ( empty( $shortcode_link ) ) {
+			return;
+		}
+
 		ob_start();
 		?>
 		<div class="anwp-shortcode-docs-link">
 			<svg class="anwp-icon anwp-icon--octi anwp-icon--s16">
-				<use xlink:href="#icon-book"></use>
+				<use href="#icon-book"></use>
 			</svg>
 			<b class="mx-2"><?php echo esc_html__( 'Documentation', 'anwp-football-leagues' ); ?>:</b>
 			<a target="_blank" href="<?php echo esc_url( $shortcode_link ); ?>"><?php echo esc_html( $shortcode_title ); ?></a>

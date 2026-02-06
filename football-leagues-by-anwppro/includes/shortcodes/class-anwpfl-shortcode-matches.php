@@ -6,55 +6,66 @@
  * @package AnWP_Football_Leagues
  */
 
+if ( class_exists( 'AnWPFL_Shortcode_Matches' ) ) {
+	return;
+}
+
 /**
  * AnWP Football Leagues :: Shortcode > Matches.
- *
- * @since 0.4.3
  */
-class AnWPFL_Shortcode_Matches {
-
-	private $shortcode = 'anwpfl-matches';
+class AnWPFL_Shortcode_Matches extends AnWPFL_Shortcode_Base {
 
 	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		$this->hooks();
-	}
-
-	/**
-	 * Initiate our hooks.
-	 */
-	public function hooks() {
-		add_action( 'init', [ $this, 'shortcode_init' ] );
-
-		// Load shortcode form
-		add_action( 'anwpfl/shortcode/get_shortcode_form_matches', [ $this, 'load_shortcode_form' ] );
-
-		// Add shortcode option
-		add_filter( 'anwpfl/shortcode/get_shortcode_options', [ $this, 'add_shortcode_option' ] );
-	}
-
-	/**
-	 * Add shortcode.
-	 */
-	public function shortcode_init() {
-		add_shortcode( $this->shortcode, [ $this, 'render_shortcode' ] );
-	}
-
-	/**
-	 * Rendering shortcode.
-	 *
-	 * @param $atts
+	 * Get the shortcode tag.
 	 *
 	 * @return string
+	 * @since 0.17.0
 	 */
-	public function render_shortcode( $atts ) {
+	protected function get_shortcode_tag(): string {
+		return 'anwpfl-matches';
+	}
 
-		$defaults = [
+	/**
+	 * Get the shortcode key.
+	 *
+	 * @return string
+	 * @since 0.17.0
+	 */
+	protected function get_shortcode_key(): string {
+		return 'matches';
+	}
+
+	/**
+	 * Get the shortcode label.
+	 *
+	 * @return string
+	 * @since 0.17.0
+	 */
+	protected function get_shortcode_label(): string {
+		return __( 'Matches', 'anwp-football-leagues' );
+	}
+
+	/**
+	 * Get documentation URL.
+	 *
+	 * @return string
+	 * @since 0.17.0
+	 */
+	protected function get_docs_url(): string {
+		return '';
+	}
+
+	/**
+	 * Get default attribute values.
+	 *
+	 * @return array
+	 * @since 0.17.0
+	 */
+	protected function get_defaults(): array {
+		return [
 			'competition_id'        => '',
 			'stage_id'              => '',
-			'show_secondary'        => 0,
+			'show_secondary'        => 1,
 			'season_id'             => '',
 			'league_id'             => '',
 			'group_id'              => '',
@@ -89,9 +100,314 @@ class AnWPFL_Shortcode_Matches {
 			'header_class'          => '',
 			'show_load_more'        => false,
 		];
+	}
+
+	/**
+	 * Get form field definitions.
+	 *
+	 * @return array
+	 * @since 0.17.0
+	 */
+	protected function get_form_fields(): array {
+		return [
+			// == Query Section ==
+			[
+				'name'     => 'competition_id',
+				'type'     => 'selector',
+				'entity'   => 'main_stage',
+				'multiple' => true,
+				'label'    => __( 'Competition ID', 'anwp-football-leagues' ),
+			],
+			[
+				'name'     => 'stage_id',
+				'type'     => 'selector',
+				'entity'   => 'stage',
+				'multiple' => true,
+				'label'    => __( 'Competition Stage ID', 'anwp-football-leagues' ),
+			],
+			[
+				'name'     => 'season_id',
+				'type'     => 'selector',
+				'entity'   => 'season',
+				'multiple' => false,
+				'label'    => __( 'Season ID', 'anwp-football-leagues' ),
+			],
+			[
+				'name'     => 'league_id',
+				'type'     => 'selector',
+				'entity'   => 'league',
+				'multiple' => false,
+				'label'    => __( 'League ID', 'anwp-football-leagues' ),
+			],
+			[
+				'name'    => 'group_id',
+				'type'    => 'text',
+				'label'   => __( 'Group ID', 'anwp-football-leagues' ),
+				'default' => '',
+			],
+			[
+				'name'    => 'type',
+				'type'    => 'select',
+				'label'   => __( 'Match Type', 'anwp-football-leagues' ),
+				'default' => '',
+				'options' => [
+					''        => __( 'All', 'anwp-football-leagues' ),
+					'result'  => __( 'Result', 'anwp-football-leagues' ),
+					'fixture' => __( 'Fixture', 'anwp-football-leagues' ),
+				],
+			],
+			[
+				'name'    => 'limit',
+				'type'    => 'text',
+				'label'   => __( 'Matches Limit (0 - for all)', 'anwp-football-leagues' ),
+				'default' => '0',
+			],
+
+			// == Filters Section ==
+			[
+				'type'  => 'section_header',
+				'label' => __( 'Filters', 'anwp-football-leagues' ),
+			],
+			[
+				'name'        => 'filter_by_clubs',
+				'type'        => 'selector',
+				'entity'      => 'club',
+				'multiple'    => true,
+				'label'       => __( 'Filter by Clubs', 'anwp-football-leagues' ),
+				'description' => __( 'comma-separated list of IDs', 'anwp-football-leagues' ),
+			],
+			[
+				'name'     => 'home_club',
+				'type'     => 'selector',
+				'entity'   => 'club',
+				'multiple' => false,
+				'label'    => __( 'Filter by Home Club', 'anwp-football-leagues' ),
+			],
+			[
+				'name'     => 'away_club',
+				'type'     => 'selector',
+				'entity'   => 'club',
+				'multiple' => false,
+				'label'    => __( 'Filter by Away Club', 'anwp-football-leagues' ),
+			],
+			[
+				'name'             => 'stadium_id',
+				'type'             => 'tom_select',
+				'label'            => __( 'Filter by Stadium', 'anwp-football-leagues' ),
+				'default'          => '',
+				'multiple'         => false,
+				'options_callback' => 'get_stadiums_options',
+			],
+			[
+				'name'        => 'filter_by_matchweeks',
+				'type'        => 'text',
+				'label'       => __( 'Filter by Matchweeks or Round IDs', 'anwp-football-leagues' ),
+				'default'     => '',
+				'description' => __( 'comma-separated list of matchweeks or rounds to filter', 'anwp-football-leagues' ),
+			],
+			[
+				'name'        => 'include_ids',
+				'type'        => 'selector',
+				'entity'      => 'match',
+				'multiple'    => true,
+				'label'       => __( 'Include IDs', 'anwp-football-leagues' ),
+				'description' => __( 'comma-separated list of IDs', 'anwp-football-leagues' ),
+			],
+			[
+				'name'        => 'exclude_ids',
+				'type'        => 'selector',
+				'entity'      => 'match',
+				'multiple'    => true,
+				'label'       => __( 'Exclude IDs', 'anwp-football-leagues' ),
+				'description' => __( 'comma-separated list of IDs', 'anwp-football-leagues' ),
+			],
+
+			// == Date Filters Section ==
+			[
+				'type'  => 'section_header',
+				'label' => __( 'Date Filters', 'anwp-football-leagues' ),
+			],
+			[
+				'name'        => 'date_from',
+				'type'        => 'text',
+				'label'       => __( 'Date From', 'anwp-football-leagues' ),
+				'default'     => '',
+				'description' => __( 'Format: YYYY-MM-DD. E.g.: 2019-04-21', 'anwp-football-leagues' ),
+			],
+			[
+				'name'        => 'date_to',
+				'type'        => 'text',
+				'label'       => __( 'Date To', 'anwp-football-leagues' ),
+				'default'     => '',
+				'description' => __( 'Format: YYYY-MM-DD. E.g.: 2019-04-21', 'anwp-football-leagues' ),
+			],
+			[
+				'name'        => 'days_offset',
+				'type'        => 'text',
+				'label'       => __( 'Dynamic days filter', 'anwp-football-leagues' ),
+				'default'     => '',
+				'description' => __( 'For example: "-2" from 2 days ago and newer; "2" from the day after tomorrow and newer', 'anwp-football-leagues' ),
+			],
+			[
+				'name'        => 'days_offset_to',
+				'type'        => 'text',
+				'label'       => __( 'Dynamic days filter to', 'anwp-football-leagues' ),
+				'default'     => '',
+				'description' => __( 'For example: "1" - till tomorrow (tomorrow not included)', 'anwp-football-leagues' ),
+			],
+
+			// == Sorting & Grouping Section ==
+			[
+				'type'  => 'section_header',
+				'label' => __( 'Sorting & Grouping', 'anwp-football-leagues' ),
+			],
+			[
+				'name'    => 'sort_by_date',
+				'type'    => 'select',
+				'label'   => __( 'Sort By Date', 'anwp-football-leagues' ),
+				'default' => '',
+				'options' => [
+					''     => __( 'none', 'anwp-football-leagues' ),
+					'asc'  => __( 'Oldest', 'anwp-football-leagues' ),
+					'desc' => __( 'Latest', 'anwp-football-leagues' ),
+				],
+			],
+			[
+				'name'    => 'sort_by_matchweek',
+				'type'    => 'select',
+				'label'   => __( 'Sort By MatchWeek', 'anwp-football-leagues' ),
+				'default' => '',
+				'options' => [
+					''     => __( 'none', 'anwp-football-leagues' ),
+					'asc'  => __( 'Ascending', 'anwp-football-leagues' ),
+					'desc' => __( 'Descending', 'anwp-football-leagues' ),
+				],
+			],
+			[
+				'name'    => 'group_by',
+				'type'    => 'select',
+				'label'   => __( 'Group By', 'anwp-football-leagues' ),
+				'default' => '',
+				'options' => [
+					''            => __( 'none', 'anwp-football-leagues' ),
+					'day'         => __( 'Day', 'anwp-football-leagues' ),
+					'month'       => __( 'Month', 'anwp-football-leagues' ),
+					'matchweek'   => __( 'Matchweek', 'anwp-football-leagues' ),
+					'stage'       => __( 'Stage', 'anwp-football-leagues' ),
+					'competition' => __( 'Competition', 'anwp-football-leagues' ),
+				],
+			],
+			[
+				'name'    => 'group_by_header_style',
+				'type'    => 'select',
+				'label'   => __( 'Group By Header Style', 'anwp-football-leagues' ),
+				'default' => '',
+				'options' => [
+					''          => __( 'Default', 'anwp-football-leagues' ),
+					'secondary' => __( 'Secondary', 'anwp-football-leagues' ),
+				],
+			],
+
+			// == Display Section ==
+			[
+				'type'  => 'section_header',
+				'label' => __( 'Display', 'anwp-football-leagues' ),
+			],
+			[
+				'name'             => 'layout',
+				'type'             => 'select',
+				'label'            => __( 'Available Layouts', 'anwp-football-leagues' ),
+				'default'          => '',
+				'options_callback' => 'get_matches_layouts',
+			],
+			[
+				'name'    => 'show_club_logos',
+				'type'    => 'yes_no',
+				'label'   => __( 'Show club logos', 'anwp-football-leagues' ),
+				'default' => '1',
+			],
+			[
+				'name'    => 'show_match_datetime',
+				'type'    => 'yes_no',
+				'label'   => __( 'Show match datetime', 'anwp-football-leagues' ),
+				'default' => '1',
+			],
+			[
+				'name'    => 'competition_logo',
+				'type'    => 'yes_no',
+				'label'   => __( 'Show Competition Logo', 'anwp-football-leagues' ),
+				'default' => '1',
+			],
+			[
+				'name'        => 'outcome_id',
+				'type'        => 'selector',
+				'entity'      => 'club',
+				'multiple'    => false,
+				'label'       => __( 'Show Outcome for club ID', 'anwp-football-leagues' ),
+				'description' => __( 'works only in "slim" layout', 'anwp-football-leagues' ),
+			],
+			[
+				'name'    => 'no_data_text',
+				'type'    => 'text',
+				'label'   => __( 'No data text', 'anwp-football-leagues' ),
+				'default' => '',
+			],
+			[
+				'name'    => 'show_load_more',
+				'type'    => 'yes_no',
+				'label'   => __( 'Show Load More', 'anwp-football-leagues' ),
+				'default' => '0',
+			],
+		];
+	}
+
+	/**
+	 * Get stadium options for Tom Select.
+	 *
+	 * @return array
+	 * @since 0.17.0
+	 */
+	public function get_stadiums_options(): array {
+		$options = [ '' => '- ' . __( 'select', 'anwp-football-leagues' ) . ' -' ];
+
+		foreach ( anwp_football_leagues()->stadium->get_stadiums_options() as $stadium_id => $stadium_title ) {
+			$options[ $stadium_id ] = $stadium_title;
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Get available match layouts.
+	 *
+	 * @return array
+	 * @since 0.17.0
+	 */
+	public function get_matches_layouts(): array {
+		$available_layouts = [ 'slim', 'modern', 'simple' ];
+		$available_layouts = apply_filters( 'anwpfl/shortcodes/matches_available_layouts', $available_layouts );
+
+		$options = [];
+
+		foreach ( $available_layouts as $layout ) {
+			$value             = 'slim' === $layout ? '' : $layout;
+			$options[ $value ] = $layout;
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Rendering shortcode.
+	 *
+	 * @param array $atts Shortcode attributes.
+	 *
+	 * @return string
+	 */
+	public function render_shortcode( $atts ): string {
 
 		// Parse defaults and create a shortcode.
-		$atts = shortcode_atts( $defaults, (array) $atts, $this->shortcode );
+		$atts = shortcode_atts( $this->get_defaults(), (array) $atts, $this->get_shortcode_tag() );
 
 		// phpcs:ignore WordPress.Security.NonceVerification
 		if ( '%competition_id%' === $atts['competition_id'] && ! empty( $_GET['competition_id'] ) && absint( $_GET['competition_id'] ) ) {
@@ -99,366 +415,33 @@ class AnWPFL_Shortcode_Matches {
 			$atts['competition_id'] = absint( $_GET['competition_id'] );
 		}
 
-		// Validate shortcode attr
+		// Validate shortcode attr.
 		$atts['show_secondary']      = (int) $atts['show_secondary'];
 		$atts['limit']               = (int) $atts['limit'];
 		$atts['competition_id']      = (int) $atts['competition_id'] ? sanitize_text_field( $atts['competition_id'] ) : '';
-		$atts['season_id']           = (int) $atts['season_id'] ? : '';
-		$atts['stadium_id']          = (int) $atts['stadium_id'] ? : '';
+		$atts['season_id']           = (int) $atts['season_id'] ?: '';
+		$atts['stadium_id']          = (int) $atts['stadium_id'] ?: '';
 		$atts['show_club_logos']     = (int) $atts['show_club_logos'];
 		$atts['show_match_datetime'] = (int) $atts['show_match_datetime'];
 		$atts['club_links']          = (int) $atts['club_links'];
 
 		$atts['type']                  = in_array( $atts['type'], [ 'result', 'fixture' ], true ) ? $atts['type'] : '';
 		$atts['filter_by']             = in_array( $atts['filter_by'], [ 'club', 'matchweek' ], true ) ? $atts['filter_by'] : '';
-		$atts['group_by']              = in_array( $atts['group_by'], [ 'day', 'month', 'matchweek', 'stage', 'competition' ], true ) ? $atts['group_by'] : '';
+		$atts['group_by']              = in_array( $atts['group_by'], [
+			'day',
+			'month',
+			'matchweek',
+			'stage',
+			'competition',
+		], true ) ? $atts['group_by'] : '';
 		$atts['group_by_header_style'] = esc_attr( $atts['group_by_header_style'] );
-		$atts['sort_by_date']          = in_array( strtolower( $atts['sort_by_date'] ), [ 'asc', 'desc' ], true ) ? strtolower( $atts['sort_by_date'] ) : '';
+		$atts['sort_by_date']          = in_array( strtolower( $atts['sort_by_date'] ), [
+			'asc',
+			'desc',
+		], true ) ? strtolower( $atts['sort_by_date'] ) : '';
 
 		return anwp_football_leagues()->template->shortcode_loader( 'matches', $atts );
 	}
-
-	/**
-	 * Add shortcode options.
-	 * Used in Shortcode Builder and Shortcode TinyMCE tool.
-	 *
-	 * @param array $data Shortcode options.
-	 *
-	 * @return array
-	 * @since 0.12.7
-	 */
-	public function add_shortcode_option( $data ) {
-		$data['matches'] = __( 'Matches', 'anwp-football-leagues' );
-
-		return $data;
-	}
-
-	/**
-	 * Load shortcode form with options.
-	 * Used in Shortcode Builder and Shortcode TinyMCE tool.
-	 */
-	public function load_shortcode_form() {
-
-		$shortcode_link  = 'https://anwppro.userecho.com/knowledge-bases/2/articles/160-matches-shortcode';
-		$shortcode_title = esc_html__( 'Shortcodes', 'anwp-football-leagues' ) . ' :: ' . esc_html__( 'Matches', 'anwp-football-leagues' );
-
-		anwp_football_leagues()->helper->render_docs_template( $shortcode_link, $shortcode_title );
-
-		$available_layouts = [
-			'slim',
-			'modern',
-			'simple',
-		];
-
-		$available_layouts = apply_filters( 'anwpfl/shortcodes/matches_available_layouts', $available_layouts );
-		?>
-		<table class="form-table">
-			<tbody>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-competition_id"><?php echo esc_html__( 'Competition ID', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('competition',false)">
-						<input name="competition_id" id="fl-form-shortcode-competition_id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-show_secondary"><?php echo esc_html__( 'Include matches from secondary stages', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="show_secondary" data-fl-type="select" id="fl-form-shortcode-show_secondary" class="postform fl-shortcode-attr">
-						<option value="0" selected><?php echo esc_html__( 'No', 'anwp-football-leagues' ); ?></option>
-						<option value="1"><?php echo esc_html__( 'Yes', 'anwp-football-leagues' ); ?></option>
-					</select>
-					<span class="anwp-option-desc"><?php echo esc_html__( 'Applied for multistage main stage competitions only.', 'anwp-football-leagues' ); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-season_id"><?php echo esc_html__( 'Season ID', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('season',true)">
-						<input name="season_id" id="fl-form-shortcode-season_id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-league_id"><?php echo esc_html__( 'League ID', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('league',true)">
-						<input name="league_id" id="fl-form-shortcode-league_id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-group-id"><?php echo esc_html__( 'Group ID', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<input name="group_id" data-fl-type="text" type="text" id="fl-form-shortcode-group-id" value="" class="fl-shortcode-attr regular-text code">
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-type"><?php echo esc_html__( 'Match Type', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="type" data-fl-type="select" id="fl-form-shortcode-type" class="postform fl-shortcode-attr">
-						<option value="" selected><?php echo esc_html__( 'All', 'anwp-football-leagues' ); ?></option>
-						<option value="result"><?php echo esc_html__( 'Result', 'anwp-football-leagues' ); ?></option>
-						<option value="fixture"><?php echo esc_html__( 'Fixture', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-limit"><?php echo esc_html__( 'Matches Limit (0 - for all)', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<input name="limit" data-fl-type="text" type="text" id="fl-form-shortcode-limit" value="0" class="fl-shortcode-attr regular-text code">
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-date_from"><?php echo esc_html__( 'Date From', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<input name="date_from" data-fl-type="text" type="text" id="fl-form-shortcode-date_from" value="" class="fl-shortcode-attr regular-text code">
-					<span class="anwp-option-desc"><?php echo esc_html__( 'Format: YYYY-MM-DD. E.g.: 2019-04-21', 'anwp-football-leagues' ); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-date_to"><?php echo esc_html__( 'Date To', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<input name="date_to" data-fl-type="text" type="text" id="fl-form-shortcode-date_to" value="" class="fl-shortcode-attr regular-text code">
-					<span class="anwp-option-desc"><?php echo esc_html__( 'Format: YYYY-MM-DD. E.g.: 2019-04-21', 'anwp-football-leagues' ); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="fl-form-shortcode-stadium_id"><?php echo esc_html__( 'Filter by Stadium', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<select name="stadium_id" data-fl-type="select2" id="fl-form-shortcode-stadium_id" class="postform fl-shortcode-attr fl-shortcode-select2">
-						<option value="">- <?php echo esc_html__( 'select', 'sports-leagues' ); ?> -</option>
-						<?php foreach ( anwp_football_leagues()->stadium->get_stadiums_options() as $stadium_id => $stadium_title ) : ?>
-							<option value="<?php echo esc_attr( $stadium_id ); ?>"><?php echo esc_html( $stadium_title ); ?></option>
-						<?php endforeach; ?>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="fl-form-shortcode-filter_by_clubs"><?php echo esc_html__( 'Filter by Clubs', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('club',false)">
-						<input name="filter_by_clubs" id="fl-form-shortcode-filter_by_clubs" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-
-					<span class="anwp-option-desc"><?php echo esc_html__( 'comma-separated list of IDs', 'anwp-football-leagues' ); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="fl-form-shortcode-home_club"><?php echo esc_html__( 'Filter by Home Club', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('club',true)">
-						<input name="home_club" id="fl-form-shortcode-home_club" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="fl-form-shortcode-away_club"><?php echo esc_html__( 'Filter by Away Club', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('club',true)">
-						<input name="away_club" id="fl-form-shortcode-away_club" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-filter_by_matchweeks"><?php echo esc_html__( 'Filter by Matchweeks or Round IDs', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<input name="filter_by_matchweeks" data-fl-type="text" type="text" id="fl-form-shortcode-filter_by_matchweeks" value="" class="fl-shortcode-attr regular-text code">
-					<span class="anwp-option-desc"><?php echo esc_html__( 'comma-separated list of matchweeks or rounds to filter', 'anwp-football-leagues' ); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-days_offset"><?php echo esc_html__( 'Dynamic days filter', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<input name="days_offset" data-fl-type="text" type="text" id="fl-form-shortcode-days_offset" value="" class="fl-shortcode-attr regular-text code">
-					<span class="anwp-option-desc"><?php echo esc_html__( 'For example: "-2" from 2 days ago and newer; "2" from the day after tomorrow and newer', 'anwp-football-leagues' ); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-days_offset_to"><?php echo esc_html__( 'Dynamic days filter to', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<input name="days_offset_to" data-fl-type="text" type="text" id="fl-form-shortcode-days_offset_to" value="" class="fl-shortcode-attr regular-text code">
-					<span class="anwp-option-desc"><?php echo esc_html__( 'For example: "1" - till tomorrow (tomorrow not included)', 'anwp-football-leagues' ); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-sort_by_date"><?php echo esc_html__( 'Sort By Date', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="sort_by_date" data-fl-type="select" id="fl-form-shortcode-sort_by_date" class="postform fl-shortcode-attr">
-						<option value=""><?php echo esc_html__( 'none', 'anwp-football-leagues' ); ?></option>
-						<option value="asc"><?php echo esc_html__( 'Oldest', 'anwp-football-leagues' ); ?></option>
-						<option value="desc"><?php echo esc_html__( 'Latest', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-sort_by_matchweek"><?php echo esc_html__( 'Sort By MatchWeek', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="sort_by_matchweek" data-fl-type="select" id="fl-form-shortcode-sort_by_matchweek" class="postform fl-shortcode-attr">
-						<option value=""><?php echo esc_html__( 'none', 'anwp-football-leagues' ); ?></option>
-						<option value="asc"><?php echo esc_html__( 'Ascending', 'anwp-football-leagues' ); ?></option>
-						<option value="desc"><?php echo esc_html__( 'Descending', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-group_by"><?php echo esc_html__( 'Group By', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="group_by" data-fl-type="select" id="fl-form-shortcode-group_by" class="postform fl-shortcode-attr">
-						<option value=""><?php echo esc_html__( 'none', 'anwp-football-leagues' ); ?></option>
-						<option value="day"><?php echo esc_html__( 'Day', 'anwp-football-leagues' ); ?></option>
-						<option value="month"><?php echo esc_html__( 'Month', 'anwp-football-leagues' ); ?></option>
-						<option value="matchweek"><?php echo esc_html__( 'Matchweek', 'anwp-football-leagues' ); ?></option>
-						<option value="stage"><?php echo esc_html__( 'Stage', 'anwp-football-leagues' ); ?></option>
-						<option value="competition"><?php echo esc_html__( 'Competition', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-group_by_header_style"><?php echo esc_html__( 'Group By Header Style', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="group_by_header_style" data-fl-type="select" id="fl-form-shortcode-group_by_header_style" class="postform fl-shortcode-attr">
-						<option value=""><?php echo esc_html__( 'Default', 'anwp-football-leagues' ); ?></option>
-						<option value="secondary"><?php echo esc_html__( 'Secondary', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-show_club_logos"><?php echo esc_html__( 'Show club logos', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="show_club_logos" data-fl-type="select" id="fl-form-shortcode-show_club_logos" class="postform fl-shortcode-attr">
-						<option value="1" selected><?php echo esc_html__( 'Yes', 'anwp-football-leagues' ); ?></option>
-						<option value="0"><?php echo esc_html__( 'No', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-show_match_datetime"><?php echo esc_html__( 'Show match datetime', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="show_match_datetime" data-fl-type="select" id="fl-form-shortcode-show_match_datetime" class="postform fl-shortcode-attr">
-						<option value="1" selected><?php echo esc_html__( 'Yes', 'anwp-football-leagues' ); ?></option>
-						<option value="0"><?php echo esc_html__( 'No', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-competition_logo"><?php echo esc_html__( 'Show Competition Logo', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="competition_logo" data-fl-type="select" id="fl-form-shortcode-competition_logo" class="postform fl-shortcode-attr">
-						<option value="1" selected><?php echo esc_html__( 'Yes', 'anwp-football-leagues' ); ?></option>
-						<option value="0"><?php echo esc_html__( 'No', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-include_ids"><?php echo esc_html__( 'Include IDs', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('match',false)">
-						<input name="include_ids" id="fl-form-shortcode-include_ids" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-
-					<span class="anwp-option-desc"><?php echo esc_html__( 'comma-separated list of IDs', 'anwp-football-leagues' ); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-exclude_ids"><?php echo esc_html__( 'Exclude IDs', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('match',false)">
-						<input name="exclude_ids" id="fl-form-shortcode-exclude_ids" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-
-					<span class="anwp-option-desc"><?php echo esc_html__( 'comma-separated list of IDs', 'anwp-football-leagues' ); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="fl-form-shortcode-outcome_id"><?php echo esc_html__( 'Show Outcome for club ID', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('club',true)">
-						<input name="outcome_id" id="fl-form-shortcode-outcome_id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-
-					<span class="anwp-option-desc"><?php echo esc_html__( 'works only in "slim" layout', 'anwp-football-leagues' ); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-no_data_text"><?php echo esc_html__( 'No data text', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<input name="no_data_text" data-fl-type="text" type="text" id="fl-form-shortcode-no_data_text" value="" class="fl-shortcode-attr regular-text">
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="fl-form-shortcode-available-layouts"><?php echo esc_html__( 'Available Layouts', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="layout" data-fl-type="select" id="fl-form-shortcode-available-layouts" class="postform fl-shortcode-attr">
-						<?php foreach ( $available_layouts as $layout ) : ?>
-							<option value="<?php echo esc_attr( 'slim' === $layout ? '' : $layout ); ?>"><?php echo esc_html( $layout ); ?></option>
-						<?php endforeach; ?>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-show_load_more"><?php echo esc_html__( 'Show Load More', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="show_load_more" data-fl-type="select" id="fl-form-shortcode-show_load_more" class="postform fl-shortcode-attr">
-						<option value="1"><?php echo esc_html__( 'Yes', 'anwp-football-leagues' ); ?></option>
-						<option value="0" selected><?php echo esc_html__( 'No', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			</tbody>
-		</table>
-		<input type="hidden" class="fl-shortcode-name" name="fl-slug" value="anwpfl-matches">
-		<?php
-	}
 }
 
-// Bump
 new AnWPFL_Shortcode_Matches();

@@ -158,7 +158,7 @@ abstract class AnWPFL_Widget extends WP_Widget {
 							<label for="<?php echo esc_attr( $this->get_field_id( $field['id'] ) ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
 						<?php endif; ?>
 
-						<div class="anwp-x-selector anwp-d-flex" fl-x-data="selectorItem('player',<?php echo esc_attr( 'no' === $field['single'] ? 'false' : 'true' ); ?>)" fl-x-cloak>
+						<div class="anwp-x-selector anwp-d-flex--noimp" fl-x-data="selectorItem('player',<?php echo esc_attr( 'no' === $field['single'] ? 'false' : 'true' ); ?>)" fl-x-cloak>
 							<input fl-x-model.fill="selected" type="text" class="<?php echo esc_attr( $field['classes'] ); ?> anwp-flex-grow-1" id="<?php echo esc_attr( $this->get_field_id( $field['id'] ) ); ?>"
 								name="<?php echo esc_attr( $this->get_field_name( $field['id'] ) ); ?>" value="<?php echo esc_attr( $value ); ?>" />
 							<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform"><span class="dashicons dashicons-search"></span></button>
@@ -178,7 +178,7 @@ abstract class AnWPFL_Widget extends WP_Widget {
 							<label for="<?php echo esc_attr( $this->get_field_id( $field['id'] ) ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
 						<?php endif; ?>
 
-						<div class="anwp-x-selector anwp-d-flex" fl-x-data="selectorItem('club',<?php echo esc_attr( 'no' === $field['single'] ? 'false' : 'true' ); ?>)" fl-x-cloak>
+						<div class="anwp-x-selector anwp-d-flex--noimp" fl-x-data="selectorItem('club',<?php echo esc_attr( 'no' === $field['single'] ? 'false' : 'true' ); ?>)" fl-x-cloak>
 							<input fl-x-model.fill="selected" type="text" class="<?php echo esc_attr( $field['classes'] ); ?> anwp-flex-grow-1" id="<?php echo esc_attr( $this->get_field_id( $field['id'] ) ); ?>"
 								name="<?php echo esc_attr( $this->get_field_name( $field['id'] ) ); ?>" value="<?php echo esc_attr( $value ); ?>" />
 							<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform"><span class="dashicons dashicons-search"></span></button>
@@ -198,7 +198,7 @@ abstract class AnWPFL_Widget extends WP_Widget {
 							<label for="<?php echo esc_attr( $this->get_field_id( $field['id'] ) ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
 						<?php endif; ?>
 
-						<div class="anwp-x-selector anwp-d-flex" fl-x-data="selectorItem('match',<?php echo esc_attr( 'no' === $field['single'] ? 'false' : 'true' ); ?>)" fl-x-cloak>
+						<div class="anwp-x-selector anwp-d-flex--noimp" fl-x-data="selectorItem('match',<?php echo esc_attr( 'no' === $field['single'] ? 'false' : 'true' ); ?>)" fl-x-cloak>
 							<input fl-x-model.fill="selected" type="text" class="<?php echo esc_attr( $field['classes'] ); ?> anwp-flex-grow-1" id="<?php echo esc_attr( $this->get_field_id( $field['id'] ) ); ?>"
 								name="<?php echo esc_attr( $this->get_field_name( $field['id'] ) ); ?>" value="<?php echo esc_attr( $value ); ?>" />
 							<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform"><span class="dashicons dashicons-search"></span></button>
@@ -218,7 +218,7 @@ abstract class AnWPFL_Widget extends WP_Widget {
 							<label for="<?php echo esc_attr( $this->get_field_id( $field['id'] ) ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
 						<?php endif; ?>
 
-						<div class="anwp-x-selector anwp-d-flex" fl-x-data="selectorItem('competition',<?php echo esc_attr( 'no' === $field['single'] ? 'false' : 'true' ); ?>)" fl-x-cloak>
+						<div class="anwp-x-selector anwp-d-flex--noimp" fl-x-data="selectorItem('competition',<?php echo esc_attr( 'no' === $field['single'] ? 'false' : 'true' ); ?>)" fl-x-cloak>
 							<input fl-x-model.fill="selected" type="text" class="<?php echo esc_attr( $field['classes'] ); ?> anwp-flex-grow-1" id="<?php echo esc_attr( $this->get_field_id( $field['id'] ) ); ?>"
 								name="<?php echo esc_attr( $this->get_field_name( $field['id'] ) ); ?>" value="<?php echo esc_attr( $value ); ?>" />
 							<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform"><span class="dashicons dashicons-search"></span></button>
@@ -238,7 +238,7 @@ abstract class AnWPFL_Widget extends WP_Widget {
 							<label for="<?php echo esc_attr( $this->get_field_id( $field['id'] ) ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
 						<?php endif; ?>
 
-						<div class="anwp-x-selector anwp-d-flex" fl-x-data="selectorItem('season',<?php echo esc_attr( 'no' === $field['single'] ? 'false' : 'true' ); ?>)" fl-x-cloak>
+						<div class="anwp-x-selector anwp-d-flex--noimp" fl-x-data="selectorItem('season',<?php echo esc_attr( 'no' === $field['single'] ? 'false' : 'true' ); ?>)" fl-x-cloak>
 							<input fl-x-model.fill="selected" type="text" class="<?php echo esc_attr( $field['classes'] ); ?> anwp-flex-grow-1" id="<?php echo esc_attr( $this->get_field_id( $field['id'] ) ); ?>"
 								name="<?php echo esc_attr( $this->get_field_name( $field['id'] ) ); ?>" value="<?php echo esc_attr( $value ); ?>" />
 							<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform"><span class="dashicons dashicons-search"></span></button>
@@ -258,7 +258,7 @@ abstract class AnWPFL_Widget extends WP_Widget {
 							<label for="<?php echo esc_attr( $this->get_field_id( $field['id'] ) ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
 						<?php endif; ?>
 
-						<div class="anwp-x-selector anwp-d-flex" fl-x-data="selectorItem('league',<?php echo esc_attr( 'no' === $field['single'] ? 'false' : 'true' ); ?>)" fl-x-cloak>
+						<div class="anwp-x-selector anwp-d-flex--noimp" fl-x-data="selectorItem('league',<?php echo esc_attr( 'no' === $field['single'] ? 'false' : 'true' ); ?>)" fl-x-cloak>
 							<input fl-x-model.fill="selected" type="text" class="<?php echo esc_attr( $field['classes'] ); ?> anwp-flex-grow-1" id="<?php echo esc_attr( $this->get_field_id( $field['id'] ) ); ?>"
 								name="<?php echo esc_attr( $this->get_field_name( $field['id'] ) ); ?>" value="<?php echo esc_attr( $value ); ?>" />
 							<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform"><span class="dashicons dashicons-search"></span></button>

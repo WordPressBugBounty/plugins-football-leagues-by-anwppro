@@ -89,7 +89,7 @@ if ( absint( $args->max_size ) ) {
 	<?php if ( $data->stadium_id ) : ?>
 		<div class="match-widget__stadium anwp-text-center anwp-opacity-80 anwp-text-xs d-flex flex-wrap align-items-center justify-content-center mb-2">
 			<svg class="anwp-icon anwp-icon--octi mr-1 anwp-icon--s12">
-				<use xlink:href="#icon-location"></use>
+				<use href="#icon-location"></use>
 			</svg>
 			<?php
 			// Stadium name

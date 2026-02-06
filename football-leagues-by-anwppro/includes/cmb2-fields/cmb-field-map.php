@@ -44,8 +44,8 @@ if ( ! function_exists( 'cmb2_render_anwp_map_callback' ) ) {
 
 		<span class="d-block h6"><?php echo esc_html__( 'Set location', 'anwp-football-leagues' ); ?></span>
 
-		<div class="form-row">
-			<div class="col">
+		<div class="anwp-d-flex anwp-flex-wrap anwp-gap-3">
+			<div style="flex: 1;">
 				<label for=""><?php echo esc_html__( 'Latitude', 'anwp-football-leagues' ); ?></label>
 				<?php
 				echo $field_type_object->input(
@@ -60,7 +60,7 @@ if ( ! function_exists( 'cmb2_render_anwp_map_callback' ) ) {
 				); // WPCS: XSS ok.
 				?>
 			</div>
-			<div class="col">
+			<div style="flex: 1;">
 				<label for="anwp_cmb2_map_input_longitude"><?php echo esc_html__( 'Longitude', 'anwp-football-leagues' ); ?></label>
 				<?php
 				echo $field_type_object->input(
@@ -75,13 +75,13 @@ if ( ! function_exists( 'cmb2_render_anwp_map_callback' ) ) {
 				); // WPCS: XSS ok.
 				?>
 			</div>
-			<div class="col">
-				<button id="anwp_cmb2_map_reset_btn" type="button" class="button mt-4"><?php echo esc_html__( 'Reset location', 'anwp-football-leagues' ); ?></button>
+			<div style="flex: 1;">
+				<button id="anwp_cmb2_map_reset_btn" type="button" class="button anwp-mt-4"><?php echo esc_html__( 'Reset location', 'anwp-football-leagues' ); ?></button>
 			</div>
 		</div>
 
-		<div class="form-row mt-3">
-			<div class="col-lg-6">
+		<div class="anwp-d-flex anwp-flex-wrap anwp-gap-3 anwp-mt-3">
+			<div class="anwp-w-50p">
 				<label for="anwp_cmb2_map_input_address"><?php echo esc_html__( 'Address Search', 'anwp-football-leagues' ); ?></label>
 				<input type="text" class="form-control" name="" id="anwp_cmb2_map_input_address" value="">
 			</div>

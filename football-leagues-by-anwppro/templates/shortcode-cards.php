@@ -85,19 +85,19 @@ $default_photo = anwp_fl()->helper->get_default_player_photo();
 
 	<div class="anwp-grid-table__th anwp-border-light cards-shortcode__cards_y justify-content-center anwp-bg-light">
 		<svg class="icon__card">
-			<use xlink:href="#icon-card_y"></use>
+			<use href="#icon-card_y"></use>
 		</svg>
 	</div>
 
 	<div class="anwp-grid-table__th anwp-border-light cards-shortcode__card_yr justify-content-center anwp-bg-light">
 		<svg class="icon__card">
-			<use xlink:href="#icon-card_yr"></use>
+			<use href="#icon-card_yr"></use>
 		</svg>
 	</div>
 
 	<div class="anwp-grid-table__th anwp-border-light cards-shortcode__card_r justify-content-center anwp-bg-light">
 		<svg class="icon__card">
-			<use xlink:href="#icon-card_r"></use>
+			<use href="#icon-card_r"></use>
 		</svg>
 	</div>
 

@@ -6,143 +6,111 @@
  * @package AnWP_Football_Leagues
  */
 
+if ( class_exists( 'AnWPFL_Shortcode_Squad' ) ) {
+	return;
+}
+
 /**
  * AnWP Football Leagues :: Shortcode > Squad.
  *
  * @since 0.5.0
  */
-class AnWPFL_Shortcode_Squad {
-
-	private $shortcode = 'anwpfl-squad';
+class AnWPFL_Shortcode_Squad extends AnWPFL_Shortcode_Base {
 
 	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-
-		$this->hooks();
-	}
-
-	/**
-	 * Initiate our hooks.
-	 */
-	public function hooks() {
-		add_action( 'init', [ $this, 'shortcode_init' ] );
-
-		// Load shortcode form
-		add_action( 'anwpfl/shortcode/get_shortcode_form_squad', [ $this, 'load_shortcode_form' ] );
-
-		// Add shortcode option
-		add_filter( 'anwpfl/shortcode/get_shortcode_options', [ $this, 'add_shortcode_option' ] );
-	}
-
-	/**
-	 * Add shortcode.
-	 *
-	 * @since 0.3.0
-	 */
-	public function shortcode_init() {
-		add_shortcode( $this->shortcode, [ $this, 'render_shortcode' ] );
-	}
-
-	/**
-	 * Rendering shortcode.
-	 *
-	 * @param $atts
+	 * Get the shortcode tag.
 	 *
 	 * @return string
+	 * @since 0.17.0
 	 */
-	public function render_shortcode( $atts ) {
+	protected function get_shortcode_tag(): string {
+		return 'anwpfl-squad';
+	}
 
-		$defaults = [
+	/**
+	 * Get the shortcode key.
+	 *
+	 * @return string
+	 * @since 0.17.0
+	 */
+	protected function get_shortcode_key(): string {
+		return 'squad';
+	}
+
+	/**
+	 * Get the shortcode label.
+	 *
+	 * @return string
+	 * @since 0.17.0
+	 */
+	protected function get_shortcode_label(): string {
+		return __( 'Squad', 'anwp-football-leagues' );
+	}
+
+	/**
+	 * Get documentation URL.
+	 *
+	 * @return string
+	 * @since 0.17.0
+	 */
+	protected function get_docs_url(): string {
+		return '';
+	}
+
+	/**
+	 * Get default attribute values.
+	 *
+	 * @return array
+	 * @since 0.17.0
+	 */
+	protected function get_defaults(): array {
+		return [
 			'season_id' => '',
 			'club_id'   => '',
 			'header'    => 1,
 			'layout'    => '',
 		];
-
-		// Parse defaults and create a shortcode.
-		$atts = shortcode_atts( $defaults, (array) $atts, $this->shortcode );
-
-		return anwp_football_leagues()->template->shortcode_loader( 'squad', $atts );
 	}
 
 	/**
-	 * Add shortcode options.
-	 * Used in Shortcode Builder and Shortcode TinyMCE tool.
-	 *
-	 * @param array $data Shortcode options.
+	 * Get form field definitions.
 	 *
 	 * @return array
-	 * @since 0.12.7
+	 * @since 0.17.0
 	 */
-	public function add_shortcode_option( $data ) {
-		$data['squad'] = __( 'Squad', 'anwp-football-leagues' );
-
-		return $data;
-	}
-
-	/**
-	 * Load shortcode form with options.
-	 * Used in Shortcode Builder and Shortcode TinyMCE tool.
-	 */
-	public function load_shortcode_form() {
-
-		$shortcode_link  = 'https://anwppro.userecho.com/knowledge-bases/2/articles/161-squad-shortcode';
-		$shortcode_title = esc_html__( 'Shortcodes', 'anwp-football-leagues' ) . ' :: ' . esc_html__( 'Squad', 'anwp-football-leagues' );
-
-		anwp_football_leagues()->helper->render_docs_template( $shortcode_link, $shortcode_title );
-		?>
-		<table class="form-table">
-			<tbody>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-season_id"><?php echo esc_html__( 'Season ID', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('season',true)">
-						<input name="season_id" id="fl-form-shortcode-season_id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="fl-form-shortcode-club_id"><?php echo esc_html__( 'Club ID', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('club',true)">
-						<input name="club_id" id="fl-form-shortcode-club_id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-header"><?php echo esc_html__( 'Show Header', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="header" data-fl-type="select" id="fl-form-shortcode-header" class="postform fl-shortcode-attr">
-						<option value="0"><?php echo esc_html__( 'No', 'anwp-football-leagues' ); ?></option>
-						<option value="1" selected><?php echo esc_html__( 'Yes', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-layout"><?php echo esc_html__( 'Layout', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="layout" data-fl-type="select" id="fl-form-shortcode-layout" class="postform fl-shortcode-attr">
-						<option value="" selected><?php echo esc_html__( 'Default', 'anwp-football-leagues' ); ?></option>
-						<option value="blocks"><?php echo esc_html__( 'Blocks', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			</tbody>
-		</table>
-		<input type="hidden" class="fl-shortcode-name" name="fl-slug" value="anwpfl-squad">
-		<?php
+	protected function get_form_fields(): array {
+		return [
+			[
+				'name'     => 'season_id',
+				'type'     => 'selector',
+				'entity'   => 'season',
+				'multiple' => false,
+				'label'    => __( 'Season ID', 'anwp-football-leagues' ),
+			],
+			[
+				'name'     => 'club_id',
+				'type'     => 'selector',
+				'entity'   => 'club',
+				'multiple' => false,
+				'label'    => __( 'Club ID', 'anwp-football-leagues' ),
+			],
+			[
+				'name'    => 'header',
+				'type'    => 'yes_no',
+				'label'   => __( 'Show Header', 'anwp-football-leagues' ),
+				'default' => '1',
+			],
+			[
+				'name'    => 'layout',
+				'type'    => 'select',
+				'label'   => __( 'Layout', 'anwp-football-leagues' ),
+				'default' => '',
+				'options' => [
+					''       => __( 'Default', 'anwp-football-leagues' ),
+					'blocks' => __( 'Blocks', 'anwp-football-leagues' ),
+				],
+			],
+		];
 	}
 }
 

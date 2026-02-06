@@ -95,7 +95,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 			'new_item'           => __( 'New Match', 'anwp-football-leagues' ),
 			'edit_item'          => __( 'Edit Match', 'anwp-football-leagues' ),
 			'view_item'          => __( 'View Match', 'anwp-football-leagues' ),
-			'all_items'          => __( 'All Matches', 'anwp-football-leagues' ),
+			'all_items'          => __( 'Matches', 'anwp-football-leagues' ),
 			'search_items'       => __( 'Search Matches', 'anwp-football-leagues' ),
 			'not_found'          => __( 'No matches found.', 'anwp-football-leagues' ),
 			'not_found_in_trash' => __( 'No matches found in Trash.', 'anwp-football-leagues' ),
@@ -106,9 +106,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 			'public'              => true,
 			'publicly_queryable'  => true,
 			'show_ui'             => true,
-			'show_in_menu'        => true,
-			'menu_position'       => 36,
-			'menu_icon'           => $plugin::SVG_VS,
+			'show_in_menu'        => 'edit.php?post_type=anwp_competition',
 			'query_var'           => true,
 			'rewrite'             => [ 'slug' => $permalink_slug ],
 			'capability_type'     => 'post',
@@ -295,7 +293,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 								<div class="club-logo__cover" style="background-image: url('<?php echo esc_attr( $home_logo ); ?>')"></div>
 							<?php endif; ?>
 							<a href="<?php echo esc_url( admin_url( 'post.php?post=' . absint( $home_id ) . '&action=edit' ) ); ?>" target="_blank"
-								data-anwpfl_tippy data-tippy-content="<?php echo esc_attr__( 'Edit Club', 'anwp-football-leagues' ); ?>"
+								data-anwp-tooltip="<?php echo esc_attr__( 'Edit Club', 'anwp-football-leagues' ); ?>"
 								class="text-decoration-none mx-3 d-inline-block anwp-text-xl anwp-text-gray-800"><?php echo esc_html( $home_title ); ?></a>
 						</div>
 
@@ -308,7 +306,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 								<div class="club-logo__cover club-logo__cover--xlarge d-block" style="background-image: url('<?php echo esc_attr( $away_logo ); ?>')"></div>
 							<?php endif; ?>
 							<a href="<?php echo esc_url( admin_url( 'post.php?post=' . absint( $away_id ) . '&action=edit' ) ); ?>" target="_blank"
-								data-anwpfl_tippy data-tippy-content="<?php echo esc_attr__( 'Edit Club', 'anwp-football-leagues' ); ?>"
+								data-anwp-tooltip="<?php echo esc_attr__( 'Edit Club', 'anwp-football-leagues' ); ?>"
 								class="text-decoration-none mx-3 d-inline-block anwp-text-xl anwp-text-gray-800"><?php echo esc_html( $away_title ); ?></a>
 						</div>
 					</div>
@@ -316,7 +314,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 					<?php if ( empty( $league->name ) || empty( $season->name ) || empty( get_post( $competition_id )->post_title ) ) : ?>
 						<div class="my-2 p-3 anwp-bg-orange-200 anwp-border anwp-border-orange-800 anwp-text-orange-900 d-flex align-items-center">
 							<svg class="anwp-icon anwp-icon--octi anwp-icon--s24 mr-2 anwp-fill-current">
-								<use xlink:href="#icon-alert"></use>
+								<use href="#icon-alert"></use>
 							</svg>
 							<div>
 								<?php echo esc_html__( 'Your Match Structure is invalid.', 'anwp-football-leagues' ); ?><br>
@@ -330,7 +328,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 					<div class="anwp-fl-menu-wrapper mr-3 d-block align-self-start anwp-flex-none <?php echo esc_attr( $is_menu_collapsed ? 'anwp-fl-collapsed-menu' : '' ); ?>" style="top: 50px;">
 
 						<button class="w-100 button button-primary py-2 mb-4 d-flex align-items-center justify-content-center" type="submit">
-							<svg class="anwp-icon anwp-icon--feather anwp-icon--s16 anwp-flex-none"><use xlink:href="#icon-save"></use></svg>
+							<svg class="anwp-icon anwp-icon--feather anwp-icon--s16 anwp-flex-none"><use href="#icon-save"></use></svg>
 							<span class="ml-2 anwp-fl-save-label"><?php echo esc_html__( 'Save', 'anwp-football-leagues' ); ?></span>
 							<span class="spinner m-0"></span>
 						</button>
@@ -448,8 +446,6 @@ class AnWPFL_Match extends AnWPFL_DB {
 							],
 							'short'
 						);
-
-						do_action( 'qm/debug', $home_players );
 
 						$away_players = $this->plugin->club->get_club_season_players(
 							[
@@ -689,7 +685,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 					?>
 					<div class="my-2 p-3 anwp-bg-orange-200 anwp-border anwp-border-orange-800 anwp-text-orange-900 d-flex align-items-center">
 						<svg class="anwp-icon anwp-icon--octi anwp-icon--s24 mr-2 anwp-fill-current">
-							<use xlink:href="#icon-alert"></use>
+							<use href="#icon-alert"></use>
 						</svg>
 						<div>
 							<?php echo esc_html__( 'Use the Match Structure editing with caution.', 'anwp-football-leagues' ); ?><br>
@@ -1280,8 +1276,8 @@ class AnWPFL_Match extends AnWPFL_DB {
 		}
 
 		// goals_conceded for goalkeepers
-		$home_goalkeepers = anwp_fl()->player->filter_goalkeepers_from_squad( $match_data['home_line_up'], $match_data['home_subs'] );
-		$away_goalkeepers = anwp_fl()->player->filter_goalkeepers_from_squad( $match_data['away_line_up'], $match_data['away_subs'] );
+		$home_goalkeepers = anwp_fl()->player->filter_goalkeepers_from_squad( $match_data['home_line_up'] ?? '', $match_data['home_subs'] ?? '' );
+		$away_goalkeepers = anwp_fl()->player->filter_goalkeepers_from_squad( $match_data['away_line_up'] ?? '', $match_data['away_subs'] ?? '' );
 
 		foreach ( $home_goalkeepers as $h_p ) {
 			foreach ( $mins_goals_away as $minute ) {

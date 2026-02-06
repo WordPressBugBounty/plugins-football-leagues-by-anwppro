@@ -6,52 +6,75 @@
  * @package AnWP_Football_Leagues
  */
 
+if ( class_exists( 'AnWPFL_Shortcode_Competition_Header' ) ) {
+	return;
+}
+
 /**
  * AnWP Football Leagues :: Shortcode > Competition Header.
  *
  * @since 0.4.3
  */
-class AnWPFL_Shortcode_Competition_Header {
-
-	private $shortcode = 'anwpfl-competition-header';
+class AnWPFL_Shortcode_Competition_Header extends AnWPFL_Shortcode_Base {
 
 	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		$this->hooks();
-	}
-
-	/**
-	 * Initiate our hooks.
-	 */
-	public function hooks() {
-		add_action( 'init', [ $this, 'shortcode_init' ] );
-
-		// Load shortcode form
-		add_action( 'anwpfl/shortcode/get_shortcode_form_competition-header', [ $this, 'load_shortcode_form' ] );
-
-		// Add shortcode option
-		add_filter( 'anwpfl/shortcode/get_shortcode_options', [ $this, 'add_shortcode_option' ] );
-	}
-
-	/**
-	 * Add shortcode.
-	 */
-	public function shortcode_init() {
-		add_shortcode( $this->shortcode, [ $this, 'render_shortcode' ] );
-	}
-
-	/**
-	 * Rendering shortcode.
-	 *
-	 * @param $atts
+	 * Get the shortcode tag.
 	 *
 	 * @return string
+	 * @since 0.17.0
 	 */
-	public function render_shortcode( $atts ) {
+	protected function get_shortcode_tag(): string {
+		return 'anwpfl-competition-header';
+	}
 
-		$defaults = [
+	/**
+	 * Get the shortcode key.
+	 *
+	 * @return string
+	 * @since 0.17.0
+	 */
+	protected function get_shortcode_key(): string {
+		return 'competition-header';
+	}
+
+	/**
+	 * Get the shortcode label.
+	 *
+	 * @return string
+	 * @since 0.17.0
+	 */
+	protected function get_shortcode_label(): string {
+		return __( 'Competition Header', 'anwp-football-leagues' );
+	}
+
+	/**
+	 * Get documentation URL.
+	 *
+	 * @return string
+	 * @since 0.17.0
+	 */
+	protected function get_docs_url(): string {
+		return '';
+	}
+
+	/**
+	 * Get template name.
+	 *
+	 * @return string
+	 * @since 0.17.0
+	 */
+	protected function get_template_name(): string {
+		return 'competition_header';
+	}
+
+	/**
+	 * Get default attribute values.
+	 *
+	 * @return array
+	 * @since 0.17.0
+	 */
+	protected function get_defaults(): array {
+		return [
 			'id'              => '',
 			'title'           => '',
 			'title_field'     => '',
@@ -59,82 +82,55 @@ class AnWPFL_Shortcode_Competition_Header {
 			'season_selector' => 0,
 			'transparent_bg'  => 0,
 		];
-
-		// Parse defaults and create a shortcode.
-		$atts = shortcode_atts( $defaults, (array) $atts, $this->shortcode );
-
-		return anwp_football_leagues()->template->shortcode_loader( 'competition_header', $atts );
 	}
 
 	/**
-	 * Add shortcode options.
-	 * Used in Shortcode Builder and Shortcode TinyMCE tool.
+	 * Get default preview width (narrow for single-item display).
 	 *
-	 * @param array $data Shortcode options.
+	 * @return int
+	 * @since 0.17.0
+	 */
+	protected function get_default_preview_width(): int {
+		return 700;
+	}
+
+	/**
+	 * Get form field definitions.
 	 *
 	 * @return array
-	 * @since 0.12.7
+	 * @since 0.17.0
 	 */
-	public function add_shortcode_option( $data ) {
-		$data['competition-header'] = __( 'Competition Header', 'anwp-football-leagues' );
-
-		return $data;
-	}
-
-	/**
-	 * Load shortcode form with options.
-	 * Used in Shortcode Builder and Shortcode TinyMCE tool.
-	 */
-	public function load_shortcode_form() {
-
-		$shortcode_link  = 'https://anwppro.userecho.com/knowledge-bases/2/articles/157-competition-header-shortcode';
-		$shortcode_title = esc_html__( 'Shortcodes', 'anwp-football-leagues' ) . ' :: ' . esc_html__( 'Competition Header', 'anwp-football-leagues' );
-
-		anwp_football_leagues()->helper->render_docs_template( $shortcode_link, $shortcode_title );
-		?>
-		<table class="form-table">
-			<tbody>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-id"><?php echo esc_html__( 'Competition ID', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<div class="anwp-x-selector" fl-x-data="selectorItem('main_stage',true)">
-						<input name="id" id="fl-form-shortcode-id" data-fl-type="text" fl-x-model="selected" type="text" class="fl-shortcode-attr code" value="" />
-						<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-2 postform">
-							<span class="dashicons dashicons-search"></span>
-						</button>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-title_as_link"><?php echo esc_html__( 'Title as a link', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="title_as_link" data-fl-type="select" id="fl-form-shortcode-title_as_link" class="postform fl-shortcode-attr">
-						<option value="0" selected><?php echo esc_html__( 'No', 'anwp-football-leagues' ); ?></option>
-						<option value="1"><?php echo esc_html__( 'Yes', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-title_field"><?php echo esc_html__( 'Competition Title in Competition Header', 'anwp-football-leagues' ); ?></label>
-				</th>
-				<td>
-					<select name="title_field" data-fl-type="select" id="fl-form-shortcode-title_field" class="postform fl-shortcode-attr">
-						<option value="" selected><?php echo esc_html__( 'League Name', 'anwp-football-leagues' ); ?></option>
-						<option value="competition"><?php echo esc_html__( 'Competition Title', 'anwp-football-leagues' ); ?></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><label for="fl-form-shortcode-title"><?php echo esc_html__( 'Custom Title', 'anwp-football-leagues' ); ?></label></th>
-				<td>
-					<input name="title" data-fl-type="text" type="text" id="fl-form-shortcode-title" value="" class="fl-shortcode-attr regular-text code">
-				</td>
-			</tr>
-			</tbody>
-		</table>
-		<input type="hidden" class="fl-shortcode-name" name="fl-slug" value="anwpfl-competition-header">
-		<?php
+	protected function get_form_fields(): array {
+		return [
+			[
+				'name'     => 'id',
+				'type'     => 'selector',
+				'entity'   => 'main_stage',
+				'multiple' => false,
+				'label'    => __( 'Competition ID', 'anwp-football-leagues' ),
+			],
+			[
+				'name'    => 'title_as_link',
+				'type'    => 'yes_no',
+				'label'   => __( 'Title as a link', 'anwp-football-leagues' ),
+				'default' => '0',
+			],
+			[
+				'name'    => 'title_field',
+				'type'    => 'select',
+				'label'   => __( 'Competition Title in Competition Header', 'anwp-football-leagues' ),
+				'default' => '',
+				'options' => [
+					''            => __( 'League Name', 'anwp-football-leagues' ),
+					'competition' => __( 'Competition Title', 'anwp-football-leagues' ),
+				],
+			],
+			[
+				'name'  => 'title',
+				'type'  => 'text',
+				'label' => __( 'Custom Title', 'anwp-football-leagues' ),
+			],
+		];
 	}
 }
 

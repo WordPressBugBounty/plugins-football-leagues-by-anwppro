@@ -88,7 +88,7 @@ $render_match_time  = AnWP_Football_Leagues::string_to_bool( $data->show_match_d
 				<div class="match-slim__date-wrapper d-flex flex-sm-column anwp-flex-none anwp-order-2 align-items-start align-items-sm-end anwp-h-min-20">
 					<div class="match-slim__date d-flex d-sm-inline-block mr-1 mr-sm-0">
 						<svg class="match-slim__date-icon anwp-icon anwp-icon--feather anwp-icon--em-1-2 d-sm-none mr-1">
-							<use xlink:href="#icon-clock-alt"></use>
+							<use href="#icon-clock-alt"></use>
 						</svg>
 						<span class="match__date-formatted anwp-leading-1"><?php echo esc_html( $data->match_date ); ?></span>
 					</div>
@@ -106,7 +106,7 @@ $render_match_time  = AnWP_Football_Leagues::string_to_bool( $data->show_match_d
 
 				<div class="match-slim__team-wrapper match-slim__team-home anwp-flex-1 d-flex flex-column flex-column-reverse flex-sm-row justify-content-center justify-content-sm-end align-items-center">
 					<div class="match-slim__team-home-title anwp-text-sm anwp-text-center anwp-text-sm-right anwp-break-word mr-sm-3 anwp-leading-1">
-						<?php echo str_repeat( '<svg class="icon__card"><use xlink:href="#icon-card_r"></use></svg>', absint( $data->home_cards_yr ) + absint( $data->home_cards_r ) ); //phpcs:ignore ?>
+						<?php echo str_repeat( '<svg class="icon__card"><use href="#icon-card_r"></use></svg>', absint( $data->home_cards_yr ) + absint( $data->home_cards_r ) ); //phpcs:ignore ?>
 						<?php echo esc_html( $data->club_home_title ); ?>
 					</div>
 					<?php if ( $data->club_home_logo ) : ?>
@@ -131,7 +131,7 @@ $render_match_time  = AnWP_Football_Leagues::string_to_bool( $data->show_match_d
 					<?php endif; ?>
 					<div class="match-slim__team-away-title anwp-text-sm anwp-text-center anwp-text-sm-left anwp-break-word ml-sm-3 anwp-leading-1">
 						<?php echo esc_html( $data->club_away_title ); ?>
-						<?php echo str_repeat( '<svg class="icon__card"><use xlink:href="#icon-card_r"></use></svg>', absint( $data->away_cards_yr ) + absint( $data->away_cards_r ) ); //phpcs:ignore ?>
+						<?php echo str_repeat( '<svg class="icon__card"><use href="#icon-card_r"></use></svg>', absint( $data->away_cards_yr ) + absint( $data->away_cards_r ) ); //phpcs:ignore ?>
 					</div>
 				</div>
 			</div>

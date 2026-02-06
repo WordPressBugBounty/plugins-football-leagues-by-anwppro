@@ -1,6 +1,227 @@
 /*--------------------------------------------------------------
 >>> Some Global Styles for AnWP Football Leagues Admin part:
 ----------------------------------------------------------------*/
+/* AlpineJS support */
+[fl-x-cloak] { display: none !important; }
+
+/* FL - X New Modal */
+.anwp-x-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 100110;
+	align-items: start;
+	justify-content: center;
+	background: rgba(0,0,0,0.5);
+	backdrop-filter: blur(1px);
+	padding-top: 50px;
+	display: flex;
+}
+
+.anwp-x-modal__wrapper {
+	max-width: 800px;
+	width: 100%;
+	flex-direction: column;
+	background-color: #fff;
+	position: relative;
+}
+
+.anwp-x-modal__close-button {
+	position: absolute;
+	left: -15px;
+	top: -15px;
+	border: 1px solid rgba(0, 0, 0, 0.25);
+	background-color: #fff;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+.anwp-x-modal__close-button span {
+	font-size: 14px;
+	line-height: 14px;
+}
+
+.anwp-x-modal__header {
+	padding: 15px 20px;
+	border-bottom: 1px solid #ddd;
+	background-color: #f5f5f5;
+}
+
+.anwp-x-modal__header > h3 > span {
+	text-transform: capitalize;
+}
+
+.anwp-x-modal__section {
+	padding: 15px 20px;
+	background-color: #fff;
+	border-top: 1px solid #ddd;
+}
+
+.anwp-x-modal__section--secondary {
+	background-color: #f5f5f5;
+}
+
+.anwp-x-modal__footer {
+	display: flex;
+	justify-content: flex-end;
+	background-color: #f5f5f5;
+	padding: 15px 20px;
+	border-top: 1px solid #ddd;
+}
+
+.anwp-x-modal__spinner {
+	float: none !important;
+	margin: 30px auto;
+	position: relative;
+	top: -15px;
+}
+
+.anwp-x-modal__selected-wrapper {
+	padding: 0;
+	max-height: 150px;
+	overflow: auto;
+	display: flex;
+	flex-wrap: wrap;
+	margin-right: -3px;
+	margin-left: -3px;
+}
+
+.anwp-x-modal__selected-item {
+	padding: 2px 10px 2px 5px;
+	border: 1px solid #d4d4d4;
+	margin: 3px;
+	background-color: #fff;
+	border-radius: 10px;
+	display: flex;
+	align-items: center;
+	min-height: 30px;
+	height: 30px;
+}
+
+.anwp-x-modal__selected-item button {
+	margin-right: 10px !important;
+	display: flex !important;
+	align-items: center;
+	border-radius: 6px !important;
+
+	color: #890000 !important;
+	font-size: 12px !important;
+	line-height: 12px !important;
+}
+
+.anwp-x-selector {
+	display: flex;
+}
+
+.anwp-x-selector button {
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+}
+
+.anwp-x-modal__search-bar {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 5px 10px 10px;
+}
+
+.anwp-x-modal__bar-group {
+	display: flex;
+	flex-direction: column;
+	margin: 10px;
+}
+
+.anwp-x-modal__bar-group label {
+	margin-bottom: 2px;
+	color: #111;
+}
+
+.anwp-x-modal__bar-group .ts-wrapper {
+	min-height: 30px;
+	min-width: 100px;
+}
+
+.anwp-x-modal__bar-group .ts-control > input {
+	min-width: unset;
+}
+
+.anwp-x-modal__bar-group .ts-wrapper.single .ts-control {
+	background-image: none;
+}
+
+.anwp-x-modal__bar-group  .ts-control {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.anwp-x-modal__bar-group .plugin-dropdown_input .dropdown-input {
+	padding: 2px 8px;
+}
+
+#anwp-x-modal__field__season + .ts-wrapper {
+	width: 110px;
+}
+
+#anwp-x-modal__field__league + .ts-wrapper {
+	width: 220px;
+}
+
+#anwp-x-modal__field__country + .ts-wrapper {
+	width: 180px;
+}
+
+#anwp-x-modal__field__club + .ts-wrapper, #anwp-x-modal__field__club-home + .ts-wrapper, #anwp-x-modal__field__club-away + .ts-wrapper {
+	width: 180px;
+}
+
+.anwp-x-modal__bar-group .ts-wrapper.single .ts-control:not(.rtl)::after {
+	left: 8px;
+}
+
+.anwp-x-modal__section-main {
+	max-height: 300px;
+	overflow-y: auto;
+}
+
+.anwp-x-modal__section-main table thead td,
+.anwp-x-modal__section-main table tfoot td {
+	white-space: nowrap;
+}
+
+.anwp-x-modal__section-main {
+	border-top: 1px solid #ddd;
+}
+
+.anwp-x-modal__clear-filter {
+	margin-right: auto;
+	font-size: 14px;
+	color: #85181d;
+	cursor: pointer;
+}
+
+.anwp-x-modal__section-action {
+	padding: 0 !important;
+	width: 30px;
+	height: 30px;
+	border-radius: 8px !important;
+
+	display: flex !important;
+	justify-content: center;
+
+	font-size: 24px !important;
+	line-height: 24px !important;
+}
+
+.ts-control .anwp-d-flex {
+	display: flex !important;
+}
+
+/* ///////////////////////////////////////////// */
+/* Others */
 .anwp-fl-help-link {
 	border-radius: 50%;
 	background-color: #ededed;
@@ -32,7 +253,7 @@ body > .vs__dropdown-menu {
 	z-index: 1000000 !important;
 }
 
-.anwp-fl-selector .dashicons, .anwp-fl-selector-action .dashicons {
+.anwp-fl-selector .dashicons {
 	display: flex;
 }
 
@@ -91,13 +312,20 @@ body > .vs__dropdown-menu {
 	line-height: 1;
 }
 
-#anwp-fl-selector-modaal__search-bar .anwp-fl-selector-modaal__bar-group.d-none {
-	display: none !important;
+.anwp-d-flex {
+	display: flex !important;
 }
 
-.anwp-d-flex {
-	display: -ms-flexbox!important;
+.anwp-d-flex--noimp {
 	display: flex;
+}
+
+.anwp-flex-wrap--noimp {
+	flex-wrap: wrap;
+}
+
+.anwp-items-start--noimp {
+	align-items: flex-start;
 }
 
 .anwp-fl-selector--visible.anwp-d-flex {
@@ -111,6 +339,10 @@ body > .vs__dropdown-menu {
 .anwp-flex-grow-1 {
 	-ms-flex-positive: 1!important;
 	flex-grow: 1!important;
+}
+
+.anwp-w-10 {
+	width: 100px;
 }
 
 .anwp-w-80 {
@@ -142,44 +374,6 @@ body > .vs__dropdown-menu {
 	margin-top: 3px;
 }
 
-#anwp-fl-selector-modaal {
-	display: none;
-}
-
-.anwp-fl-selector-modal.modaal-wrapper {
-	z-index: 10000060 !important;
-}
-
-.anwp-fl-selector-modal + .modaal-overlay {
-	z-index: 10000050 !important;
-}
-
-.anwp-fl-selector-modal .modaal-inner-wrapper {
-	vertical-align: top;
-}
-
-.anwp-fl-selector-modal .modaal-inner-wrapper .select2-selection__clear {
-	font-size: 20px;
-	color: #820f0f;
-	line-height: 1.2;
-	padding: 0 2px;
-}
-
-#anwp-fl-selector-modaal__search-spinner {
-	float: none !important;
-	margin: 0 auto;
-}
-
-.anwpfl-shortcode-modal__content + #anwp-fl-selector-modaal__search-spinner {
-	display: none !important;
-}
-
-.anwp-search-is-active.anwpfl-shortcode-modal__content + #anwp-fl-selector-modaal__search-spinner {
-	position: relative;
-	display: block !important;
-	top: -40px;
-}
-
 .anwp-search-is-active.anwpfl-shortcode-modal__content {
 	padding: 40px !important;
 }
@@ -189,101 +383,6 @@ body > .vs__dropdown-menu {
 	background-color: #fff3cd;
 	padding: 5px 10px;
 	border: 1px solid #fdcc38 !important;
-}
-
-#anwp-fl-selector-modaal__content {
-	max-height: 300px;
-	overflow-y: auto;
-}
-
-#anwp-fl-selector-modaal__content table thead td,
-#anwp-fl-selector-modaal__content table tfoot td {
-	white-space: nowrap;
-}
-
-#anwp-fl-selector-modaal__search-bar {
-	display: -webkit-box !important;
-	display: -ms-flexbox !important;
-	display: flex !important;
-
-	-ms-flex-align: end!important;
-	align-items: flex-end!important;
-
-	-ms-flex-wrap: wrap!important;
-	flex-wrap: wrap!important;
-
-	padding-top: 0;
-}
-
-#anwp-fl-selector-modaal__search-bar .anwp-fl-selector-modaal__bar-group {
-	display: -webkit-box !important;
-	display: -ms-flexbox !important;
-	display: flex !important;
-
-	-webkit-box-orient: vertical !important;
-	-webkit-box-direction: normal !important;
-	-ms-flex-direction: column !important;
-	flex-direction: column !important;
-}
-
-#anwp-fl-selector-modaal__footer {
-	display: -webkit-box !important;
-	display: -ms-flexbox !important;
-	display: flex !important;
-
-	-ms-flex-pack: end!important;
-	justify-content: flex-end!important;
-}
-
-#anwp-fl-selector-modaal__footer button:first-of-type {
-	margin: 0 10px;
-}
-
-#anwp-fl-selector-modaal__search-bar .anwp-fl-selector-modaal__bar-group label {
-	margin-bottom: 3px;
-}
-
-#anwp-fl-selector-modaal__header-context {
-	text-transform: capitalize;
-}
-
-#anwp-fl-selector-modaal__content {
-	border-top: 1px solid #ddd;
-}
-
-#anwp-fl-selector-modaal__selected-none {
-	display: none;
-}
-
-#anwp-fl-selector-modaal__selected:empty + #anwp-fl-selector-modaal__selected-none {
-	display: block;
-}
-
-#anwp-fl-selector-modaal__selected {
-	padding: 10px 0;
-	max-height: 150px;
-	overflow: auto;
-}
-
-#anwp-fl-selector-modaal__selected:empty {
-	padding: 0 !important;
-}
-
-.anwp-fl-selector-modaal__selected-item {
-	padding: 5px 0;
-	border-bottom: 1px solid #ddd;
-}
-
-.anwp-fl-selector-modaal__selected-item button {
-	margin-left: 10px !important;
-}
-.anwp-fl-selector-modaal__selected-item > span {
-	padding: 2px 0 0;
-	display: inline-block;
-}
-
-.anwp-fl-selector-modaal__selected-item:first-of-type {
-	border-top: 1px solid #ddd;
 }
 
 /* Update - 2020-06-16 ///////////////////////////////////////////////////////////////// */
@@ -302,19 +401,6 @@ body > .vs__dropdown-menu {
 	stroke: none;
 	fill: #495057;
 	stroke-width: 2px;
-}
-
-/* Update - 2020-02-09 ///////////////////////////////////////////////////////////////// */
-.anwp-b-wrap table.jexcel {
-	border-collapse: separate;
-}
-
-.anwp-b-wrap .jcontextmenu {
-	display: none;
-}
-
-.anwp-b-wrap .jexcel > thead > tr > td {
-	white-space: normal;
 }
 
 /* Update - 2020-02-09 ///////////////////////////////////////////////////////////////// */
@@ -626,6 +712,11 @@ body.wp-admin.widgets-php div.widget[id*="_anwpfl-widget-premium-"] .widget-titl
 	z-index: 100060 !important;
 }
 
+/* Tom-Select dropdown appended to body for modal z-index fix */
+body > .ts-dropdown {
+	z-index: 100110 !important;
+}
+
 .modaal-overlay {
 	z-index: 100050 !important;
 }
@@ -667,14 +758,16 @@ body.wp-admin.widgets-php div.widget[id*="_anwpfl-widget-premium-"] .widget-titl
 	display: -ms-flexbox;
 	display: flex;
 
-	border: 1px solid #17a2b8;
-	background-color: #bee5eb;
+	border: 1px solid #9ca3af;
+	background-color: #eff6ff;
 
-	padding: 0.5rem;
+	padding: 0.625rem 0.75rem;
+	margin-bottom: 1rem;
 }
 
 .anwp-shortcode-docs-link b {
 	margin: 0 0.5rem;
+	color: #1e40af;
 }
 
 .anwp-shortcode-docs-link .anwp-icon {
@@ -683,7 +776,7 @@ body.wp-admin.widgets-php div.widget[id*="_anwpfl-widget-premium-"] .widget-titl
 	height: 16px;
 	stroke-width: 0;
 	stroke: none;
-	fill: #595959;
+	fill: #2563eb;
 }
 
 .anwpfl-shortcode-modal .select2-container .select2-selection--single .select2-selection__rendered {
@@ -1474,4 +1567,255 @@ body.wp-admin.widgets-php div.widget[id*="_anwpfl-widget-premium-"] .widget-titl
 		transform: scale(1);
 	}
 
+}
+
+/*--------------------------------------------------------------
+# Shortcode Builder - Collapsible Sections
+--------------------------------------------------------------*/
+.fl-section-toggle {
+	transition: background-color 0.15s ease;
+	border-radius: 3px;
+	margin-right: -5px;
+	padding-right: 5px !important;
+}
+
+.fl-section-toggle:hover {
+	color: #2271b1;
+	background-color: #f0f6fc;
+}
+
+.fl-section-toggle:hover .dashicons {
+	color: #2271b1;
+}
+
+.fl-section-toggle strong {
+	font-weight: 600;
+}
+
+/* Section content visual grouping */
+.fl-section > div[fl-x-show] {
+	border-right: 3px solid #e5e7eb;
+	padding-right: 15px;
+	margin-right: 2px;
+}
+
+/*--------------------------------------------------------------
+# Shortcode Builder - Output Styling
+--------------------------------------------------------------*/
+.anwp-shortcode-output {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	word-break: break-word;
+	white-space: pre-wrap;
+}
+
+/*--------------------------------------------------------------
+# Shortcode Builder - Form Field Styling
+--------------------------------------------------------------*/
+.fl-shortcode-fields input[type="text"].fl-shortcode-attr,
+.fl-shortcode-fields input[type="number"].fl-shortcode-attr {
+	max-width: 400px;
+}
+
+.fl-shortcode-fields input[type="number"].fl-shortcode-attr {
+	max-width: 140px;
+}
+
+.fl-shortcode-fields select.fl-shortcode-attr {
+	max-width: 400px;
+}
+
+.fl-shortcode-fields .fl-shortcode-attr--small {
+	max-width: 140px;
+}
+
+.fl-shortcode-fields .fl-shortcode-select2 {
+	max-width: 100%;
+}
+
+/*--------------------------------------------------------------
+# Shortcode Builder - Section Cards (Vue Match Edit Pattern)
+--------------------------------------------------------------*/
+/* Section wrapper - border color set here (not via anwp- utilities) for TinyMCE modal compatibility */
+.fl-section-card {
+	margin-bottom: 1rem;
+	border: 1px solid #9ca3af;
+}
+
+/* Header button reset */
+.fl-section-card__header {
+	border: none;
+	border-bottom: 1px solid #9ca3af;
+	text-align: right;
+	font-size: 14px;
+	width: 100%;
+	background: #fff;
+	transition: background-color 0.15s ease;
+}
+
+.fl-section-card__header:hover {
+	background-color: #f0f6fc !important;
+}
+
+.fl-section-card__content {
+	background: #fff;
+	padding: 1rem 0.5rem;
+}
+
+.fl-section-card__header:focus {
+	outline: none;
+	box-shadow: inset 0 0 0 1px #2271b1;
+}
+
+/* Field wrapper - constrain width, align to bottom of row */
+.fl-shortcode-fields .fl-field {
+	max-width: 220px !important;
+	align-self: flex-end;
+}
+
+/* Field input width classes (applied to inputs) */
+.fl-shortcode-fields .fl-shortcode-attr--narrow {
+	width: 120px !important;
+}
+
+.fl-shortcode-fields .fl-shortcode-attr--medium {
+	min-width: 180px;
+	max-width: 300px;
+}
+
+.fl-shortcode-fields .fl-shortcode-attr--wide {
+	width: 400px;
+}
+
+.fl-shortcode-fields .fl-shortcode-attr--selector {
+	width: 150px !important;
+}
+
+.fl-shortcode-fields .fl-shortcode-attr--multiselect {
+	width: 400px !important;
+}
+
+/* Field wrapper override for wide inputs */
+.fl-shortcode-fields .fl-field:has(.fl-shortcode-attr--multiselect),
+.fl-shortcode-fields .fl-field:has(.fl-shortcode-attr--wide) {
+	max-width: 420px !important;
+}
+
+/* Field label - compact with 2-line limit */
+.fl-shortcode-fields .fl-field label {
+	line-height: 1;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+/* Section descriptions footer */
+.fl-section-descriptions {
+	font-size: 12px;
+	line-height: 1.4;
+	color: #6b7280;
+}
+
+.fl-section-description + .fl-section-description {
+	margin-top: 3px;
+}
+
+.fl-section-description strong {
+	color: #374151;
+}
+
+/*--------------------------------------------------------------
+# Shortcode Builder - Two-Column Layout
+--------------------------------------------------------------*/
+.fl-shortcode-builder {
+	display: flex;
+	gap: 1.5rem;
+}
+
+.fl-shortcode-builder__form {
+	max-width: 800px;
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.fl-shortcode-builder__preview {
+	flex-shrink: 0;
+}
+
+.fl-preview-panel {
+	position: sticky;
+	top: 46px; /* Below WP admin bar */
+	max-height: calc(100vh - 78px);
+	overflow: auto;
+}
+
+/* Responsive: Stack on smaller screens */
+@media (max-width: 1100px) {
+	.fl-shortcode-builder {
+		flex-direction: column;
+	}
+	.fl-shortcode-builder__preview {
+		width: 100% !important; /* Override Alpine binding on mobile */
+	}
+	.fl-preview-panel {
+		position: static;
+		max-height: none;
+	}
+}
+
+/*--------------------------------------------------------------
+# Shortcode Builder - Preview Panel
+--------------------------------------------------------------*/
+.fl-preview-iframe-wrap {
+	position: relative;
+	min-height: 200px;
+}
+
+.fl-preview-loading-overlay {
+	position: absolute;
+	inset: 0;
+	background: rgba(255, 255, 255, 0.8);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 10;
+}
+
+/* Spin animation for refresh icon */
+@keyframes anwp-spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(-360deg); }
+}
+
+.anwp-spin {
+	animation: anwp-spin 1s linear infinite;
+}
+
+/* Fix dashicon alignment in buttons */
+.fl-preview-panel button .dashicons {
+	vertical-align: middle;
+	margin-top: -2px;
+}
+
+/*--------------------------------------------------------------
+# Preview Width Toggle
+--------------------------------------------------------------*/
+.fl-preview-width-toggle {
+	display: inline-flex;
+	gap: 0;
+}
+
+.fl-preview-width-toggle .button {
+	border-radius: 0;
+	margin-right: -1px;
+	min-width: 50px;
+}
+
+.fl-preview-width-toggle .button:first-child {
+	border-radius: 0 3px 3px 0;
+	margin-right: 0;
+}
+
+.fl-preview-width-toggle .button:last-child {
+	border-radius: 3px 0 0 3px;
 }

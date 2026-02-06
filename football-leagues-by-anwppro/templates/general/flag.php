@@ -45,7 +45,7 @@ if ( 'legacy' === anwp_football_leagues()->customizer->get_value( 'general', 'fl
 static $flags_url = null;
 
 if ( null === $flags_url ) {
-	$flags_url = apply_filters( 'anwpfl/media/modify_url_svg_sprite', AnWP_Football_Leagues::url( 'public/img/flags-v2.svg' ) );
+	$flags_url = apply_filters( 'anwpfl/media/modify_url_svg_sprite', AnWP_Football_Leagues::url( 'public/img/flags-v3.svg' ) );
 }
 
 /*
@@ -96,7 +96,7 @@ else :
 	<svg class="fl-flag--rounded <?php echo esc_attr( $data['wrapper_class'] ); ?>"
 			data-toggle="anwp-tooltip" data-tippy-content="<?php echo esc_attr( anwp_football_leagues()->data->get_value_by_key( $data['country_code'], 'country' ) ); ?>"
 			width="<?php echo absint( $flag_size ); ?>" height="<?php echo absint( $flag_size ); ?>">
-		<use xlink:href="<?php echo esc_url( $flags_url ); ?>#fl-flag--<?php echo esc_attr( $code_parsed ); ?>"></use>
+		<use href="<?php echo esc_url( $flags_url ); ?>#fl-flag--<?php echo esc_attr( $code_parsed ); ?>"></use>
 	</svg>
 	<?php
 endif;

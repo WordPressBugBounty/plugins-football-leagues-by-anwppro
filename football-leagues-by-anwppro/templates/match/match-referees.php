@@ -95,7 +95,7 @@ $referee_keys = [
 	}
 	?>
 
-	<div class="match__referee-outer py-2 d-flex flex-wrap anwp-fl-border-bottom anwp-border-light anwp-text-base">
+	<div class="match__referee-outer py-2 d-flex flex-wrap anwp-border-bottom anwp-border-light anwp-text-base">
 		<?php foreach ( [ 'referee', 'assistant_1', 'assistant_2', 'referee_fourth_id' ] as $referee_slug ) : ?>
 			<?php if ( ! empty( $data[ $referee_slug ] ) ) : ?>
 				<div class="match__referee-wrapper d-flex align-items-center mr-4">
@@ -148,7 +148,7 @@ $referee_keys = [
 	</div>
 
 	<?php if ( ! empty( $additional_referees ) ) : ?>
-		<div class="py-2 d-flex flex-wrap anwp-fl-border-bottom anwp-border-light anwp-text-base">
+		<div class="py-2 d-flex flex-wrap anwp-border-bottom anwp-border-light anwp-text-base">
 			<?php foreach ( $additional_referees as $additional_referee ) : ?>
 				<?php if ( ! empty( $additional_referee['_anwpfl_referee'] ) && ( absint( $additional_referee['_anwpfl_referee'] ) || 'temp__' === mb_substr( $additional_referee['_anwpfl_referee'], 0, 6 ) ) ) : ?>
 					<div class="match__referee-wrapper d-flex align-items-center mr-4">

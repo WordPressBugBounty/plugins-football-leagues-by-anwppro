@@ -335,49 +335,49 @@ if ( 'hide' === $current_team_option ) {
 					<?php if ( $player['twitter'] ) : ?>
 						<a href="<?php echo esc_url( $player['twitter'] ); ?>" class="anwp-link-without-effects mr-2 mb-0 anwp-leading-1 d-inline-block" target="_blank">
 							<svg class="anwp-icon anwp-icon--s24 anwp-icon--social">
-								<use xlink:href="#icon-twitter"></use>
+								<use href="#icon-twitter"></use>
 							</svg>
 						</a>
 					<?php endif; ?>
 					<?php if ( $player['youtube'] ) : ?>
 						<a href="<?php echo esc_url( $player['youtube'] ); ?>" class="anwp-link-without-effects mr-2 mb-0 anwp-leading-1 d-inline-block" target="_blank">
 							<svg class="anwp-icon anwp-icon--s30 anwp-icon--social">
-								<use xlink:href="#icon-youtube"></use>
+								<use href="#icon-youtube"></use>
 							</svg>
 						</a>
 					<?php endif; ?>
 					<?php if ( $player['facebook'] ) : ?>
 						<a href="<?php echo esc_url( $player['facebook'] ); ?>" class="anwp-link-without-effects mr-2 mb-0 anwp-leading-1 d-inline-block" target="_blank">
 							<svg class="anwp-icon anwp-icon--s30 anwp-icon--social">
-								<use xlink:href="#icon-facebook"></use>
+								<use href="#icon-facebook"></use>
 							</svg>
 						</a>
 					<?php endif; ?>
 					<?php if ( $player['instagram'] ) : ?>
 						<a href="<?php echo esc_url( $player['instagram'] ); ?>" class="anwp-link-without-effects mr-2 mb-0 anwp-leading-1 d-inline-block" target="_blank">
 							<svg class="anwp-icon anwp-icon--s30 anwp-icon--social">
-								<use xlink:href="#icon-instagram"></use>
+								<use href="#icon-instagram"></use>
 							</svg>
 						</a>
 					<?php endif; ?>
 					<?php if ( $player['linkedin'] ) : ?>
 						<a href="<?php echo esc_url( $player['linkedin'] ); ?>" class="anwp-link-without-effects mr-2 mb-0 anwp-leading-1 d-inline-block" target="_blank">
 							<svg class="anwp-icon anwp-icon--s30 anwp-icon--social">
-								<use xlink:href="#icon-linkedin"></use>
+								<use href="#icon-linkedin"></use>
 							</svg>
 						</a>
 					<?php endif; ?>
 					<?php if ( $player['tiktok'] ) : ?>
 						<a href="<?php echo esc_url( $player['tiktok'] ); ?>" class="anwp-link-without-effects mr-2 mb-0 anwp-leading-1 d-inline-block" target="_blank">
 							<svg class="anwp-icon anwp-icon--s30 anwp-icon--social">
-								<use xlink:href="#icon-tiktok"></use>
+								<use href="#icon-tiktok"></use>
 							</svg>
 						</a>
 					<?php endif; ?>
 					<?php if ( $player['vk'] ) : ?>
 						<a href="<?php echo esc_url( $player['vk'] ); ?>" class="anwp-link-without-effects mr-2 mb-0 anwp-leading-1 d-inline-block" target="_blank">
 							<svg class="anwp-icon anwp-icon--s30 anwp-icon--social">
-								<use xlink:href="#icon-vk"></use>
+								<use href="#icon-vk"></use>
 							</svg>
 						</a>
 					<?php endif; ?>

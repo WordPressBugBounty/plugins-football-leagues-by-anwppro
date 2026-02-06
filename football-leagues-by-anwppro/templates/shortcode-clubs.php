@@ -73,7 +73,7 @@ if ( '' === $data->layout ) : ?>
 			foreach ( $clubs as $club ) :
 				$logo = 'small' === $data->logo_size ? $club->_anwpfl_logo : $club->_anwpfl_logo_big;
 				?>
-				<div class="clubs-shortcode__wrapper club-logo position-relative anwp-text-center p-2 m-1 anwp-fl-border anwp-border-light">
+				<div class="clubs-shortcode__wrapper club-logo position-relative anwp-text-center p-2 m-1 anwp-border anwp-border-light">
 					<img loading="lazy" class="clubs-shortcode__logo anwp-object-contain mx-auto" style="width: <?php echo esc_attr( $data->logo_width ); ?>; height: <?php echo esc_attr( $data->logo_height ); ?>;"
 						src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $club->_anwpfl_abbr ?: $club->post_title ); ?>">
 
@@ -103,7 +103,7 @@ if ( '' === $data->layout ) : ?>
 				$logo = 'small' === $data->logo_size ? $club->_anwpfl_logo : $club->_anwpfl_logo_big;
 				?>
 				<div class="<?php echo esc_attr( $col_class[ $data->layout ] ); ?> d-flex align-self-stretch">
-					<div class="club-logo club-logo--grid w-100 d-flex flex-column m-1 p-2 anwp-fl-border anwp-border-light">
+					<div class="club-logo club-logo--grid w-100 d-flex flex-column m-1 p-2 anwp-border anwp-border-light">
 						<a class="anwp-link-without-effects d-flex align-items-center justify-content-center w-100 h-100 anwp-club-logo--widget anwp-image-background-contain"
 							style="background-image: url('<?php echo esc_attr( $logo ); ?>')"
 							href="<?php echo esc_url( anwp_football_leagues()->club->get_club_link_by_id( $club->ID ) ); ?>">

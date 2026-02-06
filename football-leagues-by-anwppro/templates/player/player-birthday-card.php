@@ -40,7 +40,7 @@ $birth_date_obj = DateTime::createFromFormat( 'Y-m-d', $data['date_of_birth'] );
 $diff_date_obj  = DateTime::createFromFormat( 'Y-m-d', date( 'Y' ) . '-' . date( 'm-d', strtotime( $data['date_of_birth'] ) ) );
 $age            = $birth_date_obj->diff( $diff_date_obj )->y;
 ?>
-<div class="player__birthday-card player-birthday-card anwp-fl-border anwp-border-light d-flex align-items-start position-relative">
+<div class="player__birthday-card player-birthday-card anwp-border anwp-border-light d-flex align-items-start position-relative">
 	<div class="player-birthday-card__photo-wrapper anwp-flex-none">
 		<img loading="lazy" width="80" height="80" class="player-birthday-card__photo anwp-object-contain m-2 anwp-w-80 anwp-h-80" src="<?php echo esc_url( $data['photo'] ?: $default_photo ); ?>" alt="<?php echo esc_attr( $data['player_name'] ); ?>">
 	</div>
@@ -67,7 +67,7 @@ $age            = $birth_date_obj->diff( $diff_date_obj )->y;
 		<div class="player-birthday-card__date-wrapper d-flex align-items-end">
 			<div class="player-birthday-card__date d-flex align-items-center">
 				<svg class="anwp-icon anwp-icon--octi mr-1">
-					<use xlink:href="#icon-calendar"></use>
+					<use href="#icon-calendar"></use>
 				</svg>
 				<span class="player-birthday-card__date-text anwp-text-sm"><?php echo esc_html( date_i18n( 'M d', get_date_from_gmt( $data['date_of_birth'], 'U' ) ) ); ?></span>
 			</div>

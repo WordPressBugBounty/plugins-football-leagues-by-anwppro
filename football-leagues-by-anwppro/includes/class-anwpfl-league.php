@@ -48,7 +48,7 @@ class AnWPFL_League extends Taxonomy_Core {
 				'hierarchical'      => false,
 				'show_in_nav_menus' => false,
 				'rewrite'           => [ 'slug' => 'league' ],
-				'show_in_menu'      => 'anwp-football-leagues',
+				'show_in_menu'      => false,
 				'labels'            => [
 					'search_items'  => esc_html__( 'Search Leagues', 'anwp-football-leagues' ),
 					'all_items'     => esc_html__( 'All Leagues', 'anwp-football-leagues' ),
@@ -107,6 +107,39 @@ class AnWPFL_League extends Taxonomy_Core {
 				'display_cb'       => [ $this, 'render_league_country_column' ],
 			]
 		);
+
+		$cmb->add_field(
+			[
+				'name'             => esc_html__( 'Classification', 'anwp-football-leagues' ),
+				'id'               => $prefix . 'classification',
+				'type'             => 'select',
+				'show_option_none' => '- ' . esc_html__( 'select classification', 'anwp-football-leagues' ) . ' -',
+				'default'          => '',
+				'options_cb'       => [ $this, 'get_classification_options' ],
+				'column'           => [
+					'position' => 5,
+				],
+				'display_cb'       => [ $this, 'render_league_classification_column' ],
+			]
+		);
+
+		$cmb->add_field(
+			[
+				'name'        => esc_html__( 'Priority', 'anwp-football-leagues' ),
+				'id'          => $prefix . 'priority',
+				'type'        => 'text_small',
+				'default'     => '',
+				'description' => esc_html__( 'from 1 to 20, default: 10', 'anwp-football-leagues' ),
+				'column'      => [
+					'position' => 6,
+				],
+				'attributes'  => [
+					'type' => 'number',
+					'min'  => '1',
+					'max'  => '20',
+				],
+			]
+		);
 	}
 
 	/**
@@ -126,6 +159,93 @@ class AnWPFL_League extends Taxonomy_Core {
 		} else {
 			echo esc_attr( $field->value );
 		}
+	}
+
+	/**
+	 * Rendering Classification Column content.
+	 *
+	 * @param            $field_args
+	 * @param CMB2_Field $field
+	 *
+	 * @since 0.17.2
+	 */
+	public function render_league_classification_column( $field_args, $field ) {
+
+		$options = $this->get_classification_options();
+
+		if ( isset( $options[ $field->value ] ) ) {
+			echo esc_html( $options[ $field->value ] );
+		} else {
+			echo esc_attr( $field->value );
+		}
+	}
+
+	/**
+	 * Get classification options for leagues.
+	 *
+	 * @since 0.17.2
+	 * @return array
+	 */
+	public function get_classification_options(): array {
+
+		$options = [
+			'national_d1'         => __( 'National - Top Division', 'anwp-football-leagues' ),
+			'national_d2'         => __( 'National - 2nd Division', 'anwp-football-leagues' ),
+			'national_d3'         => __( 'National - 3rd Division', 'anwp-football-leagues' ),
+			'national_d4'         => __( 'National - 4th Division+', 'anwp-football-leagues' ),
+			'national_cup'        => __( 'National Cup', 'anwp-football-leagues' ),
+			'league_cup'          => __( 'League Cup', 'anwp-football-leagues' ),
+			'super_cup'           => __( 'Super Cup', 'anwp-football-leagues' ),
+			'continental_club'    => __( 'Continental - Club', 'anwp-football-leagues' ),
+			'world_club'          => __( 'World - Club', 'anwp-football-leagues' ),
+			'continental_nations' => __( 'Continental - Nations', 'anwp-football-leagues' ),
+			'world_nations'       => __( 'World - Nations', 'anwp-football-leagues' ),
+			'friendly'            => __( 'Friendly', 'anwp-football-leagues' ),
+			'youth'               => __( 'Youth', 'anwp-football-leagues' ),
+		];
+
+		/**
+		 * Filter classification options.
+		 *
+		 * @since 0.17.2
+		 *
+		 * @param array $options Classification options.
+		 */
+		return apply_filters( 'anwpfl/league/classification_options', $options );
+	}
+
+	/**
+	 * Get classification weights for sorting.
+	 *
+	 * @since 0.17.2
+	 * @return array
+	 */
+	public function get_classification_weights(): array {
+
+		$weights = [
+			'national_d1'         => 10,
+			'national_d2'         => 20,
+			'national_d3'         => 30,
+			'national_d4'         => 40,
+			'national_cup'        => 50,
+			'league_cup'          => 60,
+			'super_cup'           => 70,
+			'continental_club'    => 80,
+			'world_club'          => 90,
+			'continental_nations' => 100,
+			'world_nations'       => 110,
+			'friendly'            => 120,
+			'youth'               => 130,
+		];
+
+		/**
+		 * Filter classification weights for sorting.
+		 *
+		 * @since 0.17.2
+		 *
+		 * @param array $weights Classification weights.
+		 */
+		return apply_filters( 'anwpfl/league/classification_weights', $weights );
 	}
 
 	/**
@@ -251,13 +371,17 @@ class AnWPFL_League extends Taxonomy_Core {
 			/** @var WP_Term $league */
 			foreach ( $all_leagues as $league ) {
 
-				$country_code = get_term_meta( $league->term_id, '_anwpfl_country', true );
+				$country_code   = get_term_meta( $league->term_id, '_anwpfl_country', true );
+				$classification = get_term_meta( $league->term_id, '_anwpfl_classification', true );
+				$priority       = get_term_meta( $league->term_id, '_anwpfl_priority', true );
 
 				$output_data[] = (object) [
-					'id'           => $league->term_id,
-					'name'         => $league->name,
-					'country_code' => $country_code ?: '',
-					'country'      => anwp_football_leagues()->data->get_value_by_key( $country_code, 'country' ),
+					'id'             => $league->term_id,
+					'name'           => $league->name,
+					'country_code'   => $country_code ?: '',
+					'country'        => anwp_football_leagues()->data->get_value_by_key( $country_code, 'country' ),
+					'classification' => $classification ?: '',
+					'priority'       => $priority ?: 10,
 				];
 			}
 		}
@@ -294,6 +418,124 @@ class AnWPFL_League extends Taxonomy_Core {
 		}
 
 		return $output_data[ $league_id ] ?? '';
+	}
+
+	/**
+	 * Get league classification by league ID.
+	 *
+	 * @param int $league_id
+	 *
+	 * @since 0.17.2
+	 * @return string
+	 */
+	public function get_league_classification( $league_id ): string {
+
+		return $this->get_all_league_classification()[ $league_id ] ?? '';
+	}
+
+	/**
+	 * Get all league classifications.
+	 *
+	 * @since 0.17.2
+	 * @return array
+	 */
+	public function get_all_league_classification(): array {
+
+		static $output_data = null;
+
+		if ( null === $output_data ) {
+			global $wpdb;
+
+			$output_data = [];
+
+			$rows = $wpdb->get_results(
+				"
+				SELECT term_id, meta_value
+				FROM $wpdb->termmeta
+				WHERE meta_key = '_anwpfl_classification' AND meta_value != ''
+				"
+			);
+
+			foreach ( $rows as $row ) {
+				$output_data[ $row->term_id ] = $row->meta_value;
+			}
+		}
+
+		return $output_data;
+	}
+
+	/**
+	 * Get league priority by league ID.
+	 *
+	 * @param int $league_id
+	 *
+	 * @since 0.17.2
+	 * @return int
+	 */
+	public function get_league_priority( $league_id ): int {
+
+		$priority = $this->get_all_league_priority()[ $league_id ] ?? '';
+
+		return '' === $priority ? 10 : (int) $priority;
+	}
+
+	/**
+	 * Get all league priorities.
+	 *
+	 * @since 0.17.2
+	 * @return array
+	 */
+	private function get_all_league_priority(): array {
+
+		static $output_data = null;
+
+		if ( null === $output_data ) {
+			global $wpdb;
+
+			$output_data = [];
+
+			$rows = $wpdb->get_results(
+				"
+				SELECT term_id, meta_value
+				FROM $wpdb->termmeta
+				WHERE meta_key = '_anwpfl_priority' AND meta_value != ''
+				"
+			);
+
+			foreach ( $rows as $row ) {
+				$output_data[ $row->term_id ] = $row->meta_value;
+			}
+		}
+
+		return $output_data;
+	}
+
+	/**
+	 * Sort games by league priority.
+	 *
+	 * @param array $games
+	 *
+	 * @since 0.17.2
+	 * @return array
+	 */
+	public function sort_games_by_league_priority( array $games ): array {
+
+		if ( empty( $games ) ) {
+			return $games;
+		}
+
+		foreach ( $games as $game_index => $game ) {
+			$game->league_priority = $this->get_league_priority( $game->league_id );
+			$game->pre_sort_index  = $game_index;
+		}
+
+		return wp_list_sort(
+			$games,
+			[
+				'league_priority' => 'ASC',
+				'pre_sort_index'  => 'ASC',
+			]
+		);
 	}
 
 	/**

@@ -11,45 +11,39 @@ class AnWPFL_Text_Countries {
 
 	/**
 	 * Parent plugin class.
-	 *
-	 * @var    AnWP_Football_Leagues
 	 */
-	protected $plugin = null;
+	protected ?AnWP_Football_Leagues $plugin = null;
 
 	/**
 	 * Option key, and option page slug.
-	 *
-	 * @var    string
 	 */
-	protected static $key = 'anwp_fl_text_countries';
+	protected static string $key = 'anwp_fl_text_countries';
 
 	/**
 	 * Options page metabox ID.
-	 *
-	 * @var    string
 	 */
-	protected static $metabox_id = 'anwp_fl_text_countries_metabox';
+	protected static string $metabox_id = 'anwp_fl_text_countries_metabox';
 
 	/**
 	 * Options Page title.
 	 *
 	 * @var    string
 	 */
-	protected $title = '';
+	protected string $title = '';
 
 	/**
 	 * Options Page hook.
 	 *
 	 * @var string
 	 */
-	protected $options_page = '';
+	protected string $options_page = '';
 
 	/**
 	 * Constructor.
 	 *
-	 * @param  AnWP_Football_Leagues $plugin Main plugin object.
+	 * @param AnWP_Football_Leagues $plugin Main plugin object.
 	 */
-	public function __construct( $plugin ) {
+	public function __construct( AnWP_Football_Leagues $plugin ) {
 		$this->plugin = $plugin;
 		$this->hooks();
 
@@ -115,17 +109,17 @@ class AnWPFL_Text_Countries {
 
 			<div class="alert alert-info border-info mt-n2 mb-3">
 				<svg class="anwp-icon anwp-icon--s14 anwp-icon--octi mr-1">
-					<use xlink:href="#icon-light-bulb"></use>
+					<use href="#icon-light-bulb"></use>
 				</svg>
 				<?php echo esc_html__( 'Override default countries translations', 'anwp-football-leagues' ); ?>
 			</div>
 
 			<div class="cmb2-metabox cmb-field-list">
 				<div class="cmb-row bg-light">
-					<div class="row align-items-center">
-						<div class="col-sm-4"><?php echo esc_html__( 'Default', 'anwp-football-leagues' ); ?></div>
-						<div class="col-sm-4"><?php echo esc_html__( 'New', 'anwp-football-leagues' ); ?></div>
-						<div class="col-sm-4"><?php echo esc_html__( 'Country Code', 'anwp-football-leagues' ); ?></div>
+					<div class="anwp-row anwp-items-center">
+						<div class="anwp-col-sm-4"><?php echo esc_html__( 'Default', 'anwp-football-leagues' ); ?></div>
+						<div class="anwp-col-sm-4"><?php echo esc_html__( 'New', 'anwp-football-leagues' ); ?></div>
+						<div class="anwp-col-sm-4"><?php echo esc_html__( 'Country Code', 'anwp-football-leagues' ); ?></div>
 					</div>
 				</div>
 			</div>
@@ -149,8 +143,8 @@ class AnWPFL_Text_Countries {
 				'option_key'   => self::$key,
 				'show_names'   => false,
 				'capability'   => 'manage_options',
-				'parent_slug'  => 'anwp-settings-tools',
-				'menu_title'   => esc_html__( 'Countries Translations', 'anwp-football-leagues' ),
+				'parent_slug'  => 'admin.php?page=anwp_fl_text',
+				'menu_title'   => esc_html__( 'Countries', 'anwp-football-leagues' ),
 			]
 		);
 

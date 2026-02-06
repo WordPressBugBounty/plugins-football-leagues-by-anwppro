@@ -52,7 +52,7 @@ $players = anwp_fl()->player->get_birthdays( $data );
 				?>
 				<div class="player-birthday-card__date-subtitle d-flex align-items-center anwp-bg-light py-1 px-2">
 					<svg class="anwp-icon anwp-icon--octi mr-1">
-						<use xlink:href="#icon-calendar"></use>
+						<use href="#icon-calendar"></use>
 					</svg>
 					<div class="player-birthday-card__date-subtitle-text anwp-text-base">
 						<?php echo esc_html( date_i18n( 'M d', get_date_from_gmt( gmdate( 'Y' ) . '-' . $player->meta_date_short, 'U' ) ) ); ?>

@@ -144,7 +144,7 @@ if ( $home_line_up || $away_line_up ) :
 
 						$is_captain = $data['captain_home'] && ( ( 'temp__' === mb_substr( $player_id, 0, 6 ) ? $data['captain_home'] === $player_id : absint( $data['captain_home'] ) === absint( $player_id ) ) );
 						?>
-						<div class="match__player-wrapper d-flex flex-wrap align-items-center anwp-fl-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
+						<div class="match__player-wrapper d-flex flex-wrap align-items-center anwp-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
 							<div class="d-flex align-items-center">
 								<div class="match__player-number anwp-bg-light anwp-leading-1-25 mr-2">
 									<?php
@@ -189,15 +189,15 @@ if ( $home_line_up || $away_line_up ) :
 								<?php endif; ?>
 
 								<?php if ( $temp_player && $temp_player->position ) : ?>
-									<div class="match__player-position mr-2 anwp-text-nowrap anwp-fl-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
+									<div class="match__player-position mr-2 anwp-text-nowrap anwp-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
 										<?php echo esc_html( $positions_l10n[ $temp_players[ $player_id ]->position ] ); ?>
 									</div>
 								<?php elseif ( ! empty( $home_squad[ $player_id ] ) && isset( $positions_l10n[ $home_squad[ $player_id ]['position'] ] ) ) : ?>
-									<div class="match__player-position mr-2 anwp-text-nowrap anwp-fl-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
+									<div class="match__player-position mr-2 anwp-text-nowrap anwp-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
 										<?php echo esc_html( $positions_l10n[ $home_squad[ $player_id ]['position'] ] ); ?>
 									</div>
 								<?php elseif ( ! empty( $player['position'] ) && isset( $positions_l10n[ $player['position'] ] ) ) : ?>
-									<div class="match__player-position mr-2 anwp-text-nowrap anwp-fl-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
+									<div class="match__player-position mr-2 anwp-text-nowrap anwp-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
 										<?php echo esc_html( $positions_l10n[ $player['position'] ] ); ?>
 									</div>
 								<?php endif; ?>
@@ -213,7 +213,7 @@ if ( $home_line_up || $away_line_up ) :
 								<?php if ( $is_captain ) : ?>
 									<div class="match__player-captain ml-1">
 										<svg class="anwp-icon anwp-icon--s20 anwp-icon--octi">
-											<use xlink:href="#icon-captain"></use>
+											<use href="#icon-captain"></use>
 										</svg>
 									</div>
 								<?php endif; ?>
@@ -261,7 +261,7 @@ if ( $home_line_up || $away_line_up ) :
 							continue;
 						endif;
 						?>
-						<div class="match__player-wrapper d-flex flex-wrap align-items-center anwp-fl-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
+						<div class="match__player-wrapper d-flex flex-wrap align-items-center anwp-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
 							<div class="d-flex align-items-center">
 								<div class="match__player-number anwp-bg-light anwp-leading-1-25 mr-2">
 									<?php
@@ -306,15 +306,15 @@ if ( $home_line_up || $away_line_up ) :
 								<?php endif; ?>
 
 								<?php if ( $temp_player && $temp_player->position ) : ?>
-									<div class="match__player-position mr-2 anwp-text-nowrap anwp-fl-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
+									<div class="match__player-position mr-2 anwp-text-nowrap anwp-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
 										<?php echo esc_html( $positions_l10n[ $temp_player->position ] ); ?>
 									</div>
 								<?php elseif ( ! empty( $home_squad[ $player_id ] ) && isset( $positions_l10n[ $home_squad[ $player_id ]['position'] ] ) ) : ?>
-									<div class="match__player-position mr-2 anwp-text-nowrap anwp-fl-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
+									<div class="match__player-position mr-2 anwp-text-nowrap anwp-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
 										<?php echo esc_html( $positions_l10n[ $home_squad[ $player_id ]['position'] ] ); ?>
 									</div>
 								<?php elseif ( ! empty( $player['position'] ) && isset( $positions_l10n[ $player['position'] ] ) ) : ?>
-									<div class="match__player-position mr-2 anwp-text-nowrap anwp-fl-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
+									<div class="match__player-position mr-2 anwp-text-nowrap anwp-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
 										<?php echo esc_html( $positions_l10n[ $player['position'] ] ); ?>
 									</div>
 								<?php endif; ?>
@@ -355,7 +355,7 @@ if ( $home_line_up || $away_line_up ) :
 				?>
 				<div class="match-lineups__home-coach">
 					<div class="anwp-fl-subheader anwp-text-uppercase anwp-text-base anwp-bg-light p-1 mb-1"><?php echo esc_html( AnWPFL_Text::get_value( 'match__lineups__coach', __( 'Coach', 'anwp-football-leagues' ) ) ); ?></div>
-					<div class="match__player-wrapper d-flex align-items-center anwp-fl-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
+					<div class="match__player-wrapper d-flex align-items-center anwp-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
 						<?php
 						if ( 'temp' === $data['coach_home'] ) :
 							$coach_data = (object) wp_parse_args(
@@ -442,7 +442,7 @@ if ( $home_line_up || $away_line_up ) :
 
 						$is_captain = $data['captain_away'] && ( ( 'temp__' === mb_substr( $player_id, 0, 6 ) ? $data['captain_away'] === $player_id : absint( $data['captain_away'] ) === absint( $player_id ) ) );
 						?>
-						<div class="match__player-wrapper d-flex flex-wrap align-items-center anwp-fl-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
+						<div class="match__player-wrapper d-flex flex-wrap align-items-center anwp-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
 							<div class="d-flex align-items-center">
 								<div class="match__player-number anwp-bg-light anwp-leading-1-25 mr-2">
 									<?php
@@ -487,15 +487,15 @@ if ( $home_line_up || $away_line_up ) :
 								<?php endif; ?>
 
 								<?php if ( $temp_player && $temp_player->position ) : ?>
-									<div class="match__player-position mr-2 anwp-text-nowrap anwp-fl-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
+									<div class="match__player-position mr-2 anwp-text-nowrap anwp-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
 										<?php echo esc_html( $positions_l10n[ $temp_players[ $player_id ]->position ] ); ?>
 									</div>
 								<?php elseif ( ! empty( $away_squad[ $player_id ] ) && isset( $positions_l10n[ $away_squad[ $player_id ]['position'] ] ) ) : ?>
-									<div class="match__player-position mr-2 anwp-text-nowrap anwp-fl-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
+									<div class="match__player-position mr-2 anwp-text-nowrap anwp-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
 										<?php echo esc_html( $positions_l10n[ $away_squad[ $player_id ]['position'] ] ); ?>
 									</div>
 								<?php elseif ( ! empty( $player['position'] ) && isset( $positions_l10n[ $player['position'] ] ) ) : ?>
-									<div class="match__player-position mr-2 anwp-text-nowrap anwp-fl-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
+									<div class="match__player-position mr-2 anwp-text-nowrap anwp-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
 										<?php echo esc_html( $positions_l10n[ $player['position'] ] ); ?>
 									</div>
 								<?php endif; ?>
@@ -511,7 +511,7 @@ if ( $home_line_up || $away_line_up ) :
 								<?php if ( $is_captain ) : ?>
 									<div class="match__player-captain ml-1">
 										<svg class="anwp-icon anwp-icon--s20 anwp-icon--octi">
-											<use xlink:href="#icon-captain"></use>
+											<use href="#icon-captain"></use>
 										</svg>
 									</div>
 								<?php endif; ?>
@@ -559,7 +559,7 @@ if ( $home_line_up || $away_line_up ) :
 							continue;
 						endif;
 						?>
-						<div class="match__player-wrapper d-flex flex-wrap align-items-center anwp-fl-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
+						<div class="match__player-wrapper d-flex flex-wrap align-items-center anwp-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
 							<div class="d-flex align-items-center">
 								<div class="match__player-number anwp-bg-light anwp-leading-1-25 mr-2">
 									<?php
@@ -604,15 +604,15 @@ if ( $home_line_up || $away_line_up ) :
 								<?php endif; ?>
 
 								<?php if ( $temp_player && $temp_player->position ) : ?>
-									<div class="match__player-position mr-2 anwp-text-nowrap anwp-fl-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
+									<div class="match__player-position mr-2 anwp-text-nowrap anwp-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
 										<?php echo esc_html( $positions_l10n[ $temp_player->position ] ); ?>
 									</div>
 								<?php elseif ( ! empty( $away_squad[ $player_id ] ) && isset( $positions_l10n[ $away_squad[ $player_id ]['position'] ] ) ) : ?>
-									<div class="match__player-position mr-2 anwp-text-nowrap anwp-fl-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
+									<div class="match__player-position mr-2 anwp-text-nowrap anwp-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
 										<?php echo esc_html( $positions_l10n[ $away_squad[ $player_id ]['position'] ] ); ?>
 									</div>
 								<?php elseif ( ! empty( $player['position'] ) && isset( $positions_l10n[ $player['position'] ] ) ) : ?>
-									<div class="match__player-position mr-2 anwp-text-nowrap anwp-fl-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
+									<div class="match__player-position mr-2 anwp-text-nowrap anwp-border anwp-border-light anwp-leading-1-25 anwp-bg-light anwp-text-sm">
 										<?php echo esc_html( $positions_l10n[ $player['position'] ] ); ?>
 									</div>
 								<?php endif; ?>
@@ -653,7 +653,7 @@ if ( $home_line_up || $away_line_up ) :
 				<div class="match-lineups__away-coach">
 					<div class="anwp-fl-subheader anwp-text-uppercase anwp-text-base anwp-bg-light p-1 mb-1"><?php echo esc_html( AnWPFL_Text::get_value( 'match__lineups__coach', __( 'Coach', 'anwp-football-leagues' ) ) ); ?></div>
 
-					<div class="match__player-wrapper d-flex align-items-center anwp-fl-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
+					<div class="match__player-wrapper d-flex align-items-center anwp-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
 						<?php
 						if ( 'temp' === $data['coach_away'] ) :
 							$coach_data = (object) wp_parse_args(

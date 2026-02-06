@@ -97,7 +97,7 @@ $data->extra_actions_html = apply_filters( 'anwpfl/tmpl-match-small/extra_action
 		<?php if ( $data->kickoff && '0000-00-00 00:00:00' !== $data->kickoff ) : ?>
 			<div class="match-small__date-wrapper d-flex align-items-center">
 				<svg class="match-small__date-icon anwp-icon anwp-icon--feather anwp-icon--em-1-2">
-					<use xlink:href="#icon-clock-alt"></use>
+					<use href="#icon-clock-alt"></use>
 				</svg>
 				<span class="match-small__date pl-1"><?php echo esc_html( $data->match_date ); ?></span>
 
@@ -158,7 +158,7 @@ $data->extra_actions_html = apply_filters( 'anwpfl/tmpl-match-small/extra_action
 			<?php if ( $stadium_title ) : ?>
 				<div class="match-small__stadium anwp-text-xs d-flex align-items-center justify-content-center mt-1">
 					<svg class="anwp-icon anwp-icon--octi mr-2 anwp-w-20 anwp-fill-current">
-						<use xlink:href="#icon-stadium"></use>
+						<use href="#icon-stadium"></use>
 					</svg>
 					<?php echo esc_html( $stadium_title ); ?>
 				</div>
@@ -167,7 +167,7 @@ $data->extra_actions_html = apply_filters( 'anwpfl/tmpl-match-small/extra_action
 			<?php if ( $bottom_line_ref_only && get_post_meta( $data->match_id, '_anwpfl_referee', true ) ) : ?>
 				<div class="match-small__referees anwp-text-xs d-flex align-items-center justify-content-center mt-1">
 					<svg class="anwp-icon anwp-icon--octi mr-1 anwp-w-20 anwp-fill-current">
-						<use xlink:href="#icon-whistle"></use>
+						<use href="#icon-whistle"></use>
 					</svg>
 					<?php echo esc_html( get_the_title( get_post_meta( $data->match_id, '_anwpfl_referee', true ) ) ? : '' ); ?>
 				</div>

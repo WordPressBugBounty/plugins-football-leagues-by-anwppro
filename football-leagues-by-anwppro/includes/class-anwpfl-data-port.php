@@ -48,6 +48,19 @@ class AnWPFL_Data_Port {
 				},
 			]
 		);
+
+		// Batch import endpoint for relationship entities (goals, cards, subs, lineups)
+		register_rest_route(
+			'anwpfl',
+			'/import-tool/(?P<type>[a-z_]+)-batch/',
+			[
+				'methods'             => 'POST',
+				'callback'            => [ $this, 'save_import_batch' ],
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+			]
+		);
 	}
 
 	/**
@@ -417,22 +430,6 @@ class AnWPFL_Data_Port {
 			case 'games_update':
 				$import_status = $this->import_games_update( $params, $import_status );
 				break;
-
-			case 'goals':
-				$import_status = $this->import_goals( $params, $import_status );
-				break;
-
-			case 'cards':
-				$import_status = $this->import_cards( $params, $import_status );
-				break;
-
-			case 'lineups':
-				$import_status = $this->import_lineups( $params, $import_status );
-				break;
-
-			case 'subs':
-				$import_status = $this->import_subs( $params, $import_status );
-				break;
 		}
 
 		return rest_ensure_response( $import_status );
@@ -531,7 +528,7 @@ class AnWPFL_Data_Port {
 			}
 		}
 
-		if ( ! $table_game_data['group_id'] ) {
+		if ( empty( $table_game_data['group_id'] ) ) {
 			$import_status['post_title'] = 'Invalid Group ID';
 
 			return $import_status;
@@ -921,7 +918,8 @@ class AnWPFL_Data_Port {
 					break;
 
 				case 'country':
-					$club_data['meta_input']['_anwpfl_nationality'] = sanitize_text_field( $value );
+					// Resolve country name to code if not already a valid code
+					$club_data['meta_input']['_anwpfl_nationality'] = anwp_fl()->data->get_country_code_by_name( sanitize_text_field( $value ) );
 					break;
 
 				case 'is_national_team':
@@ -1221,7 +1219,15 @@ class AnWPFL_Data_Port {
 					break;
 
 				case 'current_club':
-					$staff_data['meta_input']['_anwpfl_current_club'] = sanitize_text_field( $value );
+					// Resolve club name to ID if value is not numeric
+					$sanitized_value = sanitize_text_field( $value );
+
+					if ( is_numeric( $sanitized_value ) ) {
+						$staff_data['meta_input']['_anwpfl_current_club'] = $sanitized_value;
+					} else {
+						$club_id = anwp_fl()->club->get_club_id_by_title( $sanitized_value );
+						$staff_data['meta_input']['_anwpfl_current_club'] = $club_id ?: $sanitized_value;
+					}
 					break;
 
 				case 'place_of_birth':
@@ -1237,7 +1243,8 @@ class AnWPFL_Data_Port {
 					break;
 
 				case 'nationality_1':
-					$staff_data['meta_input']['_anwpfl_nationality'][] = sanitize_text_field( $value );
+					// Resolve country name to code if not already a valid code
+					$staff_data['meta_input']['_anwpfl_nationality'][] = anwp_fl()->data->get_country_code_by_name( sanitize_text_field( $value ) );
 					break;
 
 				case 'bio':
@@ -1401,7 +1408,8 @@ class AnWPFL_Data_Port {
 					break;
 
 				case 'nationality_1':
-					$referee_data['meta_input']['_anwpfl_nationality'][] = sanitize_text_field( $value );
+					// Resolve country name to code if not already a valid code
+					$referee_data['meta_input']['_anwpfl_nationality'][] = anwp_fl()->data->get_country_code_by_name( sanitize_text_field( $value ) );
 					break;
 
 				case 'referee_external_id':
@@ -1548,16 +1556,36 @@ class AnWPFL_Data_Port {
 				case 'full_name':
 				case 'weight':
 				case 'height':
-				case 'position':
-				case 'team_id':
-				case 'national_team':
-				case 'nationality':
 				case 'place_of_birth':
-				case 'country_of_birth':
 				case 'date_of_birth':
 				case 'date_of_death':
 				case 'player_external_id':
 					$table_player_data[ $slug ] = sanitize_text_field( $value );
+					break;
+
+				case 'nationality':
+				case 'country_of_birth':
+					// Resolve country name to code if not already a valid code
+					$table_player_data[ $slug ] = anwp_fl()->data->get_country_code_by_name( sanitize_text_field( $value ) );
+					break;
+
+				case 'position':
+					// Resolve position name to key if not already a valid key
+					$table_player_data[ $slug ] = anwp_fl()->data->get_position_key_by_name( sanitize_text_field( $value ) );
+					break;
+
+				case 'team_id':
+				case 'national_team':
+					// Resolve club name to ID if value is not numeric
+					$sanitized_value = sanitize_text_field( $value );
+
+					if ( is_numeric( $sanitized_value ) ) {
+						$table_player_data[ $slug ] = $sanitized_value;
+					} else {
+						// Try to find club by title
+						$club_id = anwp_fl()->club->get_club_id_by_title( $sanitized_value );
+						$table_player_data[ $slug ] = $club_id ?: $sanitized_value;
+					}
 					break;
 
 				case 'bio':
@@ -1635,751 +1663,6 @@ class AnWPFL_Data_Port {
 	}
 
 	/**
-	 * Import Substitutes.
-	 *
-	 * @param array $params
-	 * @param array $import_status
-	 *
-	 * @return array
-	 */
-	protected function import_subs( array $params, array $import_status ): array {
-
-		$row_data = $params['row_data'];
-		$game_id  = '';
-
-		if ( ! empty( $row_data['match_id'] ) ) {
-			if ( 'anwp_match' === get_post_type( absint( $row_data['match_id'] ) ) ) {
-				$game_id = absint( $row_data['match_id'] );
-			}
-		} elseif ( ! empty( $row_data['match_external_id'] ) ) {
-			$maybe_game_id = anwp_fl()->match->get_match_id_by_external_id( $row_data['match_external_id'] );
-
-			if ( ! empty( $maybe_game_id ) ) {
-				$game_id = absint( $maybe_game_id );
-			}
-		}
-
-		if ( empty( $game_id ) || 'anwp_match' !== get_post_type( absint( $game_id ) ) ) {
-			$import_status['post_title'] = 'Invalid Match ID or External Match ID';
-
-			return $import_status;
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Club ID
-		|--------------------------------------------------------------------
-		*/
-		$club_id = '';
-
-		if ( ! empty( $row_data['club_id'] ) ) {
-			$club_id = absint( $row_data['club_id'] );
-		} elseif ( ! empty( $row_data['club_external_id'] ) ) {
-			$club_id = absint( anwp_fl()->club->get_club_id_by_external_id( $row_data['club_external_id'] ) );
-		}
-
-		if ( empty( $club_id ) || 'anwp_club' !== get_post_type( absint( $club_id ) ) ) {
-			$import_status['post_title'] = 'Invalid Club ID or External Club ID';
-
-			return $import_status;
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Check Player IDs
-		|--------------------------------------------------------------------
-		*/
-		$player_id = '';
-
-		if ( ! empty( $row_data['player_id'] ) ) {
-			$player_id = absint( $row_data['player_id'] );
-		} elseif ( ! empty( $row_data['player_external_id'] ) ) {
-			$player_id = absint( anwp_fl()->player->get_player_id_by_external_id( $row_data['player_external_id'] ) );
-		}
-
-		if ( empty( $player_id ) && ! empty( $row_data['player_temp'] ) ) {
-			$player_id = 'temp__' . $row_data['player_temp'];
-		} elseif ( empty( $player_id ) || 'anwp_player' !== get_post_type( absint( $player_id ) ) ) {
-			$player_id = '';
-		}
-
-		$player_out_id = '';
-
-		if ( ! empty( $row_data['player_out_id'] ) ) {
-			$player_out_id = absint( $row_data['player_out_id'] );
-		} elseif ( ! empty( $row_data['player_out_external_id'] ) ) {
-			$player_out_id = absint( anwp_fl()->player->get_player_id_by_external_id( $row_data['player_out_external_id'] ) );
-		}
-
-		if ( empty( $player_out_id ) && ! empty( $row_data['player_out_temp'] ) ) {
-			$player_out_id = 'temp__' . $row_data['player_out_temp'];
-		} elseif ( empty( $player_out_id ) || 'anwp_player' !== get_post_type( absint( $player_out_id ) ) ) {
-			$player_out_id = '';
-		}
-
-		if ( empty( $player_id ) || empty( $player_out_id ) ) {
-			$import_status['post_title'] = 'Invalid Player IDs';
-
-			return $import_status;
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Prepare data
-		|--------------------------------------------------------------------
-		*/
-		$minute     = sanitize_text_field( $row_data['minute'] ?? '' );
-		$minute_add = sanitize_text_field( $row_data['minute_add'] ?? '' );
-
-		$game_data    = anwp_fl()->match->get_game_data( $game_id );
-		$game_events  = json_decode( $game_data['match_events'], true ) ?: [];
-		$temp_players = [];
-		$is_home_team = absint( $club_id ) === absint( $game_data['home_club'] );
-
-		if ( mb_strpos( $player_id, 'temp__' ) !== false ) {
-			if ( empty( $temp_players ) ) {
-				$temp_players = json_decode( wp_unslash( get_post_meta( $game_id, '_anwpfl_match_temp_players', true ) ), true ) ?: [];
-			}
-
-			$last_temp_id = $temp_players ? mb_substr( end( $temp_players )->id, 6 ) : 1;
-			$player_temp  = mb_substr( $temp_players, 6 );
-			$player_id    = 'temp__' . ( ++$last_temp_id );
-
-			$temp_players[] = [
-				'id'       => $player_id,
-				'club_id'  => absint( $club_id ),
-				'country'  => '',
-				'position' => '',
-				'name'     => $player_temp,
-				'context'  => $is_home_team ? 'home' : 'away',
-			];
-		}
-
-		if ( mb_strpos( $player_out_id, 'temp__' ) !== false ) {
-			if ( empty( $temp_players ) ) {
-				$temp_players = json_decode( wp_unslash( get_post_meta( $game_id, '_anwpfl_match_temp_players', true ) ), true ) ?: [];
-			}
-
-			$last_temp_id  = $temp_players ? mb_substr( end( $temp_players )->id, 6 ) : 1;
-			$player_temp   = mb_substr( $temp_players, 6 );
-			$player_out_id = 'temp__' . ( ++$last_temp_id );
-
-			$temp_players[] = [
-				'id'       => $player_out_id,
-				'club_id'  => absint( $club_id ),
-				'country'  => '',
-				'position' => '',
-				'name'     => $player_temp,
-				'context'  => $is_home_team ? 'home' : 'away',
-			];
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Save data
-		|--------------------------------------------------------------------
-		*/
-		$game_events[] = [
-			'type'        => 'substitute',
-			'club'        => $club_id,
-			'minute'      => $minute,
-			'minuteAdd'   => $minute_add,
-			'player'      => $player_id,
-			'assistant'   => '',
-			'playerOut'   => $player_out_id,
-			'card'        => '',
-			'ownGoal'     => '',
-			'fromPenalty' => '',
-			'id'          => (int) round( microtime( true ) * 1000 ),
-			'comment'     => '',
-			'sorting'     => '',
-		];
-
-		if ( ! empty( $temp_players ) ) {
-			update_post_meta( $game_id, '_anwpfl_match_temp_players', wp_slash( wp_json_encode( $temp_players ) ) );
-		}
-
-		$game_events = wp_list_sort(
-			$game_events,
-			[
-				'minute'    => 'ASC',
-				'minuteAdd' => 'ASC',
-				'sorting'   => 'ASC',
-			]
-		);
-
-		anwp_fl()->match->update( $game_id, [ 'match_events' => wp_json_encode( $game_events ) ] );
-
-		/*
-		|--------------------------------------------------------------------
-		| Update player stats
-		|--------------------------------------------------------------------
-		*/
-		anwp_fl()->match->save_player_statistics( $game_data, $game_events );
-
-		$post_obj = get_post( $game_id );
-
-		$import_status['result']     = 'success';
-		$import_status['post_title'] = $post_obj->post_title;
-		$import_status['post_url']   = get_permalink( $post_obj );
-		$import_status['post_edit']  = get_edit_post_link( $post_obj );
-
-		return $import_status;
-	}
-
-	/**
-	 * Import Goals.
-	 *
-	 * @param array $params
-	 * @param array $import_status
-	 *
-	 * @return array
-	 */
-	protected function import_cards( array $params, array $import_status ): array {
-
-		$row_data = $params['row_data'];
-		$game_id  = '';
-
-		if ( ! empty( $row_data['match_id'] ) ) {
-			if ( 'anwp_match' === get_post_type( absint( $row_data['match_id'] ) ) ) {
-				$game_id = absint( $row_data['match_id'] );
-			}
-		} elseif ( ! empty( $row_data['match_external_id'] ) ) {
-			$maybe_game_id = anwp_fl()->match->get_match_id_by_external_id( $row_data['match_external_id'] );
-
-			if ( ! empty( $maybe_game_id ) ) {
-				$game_id = absint( $maybe_game_id );
-			}
-		}
-
-		if ( empty( $game_id ) || 'anwp_match' !== get_post_type( absint( $game_id ) ) ) {
-			$import_status['post_title'] = 'Invalid Match ID or External Match ID';
-
-			return $import_status;
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Club ID
-		|--------------------------------------------------------------------
-		*/
-		$club_id = '';
-
-		if ( ! empty( $row_data['club_id'] ) ) {
-			$club_id = absint( $row_data['club_id'] );
-		} elseif ( ! empty( $row_data['club_external_id'] ) ) {
-			$club_id = absint( anwp_fl()->club->get_club_id_by_external_id( $row_data['club_external_id'] ) );
-		}
-
-		if ( empty( $club_id ) || 'anwp_club' !== get_post_type( absint( $club_id ) ) ) {
-			$import_status['post_title'] = 'Invalid Club ID or External Club ID';
-
-			return $import_status;
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Check Player IDs
-		|--------------------------------------------------------------------
-		*/
-		$player_id = '';
-
-		if ( ! empty( $row_data['player_id'] ) ) {
-			$player_id = absint( $row_data['player_id'] );
-		} elseif ( ! empty( $row_data['player_external_id'] ) ) {
-			$player_id = absint( anwp_fl()->player->get_player_id_by_external_id( $row_data['player_external_id'] ) );
-		}
-
-		if ( empty( $player_id ) && ! empty( $row_data['player_temp'] ) ) {
-			$player_id = 'temp__' . $row_data['player_temp'];
-		} elseif ( empty( $player_id ) || 'anwp_player' !== get_post_type( absint( $player_id ) ) ) {
-			$player_id = '';
-		}
-
-		if ( empty( $player_id ) ) {
-			$import_status['post_title'] = 'Invalid Player ID';
-
-			return $import_status;
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Prepare data
-		|--------------------------------------------------------------------
-		*/
-		$minute     = sanitize_text_field( $row_data['minute'] ?? '' );
-		$minute_add = sanitize_text_field( $row_data['minute_add'] ?? '' );
-		$card_type  = sanitize_text_field( $row_data['cart_type'] ?? '' );
-
-		if ( ! in_array( $card_type, [ 'y', 'r', 'yr' ], true ) ) {
-			$import_status['post_title'] = 'Invalid Card Type';
-
-			return $import_status;
-		}
-
-		$game_data    = anwp_fl()->match->get_game_data( $game_id );
-		$game_events  = json_decode( $game_data['match_events'], true ) ?: [];
-		$temp_players = [];
-		$is_home_team = absint( $club_id ) === absint( $game_data['home_club'] );
-
-		if ( mb_strpos( $player_id, 'temp__' ) !== false ) {
-			if ( empty( $temp_players ) ) {
-				$temp_players = json_decode( wp_unslash( get_post_meta( $game_id, '_anwpfl_match_temp_players', true ) ), true ) ?: [];
-			}
-
-			$last_temp_id = $temp_players ? mb_substr( end( $temp_players )->id, 6 ) : 1;
-			$player_temp  = mb_substr( $temp_players, 6 );
-			$player_id    = 'temp__' . ( ++ $last_temp_id );
-
-			$temp_players[] = [
-				'id'       => $player_id,
-				'club_id'  => absint( $club_id ),
-				'country'  => '',
-				'position' => '',
-				'name'     => $player_temp,
-				'context'  => $is_home_team ? 'home' : 'away',
-			];
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Save data
-		|--------------------------------------------------------------------
-		*/
-		$game_events[] = [
-			'type'        => 'card',
-			'club'        => $club_id,
-			'minute'      => $minute,
-			'minuteAdd'   => $minute_add,
-			'player'      => $player_id,
-			'assistant'   => '',
-			'playerOut'   => '',
-			'card'        => $card_type,
-			'ownGoal'     => '',
-			'fromPenalty' => '',
-			'id'          => (int) round( microtime( true ) * 1000 ),
-			'comment'     => '',
-			'sorting'     => '',
-		];
-
-		if ( ! empty( $temp_players ) ) {
-			update_post_meta( $game_id, '_anwpfl_match_temp_players', wp_slash( wp_json_encode( $temp_players ) ) );
-		}
-
-		$game_events = wp_list_sort(
-			$game_events,
-			[
-				'minute'    => 'ASC',
-				'minuteAdd' => 'ASC',
-				'sorting'   => 'ASC',
-			]
-		);
-
-		anwp_fl()->match->update( $game_id, [ 'match_events' => wp_json_encode( $game_events ) ] );
-
-		/*
-		|--------------------------------------------------------------------
-		| Update player stats
-		|--------------------------------------------------------------------
-		*/
-		anwp_fl()->match->save_player_statistics( $game_data, $game_events );
-
-		$post_obj = get_post( $game_id );
-
-		$import_status['result']     = 'success';
-		$import_status['post_title'] = $post_obj->post_title;
-		$import_status['post_url']   = get_permalink( $post_obj );
-		$import_status['post_edit']  = get_edit_post_link( $post_obj );
-
-		return $import_status;
-	}
-
-	/**
-	 * Import Goals.
-	 *
-	 * @param array $params
-	 * @param array $import_status
-	 *
-	 * @return array
-	 */
-	protected function import_lineups( array $params, array $import_status ): array {
-		global $wpdb;
-
-		$row_data = $params['row_data'];
-		$game_id  = '';
-
-		if ( ! empty( $row_data['match_id'] ) ) {
-			if ( 'anwp_match' === get_post_type( absint( $row_data['match_id'] ) ) ) {
-				$game_id = absint( $row_data['match_id'] );
-			}
-		} elseif ( ! empty( $row_data['match_external_id'] ) ) {
-			$maybe_game_id = anwp_fl()->match->get_match_id_by_external_id( $row_data['match_external_id'] );
-
-			if ( ! empty( $maybe_game_id ) ) {
-				$game_id = absint( $maybe_game_id );
-			}
-		}
-
-		if ( empty( $game_id ) || 'anwp_match' !== get_post_type( absint( $game_id ) ) ) {
-			$import_status['post_title'] = 'Invalid Match ID or External Match ID';
-
-			return $import_status;
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Club ID
-		|--------------------------------------------------------------------
-		*/
-		$club_id = '';
-
-		if ( ! empty( $row_data['club_id'] ) ) {
-			$club_id = absint( $row_data['club_id'] );
-		} elseif ( ! empty( $row_data['club_external_id'] ) ) {
-			$club_id = absint( anwp_fl()->club->get_club_id_by_external_id( $row_data['club_external_id'] ) );
-		}
-
-		if ( empty( $club_id ) || 'anwp_club' !== get_post_type( absint( $club_id ) ) ) {
-			$import_status['post_title'] = 'Invalid Club ID or External Club ID';
-
-			return $import_status;
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Check Player ID
-		|--------------------------------------------------------------------
-		*/
-		$player_id = '';
-
-		if ( ! empty( $row_data['player_id'] ) ) {
-			$player_id = absint( $row_data['player_id'] );
-		} elseif ( ! empty( $row_data['player_external_id'] ) ) {
-			$player_id = absint( anwp_fl()->player->get_player_id_by_external_id( $row_data['player_external_id'] ) );
-		}
-
-		if ( empty( $player_id ) && ! empty( $row_data['player_temp'] ) ) {
-			$player_id = 'temp__' . $row_data['player_temp'];
-		} elseif ( empty( $player_id ) || 'anwp_player' !== get_post_type( absint( $player_id ) ) ) {
-			$import_status['post_title'] = 'Invalid Player Data';
-
-			return $import_status;
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Prepare data
-		|--------------------------------------------------------------------
-		*/
-		$starting      = AnWP_Football_Leagues::string_to_bool( $row_data['starting'] ?? '' );
-		$is_captain    = AnWP_Football_Leagues::string_to_bool( $row_data['is_captain'] ?? '' );
-		$player_number = sanitize_text_field( $row_data['number'] ?? '' );
-
-		$lineups_data = $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT * FROM $wpdb->anwpfl_lineups WHERE `match_id` = %d",
-				$game_id
-			),
-			ARRAY_A
-		) ? : [];
-
-		$lineups_data = wp_parse_args(
-			$lineups_data,
-			[
-				'home_line_up'   => '',
-				'away_line_up'   => '',
-				'home_subs'      => '',
-				'away_subs'      => '',
-				'custom_numbers' => '',
-				'captain_home'   => '',
-				'captain_away'   => '',
-			]
-		);
-
-		$lineups_data['custom_numbers'] = json_decode( $lineups_data['custom_numbers'], true ) ?: [];
-
-		$game_data    = anwp_fl()->match->get_game_data( $game_id );
-		$temp_players = [];
-		$is_home_team = absint( $club_id ) === absint( $game_data['home_club'] );
-
-		if ( mb_strpos( $player_id, 'temp__' ) !== false ) {
-			if ( empty( $temp_players ) ) {
-				$temp_players = json_decode( wp_unslash( get_post_meta( $game_id, '_anwpfl_match_temp_players', true ) ), true ) ?: [];
-			}
-
-			$last_temp_id = $temp_players ? mb_substr( end( $temp_players )->id, 6 ) : 1;
-			$player_temp  = mb_substr( $temp_players, 6 );
-			$player_id    = 'temp__' . ( ++ $last_temp_id );
-
-			$temp_players[] = [
-				'id'       => $player_id,
-				'club_id'  => absint( $club_id ),
-				'country'  => '',
-				'position' => '',
-				'name'     => $player_temp,
-				'context'  => $is_home_team ? 'home' : 'away',
-			];
-		}
-
-		if ( $is_captain ) {
-			if ( $is_home_team ) {
-				$lineups_data['captain_home'] = $player_id;
-			} else {
-				$lineups_data['captain_away'] = $player_id;
-			}
-		}
-
-		if ( $starting ) {
-			if ( $is_home_team ) {
-				$lineups_data['home_line_up'] .= ( $lineups_data['home_line_up'] ? ',' : '' ) . $player_id;
-			} else {
-				$lineups_data['away_line_up'] .= ( $lineups_data['away_line_up'] ? ',' : '' ) . $player_id;
-			}
-		} else {
-			if ( $is_home_team ) {
-				$lineups_data['home_subs'] .= ( $lineups_data['home_subs'] ? ',' : '' ) . $player_id;
-			} else {
-				$lineups_data['away_subs'] .= ( $lineups_data['away_subs'] ? ',' : '' ) . $player_id;
-			}
-		}
-
-		if ( '' !== $player_number ) {
-			$lineups_data['custom_numbers'][ $player_id ] = $player_number;
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Save data
-		|--------------------------------------------------------------------
-		*/
-		if ( ! empty( $temp_players ) ) {
-			update_post_meta( $game_id, '_anwpfl_match_temp_players', wp_slash( wp_json_encode( $temp_players ) ) );
-		}
-
-		$wpdb->replace(
-			$wpdb->anwpfl_lineups,
-			[
-				'match_id'       => $game_id,
-				'home_line_up'   => $lineups_data['home_line_up'],
-				'away_line_up'   => $lineups_data['away_line_up'],
-				'home_subs'      => $lineups_data['home_subs'],
-				'away_subs'      => $lineups_data['away_subs'],
-				'custom_numbers' => wp_json_encode( $lineups_data['custom_numbers'] ),
-				'captain_home'   => $lineups_data['captain_home'],
-				'captain_away'   => $lineups_data['captain_away'],
-			]
-		);
-
-		/*
-		|--------------------------------------------------------------------
-		| Update player stats
-		|--------------------------------------------------------------------
-		*/
-		$game_data_updated = anwp_fl()->match->get_game_data( $game_id );
-		$game_events       = json_decode( $game_data_updated['match_events'], true ) ?: [];
-
-		anwp_fl()->match->save_player_statistics( $game_data_updated, $game_events );
-
-		$post_obj = get_post( $game_id );
-
-		$import_status['result']     = 'success';
-		$import_status['post_title'] = $post_obj->post_title;
-		$import_status['post_url']   = get_permalink( $post_obj );
-		$import_status['post_edit']  = get_edit_post_link( $post_obj );
-
-		return $import_status;
-	}
-
-	/**
-	 * Import Goals.
-	 *
-	 * @param array $params
-	 * @param array $import_status
-	 *
-	 * @return array
-	 */
-	protected function import_goals( array $params, array $import_status ): array {
-
-		$row_data = $params['row_data'];
-		$game_id  = '';
-
-		if ( ! empty( $row_data['match_id'] ) ) {
-			if ( 'anwp_match' === get_post_type( absint( $row_data['match_id'] ) ) ) {
-				$game_id = absint( $row_data['match_id'] );
-			}
-		} elseif ( ! empty( $row_data['match_external_id'] ) ) {
-			$maybe_game_id = anwp_fl()->match->get_match_id_by_external_id( $row_data['match_external_id'] );
-
-			if ( ! empty( $maybe_game_id ) ) {
-				$game_id = absint( $maybe_game_id );
-			}
-		}
-
-		if ( empty( $game_id ) || 'anwp_match' !== get_post_type( absint( $game_id ) ) ) {
-			$import_status['post_title'] = 'Invalid Match ID or External Match ID';
-
-			return $import_status;
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Club ID
-		|--------------------------------------------------------------------
-		*/
-		$club_id = '';
-
-		if ( ! empty( $row_data['club_id'] ) ) {
-			$club_id = absint( $row_data['club_id'] );
-		} elseif ( ! empty( $row_data['club_external_id'] ) ) {
-			$club_id = absint( anwp_fl()->club->get_club_id_by_external_id( $row_data['club_external_id'] ) );
-		}
-
-		if ( empty( $club_id ) || 'anwp_club' !== get_post_type( absint( $club_id ) ) ) {
-			$import_status['post_title'] = 'Invalid Club ID or External Club ID';
-
-			return $import_status;
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Check Player & Assistant ID
-		|--------------------------------------------------------------------
-		*/
-		$player_id = '';
-
-		if ( ! empty( $row_data['player_id'] ) ) {
-			$player_id = absint( $row_data['player_id'] );
-		} elseif ( ! empty( $row_data['player_external_id'] ) ) {
-			$player_id = absint( anwp_fl()->player->get_player_id_by_external_id( $row_data['player_external_id'] ) );
-		}
-
-		if ( empty( $player_id ) && ! empty( $row_data['player_temp'] ) ) {
-			$player_id = 'temp__' . $row_data['player_temp'];
-		} elseif ( empty( $player_id ) || 'anwp_player' !== get_post_type( absint( $player_id ) ) ) {
-			$player_id = '';
-		}
-
-		$assistant_id = '';
-
-		if ( ! empty( $row_data['assistant_id'] ) ) {
-			$assistant_id = absint( $row_data['assistant_id'] );
-		} elseif ( ! empty( $row_data['assistant_external_id'] ) ) {
-			$assistant_id = absint( anwp_fl()->player->get_player_id_by_external_id( $row_data['assistant_external_id'] ) );
-		}
-
-		if ( empty( $assistant_id ) && ! empty( $row_data['assistant_temp'] ) ) {
-			$assistant_id = 'temp__' . $row_data['assistant_temp'];
-		} elseif ( empty( $assistant_id ) || 'anwp_player' !== get_post_type( absint( $assistant_id ) ) ) {
-			$assistant_id = '';
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Prepare data
-		|--------------------------------------------------------------------
-		*/
-		$own_goal     = AnWP_Football_Leagues::string_to_bool( $row_data['own_goal'] ?? '' );
-		$from_penalty = AnWP_Football_Leagues::string_to_bool( $row_data['from_penalty'] ?? '' );
-		$minute       = sanitize_text_field( $row_data['minute'] ?? '' );
-		$minute_add   = sanitize_text_field( $row_data['minute_add'] ?? '' );
-
-		$game_data    = anwp_fl()->match->get_game_data( $game_id );
-		$game_events  = json_decode( $game_data['match_events'], true ) ?: [];
-		$temp_players = [];
-		$is_home_team = absint( $club_id ) === absint( $game_data['home_club'] );
-
-		if ( mb_strpos( $player_id, 'temp__' ) !== false ) {
-			if ( empty( $temp_players ) ) {
-				$temp_players = json_decode( wp_unslash( get_post_meta( $game_id, '_anwpfl_match_temp_players', true ) ), true ) ?: [];
-			}
-
-			$last_temp_id = $temp_players ? mb_substr( end( $temp_players )->id, 6 ) : 1;
-			$player_temp  = mb_substr( $temp_players, 6 );
-			$player_id    = 'temp__' . ( ++ $last_temp_id );
-
-			$temp_players[] = [
-				'id'       => $player_id,
-				'club_id'  => absint( $club_id ),
-				'country'  => '',
-				'position' => '',
-				'name'     => $player_temp,
-				'context'  => $is_home_team ? 'home' : 'away',
-			];
-		}
-
-		if ( mb_strpos( $assistant_id, 'temp__' ) !== false ) {
-			if ( empty( $temp_players ) ) {
-				$temp_players = json_decode( wp_unslash( get_post_meta( $game_id, '_anwpfl_match_temp_players', true ) ), true ) ?: [];
-			}
-
-			$last_temp_id = $temp_players ? mb_substr( end( $temp_players )->id, 6 ) : 1;
-			$player_temp  = mb_substr( $temp_players, 6 );
-			$assistant_id = 'temp__' . ( ++ $last_temp_id );
-
-			$temp_players[] = [
-				'id'       => $assistant_id,
-				'club_id'  => absint( $club_id ),
-				'country'  => '',
-				'position' => '',
-				'name'     => $player_temp,
-				'context'  => $is_home_team ? 'home' : 'away',
-			];
-		}
-
-		/*
-		|--------------------------------------------------------------------
-		| Save data
-		|--------------------------------------------------------------------
-		*/
-		$game_events[] = [
-			'type'        => 'goal',
-			'club'        => $club_id,
-			'minute'      => $minute,
-			'minuteAdd'   => $minute_add,
-			'player'      => $player_id,
-			'assistant'   => $assistant_id,
-			'playerOut'   => '',
-			'card'        => '',
-			'ownGoal'     => $own_goal ? 'yes' : '',
-			'fromPenalty' => $from_penalty ? 'yes' : '',
-			'id'          => (int) round( microtime( true ) * 1000 ),
-			'comment'     => '',
-			'sorting'     => '',
-		];
-
-		if ( ! empty( $temp_players ) ) {
-			update_post_meta( $game_id, '_anwpfl_match_temp_players', wp_slash( wp_json_encode( $temp_players ) ) );
-		}
-
-		$game_events = wp_list_sort(
-			$game_events,
-			[
-				'minute'    => 'ASC',
-				'minuteAdd' => 'ASC',
-				'sorting'   => 'ASC',
-			]
-		);
-
-		anwp_fl()->match->update( $game_id, [ 'match_events' => wp_json_encode( $game_events ) ] );
-
-		/*
-		|--------------------------------------------------------------------
-		| Update player stats
-		|--------------------------------------------------------------------
-		*/
-		anwp_fl()->match->save_player_statistics( $game_data, $game_events );
-
-		$post_obj = get_post( $game_id );
-
-		$import_status['result']     = 'success';
-		$import_status['post_title'] = $post_obj->post_title;
-		$import_status['post_url']   = get_permalink( $post_obj );
-		$import_status['post_edit']  = get_edit_post_link( $post_obj );
-
-		return $import_status;
-	}
-
-	/**
 	 * Neutralize spreadsheet formula injection in CSV cells.
 	 * If a value begins (after optional whitespace) with =, +, -, or @,
 	 * prefix it with a single quote to force literal interpretation.
@@ -2409,5 +1692,718 @@ class AnWPFL_Data_Port {
 		}
 
 		return $value;
+	}
+
+	/*
+	|--------------------------------------------------------------------------
+	| Batch Import Methods
+	|--------------------------------------------------------------------------
+	| These methods handle batch import of relationship entities (goals, cards,
+	| subs, lineups) with support for Replace/Append modes.
+	|--------------------------------------------------------------------------
+	*/
+
+	/**
+	 * Handle batch import for relationship entities.
+	 *
+	 * @param WP_REST_Request $request REST request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function save_import_batch( WP_REST_Request $request ): WP_REST_Response {
+		$type     = $request->get_param( 'type' );
+		$match_id = $request->get_param( 'match_id' );
+		$ext_id   = $request->get_param( 'match_external_id' );
+		$mode     = $request->get_param( 'mode' ) ?: 'replace';
+		$items    = $request->get_param( 'items' ) ?: [];
+
+		// Validate type
+		$allowed_types = [ 'goals', 'cards', 'subs', 'lineups' ];
+		if ( ! in_array( $type, $allowed_types, true ) ) {
+			return new WP_REST_Response( [ 'error' => 'Invalid import type' ], 400 );
+		}
+
+		// Resolve match ID
+		$game_id = $this->resolve_batch_match_id( $match_id, $ext_id );
+		if ( empty( $game_id ) ) {
+			return new WP_REST_Response( [ 'error' => 'Invalid Match ID or External Match ID' ], 400 );
+		}
+
+		// Validate mode
+		if ( ! in_array( $mode, [ 'replace', 'append' ], true ) ) {
+			$mode = 'replace';
+		}
+
+		// Dispatch to type-specific handler
+		$method = "import_{$type}_batch";
+		if ( ! method_exists( $this, $method ) ) {
+			return new WP_REST_Response( [ 'error' => 'Batch import not supported for this type' ], 400 );
+		}
+
+		$result = $this->$method( $game_id, $items, $mode );
+
+		return new WP_REST_Response( $result );
+	}
+
+	/**
+	 * Resolve match ID from match_id or match_external_id.
+	 *
+	 * @param mixed $match_id Internal match ID.
+	 * @param mixed $ext_id   External match ID.
+	 *
+	 * @return int|null
+	 */
+	protected function resolve_batch_match_id( $match_id, $ext_id ): ?int {
+		$game_id = null;
+
+		if ( ! empty( $match_id ) ) {
+			if ( 'anwp_match' === get_post_type( absint( $match_id ) ) ) {
+				$game_id = absint( $match_id );
+			}
+		} elseif ( ! empty( $ext_id ) ) {
+			$maybe_game_id = anwp_fl()->match->get_match_id_by_external_id( $ext_id );
+
+			if ( ! empty( $maybe_game_id ) ) {
+				$game_id = absint( $maybe_game_id );
+			}
+		}
+
+		return $game_id;
+	}
+
+	/**
+	 * Resolve club ID from club_id or club_external_id.
+	 *
+	 * @param array $item Item data.
+	 *
+	 * @return int|null
+	 */
+	protected function resolve_batch_club_id( array $item ): ?int {
+		$club_id = null;
+
+		if ( ! empty( $item['club_id'] ) ) {
+			$club_id = absint( $item['club_id'] );
+		} elseif ( ! empty( $item['club_external_id'] ) ) {
+			$club_id = absint( anwp_fl()->club->get_club_id_by_external_id( $item['club_external_id'] ) );
+		}
+
+		if ( empty( $club_id ) || 'anwp_club' !== get_post_type( absint( $club_id ) ) ) {
+			return null;
+		}
+
+		return $club_id;
+	}
+
+	/**
+	 * Resolve player ID from player_id, player_external_id, or player_temp.
+	 *
+	 * @param array $item         Item data.
+	 * @param int   $club_id      Club ID for temp players.
+	 * @param array $game_data    Game data for home/away detection.
+	 * @param array $temp_players Reference to temp players array.
+	 *
+	 * @return string|int|null Player ID, temp ID string, or null.
+	 */
+	protected function resolve_batch_player_id( array $item, int $club_id, array $game_data, array &$temp_players ) {
+		$player_id = null;
+
+		if ( ! empty( $item['player_id'] ) ) {
+			$player_id = absint( $item['player_id'] );
+		} elseif ( ! empty( $item['player_external_id'] ) ) {
+			$player_id = absint( anwp_fl()->player->get_player_id_by_external_id( $item['player_external_id'] ) );
+		}
+
+		// Handle temp players
+		if ( empty( $player_id ) && ! empty( $item['player_temp'] ) ) {
+			$is_home_team = absint( $club_id ) === absint( $game_data['home_club'] );
+
+			// Find next temp ID
+			$last_temp_id = 1;
+			if ( ! empty( $temp_players ) ) {
+				$last_item = end( $temp_players );
+				if ( isset( $last_item['id'] ) ) {
+					$last_temp_id = (int) mb_substr( $last_item['id'], 6 );
+				}
+			}
+
+			$player_id = 'temp__' . ( ++$last_temp_id );
+
+			$temp_players[] = [
+				'id'       => $player_id,
+				'club_id'  => $club_id,
+				'country'  => '',
+				'position' => '',
+				'name'     => sanitize_text_field( $item['player_temp'] ),
+				'context'  => $is_home_team ? 'home' : 'away',
+			];
+
+			return $player_id;
+		}
+
+		// Validate real player
+		if ( empty( $player_id ) || 'anwp_player' !== get_post_type( absint( $player_id ) ) ) {
+			return null;
+		}
+
+		return $player_id;
+	}
+
+	/**
+	 * Import goals in batch for a single match.
+	 *
+	 * @param int    $game_id Match post ID.
+	 * @param array  $items   Array of goal data.
+	 * @param string $mode    'replace' or 'append'.
+	 *
+	 * @return array
+	 */
+	protected function import_goals_batch( int $game_id, array $items, string $mode ): array {
+		$game_data   = anwp_fl()->match->get_game_data( $game_id );
+		$game_events = json_decode( $game_data['match_events'], true ) ?: [];
+
+		// REPLACE mode: Remove existing goals
+		if ( 'replace' === $mode ) {
+			$game_events = array_filter(
+				$game_events,
+				function ( $event ) {
+					return 'goal' !== ( $event['type'] ?? '' );
+				}
+			);
+			$game_events = array_values( $game_events );
+		}
+
+		$results      = [];
+		$temp_players = json_decode(
+			wp_unslash( get_post_meta( $game_id, '_anwpfl_match_temp_players', true ) ),
+			true
+		) ?: [];
+
+		foreach ( $items as $index => $item ) {
+			// Validate club
+			$club_id = $this->resolve_batch_club_id( $item );
+			if ( empty( $club_id ) ) {
+				$results[] = [ 'success' => false, 'error' => 'Invalid Club ID' ];
+				continue;
+			}
+
+			// Validate player
+			$player_id = $this->resolve_batch_player_id( $item, $club_id, $game_data, $temp_players );
+			if ( empty( $player_id ) ) {
+				$results[] = [ 'success' => false, 'error' => 'Invalid Player ID' ];
+				continue;
+			}
+
+			// Resolve assistant (optional)
+			$assistant_id = '';
+			if ( ! empty( $item['assistant_id'] ) ) {
+				$assistant_id = absint( $item['assistant_id'] );
+			} elseif ( ! empty( $item['assistant_external_id'] ) ) {
+				$assistant_id = absint( anwp_fl()->player->get_player_id_by_external_id( $item['assistant_external_id'] ) );
+			}
+
+			if ( empty( $assistant_id ) && ! empty( $item['assistant_temp'] ) ) {
+				$is_home_team = absint( $club_id ) === absint( $game_data['home_club'] );
+
+				$last_temp_id = 1;
+				if ( ! empty( $temp_players ) ) {
+					$last_item = end( $temp_players );
+					if ( isset( $last_item['id'] ) ) {
+						$last_temp_id = (int) mb_substr( $last_item['id'], 6 );
+					}
+				}
+
+				$assistant_id = 'temp__' . ( ++$last_temp_id );
+
+				$temp_players[] = [
+					'id'       => $assistant_id,
+					'club_id'  => $club_id,
+					'country'  => '',
+					'position' => '',
+					'name'     => sanitize_text_field( $item['assistant_temp'] ),
+					'context'  => $is_home_team ? 'home' : 'away',
+				];
+			} elseif ( ! empty( $assistant_id ) && 'anwp_player' !== get_post_type( absint( $assistant_id ) ) ) {
+				$assistant_id = '';
+			}
+
+			// Create event
+			$event = [
+				'type'        => 'goal',
+				'club'        => $club_id,
+				'minute'      => sanitize_text_field( $item['minute'] ?? '' ),
+				'minuteAdd'   => sanitize_text_field( $item['minute_add'] ?? '' ),
+				'player'      => $player_id,
+				'assistant'   => $assistant_id,
+				'playerOut'   => '',
+				'card'        => '',
+				'ownGoal'     => AnWP_Football_Leagues::string_to_bool( $item['own_goal'] ?? '' ) ? 'yes' : '',
+				'fromPenalty' => AnWP_Football_Leagues::string_to_bool( $item['from_penalty'] ?? '' ) ? 'yes' : '',
+				'id'          => (int) round( microtime( true ) * 1000 ) + $index,
+				'comment'     => '',
+				'sorting'     => '',
+			];
+
+			$game_events[] = $event;
+			$results[]     = [ 'success' => true ];
+		}
+
+		// Save temp players if modified
+		if ( ! empty( $temp_players ) ) {
+			update_post_meta( $game_id, '_anwpfl_match_temp_players', wp_slash( wp_json_encode( $temp_players ) ) );
+		}
+
+		// Sort events by minute
+		$game_events = wp_list_sort(
+			$game_events,
+			[
+				'minute'    => 'ASC',
+				'minuteAdd' => 'ASC',
+				'sorting'   => 'ASC',
+			]
+		);
+
+		// Save ALL events ONCE
+		anwp_fl()->match->update( $game_id, [ 'match_events' => wp_json_encode( $game_events ) ] );
+
+		// Recalculate stats ONCE
+		anwp_fl()->match->save_player_statistics( $game_data, $game_events );
+
+		$post_obj = get_post( $game_id );
+
+		return [
+			'success'    => true,
+			'post_title' => $post_obj->post_title,
+			'post_url'   => get_permalink( $post_obj ),
+			'post_edit'  => get_edit_post_link( $post_obj, 'raw' ),
+			'results'    => $results,
+			'summary'    => [
+				'total'   => count( $items ),
+				'success' => count( array_filter( $results, fn( $r ) => $r['success'] ) ),
+				'errors'  => count( array_filter( $results, fn( $r ) => ! $r['success'] ) ),
+			],
+		];
+	}
+
+	/**
+	 * Import cards in batch for a single match.
+	 *
+	 * @param int    $game_id Match post ID.
+	 * @param array  $items   Array of card data.
+	 * @param string $mode    'replace' or 'append'.
+	 *
+	 * @return array
+	 */
+	protected function import_cards_batch( int $game_id, array $items, string $mode ): array {
+		$game_data   = anwp_fl()->match->get_game_data( $game_id );
+		$game_events = json_decode( $game_data['match_events'], true ) ?: [];
+
+		// REPLACE mode: Remove existing cards
+		if ( 'replace' === $mode ) {
+			$game_events = array_filter(
+				$game_events,
+				function ( $event ) {
+					return 'card' !== ( $event['type'] ?? '' );
+				}
+			);
+			$game_events = array_values( $game_events );
+		}
+
+		$results      = [];
+		$temp_players = json_decode(
+			wp_unslash( get_post_meta( $game_id, '_anwpfl_match_temp_players', true ) ),
+			true
+		) ?: [];
+
+		foreach ( $items as $index => $item ) {
+			// Validate club
+			$club_id = $this->resolve_batch_club_id( $item );
+			if ( empty( $club_id ) ) {
+				$results[] = [ 'success' => false, 'error' => 'Invalid Club ID' ];
+				continue;
+			}
+
+			// Validate player
+			$player_id = $this->resolve_batch_player_id( $item, $club_id, $game_data, $temp_players );
+			if ( empty( $player_id ) ) {
+				$results[] = [ 'success' => false, 'error' => 'Invalid Player ID' ];
+				continue;
+			}
+
+			// Validate card type
+			$card_type = sanitize_text_field( $item['cart_type'] ?? '' );
+			if ( ! in_array( $card_type, [ 'y', 'r', 'yr' ], true ) ) {
+				$results[] = [ 'success' => false, 'error' => 'Invalid Card Type' ];
+				continue;
+			}
+
+			// Create event
+			$event = [
+				'type'        => 'card',
+				'club'        => $club_id,
+				'minute'      => sanitize_text_field( $item['minute'] ?? '' ),
+				'minuteAdd'   => sanitize_text_field( $item['minute_add'] ?? '' ),
+				'player'      => $player_id,
+				'assistant'   => '',
+				'playerOut'   => '',
+				'card'        => $card_type,
+				'ownGoal'     => '',
+				'fromPenalty' => '',
+				'id'          => (int) round( microtime( true ) * 1000 ) + $index,
+				'comment'     => '',
+				'sorting'     => '',
+			];
+
+			$game_events[] = $event;
+			$results[]     = [ 'success' => true ];
+		}
+
+		// Save temp players if modified
+		if ( ! empty( $temp_players ) ) {
+			update_post_meta( $game_id, '_anwpfl_match_temp_players', wp_slash( wp_json_encode( $temp_players ) ) );
+		}
+
+		// Sort events by minute
+		$game_events = wp_list_sort(
+			$game_events,
+			[
+				'minute'    => 'ASC',
+				'minuteAdd' => 'ASC',
+				'sorting'   => 'ASC',
+			]
+		);
+
+		// Save ALL events ONCE
+		anwp_fl()->match->update( $game_id, [ 'match_events' => wp_json_encode( $game_events ) ] );
+
+		// Recalculate stats ONCE
+		anwp_fl()->match->save_player_statistics( $game_data, $game_events );
+
+		$post_obj = get_post( $game_id );
+
+		return [
+			'success'    => true,
+			'post_title' => $post_obj->post_title,
+			'post_url'   => get_permalink( $post_obj ),
+			'post_edit'  => get_edit_post_link( $post_obj, 'raw' ),
+			'results'    => $results,
+			'summary'    => [
+				'total'   => count( $items ),
+				'success' => count( array_filter( $results, fn( $r ) => $r['success'] ) ),
+				'errors'  => count( array_filter( $results, fn( $r ) => ! $r['success'] ) ),
+			],
+		];
+	}
+
+	/**
+	 * Import substitutes in batch for a single match.
+	 *
+	 * @param int    $game_id Match post ID.
+	 * @param array  $items   Array of sub data.
+	 * @param string $mode    'replace' or 'append'.
+	 *
+	 * @return array
+	 */
+	protected function import_subs_batch( int $game_id, array $items, string $mode ): array {
+		$game_data   = anwp_fl()->match->get_game_data( $game_id );
+		$game_events = json_decode( $game_data['match_events'], true ) ?: [];
+
+		// REPLACE mode: Remove existing substitutes
+		if ( 'replace' === $mode ) {
+			$game_events = array_filter(
+				$game_events,
+				function ( $event ) {
+					return 'substitute' !== ( $event['type'] ?? '' );
+				}
+			);
+			$game_events = array_values( $game_events );
+		}
+
+		$results      = [];
+		$temp_players = json_decode(
+			wp_unslash( get_post_meta( $game_id, '_anwpfl_match_temp_players', true ) ),
+			true
+		) ?: [];
+
+		foreach ( $items as $index => $item ) {
+			// Validate club
+			$club_id = $this->resolve_batch_club_id( $item );
+			if ( empty( $club_id ) ) {
+				$results[] = [ 'success' => false, 'error' => 'Invalid Club ID' ];
+				continue;
+			}
+
+			$is_home_team = absint( $club_id ) === absint( $game_data['home_club'] );
+
+			// Validate player_in
+			$player_in = null;
+			if ( ! empty( $item['player_in'] ) ) {
+				$player_in = absint( $item['player_in'] );
+			} elseif ( ! empty( $item['player_in_external_id'] ) ) {
+				$player_in = absint( anwp_fl()->player->get_player_id_by_external_id( $item['player_in_external_id'] ) );
+			}
+
+			if ( empty( $player_in ) && ! empty( $item['player_in_temp'] ) ) {
+				$last_temp_id = 1;
+				if ( ! empty( $temp_players ) ) {
+					$last_item = end( $temp_players );
+					if ( isset( $last_item['id'] ) ) {
+						$last_temp_id = (int) mb_substr( $last_item['id'], 6 );
+					}
+				}
+
+				$player_in = 'temp__' . ( ++$last_temp_id );
+
+				$temp_players[] = [
+					'id'       => $player_in,
+					'club_id'  => $club_id,
+					'country'  => '',
+					'position' => '',
+					'name'     => sanitize_text_field( $item['player_in_temp'] ),
+					'context'  => $is_home_team ? 'home' : 'away',
+				];
+			} elseif ( empty( $player_in ) || 'anwp_player' !== get_post_type( absint( $player_in ) ) ) {
+				$results[] = [ 'success' => false, 'error' => 'Invalid Player In ID' ];
+				continue;
+			}
+
+			// Validate player_out
+			$player_out = null;
+			if ( ! empty( $item['player_out'] ) ) {
+				$player_out = absint( $item['player_out'] );
+			} elseif ( ! empty( $item['player_out_external_id'] ) ) {
+				$player_out = absint( anwp_fl()->player->get_player_id_by_external_id( $item['player_out_external_id'] ) );
+			}
+
+			if ( empty( $player_out ) && ! empty( $item['player_out_temp'] ) ) {
+				$last_temp_id = 1;
+				if ( ! empty( $temp_players ) ) {
+					$last_item = end( $temp_players );
+					if ( isset( $last_item['id'] ) ) {
+						$last_temp_id = (int) mb_substr( $last_item['id'], 6 );
+					}
+				}
+
+				$player_out = 'temp__' . ( ++$last_temp_id );
+
+				$temp_players[] = [
+					'id'       => $player_out,
+					'club_id'  => $club_id,
+					'country'  => '',
+					'position' => '',
+					'name'     => sanitize_text_field( $item['player_out_temp'] ),
+					'context'  => $is_home_team ? 'home' : 'away',
+				];
+			} elseif ( empty( $player_out ) || 'anwp_player' !== get_post_type( absint( $player_out ) ) ) {
+				$results[] = [ 'success' => false, 'error' => 'Invalid Player Out ID' ];
+				continue;
+			}
+
+			// Create event
+			$event = [
+				'type'        => 'substitute',
+				'club'        => $club_id,
+				'minute'      => sanitize_text_field( $item['minute'] ?? '' ),
+				'minuteAdd'   => sanitize_text_field( $item['minute_add'] ?? '' ),
+				'player'      => $player_in,
+				'assistant'   => '',
+				'playerOut'   => $player_out,
+				'card'        => '',
+				'ownGoal'     => '',
+				'fromPenalty' => '',
+				'id'          => (int) round( microtime( true ) * 1000 ) + $index,
+				'comment'     => '',
+				'sorting'     => '',
+			];
+
+			$game_events[] = $event;
+			$results[]     = [ 'success' => true ];
+		}
+
+		// Save temp players if modified
+		if ( ! empty( $temp_players ) ) {
+			update_post_meta( $game_id, '_anwpfl_match_temp_players', wp_slash( wp_json_encode( $temp_players ) ) );
+		}
+
+		// Sort events by minute
+		$game_events = wp_list_sort(
+			$game_events,
+			[
+				'minute'    => 'ASC',
+				'minuteAdd' => 'ASC',
+				'sorting'   => 'ASC',
+			]
+		);
+
+		// Save ALL events ONCE
+		anwp_fl()->match->update( $game_id, [ 'match_events' => wp_json_encode( $game_events ) ] );
+
+		// Recalculate stats ONCE
+		anwp_fl()->match->save_player_statistics( $game_data, $game_events );
+
+		$post_obj = get_post( $game_id );
+
+		return [
+			'success'    => true,
+			'post_title' => $post_obj->post_title,
+			'post_url'   => get_permalink( $post_obj ),
+			'post_edit'  => get_edit_post_link( $post_obj, 'raw' ),
+			'results'    => $results,
+			'summary'    => [
+				'total'   => count( $items ),
+				'success' => count( array_filter( $results, fn( $r ) => $r['success'] ) ),
+				'errors'  => count( array_filter( $results, fn( $r ) => ! $r['success'] ) ),
+			],
+		];
+	}
+
+	/**
+	 * Import lineups in batch for a single match.
+	 *
+	 * @param int    $game_id Match post ID.
+	 * @param array  $items   Array of lineup data.
+	 * @param string $mode    'replace' or 'append'.
+	 *
+	 * @return array
+	 */
+	protected function import_lineups_batch( int $game_id, array $items, string $mode ): array {
+		global $wpdb;
+
+		$game_data = anwp_fl()->match->get_game_data( $game_id );
+
+		// Get existing lineups data
+		$lineups_data = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM $wpdb->anwpfl_lineups WHERE `match_id` = %d",
+				$game_id
+			),
+			ARRAY_A
+		) ?: [];
+
+		// REPLACE mode: Clear existing lineups
+		if ( 'replace' === $mode ) {
+			$lineups_data = [
+				'home_line_up'   => '',
+				'away_line_up'   => '',
+				'home_subs'      => '',
+				'away_subs'      => '',
+				'custom_numbers' => '{}',
+				'captain_home'   => '',
+				'captain_away'   => '',
+			];
+		} else {
+			$lineups_data = wp_parse_args(
+				$lineups_data,
+				[
+					'home_line_up'   => '',
+					'away_line_up'   => '',
+					'home_subs'      => '',
+					'away_subs'      => '',
+					'custom_numbers' => '{}',
+					'captain_home'   => '',
+					'captain_away'   => '',
+				]
+			);
+		}
+
+		$lineups_data['custom_numbers'] = json_decode( $lineups_data['custom_numbers'], true ) ?: [];
+
+		$results      = [];
+		$temp_players = json_decode(
+			wp_unslash( get_post_meta( $game_id, '_anwpfl_match_temp_players', true ) ),
+			true
+		) ?: [];
+
+		foreach ( $items as $index => $item ) {
+			// Validate club
+			$club_id = $this->resolve_batch_club_id( $item );
+			if ( empty( $club_id ) ) {
+				$results[] = [ 'success' => false, 'error' => 'Invalid Club ID' ];
+				continue;
+			}
+
+			// Validate player
+			$player_id = $this->resolve_batch_player_id( $item, $club_id, $game_data, $temp_players );
+			if ( empty( $player_id ) ) {
+				$results[] = [ 'success' => false, 'error' => 'Invalid Player ID' ];
+				continue;
+			}
+
+			$is_home_team  = absint( $club_id ) === absint( $game_data['home_club'] );
+			$starting      = AnWP_Football_Leagues::string_to_bool( $item['starting'] ?? '' );
+			$is_captain    = AnWP_Football_Leagues::string_to_bool( $item['is_captain'] ?? '' );
+			$player_number = sanitize_text_field( $item['number'] ?? '' );
+
+			// Set captain
+			if ( $is_captain ) {
+				if ( $is_home_team ) {
+					$lineups_data['captain_home'] = $player_id;
+				} else {
+					$lineups_data['captain_away'] = $player_id;
+				}
+			}
+
+			// Add to lineup or subs
+			if ( $starting ) {
+				if ( $is_home_team ) {
+					$lineups_data['home_line_up'] .= ( $lineups_data['home_line_up'] ? ',' : '' ) . $player_id;
+				} else {
+					$lineups_data['away_line_up'] .= ( $lineups_data['away_line_up'] ? ',' : '' ) . $player_id;
+				}
+			} else {
+				if ( $is_home_team ) {
+					$lineups_data['home_subs'] .= ( $lineups_data['home_subs'] ? ',' : '' ) . $player_id;
+				} else {
+					$lineups_data['away_subs'] .= ( $lineups_data['away_subs'] ? ',' : '' ) . $player_id;
+				}
+			}
+
+			// Set custom number
+			if ( '' !== $player_number ) {
+				$lineups_data['custom_numbers'][ $player_id ] = $player_number;
+			}
+
+			$results[] = [ 'success' => true ];
+		}
+
+		// Save temp players if modified
+		if ( ! empty( $temp_players ) ) {
+			update_post_meta( $game_id, '_anwpfl_match_temp_players', wp_slash( wp_json_encode( $temp_players ) ) );
+		}
+
+		// Save lineups
+		$wpdb->replace(
+			$wpdb->anwpfl_lineups,
+			[
+				'match_id'       => $game_id,
+				'home_line_up'   => $lineups_data['home_line_up'],
+				'away_line_up'   => $lineups_data['away_line_up'],
+				'home_subs'      => $lineups_data['home_subs'],
+				'away_subs'      => $lineups_data['away_subs'],
+				'custom_numbers' => wp_json_encode( $lineups_data['custom_numbers'] ),
+				'captain_home'   => $lineups_data['captain_home'],
+				'captain_away'   => $lineups_data['captain_away'],
+			]
+		);
+
+		// Update player stats
+		$game_data_updated = anwp_fl()->match->get_game_data( $game_id );
+		$game_events       = json_decode( $game_data_updated['match_events'], true ) ?: [];
+
+		anwp_fl()->match->save_player_statistics( $game_data_updated, $game_events );
+
+		$post_obj = get_post( $game_id );
+
+		return [
+			'success'    => true,
+			'post_title' => $post_obj->post_title,
+			'post_url'   => get_permalink( $post_obj ),
+			'post_edit'  => get_edit_post_link( $post_obj, 'raw' ),
+			'results'    => $results,
+			'summary'    => [
+				'total'   => count( $items ),
+				'success' => count( array_filter( $results, fn( $r ) => $r['success'] ) ),
+				'errors'  => count( array_filter( $results, fn( $r ) => ! $r['success'] ) ),
+			],
+		];
 	}
 }

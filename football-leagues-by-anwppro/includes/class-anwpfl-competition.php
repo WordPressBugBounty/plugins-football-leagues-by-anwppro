@@ -64,8 +64,7 @@ class AnWPFL_Competition extends CPT_Core {
 					'title',
 					'comments',
 				],
-				'show_in_menu'        => true,
-				'menu_position'       => 33,
+				'show_in_menu'        => 'edit.php?post_type=anwp_competition',
 				'menu_icon'           => $plugin::SVG_CUP,
 				'show_in_rest'        => true,
 				'rest_base'           => 'anwp_competitions',
@@ -73,7 +72,7 @@ class AnWPFL_Competition extends CPT_Core {
 				'rewrite'             => [ 'slug' => $permalink_slug ],
 				'public'              => true,
 				'labels'              => [
-					'all_items'    => esc_html__( 'All Competitions', 'anwp-football-leagues' ),
+					'all_items'    => esc_html__( 'Competitions', 'anwp-football-leagues' ),
 					'add_new'      => esc_html__( 'Add New Competition', 'anwp-football-leagues' ),
 					'add_new_item' => esc_html__( 'Add New Competition', 'anwp-football-leagues' ),
 					'edit_item'    => esc_html__( 'Edit Competition', 'anwp-football-leagues' ),
@@ -448,11 +447,11 @@ class AnWPFL_Competition extends CPT_Core {
 			<div class="anwp-metabox-tabs d-sm-flex">
 				<div class="anwp-metabox-tabs__controls d-flex flex-sm-column flex-wrap">
 					<div class="p-3 anwp-metabox-tabs__control-item" data-target="#anwp-tabs-display-competition_metabox">
-						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use xlink:href="#icon-eye"></use></svg>
+						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use href="#icon-eye"></use></svg>
 						<span class="d-block"><?php echo esc_html__( 'Display', 'anwp-football-leagues' ); ?></span>
 					</div>
 					<div class="p-3 anwp-metabox-tabs__control-item" data-target="#anwp-tabs-bottom_content-competition_metabox">
-						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use xlink:href="#icon-repo-push"></use></svg>
+						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use href="#icon-repo-push"></use></svg>
 						<span class="d-block"><?php echo esc_html__( 'Bottom Content', 'anwp-football-leagues' ); ?></span>
 					</div>
 					<?php
@@ -2215,7 +2214,7 @@ class AnWPFL_Competition extends CPT_Core {
 						foreach ( $standing_map[ $post_id ] as $standing_id => $standing_title ) {
 							$edit_link = admin_url( 'post.php?post=' . intval( $standing_id ) . '&action=edit' );
 
-							echo '<svg class="anwp-icon anwp-icon--octi" style="margin-bottom: -2px;"><use xlink:href="#icon-link-external"></use></svg>&nbsp;&nbsp;';
+							echo '<svg class="anwp-icon anwp-icon--octi" style="margin-bottom: -2px;"><use href="#icon-link-external"></use></svg>&nbsp;&nbsp;';
 							echo '<a href="' . esc_url( $edit_link ) . '">' . esc_html( $standing_title ) . '</a><br>';
 						}
 					}
@@ -2226,7 +2225,7 @@ class AnWPFL_Competition extends CPT_Core {
 							foreach ( $standing_map[ $post_id ] as $standing_id => $standing_title ) {
 								$edit_link = admin_url( 'post.php?post=' . intval( $standing_id ) . '&action=edit' );
 
-								echo '<svg class="anwp-icon anwp-icon--octi" style="margin-bottom: -2px;"><use xlink:href="#icon-link-external"></use></svg>&nbsp;&nbsp;';
+								echo '<svg class="anwp-icon anwp-icon--octi" style="margin-bottom: -2px;"><use href="#icon-link-external"></use></svg>&nbsp;&nbsp;';
 								echo '<a href="' . esc_url( $edit_link ) . '">' . esc_html( $standing_title ) . '</a><br>';
 							}
 						}
@@ -2240,7 +2239,7 @@ class AnWPFL_Competition extends CPT_Core {
 							foreach ( $standing_map[ $stage['id'] ] as $standing_id => $standing_title ) {
 								$edit_link = admin_url( 'post.php?post=' . intval( $standing_id ) . '&action=edit' );
 
-								echo '<svg class="anwp-icon anwp-icon--octi" style="margin-bottom: -2px;"><use xlink:href="#icon-link-external"></use></svg>&nbsp;&nbsp;';
+								echo '<svg class="anwp-icon anwp-icon--octi" style="margin-bottom: -2px;"><use href="#icon-link-external"></use></svg>&nbsp;&nbsp;';
 								echo '<a href="' . esc_url( $edit_link ) . '">' . esc_html( $standing_title ) . '</a><br>';
 							}
 						}

@@ -94,7 +94,7 @@ do_action( 'anwpfl/tmpl-competition/before_wrapper', $competition_post_id );
 			?>
 			<div class="anwp-fl-tabs mb-3 competition__tabs d-flex flex-wrap">
 				<?php foreach ( $competitions as $ii => $c ) : ?>
-					<div class="position-relative anwp-text-sm anwp-fl-tabs__item anwp-bg-gray-light anwp-fl-border anwp-border-light anwp-flex-1 d-flex align-items-center justify-content-center"
+					<div class="position-relative anwp-text-sm anwp-fl-tabs__item anwp-bg-gray-light anwp-border anwp-border-light anwp-flex-1 d-flex align-items-center justify-content-center"
 						data-target="#anwp_c_id_<?php echo (int) $c->ID; ?>" id="anwp_id_<?php echo (int) $c->ID; ?>-tab">
 						<span><?php echo esc_html( get_post_meta( $c->ID, '_anwpfl_stage_title', true ) ); ?></span>
 						<a class="anwp-link-without-effects anwp-link-cover" href="#" aria-label="<?php echo esc_attr( get_post_meta( $c->ID, '_anwpfl_stage_title', true ) ); ?>"></a>
@@ -167,7 +167,7 @@ do_action( 'anwpfl/tmpl-competition/before_wrapper', $competition_post_id );
 						?>
 						<div class="anwp-fl-tabs mb-3 d-flex flex-wrap competition__tabs" id="anwp-rounds-tabs-c<?php echo (int) $ii; ?>" role="tablist">
 							<?php foreach ( $rounds as $rr => $c ) : ?>
-								<div class="position-relative anwp-text-sm anwp-fl-tabs__item anwp-bg-gray-light anwp-fl-border anwp-border-light anwp-flex-1 d-flex align-items-center justify-content-center"
+								<div class="position-relative anwp-text-sm anwp-fl-tabs__item anwp-bg-gray-light anwp-border anwp-border-light anwp-flex-1 d-flex align-items-center justify-content-center"
 									data-target="#anwp_c_id_<?php echo (int) $competition->ID; ?>_round_id_<?php echo (int) $c->id; ?>">
 									<span><?php echo esc_html( $c->title ); ?></span>
 									<a class="anwp-link-without-effects anwp-link-cover" href="#" aria-label="<?php echo esc_attr( $c->title ); ?>"></a>

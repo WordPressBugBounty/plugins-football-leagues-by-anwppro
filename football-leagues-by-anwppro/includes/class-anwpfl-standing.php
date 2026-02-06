@@ -949,7 +949,7 @@ class AnWPFL_Standing extends CPT_Core {
 				<?php if ( empty( $group_data['clubs'] ) ) : ?>
 					<div class="alert alert-warning border-warning d-flex align-items-center" role="alert">
 						<svg class="anwp-icon mr-2 anwp-icon--octi anwp-icon--s16">
-							<use xlink:href="#icon-alert"></use>
+							<use href="#icon-alert"></use>
 						</svg>
 						<?php echo esc_html__( "Selected Standing group doesn't have any club. Please add clubs to the Competition group first.", 'anwp-football-leagues' ); ?>
 					</div>
@@ -1053,7 +1053,7 @@ class AnWPFL_Standing extends CPT_Core {
 					<div class="anwp-border anwp-border-gray-500 mb-4">
 						<div class="anwp-border-bottom anwp-border-gray-500 bg-white d-flex align-items-center px-3 py-2 anwp-text-gray-700 anwp-font-semibold">
 							<svg class="anwp-icon anwp-icon--s16 mr-2 anwp-icon--octi anwp-fill-current">
-								<use xlink:href="#icon-database"></use>
+								<use href="#icon-database"></use>
 							</svg>
 
 							<?php echo esc_html__( 'Clubs', 'anwp-football-leagues' ); ?> (<?php echo count( $group_data['clubs'] ); ?>)
@@ -1069,9 +1069,9 @@ class AnWPFL_Standing extends CPT_Core {
 								</div>
 							<?php endforeach; ?>
 						</div>
-						<div class="bg-light px-3 py-2 d-flex align-items-center anwp-fl-border anwp-border-top anwp-border-gray-400">
+						<div class="bg-light px-3 py-2 d-flex align-items-center anwp-border anwp-border-top anwp-border-gray-400">
 							<svg class="anwp-icon anwp-icon--octi anwp-icon--s16 mr-2">
-								<use xlink:href="#icon-info"></use>
+								<use href="#icon-info"></use>
 							</svg>
 							<?php echo esc_html__( 'You can add or remove clubs only on Competition page', 'anwp-football-leagues' ); ?>
 						</div>
@@ -1093,7 +1093,7 @@ class AnWPFL_Standing extends CPT_Core {
 					<div class="anwp-b-wrap anwpfl-standing-metabox-wrapper">
 						<div class="alert alert-warning border-warning d-flex align-items-center" role="alert">
 							<svg class="anwp-icon mr-2 anwp-icon--octi anwp-icon--s16">
-								<use xlink:href="#icon-alert"></use>
+								<use href="#icon-alert"></use>
 							</svg>
 							<?php echo esc_html__( 'There are no available "Round-Robin" competitions.', 'anwp-football-leagues' ); ?>
 						</div>
@@ -1509,7 +1509,7 @@ class AnWPFL_Standing extends CPT_Core {
 		$replace_data = [ 'info', 'warning', 'danger', 'primary', 'secondary', 'success' ];
 
 		foreach ( $replace_data as $replace ) {
-			$notes = str_ireplace( '%' . $replace . '%', '<span class="anwp-fl-border anwp-border-light mr-1 px-3 anwp-bg-' . $replace . '-light"></span>', $notes );
+			$notes = str_ireplace( '%' . $replace . '%', '<span class="anwp-border anwp-border-light mr-1 px-3 anwp-bg-' . $replace . '-light"></span>', $notes );
 		}
 
 		/*
@@ -1523,7 +1523,7 @@ class AnWPFL_Standing extends CPT_Core {
 					continue;
 				}
 
-				$notes = str_ireplace( '%' . $table_color . '%', '<span class="anwp-fl-border anwp-border-light mr-1 px-3" style="background-color: ' . esc_attr( $table_color ) . '"></span>', $notes );
+				$notes = str_ireplace( '%' . $table_color . '%', '<span class="anwp-border anwp-border-light mr-1 px-3" style="background-color: ' . esc_attr( $table_color ) . '"></span>', $notes );
 			}
 		}
 

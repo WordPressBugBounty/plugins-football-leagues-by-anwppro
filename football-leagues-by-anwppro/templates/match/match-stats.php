@@ -143,7 +143,7 @@ ob_start();
 foreach ( $stats_array as $stats_value ) :
 	if ( ! empty( $data[ $stats_value['h'] ] ) || ! empty( $data[ $stats_value['a'] ] ) ) :
 		?>
-		<div class="match-stats__stat-wrapper anwp-fl-border-bottom anwp-border-light p-2 club-stats__<?php echo esc_attr( $stats_value['stat'] ); ?>">
+		<div class="match-stats__stat-wrapper anwp-border-bottom anwp-border-light p-2 club-stats__<?php echo esc_attr( $stats_value['stat'] ); ?>">
 			<div class="match-stats__stat-name anwp-text-center anwp-text-base"><?php echo esc_html( $stats_value['text'] ); ?></div>
 			<div class="d-flex mt-1 match-stats__stat-row">
 				<div class="match-stats__stat-value anwp-flex-none match__stats-number mx-1 anwp-text-base"><?php echo (int) ( $data[ $stats_value['h'] ] ?? 0 ); ?></div>

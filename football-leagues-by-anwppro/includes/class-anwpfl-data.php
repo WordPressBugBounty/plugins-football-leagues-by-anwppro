@@ -842,14 +842,14 @@ class AnWPFL_Data {
 	public function get_event_icons() {
 
 		return [
-			'goal'         => '<svg class="icon__ball icon--lineups"><use xlink:href="#icon-ball"></use></svg>',
-			'goal_own'     => '<svg class="icon__ball icon__ball--own icon--lineups"><use xlink:href="#icon-ball"></use></svg>',
-			'goal_penalty' => '<svg class="icon__ball icon--lineups"><use xlink:href="#icon-ball_penalty"></use></svg>',
-			'subs_in'      => '<svg class="icon__subs-in icon--lineups"><use xlink:href="#icon-arrow-o-up"></use></svg>',
-			'subs_out'     => '<svg class="icon__subs-out icon--lineups"><use xlink:href="#icon-arrow-o-down"></use></svg>',
-			'card_y'       => '<svg class="icon__card icon--lineups"><use xlink:href="#icon-card_y"></use></svg>',
-			'card_r'       => '<svg class="icon__card icon--lineups"><use xlink:href="#icon-card_r"></use></svg>',
-			'card_yr'      => '<svg class="icon__card icon--lineups"><use xlink:href="#icon-card_yr"></use></svg>',
+			'goal'         => '<svg class="icon__ball icon--lineups"><use href="#icon-ball"></use></svg>',
+			'goal_own'     => '<svg class="icon__ball icon__ball--own icon--lineups"><use href="#icon-ball"></use></svg>',
+			'goal_penalty' => '<svg class="icon__ball icon--lineups"><use href="#icon-ball_penalty"></use></svg>',
+			'subs_in'      => '<svg class="icon__subs-in icon--lineups"><use href="#icon-arrow-o-up"></use></svg>',
+			'subs_out'     => '<svg class="icon__subs-out icon--lineups"><use href="#icon-arrow-o-down"></use></svg>',
+			'card_y'       => '<svg class="icon__card icon--lineups"><use href="#icon-card_y"></use></svg>',
+			'card_r'       => '<svg class="icon__card icon--lineups"><use href="#icon-card_r"></use></svg>',
+			'card_yr'      => '<svg class="icon__card icon--lineups"><use href="#icon-card_yr"></use></svg>',
 		];
 	}
 
@@ -867,6 +867,82 @@ class AnWPFL_Data {
 			'm' => esc_html_x( 'm', 'midfielder - player position Letter', 'anwp-football-leagues' ),
 			'f' => esc_html_x( 'f', 'forward - player position Letter', 'anwp-football-leagues' ),
 		];
+	}
+
+	/**
+	 * Get position key by name.
+	 *
+	 * Resolves position name (e.g., "Goalkeeper") to key (e.g., "g").
+	 * Returns original value if already a valid key or if no match found.
+	 *
+	 * @param string $value Position key or name.
+	 *
+	 * @return string Position key or original value.
+	 * @since 0.17.2
+	 */
+	public function get_position_key_by_name( $value ) {
+
+		if ( empty( $value ) ) {
+			return '';
+		}
+
+		$value = trim( $value );
+
+		// Already a valid key
+		if ( isset( $this->positions[ $value ] ) ) {
+			return $value;
+		}
+
+		// Search by name (case-insensitive)
+		$value_lower = mb_strtolower( $value );
+
+		foreach ( $this->positions as $key => $name ) {
+			if ( mb_strtolower( $name ) === $value_lower ) {
+				return $key;
+			}
+		}
+
+		// No match found, return original value
+		return $value;
+	}
+
+	/**
+	 * Get country code by name.
+	 *
+	 * Resolves country name (e.g., "United States") to code (e.g., "us").
+	 * Returns original value if already a valid code or if no match found.
+	 *
+	 * @param string $value Country code or name.
+	 *
+	 * @return string Country code or original value.
+	 * @since 0.17.2
+	 */
+	public function get_country_code_by_name( $value ) {
+
+		if ( empty( $value ) ) {
+			return '';
+		}
+
+		$value = trim( $value );
+
+		$this->init_countries();
+
+		// Already a valid code
+		if ( isset( $this->countries[ $value ] ) ) {
+			return $value;
+		}
+
+		// Search by name (case-insensitive)
+		$value_lower = mb_strtolower( $value );
+
+		foreach ( $this->countries as $code => $name ) {
+			if ( mb_strtolower( $name ) === $value_lower ) {
+				return $code;
+			}
+		}
+
+		// No match found, return original value
+		return $value;
 	}
 
 	/**

@@ -35,8 +35,7 @@ var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "sy
     return true;
   }
   function createAddHook(hooks, storeKey) {
-    return function addHook(hookName, namespace, callback) {
-      let priority = arguments.length > 3 && arguments[3] !== void 0 ? arguments[3] : 10;
+    return function addHook(hookName, namespace, callback, priority = 10) {
       const hooksStore = hooks[storeKey];
       if (!validateHookName(hookName)) {
         return;
@@ -86,8 +85,7 @@ var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "sy
       }
     };
   }
-  function createRemoveHook(hooks, storeKey) {
-    let removeAll = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
+  function createRemoveHook(hooks, storeKey, removeAll = false) {
     return function removeHook(hookName, namespace) {
       const hooksStore = hooks[storeKey];
       if (!validateHookName(hookName)) {
@@ -135,9 +133,8 @@ var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "sy
       return hookName in hooksStore;
     };
   }
-  function createRunHook(hooks, storeKey) {
-    let returnFirstArg = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
-    return function runHooks(hookName) {
+  function createRunHook(hooks, storeKey, returnFirstArg = false) {
+    return function runHooks(hookName, ...args) {
       const hooksStore = hooks[storeKey];
       if (!hooksStore[hookName]) {
         hooksStore[hookName] = {
@@ -147,9 +144,6 @@ var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "sy
       }
       hooksStore[hookName].runs++;
       const handlers = hooksStore[hookName].handlers;
-      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
-      }
       if (!handlers || !handlers.length) {
         return returnFirstArg ? args[0] : void 0;
       }
@@ -170,13 +164,15 @@ var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "sy
       if (returnFirstArg) {
         return args[0];
       }
+      return void 0;
     };
   }
   function createCurrentHook(hooks, storeKey) {
     return function currentHook() {
-      var _hooksStore$__current, _hooksStore$__current2;
+      var _a;
+      var _hooksStore$__current;
       const hooksStore = hooks[storeKey];
-      return (_hooksStore$__current = (_hooksStore$__current2 = hooksStore.__current[hooksStore.__current.length - 1]) === null || _hooksStore$__current2 === void 0 ? void 0 : _hooksStore$__current2.name) !== null && _hooksStore$__current !== void 0 ? _hooksStore$__current : null;
+      return (_hooksStore$__current = (_a = hooksStore.__current[hooksStore.__current.length - 1]) == null ? void 0 : _a.name) !== null && _hooksStore$__current !== void 0 ? _hooksStore$__current : null;
     };
   }
   function createDoingHook(hooks, storeKey) {
@@ -224,7 +220,27 @@ var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "sy
   function createHooks() {
     return new _Hooks();
   }
-  createHooks();
+  const defaultHooks = createHooks();
+  const {
+    addAction,
+    addFilter,
+    removeAction,
+    removeFilter,
+    hasAction,
+    hasFilter,
+    removeAllActions,
+    removeAllFilters,
+    doAction,
+    applyFilters,
+    currentAction,
+    currentFilter,
+    doingAction,
+    doingFilter,
+    didAction,
+    didFilter,
+    actions,
+    filters
+  } = defaultHooks;
   var flushPending = false;
   var flushing = false;
   var queue = [];
@@ -642,7 +658,14 @@ var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "sy
       handleError(e, el, expression);
     }
   }
-  function handleError(error2, el, expression = void 0) {
+  function handleError(...args) {
+    return errorHandler(...args);
+  }
+  var errorHandler = normalErrorHandler;
+  function setErrorHandler(handler4) {
+    errorHandler = handler4;
+  }
+  function normalErrorHandler(error2, el, expression = void 0) {
     error2 = Object.assign(
       error2 != null ? error2 : { message: "No error message given." },
       { el, expression }
@@ -674,6 +697,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   function setEvaluator(newEvaluator) {
     theEvaluatorFunction = newEvaluator;
   }
+  var theRawEvaluatorFunction;
+  function setRawEvaluator(newEvaluator) {
+    theRawEvaluatorFunction = newEvaluator;
+  }
   function normalEvaluator(el, expression) {
     let overriddenMagics = {};
     injectMagics(overriddenMagics, el);
@@ -683,7 +710,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   }
   function generateEvaluatorFromFunction(dataStack, func) {
     return (receiver = () => {
-    }, { scope: scope2 = {}, params = [] } = {}) => {
+    }, { scope: scope2 = {}, params = [], context } = {}) => {
+      if (!shouldAutoEvaluateFunctions) {
+        runIfTypeOfFunction(receiver, func, mergeProxies([scope2, ...dataStack]), params);
+        return;
+      }
       let result = func.apply(mergeProxies([scope2, ...dataStack]), params);
       runIfTypeOfFunction(receiver, result);
     };
@@ -718,12 +749,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   function generateEvaluatorFromString(dataStack, expression, el) {
     let func = generateFunctionFromString(expression, el);
     return (receiver = () => {
-    }, { scope: scope2 = {}, params = [] } = {}) => {
+    }, { scope: scope2 = {}, params = [], context } = {}) => {
       func.result = void 0;
       func.finished = false;
       let completeScope = mergeProxies([scope2, ...dataStack]);
       if (typeof func === "function") {
-        let promise = func(func, completeScope).catch((error2) => handleError(error2, el, expression));
+        let promise = func.call(context, func, completeScope).catch((error2) => handleError(error2, el, expression));
         if (func.finished) {
           runIfTypeOfFunction(receiver, func.result, completeScope, params, el);
           func.result = void 0;
@@ -747,6 +778,39 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       value.then((i) => receiver(i));
     } else {
       receiver(value);
+    }
+  }
+  function evaluateRaw(...args) {
+    return theRawEvaluatorFunction(...args);
+  }
+  function normalRawEvaluator(el, expression, extras = {}) {
+    var _a, _b;
+    let overriddenMagics = {};
+    injectMagics(overriddenMagics, el);
+    let dataStack = [overriddenMagics, ...closestDataStack(el)];
+    let scope2 = mergeProxies([(_a = extras.scope) != null ? _a : {}, ...dataStack]);
+    let params = (_b = extras.params) != null ? _b : [];
+    if (expression.includes("await")) {
+      let AsyncFunction = Object.getPrototypeOf(async function() {
+      }).constructor;
+      let rightSideSafeExpression = /^[\n\s]*if.*\(.*\)/.test(expression.trim()) || /^(let|const)\s/.test(expression.trim()) ? `(async()=>{ ${expression} })()` : expression;
+      let func = new AsyncFunction(
+        ["scope"],
+        `with (scope) { let __result = ${rightSideSafeExpression}; return __result }`
+      );
+      let result = func.call(extras.context, scope2);
+      return result;
+    } else {
+      let rightSideSafeExpression = /^[\n\s]*if.*\(.*\)/.test(expression.trim()) || /^(let|const)\s/.test(expression.trim()) ? `(()=>{ ${expression} })()` : expression;
+      let func = new Function(
+        ["scope"],
+        `with (scope) { let __result = ${rightSideSafeExpression}; return __result }`
+      );
+      let result = func.call(extras.context, scope2);
+      if (typeof result === "function" && shouldAutoEvaluateFunctions) {
+        return result.apply(scope2, params);
+      }
+      return result;
     }
   }
   var prefixAsString = "x-";
@@ -993,6 +1057,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       return el;
     if (el._x_teleportBack)
       el = el._x_teleportBack;
+    if (el.parentNode instanceof ShadowRoot) {
+      return findClosest(el.parentNode.host, callback);
+    }
     if (!el.parentElement)
       return;
     return findClosest(el.parentElement, callback);
@@ -1674,10 +1741,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     return el.type === "radio" || el.localName === "ui-radio";
   }
   function debounce(func, wait) {
-    var timeout2;
+    let timeout2;
     return function() {
-      var context = this, args = arguments;
-      var later = function() {
+      const context = this, args = arguments;
+      const later = function() {
         timeout2 = null;
         func.apply(context, args);
       };
@@ -1724,7 +1791,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   function cloneIfObject(value) {
     return typeof value === "object" ? JSON.parse(JSON.stringify(value)) : value;
   }
-  function plugin(callback) {
+  function plugin$e(callback) {
     let callbacks = Array.isArray(callback) ? callback : [callback];
     callbacks.forEach((i) => i(alpine_default));
   }
@@ -1824,7 +1891,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     get raw() {
       return raw;
     },
-    version: "3.14.9",
+    version: "3.15.3",
     flushAndStopDeferringMutations,
     dontAutoEvaluateFunctions,
     disableEffectScheduling,
@@ -1838,13 +1905,17 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     onlyDuringClone,
     addRootSelector,
     addInitSelector,
+    setErrorHandler,
     interceptClone,
     addScopeToNode,
     deferMutations,
     mapAttributes,
     evaluateLater,
     interceptInit,
+    initInterceptors,
+    injectMagics,
     setEvaluator,
+    setRawEvaluator,
     mergeProxies,
     extractProp,
     findClosest,
@@ -1863,11 +1934,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     throttle,
     debounce,
     evaluate,
+    evaluateRaw,
     initTree,
     nextTick,
     prefixed: prefix,
     prefix: setPrefix,
-    plugin,
+    plugin: plugin$e,
     magic,
     store,
     start,
@@ -2477,7 +2549,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       shallowReadonlyInstrumentations2
     ];
   }
-  var [mutableInstrumentations, readonlyInstrumentations, shallowInstrumentations, shallowReadonlyInstrumentations] = /* @__PURE__ */ createInstrumentations();
+  var [mutableInstrumentations, readonlyInstrumentations] = /* @__PURE__ */ createInstrumentations();
   function createInstrumentationGetter(isReadonly, shallow) {
     const instrumentations = isReadonly ? readonlyInstrumentations : mutableInstrumentations;
     return (target, key, receiver) => {
@@ -2861,7 +2933,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   }
   function isListeningForASpecificKeyThatHasntBeenPressed(e, modifiers) {
     let keyModifiers = modifiers.filter((i) => {
-      return !["window", "document", "prevent", "stop", "once", "capture", "self", "away", "outside", "passive"].includes(i);
+      return !["window", "document", "prevent", "stop", "once", "capture", "self", "away", "outside", "passive", "preserve-scroll"].includes(i);
     });
     if (keyModifiers.includes("debounce")) {
       let debounceIndex = keyModifiers.indexOf("debounce");
@@ -2958,7 +3030,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           el.setAttribute("name", expression);
       });
     }
-    var event = el.tagName.toLowerCase() === "select" || ["checkbox", "radio"].includes(el.type) || modifiers.includes("lazy") ? "change" : "input";
+    let event = el.tagName.toLowerCase() === "select" || ["checkbox", "radio"].includes(el.type) || modifiers.includes("lazy") ? "change" : "input";
     let removeListener = isCloning ? () => {
     } : on(el, event, modifiers, (e) => {
       setValue(getInputValue(el, modifiers, e, getValue()));
@@ -3489,6 +3561,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     directive(directiveName, (el) => warn(`You can't use [x-${directiveName}] without first installing the "${name}" plugin here: https://alpinejs.dev/plugins/${slug}`, el));
   }
   alpine_default.setEvaluator(normalEvaluator);
+  alpine_default.setRawEvaluator(normalRawEvaluator);
   alpine_default.setReactivityEngine({ reactive: reactive2, effect: effect2, release: stop, raw: toRaw });
   var src_default$1 = alpine_default;
   var module_default$1 = src_default$1;
@@ -4406,6 +4479,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           allowOutsideClick: true,
           fallbackFocus: () => el
         };
+        let undoInert = () => {
+        };
         if (modifiers.includes("noautofocus")) {
           options.initialFocus = false;
         } else {
@@ -4413,9 +4488,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           if (autofocusEl)
             options.initialFocus = autofocusEl;
         }
+        if (modifiers.includes("inert")) {
+          options.onPostActivate = () => {
+            Alpine2.nextTick(() => {
+              undoInert = setInert(el);
+            });
+          };
+        }
         let trap = createFocusTrap(el, options);
-        let undoInert = () => {
-        };
         let undoDisableScrolling = () => {
         };
         const releaseFocus = () => {
@@ -4435,8 +4515,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           if (value && !oldValue) {
             if (modifiers.includes("noscroll"))
               undoDisableScrolling = disableScrolling();
-            if (modifiers.includes("inert"))
-              undoInert = setInert(el);
             setTimeout(() => {
               trap.activate();
             }, 15);
@@ -4534,7 +4612,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           return;
         }
         const event_array = this._events[event];
-        if (event_array === void 0) return;
+        if (event_array === void 0)
+          return;
         event_array.splice(event_array.indexOf(fct), 1);
         this._events[event] = event_array;
       });
@@ -4543,7 +4622,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       var self = this;
       forEvents(events, (event) => {
         const event_array = self._events[event];
-        if (event_array === void 0) return;
+        if (event_array === void 0)
+          return;
         event_array.forEach((fct) => {
           fct.apply(self, args);
         });
@@ -5032,7 +5112,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       obj[key] = [value];
     }
   };
-  const iterate$1 = (object, callback) => {
+  const iterate$5 = (object, callback) => {
     if (Array.isArray(object)) {
       object.forEach(callback);
     } else {
@@ -5154,7 +5234,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
               sum += scoreValue(value, token, 1);
             }
           } else {
-            iterate$1(weights, (weight, field) => {
+            iterate$5(weights, (weight, field) => {
               sum += scoreValue(getAttrFn(data2, field), token, weight);
             });
           }
@@ -5180,7 +5260,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       } else {
         return function(data2) {
           var sum = 0;
-          iterate$1(tokens, (token) => {
+          iterate$5(tokens, (token) => {
             sum += scoreObject(token, data2);
           });
           return sum / token_count;
@@ -5290,14 +5370,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       query = search.query;
       const fn_score = options.score || self._getScoreFunction(search);
       if (query.length) {
-        iterate$1(self.items, (item, id) => {
+        iterate$5(self.items, (item, id) => {
           score = fn_score(item);
           if (options.filter === false || score > 0) {
             search.items.push({ "score": score, "id": id });
           }
         });
       } else {
-        iterate$1(self.items, (_, id) => {
+        iterate$5(self.items, (_, id) => {
           search.items.push({ "score": 1, "id": id });
         });
       }
@@ -5311,15 +5391,17 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       return search;
     }
   }
-  const hash_key = (value) => {
-    if (typeof value === "undefined" || value === null) return null;
-    return get_hash(value);
+  const hash_key$1 = (value) => {
+    if (typeof value === "undefined" || value === null)
+      return null;
+    return get_hash$1(value);
   };
-  const get_hash = (value) => {
-    if (typeof value === "boolean") return value ? "1" : "0";
+  const get_hash$1 = (value) => {
+    if (typeof value === "boolean")
+      return value ? "1" : "0";
     return value + "";
   };
-  const escape_html = (str) => {
+  const escape_html$1 = (str) => {
     return (str + "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   };
   const timeout = (fn, timeout2) => {
@@ -5370,7 +5452,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       length: (input.selectionEnd || 0) - (input.selectionStart || 0)
     };
   };
-  const preventDefault = (evt, stop2 = false) => {
+  const preventDefault$5 = (evt, stop2 = false) => {
     if (evt) {
       evt.preventDefault();
       if (stop2) {
@@ -5378,7 +5460,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
     }
   };
-  const addEvent = (target, type, callback, options) => {
+  const addEvent$5 = (target, type, callback, options) => {
     target.addEventListener(type, callback, options);
   };
   const isKeyDown = (key_name, evt) => {
@@ -5406,9 +5488,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     return str.replace(/[\\"']/g, "\\$&");
   };
   const append = (parent, node) => {
-    if (node) parent.append(node);
+    if (node)
+      parent.append(node);
   };
-  const iterate = (object, callback) => {
+  const iterate$4 = (object, callback) => {
     if (Array.isArray(object)) {
       object.forEach(callback);
     } else {
@@ -5419,21 +5502,21 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
     }
   };
-  const getDom = (query) => {
+  const getDom$6 = (query) => {
     if (query.jquery) {
       return query[0];
     }
     if (query instanceof HTMLElement) {
       return query;
     }
-    if (isHtmlString(query)) {
+    if (isHtmlString$6(query)) {
       var tpl = document.createElement("template");
       tpl.innerHTML = query.trim();
       return tpl.content.firstChild;
     }
     return document.querySelector(query);
   };
-  const isHtmlString = (arg) => {
+  const isHtmlString$6 = (arg) => {
     if (typeof arg === "string" && arg.indexOf("<") > -1) {
       return true;
     }
@@ -5450,27 +5533,27 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   const applyCSS = (dom_el, css) => {
     Object.assign(dom_el.style, css);
   };
-  const addClasses = (elmts, ...classes) => {
-    var norm_classes = classesArray(classes);
-    elmts = castAsArray(elmts);
+  const addClasses$2 = (elmts, ...classes) => {
+    var norm_classes = classesArray$3(classes);
+    elmts = castAsArray$3(elmts);
     elmts.map((el) => {
       norm_classes.map((cls) => {
         el.classList.add(cls);
       });
     });
   };
-  const removeClasses = (elmts, ...classes) => {
-    var norm_classes = classesArray(classes);
-    elmts = castAsArray(elmts);
+  const removeClasses$1 = (elmts, ...classes) => {
+    var norm_classes = classesArray$3(classes);
+    elmts = castAsArray$3(elmts);
     elmts.map((el) => {
       norm_classes.map((cls) => {
         el.classList.remove(cls);
       });
     });
   };
-  const classesArray = (args) => {
+  const classesArray$3 = (args) => {
     var classes = [];
-    iterate(args, (_classes) => {
+    iterate$4(args, (_classes) => {
       if (typeof _classes === "string") {
         _classes = _classes.trim().split(/[\t\n\f\r\s]/);
       }
@@ -5480,13 +5563,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     });
     return classes.filter(Boolean);
   };
-  const castAsArray = (arg) => {
+  const castAsArray$3 = (arg) => {
     if (!Array.isArray(arg)) {
       arg = [arg];
     }
     return arg;
   };
-  const parentMatch = (target, selector, wrapper) => {
+  const parentMatch$1 = (target, selector, wrapper) => {
     if (wrapper && !wrapper.contains(target)) {
       return;
     }
@@ -5506,8 +5589,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   const isEmptyObject = (obj) => {
     return Object.keys(obj).length === 0;
   };
-  const nodeIndex = (el, amongst) => {
-    if (!el) return -1;
+  const nodeIndex$2 = (el, amongst) => {
+    if (!el)
+      return -1;
     amongst = amongst || el.nodeName;
     var i = 0;
     while (el = el.previousElementSibling) {
@@ -5517,8 +5601,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
     return i;
   };
-  const setAttr = (el, attrs) => {
-    iterate(attrs, (val, attr) => {
+  const setAttr$1 = (el, attrs) => {
+    iterate$4(attrs, (val, attr) => {
       if (val == null) {
         el.removeAttribute(attr);
       } else {
@@ -5527,12 +5611,15 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     });
   };
   const replaceNode = (existing, replacement) => {
-    if (existing.parentNode) existing.parentNode.replaceChild(replacement, existing);
+    if (existing.parentNode)
+      existing.parentNode.replaceChild(replacement, existing);
   };
   const highlight = (element, regex) => {
-    if (regex === null) return;
+    if (regex === null)
+      return;
     if (typeof regex === "string") {
-      if (!regex.length) return;
+      if (!regex.length)
+        return;
       regex = new RegExp(regex, "i");
     }
     const highlightText = (node) => {
@@ -5575,14 +5662,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   };
   const KEY_A = 65;
   const KEY_RETURN = 13;
-  const KEY_ESC = 27;
-  const KEY_LEFT = 37;
+  const KEY_ESC$1 = 27;
+  const KEY_LEFT$1 = 37;
   const KEY_UP = 38;
-  const KEY_RIGHT = 39;
+  const KEY_RIGHT$1 = 39;
   const KEY_DOWN = 40;
   const KEY_BACKSPACE = 8;
   const KEY_DELETE = 46;
-  const KEY_TAB = 9;
+  const KEY_TAB$1 = 9;
   const IS_MAC = typeof navigator === "undefined" ? false : /Mac/.test(navigator.userAgent);
   const KEY_SHORTCUT = IS_MAC ? "metaKey" : "ctrlKey";
   const defaults = {
@@ -5707,9 +5794,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return data2;
       };
       var addOption = (option, group) => {
-        var value = hash_key(option.value);
-        if (value == null) return;
-        if (!value && !settings.allowEmptyOption) return;
+        var value = hash_key$1(option.value);
+        if (value == null)
+          return;
+        if (!value && !settings.allowEmptyOption)
+          return;
         if (optionsMap.hasOwnProperty(value)) {
           if (group) {
             var arr = optionsMap[value][field_optgroup];
@@ -5745,12 +5834,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         optgroup_data.$order = optgroup_data.$order || ++$order;
         settings_element.optgroups.push(optgroup_data);
         id = optgroup_data[field_optgroup_value];
-        iterate(optgroup.children, (option) => {
+        iterate$4(optgroup.children, (option) => {
           addOption(option, id);
         });
       };
       settings_element.maxItems = input.hasAttribute("multiple") ? null : 1;
-      iterate(input.children, (child) => {
+      iterate$4(input.children, (child) => {
         tagName = child.tagName.toLowerCase();
         if (tagName === "optgroup") {
           addGroup(child);
@@ -5763,9 +5852,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       const data_raw = input.getAttribute(attr_data);
       if (!data_raw) {
         var value = input.value.trim() || "";
-        if (!settings.allowEmptyOption && !value.length) return;
+        if (!settings.allowEmptyOption && !value.length)
+          return;
         const values = value.split(settings.delimiter);
-        iterate(values, (value2) => {
+        iterate$4(values, (value2) => {
           const option = {};
           option[field_label] = value2;
           option[field_value] = value2;
@@ -5774,7 +5864,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         settings_element.items = values;
       } else {
         settings_element.options = JSON.parse(data_raw);
-        iterate(settings_element.options, (opt) => {
+        iterate$4(settings_element.options, (opt) => {
           settings_element.items.push(opt[field_value]);
         });
       }
@@ -5816,7 +5906,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       this.refreshTimeout = null;
       instance_i++;
       var dir;
-      var input = getDom(input_arg);
+      var input = getDom$6(input_arg);
       if (input.tomselect) {
         throw new Error("Tom Select already initialized on this element");
       }
@@ -5855,39 +5945,39 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       this.initializePlugins(settings.plugins);
       this.setupCallbacks();
       this.setupTemplates();
-      const wrapper = getDom("<div>");
-      const control = getDom("<div>");
+      const wrapper = getDom$6("<div>");
+      const control = getDom$6("<div>");
       const dropdown = this._render("dropdown");
-      const dropdown_content = getDom(`<div role="listbox" tabindex="-1">`);
+      const dropdown_content = getDom$6(`<div role="listbox" tabindex="-1">`);
       const classes = this.input.getAttribute("class") || "";
       const inputMode = settings.mode;
       var control_input;
-      addClasses(wrapper, settings.wrapperClass, classes, inputMode);
-      addClasses(control, settings.controlClass);
+      addClasses$2(wrapper, settings.wrapperClass, classes, inputMode);
+      addClasses$2(control, settings.controlClass);
       append(wrapper, control);
-      addClasses(dropdown, settings.dropdownClass, inputMode);
+      addClasses$2(dropdown, settings.dropdownClass, inputMode);
       if (settings.copyClassesToDropdown) {
-        addClasses(dropdown, classes);
+        addClasses$2(dropdown, classes);
       }
-      addClasses(dropdown_content, settings.dropdownContentClass);
+      addClasses$2(dropdown_content, settings.dropdownContentClass);
       append(dropdown, dropdown_content);
-      getDom(settings.dropdownParent || wrapper).appendChild(dropdown);
-      if (isHtmlString(settings.controlInput)) {
-        control_input = getDom(settings.controlInput);
+      getDom$6(settings.dropdownParent || wrapper).appendChild(dropdown);
+      if (isHtmlString$6(settings.controlInput)) {
+        control_input = getDom$6(settings.controlInput);
         var attrs = ["autocorrect", "autocapitalize", "autocomplete", "spellcheck"];
-        iterate(attrs, (attr) => {
+        iterate$4(attrs, (attr) => {
           if (input.getAttribute(attr)) {
-            setAttr(control_input, { [attr]: input.getAttribute(attr) });
+            setAttr$1(control_input, { [attr]: input.getAttribute(attr) });
           }
         });
         control_input.tabIndex = -1;
         control.appendChild(control_input);
         this.focus_node = control_input;
       } else if (settings.controlInput) {
-        control_input = getDom(settings.controlInput);
+        control_input = getDom$6(settings.controlInput);
         this.focus_node = control_input;
       } else {
-        control_input = getDom("<input/>");
+        control_input = getDom$6("<input/>");
         this.focus_node = control;
       }
       this.wrapper = wrapper;
@@ -5913,10 +6003,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       const focus_node = self.focus_node;
       const passive_event = { passive: true };
       const listboxId = self.inputId + "-ts-dropdown";
-      setAttr(dropdown_content, {
+      setAttr$1(dropdown_content, {
         id: listboxId
       });
-      setAttr(focus_node, {
+      setAttr$1(focus_node, {
         role: "combobox",
         "aria-haspopup": "listbox",
         "aria-expanded": "false",
@@ -5927,22 +6017,22 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       const label = document.querySelector(query);
       const label_click = self.focus.bind(self);
       if (label) {
-        addEvent(label, "click", label_click);
-        setAttr(label, { for: control_id });
+        addEvent$5(label, "click", label_click);
+        setAttr$1(label, { for: control_id });
         const label_id = getId(label, self.inputId + "-ts-label");
-        setAttr(focus_node, { "aria-labelledby": label_id });
-        setAttr(dropdown_content, { "aria-labelledby": label_id });
+        setAttr$1(focus_node, { "aria-labelledby": label_id });
+        setAttr$1(dropdown_content, { "aria-labelledby": label_id });
       }
       wrapper.style.width = input.style.width;
       if (self.plugins.names.length) {
         const classes_plugins = "plugin-" + self.plugins.names.join(" plugin-");
-        addClasses([wrapper, dropdown], classes_plugins);
+        addClasses$2([wrapper, dropdown], classes_plugins);
       }
       if ((settings.maxItems === null || settings.maxItems > 1) && self.is_select_tag) {
-        setAttr(input, { multiple: "multiple" });
+        setAttr$1(input, { multiple: "multiple" });
       }
       if (settings.placeholder) {
-        setAttr(control_input, { placeholder: settings.placeholder });
+        setAttr$1(control_input, { placeholder: settings.placeholder });
       }
       if (!settings.splitOn && settings.delimiter) {
         settings.splitOn = new RegExp("\\s*" + escape_regex(settings.delimiter) + "+\\s*");
@@ -5950,38 +6040,39 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       if (settings.load && settings.loadThrottle) {
         settings.load = loadDebounce(settings.load, settings.loadThrottle);
       }
-      addEvent(dropdown, "mousemove", () => {
+      addEvent$5(dropdown, "mousemove", () => {
         self.ignoreHover = false;
       });
-      addEvent(dropdown, "mouseenter", (e) => {
-        var target_match = parentMatch(e.target, "[data-selectable]", dropdown);
-        if (target_match) self.onOptionHover(e, target_match);
+      addEvent$5(dropdown, "mouseenter", (e) => {
+        var target_match = parentMatch$1(e.target, "[data-selectable]", dropdown);
+        if (target_match)
+          self.onOptionHover(e, target_match);
       }, { capture: true });
-      addEvent(dropdown, "click", (evt) => {
-        const option = parentMatch(evt.target, "[data-selectable]");
+      addEvent$5(dropdown, "click", (evt) => {
+        const option = parentMatch$1(evt.target, "[data-selectable]");
         if (option) {
           self.onOptionSelect(evt, option);
-          preventDefault(evt, true);
+          preventDefault$5(evt, true);
         }
       });
-      addEvent(control, "click", (evt) => {
-        var target_match = parentMatch(evt.target, "[data-ts-item]", control);
+      addEvent$5(control, "click", (evt) => {
+        var target_match = parentMatch$1(evt.target, "[data-ts-item]", control);
         if (target_match && self.onItemSelect(evt, target_match)) {
-          preventDefault(evt, true);
+          preventDefault$5(evt, true);
           return;
         }
         if (control_input.value != "") {
           return;
         }
         self.onClick();
-        preventDefault(evt, true);
+        preventDefault$5(evt, true);
       });
-      addEvent(focus_node, "keydown", (e) => self.onKeyDown(e));
-      addEvent(control_input, "keypress", (e) => self.onKeyPress(e));
-      addEvent(control_input, "input", (e) => self.onInput(e));
-      addEvent(focus_node, "blur", (e) => self.onBlur(e));
-      addEvent(focus_node, "focus", (e) => self.onFocus(e));
-      addEvent(control_input, "paste", (e) => self.onPaste(e));
+      addEvent$5(focus_node, "keydown", (e) => self.onKeyDown(e));
+      addEvent$5(control_input, "keypress", (e) => self.onKeyPress(e));
+      addEvent$5(control_input, "input", (e) => self.onInput(e));
+      addEvent$5(focus_node, "blur", (e) => self.onBlur(e));
+      addEvent$5(focus_node, "focus", (e) => self.onFocus(e));
+      addEvent$5(control_input, "paste", (e) => self.onPaste(e));
       const doc_mousedown = (evt) => {
         const target = evt.composedPath()[0];
         if (!wrapper.contains(target) && !dropdown.contains(target)) {
@@ -5994,7 +6085,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         if (target == control_input && self.isOpen) {
           evt.stopPropagation();
         } else {
-          preventDefault(evt, true);
+          preventDefault$5(evt, true);
         }
       };
       const win_scroll = () => {
@@ -6002,14 +6093,15 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           self.positionDropdown();
         }
       };
-      addEvent(document, "mousedown", doc_mousedown);
-      addEvent(window, "scroll", win_scroll, passive_event);
-      addEvent(window, "resize", win_scroll, passive_event);
+      addEvent$5(document, "mousedown", doc_mousedown);
+      addEvent$5(window, "scroll", win_scroll, passive_event);
+      addEvent$5(window, "resize", win_scroll, passive_event);
       this._destroy = () => {
         document.removeEventListener("mousedown", doc_mousedown);
         window.removeEventListener("scroll", win_scroll);
         window.removeEventListener("resize", win_scroll);
-        if (label) label.removeEventListener("click", label_click);
+        if (label)
+          label.removeEventListener("click", label_click);
       };
       this.revertSettings = {
         innerHTML: input.innerHTML,
@@ -6021,7 +6113,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       settings.items = [];
       delete settings.optgroups;
       delete settings.options;
-      addEvent(input, "invalid", () => {
+      addEvent$5(input, "invalid", () => {
         if (self.isValid) {
           self.isValid = false;
           self.isInvalid = true;
@@ -6041,7 +6133,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         self.enable();
       }
       self.on("change", this.onChange);
-      addClasses(input, "tomselected", "ts-hidden-accessible");
+      addClasses$2(input, "tomselected", "ts-hidden-accessible");
       self.trigger("initialize");
       if (settings.preload === true) {
         self.preload();
@@ -6053,7 +6145,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      */
     setupOptions(options = [], optgroups = []) {
       this.addOptions(options);
-      iterate(optgroups, (optgroup) => {
+      iterate$4(optgroups, (optgroup) => {
         this.registerOptionGroup(optgroup);
       });
     }
@@ -6125,7 +6217,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       };
       for (key in callbacks) {
         fn = this.settings[callbacks[key]];
-        if (fn) this.on(key, fn);
+        if (fn)
+          this.on(key, fn);
       }
     }
     /**
@@ -6179,7 +6272,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     onPaste(e) {
       var self = this;
       if (self.isInputHidden || self.isLocked) {
-        preventDefault(e);
+        preventDefault$5(e);
         return;
       }
       if (!self.settings.splitOn) {
@@ -6191,8 +6284,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           return;
         }
         var splitInput = pastedText.trim().split(self.settings.splitOn);
-        iterate(splitInput, (piece) => {
-          const hash = hash_key(piece);
+        iterate$4(splitInput, (piece) => {
+          const hash = hash_key$1(piece);
           if (hash) {
             if (this.options[piece]) {
               self.addItem(piece);
@@ -6210,13 +6303,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     onKeyPress(e) {
       var self = this;
       if (self.isLocked) {
-        preventDefault(e);
+        preventDefault$5(e);
         return;
       }
       var character = String.fromCharCode(e.keyCode || e.which);
       if (self.settings.create && self.settings.mode === "multi" && character === self.settings.delimiter) {
         self.createItem();
-        preventDefault(e);
+        preventDefault$5(e);
         return;
       }
     }
@@ -6228,8 +6321,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       var self = this;
       self.ignoreHover = true;
       if (self.isLocked) {
-        if (e.keyCode !== KEY_TAB) {
-          preventDefault(e);
+        if (e.keyCode !== KEY_TAB$1) {
+          preventDefault$5(e);
         }
         return;
       }
@@ -6237,15 +6330,15 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         case KEY_A:
           if (isKeyDown(KEY_SHORTCUT, e)) {
             if (self.control_input.value == "") {
-              preventDefault(e);
+              preventDefault$5(e);
               self.selectAll();
               return;
             }
           }
           break;
-        case KEY_ESC:
+        case KEY_ESC$1:
           if (self.isOpen) {
-            preventDefault(e, true);
+            preventDefault$5(e, true);
             self.close();
           }
           self.clearActiveItems();
@@ -6255,41 +6348,43 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             self.open();
           } else if (self.activeOption) {
             let next = self.getAdjacent(self.activeOption, 1);
-            if (next) self.setActiveOption(next);
+            if (next)
+              self.setActiveOption(next);
           }
-          preventDefault(e);
+          preventDefault$5(e);
           return;
         case KEY_UP:
           if (self.activeOption) {
             let prev = self.getAdjacent(self.activeOption, -1);
-            if (prev) self.setActiveOption(prev);
+            if (prev)
+              self.setActiveOption(prev);
           }
-          preventDefault(e);
+          preventDefault$5(e);
           return;
         case KEY_RETURN:
           if (self.canSelect(self.activeOption)) {
             self.onOptionSelect(e, self.activeOption);
-            preventDefault(e);
+            preventDefault$5(e);
           } else if (self.settings.create && self.createItem()) {
-            preventDefault(e);
+            preventDefault$5(e);
           } else if (document.activeElement == self.control_input && self.isOpen) {
-            preventDefault(e);
+            preventDefault$5(e);
           }
           return;
-        case KEY_LEFT:
+        case KEY_LEFT$1:
           self.advanceSelection(-1, e);
           return;
-        case KEY_RIGHT:
+        case KEY_RIGHT$1:
           self.advanceSelection(1, e);
           return;
-        case KEY_TAB:
+        case KEY_TAB$1:
           if (self.settings.selectOnTab) {
             if (self.canSelect(self.activeOption)) {
               self.onOptionSelect(e, self.activeOption);
-              preventDefault(e);
+              preventDefault$5(e);
             }
             if (self.settings.create && self.createItem()) {
-              preventDefault(e);
+              preventDefault$5(e);
             }
           }
           return;
@@ -6299,7 +6394,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           return;
       }
       if (self.isInputHidden && !isKeyDown(KEY_SHORTCUT, e)) {
-        preventDefault(e);
+        preventDefault$5(e);
       }
     }
     /**
@@ -6311,7 +6406,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return;
       }
       const value = this.inputValue();
-      if (this.lastValue === value) return;
+      if (this.lastValue === value)
+        return;
       this.lastValue = value;
       if (value == "") {
         this._onInput();
@@ -6339,7 +6435,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      *
      */
     onOptionHover(evt, option) {
-      if (this.ignoreHover) return;
+      if (this.ignoreHover)
+        return;
       this.setActiveOption(option, false);
     }
     /**
@@ -6351,13 +6448,16 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       var wasFocused = self.isFocused;
       if (self.isDisabled || self.isReadOnly) {
         self.blur();
-        preventDefault(e);
+        preventDefault$5(e);
         return;
       }
-      if (self.ignoreFocus) return;
+      if (self.ignoreFocus)
+        return;
       self.isFocused = true;
-      if (self.settings.preload === "focus") self.preload();
-      if (!wasFocused) self.trigger("focus");
+      if (self.settings.preload === "focus")
+        self.preload();
+      if (!wasFocused)
+        self.trigger("focus");
       if (!self.activeItems.length) {
         self.inputState();
         self.refreshOptions(!!self.settings.openOnFocus);
@@ -6369,9 +6469,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      *
      */
     onBlur(e) {
-      if (document.hasFocus() === false) return;
+      if (document.hasFocus() === false)
+        return;
       var self = this;
-      if (!self.isFocused) return;
+      if (!self.isFocused)
+        return;
       self.isFocused = false;
       self.ignoreFocus = false;
       var deactivate = () => {
@@ -6434,7 +6536,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     onItemSelect(evt, item) {
       var self = this;
       if (!self.isLocked && self.settings.mode === "multi") {
-        preventDefault(evt);
+        preventDefault$5(evt);
         self.setActiveItem(item, evt);
         return true;
       }
@@ -6457,8 +6559,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      *
      */
     canLoad(value) {
-      if (!this.settings.load) return false;
-      if (this.loadedSearches.hasOwnProperty(value)) return false;
+      if (!this.settings.load)
+        return false;
+      if (this.loadedSearches.hasOwnProperty(value))
+        return false;
       return true;
     }
     /**
@@ -6467,8 +6571,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      */
     load(value) {
       const self = this;
-      if (!self.canLoad(value)) return;
-      addClasses(self.wrapper, self.settings.loadingClass);
+      if (!self.canLoad(value))
+        return;
+      addClasses$2(self.wrapper, self.settings.loadingClass);
       self.loading++;
       const callback = self.loadCallback.bind(self);
       self.settings.load.call(self, value, callback);
@@ -6485,13 +6590,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       self.setupOptions(options, optgroups);
       self.refreshOptions(self.isFocused && !self.isInputHidden);
       if (!self.loading) {
-        removeClasses(self.wrapper, self.settings.loadingClass);
+        removeClasses$1(self.wrapper, self.settings.loadingClass);
       }
       self.trigger("load", options, optgroups);
     }
     preload() {
       var classList = this.wrapper.classList;
-      if (classList.contains("preloaded")) return;
+      if (classList.contains("preloaded"))
+        return;
       classList.add("preloaded");
       this.load("");
     }
@@ -6537,7 +6643,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      *
      */
     setMaxItems(value) {
-      if (value === 0) value = null;
+      if (value === 0)
+        value = null;
       this.settings.maxItems = value;
       this.refreshState();
     }
@@ -6550,7 +6657,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       var eventName;
       var i, begin, end, swap;
       var last;
-      if (self.settings.mode === "single") return;
+      if (self.settings.mode === "single")
+        return;
       if (!item) {
         self.clearActiveItems();
         if (self.isFocused) {
@@ -6574,7 +6682,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             self.setActiveItemClass(item);
           }
         }
-        preventDefault(e);
+        preventDefault$5(e);
       } else if (eventName === "click" && isKeyDown(KEY_SHORTCUT, e) || eventName === "keydown" && isKeyDown("shiftKey", e)) {
         if (item.classList.contains("active")) {
           self.removeActiveItem(item);
@@ -6597,8 +6705,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     setActiveItemClass(item) {
       const self = this;
       const last_active = self.control.querySelector(".last-active");
-      if (last_active) removeClasses(last_active, "last-active");
-      addClasses(item, "active last-active");
+      if (last_active)
+        removeClasses$1(last_active, "last-active");
+      addClasses$2(item, "active last-active");
       self.trigger("item_select", item);
       if (self.activeItems.indexOf(item) == -1) {
         self.activeItems.push(item);
@@ -6611,14 +6720,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     removeActiveItem(item) {
       var idx = this.activeItems.indexOf(item);
       this.activeItems.splice(idx, 1);
-      removeClasses(item, "active");
+      removeClasses$1(item, "active");
     }
     /**
      * Clears all the active items
      *
      */
     clearActiveItems() {
-      removeClasses(this.activeItems, "active");
+      removeClasses$1(this.activeItems, "active");
       this.activeItems = [];
     }
     /**
@@ -6631,19 +6740,22 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return;
       }
       this.clearActiveOption();
-      if (!option) return;
+      if (!option)
+        return;
       this.activeOption = option;
-      setAttr(this.focus_node, { "aria-activedescendant": option.getAttribute("id") });
-      setAttr(option, { "aria-selected": "true" });
-      addClasses(option, "active");
-      if (scroll) this.scrollToOption(option);
+      setAttr$1(this.focus_node, { "aria-activedescendant": option.getAttribute("id") });
+      setAttr$1(option, { "aria-selected": "true" });
+      addClasses$2(option, "active");
+      if (scroll)
+        this.scrollToOption(option);
     }
     /**
      * Sets the dropdown_content scrollTop to display the option
      *
      */
     scrollToOption(option, behavior) {
-      if (!option) return;
+      if (!option)
+        return;
       const content = this.dropdown_content;
       const height_menu = content.clientHeight;
       const scrollTop = content.scrollTop || 0;
@@ -6673,24 +6785,26 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      */
     clearActiveOption() {
       if (this.activeOption) {
-        removeClasses(this.activeOption, "active");
-        setAttr(this.activeOption, { "aria-selected": null });
+        removeClasses$1(this.activeOption, "active");
+        setAttr$1(this.activeOption, { "aria-selected": null });
       }
       this.activeOption = null;
-      setAttr(this.focus_node, { "aria-activedescendant": null });
+      setAttr$1(this.focus_node, { "aria-activedescendant": null });
     }
     /**
      * Selects all items (CTRL + A).
      */
     selectAll() {
       const self = this;
-      if (self.settings.mode === "single") return;
+      if (self.settings.mode === "single")
+        return;
       const activeItems = self.controlChildren();
-      if (!activeItems.length) return;
+      if (!activeItems.length)
+        return;
       self.inputState();
       self.close();
       self.activeItems = activeItems;
-      iterate(activeItems, (item) => {
+      iterate$4(activeItems, (item) => {
         self.setActiveItemClass(item);
       });
     }
@@ -6700,14 +6814,15 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      */
     inputState() {
       var self = this;
-      if (!self.control.contains(self.control_input)) return;
-      setAttr(self.control_input, { placeholder: self.settings.placeholder });
+      if (!self.control.contains(self.control_input))
+        return;
+      setAttr$1(self.control_input, { placeholder: self.settings.placeholder });
       if (self.activeItems.length > 0 || !self.isFocused && self.settings.hidePlaceholder && self.items.length > 0) {
         self.setTextboxValue();
         self.isInputHidden = true;
       } else {
         if (self.settings.hidePlaceholder && self.items.length > 0) {
-          setAttr(self.control_input, { placeholder: "" });
+          setAttr$1(self.control_input, { placeholder: "" });
         }
         self.isInputHidden = false;
       }
@@ -6724,7 +6839,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      */
     focus() {
       var self = this;
-      if (self.isDisabled || self.isReadOnly) return;
+      if (self.isDisabled || self.isReadOnly)
+        return;
       self.ignoreFocus = true;
       if (self.control_input.offsetWidth) {
         self.control_input.focus();
@@ -6798,7 +6914,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
       if (self.settings.hideSelected) {
         result.items = result.items.filter((item) => {
-          let hashed = hash_key(item.id);
+          let hashed = hash_key$1(item.id);
           return !(hashed && self.items.indexOf(hashed) !== -1);
         });
       }
@@ -6849,11 +6965,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       };
       for (i = 0; i < n; i++) {
         let item = results.items[i];
-        if (!item) continue;
+        if (!item)
+          continue;
         let opt_value = item.id;
         let option = self.options[opt_value];
-        if (option === void 0) continue;
-        let opt_hash = get_hash(opt_value);
+        if (option === void 0)
+          continue;
+        let opt_hash = get_hash$1(opt_value);
         let option_el = self.getOption(opt_hash, true);
         if (!self.settings.hideSelected) {
           option_el.classList.toggle("selected", self.items.includes(opt_hash));
@@ -6872,9 +6990,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           const [group_order_i, group_fragment] = getGroupFragment(optgroup, order);
           if (j > 0) {
             option_el = option_el.cloneNode(true);
-            setAttr(option_el, { id: option.$id + "-clone-" + j, "aria-selected": null });
+            setAttr$1(option_el, { id: option.$id + "-clone-" + j, "aria-selected": null });
             option_el.classList.add("ts-cloned");
-            removeClasses(option_el, "active");
+            removeClasses$1(option_el, "active");
             if (self.activeOption && self.activeOption.dataset.value == opt_value) {
               if (active_group && active_group.dataset.group === optgroup.toString()) {
                 active_option = option_el;
@@ -6893,10 +7011,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         });
       }
       html = document.createDocumentFragment();
-      iterate(groups_order, (group_order) => {
+      iterate$4(groups_order, (group_order) => {
         let group_fragment = group_order.fragment;
         let optgroup2 = group_order.optgroup;
-        if (!group_fragment || !group_fragment.children.length) return;
+        if (!group_fragment || !group_fragment.children.length)
+          return;
         let group_heading = self.optgroups[optgroup2];
         if (group_heading !== void 0) {
           let group_options = document.createDocumentFragment();
@@ -6914,7 +7033,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       if (self.settings.highlight) {
         removeHighlight(dropdown_content);
         if (results.query.length && results.tokens.length) {
-          iterate(results.tokens, (tok) => {
+          iterate$4(results.tokens, (tok) => {
             highlight(dropdown_content, tok.regex);
           });
         }
@@ -6990,7 +7109,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         self.addOptions(data2, user_created);
         return false;
       }
-      const key = hash_key(data2[self.settings.valueField]);
+      const key = hash_key$1(data2[self.settings.valueField]);
       if (key === null || self.options.hasOwnProperty(key)) {
         return false;
       }
@@ -7009,7 +7128,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      *
      */
     addOptions(data2, user_created = false) {
-      iterate(data2, (dat) => {
+      iterate$4(data2, (dat) => {
         this.addOption(dat, user_created);
       });
     }
@@ -7025,8 +7144,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      * @return {boolean|string}
      */
     registerOptionGroup(data2) {
-      var key = hash_key(data2[this.settings.optgroupValueField]);
-      if (key === null) return false;
+      var key = hash_key$1(data2[this.settings.optgroupValueField]);
+      if (key === null)
+        return false;
       data2.$order = data2.$order || ++this.order;
       this.optgroups[key] = data2;
       return key;
@@ -7072,12 +7192,15 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       const self = this;
       var item_new;
       var index_item;
-      const value_old = hash_key(value);
-      const value_new = hash_key(data2[self.settings.valueField]);
-      if (value_old === null) return;
+      const value_old = hash_key$1(value);
+      const value_new = hash_key$1(data2[self.settings.valueField]);
+      if (value_old === null)
+        return;
       const data_old = self.options[value_old];
-      if (data_old == void 0) return;
-      if (typeof value_new !== "string") throw new Error("Value must be set in option data");
+      if (data_old == void 0)
+        return;
+      if (typeof value_new !== "string")
+        throw new Error("Value must be set in option data");
       const option = self.getOption(value_old);
       const item = self.getItem(value_old);
       data2.$order = data2.$order || data_old.$order;
@@ -7100,7 +7223,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           self.items.splice(index_item, 1, value_new);
         }
         item_new = self._render("item", data2);
-        if (item.classList.contains("active")) addClasses(item_new, "active");
+        if (item.classList.contains("active"))
+          addClasses$2(item_new, "active");
         replaceNode(item, item_new);
       }
       self.lastQuery = null;
@@ -7111,7 +7235,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      */
     removeOption(value, silent) {
       const self = this;
-      value = get_hash(value);
+      value = get_hash$1(value);
       self.uncacheValue(value);
       delete self.userOptions[value];
       delete self.options[value];
@@ -7128,7 +7252,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       this.userOptions = {};
       this.clearCache();
       const selected = {};
-      iterate(this.options, (option, key) => {
+      iterate$4(this.options, (option, key) => {
         if (boundFilter(option, key)) {
           selected[key] = option;
         }
@@ -7154,8 +7278,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      *
      */
     getOption(value, create = false) {
-      const hashed = hash_key(value);
-      if (hashed === null) return null;
+      const hashed = hash_key$1(value);
+      if (hashed === null)
+        return null;
       const option = this.options[hashed];
       if (option != void 0) {
         if (option.$div) {
@@ -7202,7 +7327,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       if (typeof item == "object") {
         return item;
       }
-      var value = hash_key(item);
+      var value = hash_key$1(item);
       return value !== null ? this.control.querySelector(`[data-value="${addSlashes(value)}"]`) : null;
     }
     /**
@@ -7231,7 +7356,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         var item, wasFull;
         const self = this;
         const inputMode = self.settings.mode;
-        const hashed = hash_key(value);
+        const hashed = hash_key$1(value);
         if (hashed && self.items.indexOf(hashed) !== -1) {
           if (inputMode === "single") {
             self.close();
@@ -7240,9 +7365,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             return;
           }
         }
-        if (hashed === null || !self.options.hasOwnProperty(hashed)) return;
-        if (inputMode === "single") self.clear(silent);
-        if (inputMode === "multi" && self.isFull()) return;
+        if (hashed === null || !self.options.hasOwnProperty(hashed))
+          return;
+        if (inputMode === "single")
+          self.clear(silent);
+        if (inputMode === "multi" && self.isFull())
+          return;
         item = self._render("item", self.options[hashed]);
         if (self.control.contains(item)) {
           item = item.cloneNode(true);
@@ -7285,15 +7413,16 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     removeItem(item = null, silent) {
       const self = this;
       item = self.getItem(item);
-      if (!item) return;
+      if (!item)
+        return;
       var i, idx;
       const value = item.dataset.value;
-      i = nodeIndex(item);
+      i = nodeIndex$2(item);
       item.remove();
       if (item.classList.contains("active")) {
         idx = self.activeItems.indexOf(item);
         self.activeItems.splice(idx, 1);
-        removeClasses(item, "active");
+        removeClasses$1(item, "active");
       }
       self.items.splice(i, 1);
       self.lastQuery = null;
@@ -7338,8 +7467,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       var created = false;
       var create = (data2) => {
         self.unlock();
-        if (!data2 || typeof data2 !== "object") return callback();
-        var value = hash_key(data2[self.settings.valueField]);
+        if (!data2 || typeof data2 !== "object")
+          return callback();
+        var value = hash_key$1(data2[self.settings.valueField]);
         if (typeof value !== "string") {
           return callback();
         }
@@ -7435,7 +7565,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       if (self.is_select_tag) {
         let AddSelected = function(option_el, value, label2) {
           if (!option_el) {
-            option_el = getDom('<option value="' + escape_html(value) + '">' + escape_html(label2) + "</option>");
+            option_el = getDom$6('<option value="' + escape_html$1(value) + '">' + escape_html$1(label2) + "</option>");
           }
           if (option_el != empty_option) {
             self.input.append(option_el);
@@ -7480,9 +7610,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      */
     open() {
       var self = this;
-      if (self.isLocked || self.isOpen || self.settings.mode === "multi" && self.isFull()) return;
+      if (self.isLocked || self.isOpen || self.settings.mode === "multi" && self.isFull())
+        return;
       self.isOpen = true;
-      setAttr(self.focus_node, { "aria-expanded": "true" });
+      setAttr$1(self.focus_node, { "aria-expanded": "true" });
       self.refreshState();
       applyCSS(self.dropdown, { visibility: "hidden", display: "block" });
       self.positionDropdown();
@@ -7503,13 +7634,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         }
       }
       self.isOpen = false;
-      setAttr(self.focus_node, { "aria-expanded": "false" });
+      setAttr$1(self.focus_node, { "aria-expanded": "false" });
       applyCSS(self.dropdown, { display: "none" });
       if (self.settings.hideSelected) {
         self.clearActiveOption();
       }
       self.refreshState();
-      if (trigger2) self.trigger("dropdown_close", self.dropdown);
+      if (trigger2)
+        self.trigger("dropdown_close", self.dropdown);
     }
     /**
      * Calculates and applies the appropriate
@@ -7537,13 +7669,15 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      */
     clear(silent) {
       var self = this;
-      if (!self.items.length) return;
+      if (!self.items.length)
+        return;
       var items = self.controlChildren();
-      iterate(items, (item) => {
+      iterate$4(items, (item) => {
         self.removeItem(item, true);
       });
       self.inputState();
-      if (!silent) self.updateOriginalInput();
+      if (!silent)
+        self.updateOriginalInput();
       self.trigger("clear");
     }
     /**
@@ -7570,11 +7704,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       const rm_items = [];
       if (self.activeItems.length) {
         tail = getTail(self.activeItems, direction);
-        caret = nodeIndex(tail);
+        caret = nodeIndex$2(tail);
         if (direction > 0) {
           caret++;
         }
-        iterate(self.activeItems, (item) => rm_items.push(item));
+        iterate$4(self.activeItems, (item) => rm_items.push(item));
       } else if ((self.isFocused || self.settings.mode === "single") && self.items.length) {
         const items = self.controlChildren();
         let rm_item;
@@ -7590,7 +7724,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       if (!self.shouldDelete(rm_items, e)) {
         return false;
       }
-      preventDefault(e, true);
+      preventDefault$5(e, true);
       if (typeof caret !== "undefined") {
         self.setCaret(caret);
       }
@@ -7621,8 +7755,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      */
     advanceSelection(direction, e) {
       var last_active, adjacent, self = this;
-      if (self.rtl) direction *= -1;
-      if (self.inputValue().length) return;
+      if (self.rtl)
+        direction *= -1;
+      if (self.inputValue().length)
+        return;
       if (isKeyDown(KEY_SHORTCUT, e) || isKeyDown("shiftKey", e)) {
         last_active = self.getLastActive(direction);
         if (last_active) {
@@ -7742,7 +7878,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       self.dropdown.remove();
       self.input.innerHTML = revertSettings.innerHTML;
       self.input.tabIndex = revertSettings.tabIndex;
-      removeClasses(self.input, "tomselected", "ts-hidden-accessible");
+      removeClasses$1(self.input, "tomselected", "ts-hidden-accessible");
       self._destroy();
       delete self.input.tomselect;
     }
@@ -7757,33 +7893,33 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       if (typeof this.settings.render[templateName] !== "function") {
         return null;
       }
-      html = self.settings.render[templateName].call(this, data2, escape_html);
+      html = self.settings.render[templateName].call(this, data2, escape_html$1);
       if (!html) {
         return null;
       }
-      html = getDom(html);
+      html = getDom$6(html);
       if (templateName === "option" || templateName === "option_create") {
         if (data2[self.settings.disabledField]) {
-          setAttr(html, { "aria-disabled": "true" });
+          setAttr$1(html, { "aria-disabled": "true" });
         } else {
-          setAttr(html, { "data-selectable": "" });
+          setAttr$1(html, { "data-selectable": "" });
         }
       } else if (templateName === "optgroup") {
         id = data2.group[self.settings.optgroupValueField];
-        setAttr(html, { "data-group": id });
+        setAttr$1(html, { "data-group": id });
         if (data2.group[self.settings.disabledField]) {
-          setAttr(html, { "data-disabled": "" });
+          setAttr$1(html, { "data-disabled": "" });
         }
       }
       if (templateName === "option" || templateName === "item") {
-        const value = get_hash(data2[self.settings.valueField]);
-        setAttr(html, { "data-value": value });
+        const value = get_hash$1(data2[self.settings.valueField]);
+        setAttr$1(html, { "data-value": value });
         if (templateName === "item") {
-          addClasses(html, self.settings.itemClass);
-          setAttr(html, { "data-ts-item": "" });
+          addClasses$2(html, self.settings.itemClass);
+          setAttr$1(html, { "data-ts-item": "" });
         } else {
-          addClasses(html, self.settings.optionClass);
-          setAttr(html, {
+          addClasses$2(html, self.settings.optionClass);
+          setAttr$1(html, {
             role: "option",
             id: data2.$id
           });
@@ -7811,7 +7947,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      *
      */
     clearCache() {
-      iterate(this.options, (option) => {
+      iterate$4(this.options, (option) => {
         if (option.$div) {
           option.$div.remove();
           delete option.$div;
@@ -7824,7 +7960,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
      */
     uncacheValue(value) {
       const option_el = this.getOption(value);
-      if (option_el) option_el.remove();
+      if (option_el)
+        option_el.remove();
     }
     /**
      * Determines whether or not to display the
@@ -7860,7 +7997,419 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       };
     }
   }
-  function caret_position() {
+  const addEvent$4 = (target, type, callback, options) => {
+    target.addEventListener(type, callback, options);
+  };
+  function plugin$d() {
+    addEvent$4(this.input, "change", () => {
+      this.sync();
+    });
+  }
+  const hash_key = (value) => {
+    if (typeof value === "undefined" || value === null) return null;
+    return get_hash(value);
+  };
+  const get_hash = (value) => {
+    if (typeof value === "boolean") return value ? "1" : "0";
+    return value + "";
+  };
+  const preventDefault$4 = (evt, stop2 = false) => {
+    if (evt) {
+      evt.preventDefault();
+      if (stop2) {
+        evt.stopPropagation();
+      }
+    }
+  };
+  const getDom$5 = (query) => {
+    if (query.jquery) {
+      return query[0];
+    }
+    if (query instanceof HTMLElement) {
+      return query;
+    }
+    if (isHtmlString$5(query)) {
+      var tpl = document.createElement("template");
+      tpl.innerHTML = query.trim();
+      return tpl.content.firstChild;
+    }
+    return document.querySelector(query);
+  };
+  const isHtmlString$5 = (arg) => {
+    if (typeof arg === "string" && arg.indexOf("<") > -1) {
+      return true;
+    }
+    return false;
+  };
+  function plugin$c(userOptions) {
+    var self = this;
+    var orig_onOptionSelect = self.onOptionSelect;
+    self.settings.hideSelected = false;
+    const cbOptions = Object.assign({
+      // so that the user may add different ones as well
+      className: "tomselect-checkbox",
+      // the following default to the historic plugin's values
+      checkedClassNames: void 0,
+      uncheckedClassNames: void 0
+    }, userOptions);
+    var UpdateChecked = function UpdateChecked2(checkbox, toCheck) {
+      if (toCheck) {
+        checkbox.checked = true;
+        if (cbOptions.uncheckedClassNames) {
+          checkbox.classList.remove(...cbOptions.uncheckedClassNames);
+        }
+        if (cbOptions.checkedClassNames) {
+          checkbox.classList.add(...cbOptions.checkedClassNames);
+        }
+      } else {
+        checkbox.checked = false;
+        if (cbOptions.checkedClassNames) {
+          checkbox.classList.remove(...cbOptions.checkedClassNames);
+        }
+        if (cbOptions.uncheckedClassNames) {
+          checkbox.classList.add(...cbOptions.uncheckedClassNames);
+        }
+      }
+    };
+    var UpdateCheckbox = function UpdateCheckbox2(option) {
+      setTimeout(() => {
+        var checkbox = option.querySelector("input." + cbOptions.className);
+        if (checkbox instanceof HTMLInputElement) {
+          UpdateChecked(checkbox, option.classList.contains("selected"));
+        }
+      }, 1);
+    };
+    self.hook("after", "setupTemplates", () => {
+      var orig_render_option = self.settings.render.option;
+      self.settings.render.option = (data2, escape_html2) => {
+        var rendered = getDom$5(orig_render_option.call(self, data2, escape_html2));
+        var checkbox = document.createElement("input");
+        if (cbOptions.className) {
+          checkbox.classList.add(cbOptions.className);
+        }
+        checkbox.addEventListener("click", function(evt) {
+          preventDefault$4(evt);
+        });
+        checkbox.type = "checkbox";
+        const hashed = hash_key(data2[self.settings.valueField]);
+        UpdateChecked(checkbox, !!(hashed && self.items.indexOf(hashed) > -1));
+        rendered.prepend(checkbox);
+        return rendered;
+      };
+    });
+    self.on("item_remove", (value) => {
+      var option = self.getOption(value);
+      if (option) {
+        option.classList.remove("selected");
+        UpdateCheckbox(option);
+      }
+    });
+    self.on("item_add", (value) => {
+      var option = self.getOption(value);
+      if (option) {
+        UpdateCheckbox(option);
+      }
+    });
+    self.hook("instead", "onOptionSelect", (evt, option) => {
+      if (option.classList.contains("selected")) {
+        option.classList.remove("selected");
+        self.removeItem(option.dataset.value);
+        self.refreshOptions();
+        preventDefault$4(evt, true);
+        return;
+      }
+      orig_onOptionSelect.call(self, evt, option);
+      UpdateCheckbox(option);
+    });
+  }
+  const getDom$4 = (query) => {
+    if (query.jquery) {
+      return query[0];
+    }
+    if (query instanceof HTMLElement) {
+      return query;
+    }
+    if (isHtmlString$4(query)) {
+      var tpl = document.createElement("template");
+      tpl.innerHTML = query.trim();
+      return tpl.content.firstChild;
+    }
+    return document.querySelector(query);
+  };
+  const isHtmlString$4 = (arg) => {
+    if (typeof arg === "string" && arg.indexOf("<") > -1) {
+      return true;
+    }
+    return false;
+  };
+  function plugin$b(userOptions) {
+    const self = this;
+    const options = Object.assign({
+      className: "clear-button",
+      title: "Clear All",
+      html: (data2) => {
+        return `<div class="${data2.className}" title="${data2.title}">&#10799;</div>`;
+      }
+    }, userOptions);
+    self.on("initialize", () => {
+      var button = getDom$4(options.html(options));
+      button.addEventListener("click", (evt) => {
+        if (self.isLocked) return;
+        self.clear();
+        if (self.settings.mode === "single" && self.settings.allowEmptyOption) {
+          self.addItem("");
+        }
+        evt.preventDefault();
+        evt.stopPropagation();
+      });
+      self.control.appendChild(button);
+    });
+  }
+  const preventDefault$3 = (evt, stop2 = false) => {
+    if (evt) {
+      evt.preventDefault();
+      if (stop2) {
+        evt.stopPropagation();
+      }
+    }
+  };
+  const addEvent$3 = (target, type, callback, options) => {
+    target.addEventListener(type, callback, options);
+  };
+  const iterate$3 = (object, callback) => {
+    if (Array.isArray(object)) {
+      object.forEach(callback);
+    } else {
+      for (var key in object) {
+        if (object.hasOwnProperty(key)) {
+          callback(object[key], key);
+        }
+      }
+    }
+  };
+  const getDom$3 = (query) => {
+    if (query.jquery) {
+      return query[0];
+    }
+    if (query instanceof HTMLElement) {
+      return query;
+    }
+    if (isHtmlString$3(query)) {
+      var tpl = document.createElement("template");
+      tpl.innerHTML = query.trim();
+      return tpl.content.firstChild;
+    }
+    return document.querySelector(query);
+  };
+  const isHtmlString$3 = (arg) => {
+    if (typeof arg === "string" && arg.indexOf("<") > -1) {
+      return true;
+    }
+    return false;
+  };
+  const setAttr = (el, attrs) => {
+    iterate$3(attrs, (val, attr) => {
+      if (val == null) {
+        el.removeAttribute(attr);
+      } else {
+        el.setAttribute(attr, "" + val);
+      }
+    });
+  };
+  const insertAfter = (referenceNode, newNode) => {
+    var _referenceNode$parent;
+    (_referenceNode$parent = referenceNode.parentNode) == null || _referenceNode$parent.insertBefore(newNode, referenceNode.nextSibling);
+  };
+  const insertBefore = (referenceNode, newNode) => {
+    var _referenceNode$parent2;
+    (_referenceNode$parent2 = referenceNode.parentNode) == null || _referenceNode$parent2.insertBefore(newNode, referenceNode);
+  };
+  const isBefore = (referenceNode, newNode) => {
+    do {
+      var _newNode;
+      newNode = (_newNode = newNode) == null ? void 0 : _newNode.previousElementSibling;
+      if (referenceNode == newNode) {
+        return true;
+      }
+    } while (newNode && newNode.previousElementSibling);
+    return false;
+  };
+  function plugin$a() {
+    var self = this;
+    if (self.settings.mode !== "multi") return;
+    var orig_lock = self.lock;
+    var orig_unlock = self.unlock;
+    let sortable = true;
+    let drag_item;
+    self.hook("after", "setupTemplates", () => {
+      var orig_render_item = self.settings.render.item;
+      self.settings.render.item = (data2, escape) => {
+        const item = getDom$3(orig_render_item.call(self, data2, escape));
+        setAttr(item, {
+          "draggable": "true"
+        });
+        const mousedown = (evt) => {
+          if (!sortable) preventDefault$3(evt);
+          evt.stopPropagation();
+        };
+        const dragStart = (evt) => {
+          drag_item = item;
+          setTimeout(() => {
+            item.classList.add("ts-dragging");
+          }, 0);
+        };
+        const dragOver = (evt) => {
+          evt.preventDefault();
+          item.classList.add("ts-drag-over");
+          moveitem(item, drag_item);
+        };
+        const dragLeave = () => {
+          item.classList.remove("ts-drag-over");
+        };
+        const moveitem = (targetitem, dragitem) => {
+          if (dragitem === void 0) return;
+          if (isBefore(dragitem, item)) {
+            insertAfter(targetitem, dragitem);
+          } else {
+            insertBefore(targetitem, dragitem);
+          }
+        };
+        const dragend = () => {
+          var _drag_item;
+          document.querySelectorAll(".ts-drag-over").forEach((el) => el.classList.remove("ts-drag-over"));
+          (_drag_item = drag_item) == null || _drag_item.classList.remove("ts-dragging");
+          drag_item = void 0;
+          var values = [];
+          self.control.querySelectorAll(`[data-value]`).forEach((el) => {
+            if (el.dataset.value) {
+              let value = el.dataset.value;
+              if (value) {
+                values.push(value);
+              }
+            }
+          });
+          self.setValue(values);
+        };
+        addEvent$3(item, "mousedown", mousedown);
+        addEvent$3(item, "dragstart", dragStart);
+        addEvent$3(item, "dragenter", dragOver);
+        addEvent$3(item, "dragover", dragOver);
+        addEvent$3(item, "dragleave", dragLeave);
+        addEvent$3(item, "dragend", dragend);
+        return item;
+      };
+    });
+    self.hook("instead", "lock", () => {
+      sortable = false;
+      return orig_lock.call(self);
+    });
+    self.hook("instead", "unlock", () => {
+      sortable = true;
+      return orig_unlock.call(self);
+    });
+  }
+  const preventDefault$2 = (evt, stop2 = false) => {
+    if (evt) {
+      evt.preventDefault();
+      if (stop2) {
+        evt.stopPropagation();
+      }
+    }
+  };
+  const getDom$2 = (query) => {
+    if (query.jquery) {
+      return query[0];
+    }
+    if (query instanceof HTMLElement) {
+      return query;
+    }
+    if (isHtmlString$2(query)) {
+      var tpl = document.createElement("template");
+      tpl.innerHTML = query.trim();
+      return tpl.content.firstChild;
+    }
+    return document.querySelector(query);
+  };
+  const isHtmlString$2 = (arg) => {
+    if (typeof arg === "string" && arg.indexOf("<") > -1) {
+      return true;
+    }
+    return false;
+  };
+  function plugin$9(userOptions) {
+    const self = this;
+    const options = Object.assign({
+      title: "Untitled",
+      headerClass: "dropdown-header",
+      titleRowClass: "dropdown-header-title",
+      labelClass: "dropdown-header-label",
+      closeClass: "dropdown-header-close",
+      html: (data2) => {
+        return '<div class="' + data2.headerClass + '"><div class="' + data2.titleRowClass + '"><span class="' + data2.labelClass + '">' + data2.title + '</span><a class="' + data2.closeClass + '">&times;</a></div></div>';
+      }
+    }, userOptions);
+    self.on("initialize", () => {
+      var header = getDom$2(options.html(options));
+      var close_link = header.querySelector("." + options.closeClass);
+      if (close_link) {
+        close_link.addEventListener("click", (evt) => {
+          preventDefault$2(evt, true);
+          self.close();
+        });
+      }
+      self.dropdown.insertBefore(header, self.dropdown.firstChild);
+    });
+  }
+  const iterate$2 = (object, callback) => {
+    if (Array.isArray(object)) {
+      object.forEach(callback);
+    } else {
+      for (var key in object) {
+        if (object.hasOwnProperty(key)) {
+          callback(object[key], key);
+        }
+      }
+    }
+  };
+  const removeClasses = (elmts, ...classes) => {
+    var norm_classes = classesArray$2(classes);
+    elmts = castAsArray$2(elmts);
+    elmts.map((el) => {
+      norm_classes.map((cls) => {
+        el.classList.remove(cls);
+      });
+    });
+  };
+  const classesArray$2 = (args) => {
+    var classes = [];
+    iterate$2(args, (_classes) => {
+      if (typeof _classes === "string") {
+        _classes = _classes.trim().split(/[\t\n\f\r\s]/);
+      }
+      if (Array.isArray(_classes)) {
+        classes = classes.concat(_classes);
+      }
+    });
+    return classes.filter(Boolean);
+  };
+  const castAsArray$2 = (arg) => {
+    if (!Array.isArray(arg)) {
+      arg = [arg];
+    }
+    return arg;
+  };
+  const nodeIndex$1 = (el, amongst) => {
+    if (!el) return -1;
+    amongst = amongst || el.nodeName;
+    var i = 0;
+    while (el = el.previousElementSibling) {
+      if (el.matches(amongst)) {
+        i++;
+      }
+    }
+    return i;
+  };
+  function plugin$8() {
     var self = this;
     self.hook("instead", "setCaret", (new_pos) => {
       if (self.settings.mode === "single" || !self.control.contains(self.control_input)) {
@@ -7883,7 +8432,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       if (!self.isFocused) return;
       const last_active = self.getLastActive(direction);
       if (last_active) {
-        const idx = nodeIndex(last_active);
+        const idx = nodeIndex$1(last_active);
         self.setCaret(direction > 0 ? idx + 1 : idx);
         self.setActiveItem();
         removeClasses(last_active, "last-active");
@@ -7892,16 +8441,87 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
     });
   }
-  function dropdown_input() {
+  const KEY_ESC = 27;
+  const KEY_TAB = 9;
+  const preventDefault$1 = (evt, stop2 = false) => {
+    if (evt) {
+      evt.preventDefault();
+      if (stop2) {
+        evt.stopPropagation();
+      }
+    }
+  };
+  const addEvent$2 = (target, type, callback, options) => {
+    target.addEventListener(type, callback, options);
+  };
+  const iterate$1 = (object, callback) => {
+    if (Array.isArray(object)) {
+      object.forEach(callback);
+    } else {
+      for (var key in object) {
+        if (object.hasOwnProperty(key)) {
+          callback(object[key], key);
+        }
+      }
+    }
+  };
+  const getDom$1 = (query) => {
+    if (query.jquery) {
+      return query[0];
+    }
+    if (query instanceof HTMLElement) {
+      return query;
+    }
+    if (isHtmlString$1(query)) {
+      var tpl = document.createElement("template");
+      tpl.innerHTML = query.trim();
+      return tpl.content.firstChild;
+    }
+    return document.querySelector(query);
+  };
+  const isHtmlString$1 = (arg) => {
+    if (typeof arg === "string" && arg.indexOf("<") > -1) {
+      return true;
+    }
+    return false;
+  };
+  const addClasses$1 = (elmts, ...classes) => {
+    var norm_classes = classesArray$1(classes);
+    elmts = castAsArray$1(elmts);
+    elmts.map((el) => {
+      norm_classes.map((cls) => {
+        el.classList.add(cls);
+      });
+    });
+  };
+  const classesArray$1 = (args) => {
+    var classes = [];
+    iterate$1(args, (_classes) => {
+      if (typeof _classes === "string") {
+        _classes = _classes.trim().split(/[\t\n\f\r\s]/);
+      }
+      if (Array.isArray(_classes)) {
+        classes = classes.concat(_classes);
+      }
+    });
+    return classes.filter(Boolean);
+  };
+  const castAsArray$1 = (arg) => {
+    if (!Array.isArray(arg)) {
+      arg = [arg];
+    }
+    return arg;
+  };
+  function plugin$7() {
     const self = this;
     self.settings.shouldOpen = true;
     self.hook("before", "setup", () => {
       self.focus_node = self.control;
-      addClasses(self.control_input, "dropdown-input");
-      const div = getDom('<div class="dropdown-input-wrap">');
+      addClasses$1(self.control_input, "dropdown-input");
+      const div = getDom$1('<div class="dropdown-input-wrap">');
       div.append(self.control_input);
       self.dropdown.insertBefore(div, self.dropdown.firstChild);
-      const placeholder = getDom('<input class="items-placeholder" tabindex="-1" />');
+      const placeholder = getDom$1('<input class="items-placeholder" tabindex="-1" />');
       placeholder.placeholder = self.settings.placeholder || "";
       self.control.append(placeholder);
     });
@@ -7910,7 +8530,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         switch (evt.keyCode) {
           case KEY_ESC:
             if (self.isOpen) {
-              preventDefault(evt, true);
+              preventDefault$1(evt, true);
               self.close();
             }
             self.clearActiveItems();
@@ -7932,14 +8552,42 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         if (evt && evt.relatedTarget == self.control_input) return;
         return orig_onBlur.call(self);
       });
-      addEvent(self.control_input, "blur", () => self.onBlur());
+      addEvent$2(self.control_input, "blur", () => self.onBlur());
       self.hook("before", "close", () => {
         if (!self.isOpen) return;
-        self.focus_node.focus({ preventScroll: true });
+        self.focus_node.focus({
+          preventScroll: true
+        });
       });
     });
   }
-  function no_backspace_delete() {
+  const addEvent$1 = (target, type, callback, options) => {
+    target.addEventListener(type, callback, options);
+  };
+  function plugin$6() {
+    var self = this;
+    self.on("initialize", () => {
+      var test_input = document.createElement("span");
+      var control = self.control_input;
+      test_input.style.cssText = "position:absolute; top:-99999px; left:-99999px; width:auto; padding:0; white-space:pre; ";
+      self.wrapper.appendChild(test_input);
+      var transfer_styles = ["letterSpacing", "fontSize", "fontFamily", "fontWeight", "textTransform"];
+      for (const style_name of transfer_styles) {
+        test_input.style[style_name] = control.style[style_name];
+      }
+      var resize = () => {
+        test_input.textContent = control.value;
+        control.style.width = test_input.clientWidth + "px";
+      };
+      resize();
+      self.on("update item_add item_remove", resize);
+      addEvent$1(control, "input", resize);
+      addEvent$1(control, "keyup", resize);
+      addEvent$1(control, "blur", resize);
+      addEvent$1(control, "update", resize);
+    });
+  }
+  function plugin$5() {
     var self = this;
     var orig_deleteSelection = self.deleteSelection;
     this.hook("instead", "deleteSelection", (evt) => {
@@ -7949,7 +8597,97 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       return false;
     });
   }
-  function remove_button(userOptions) {
+  function plugin$4() {
+    this.hook("instead", "setActiveItem", () => {
+    });
+    this.hook("instead", "selectAll", () => {
+    });
+  }
+  const KEY_LEFT = 37;
+  const KEY_RIGHT = 39;
+  const parentMatch = (target, selector, wrapper) => {
+    while (target && target.matches) {
+      if (target.matches(selector)) {
+        return target;
+      }
+      target = target.parentNode;
+    }
+  };
+  const nodeIndex = (el, amongst) => {
+    if (!el) return -1;
+    amongst = amongst || el.nodeName;
+    var i = 0;
+    while (el = el.previousElementSibling) {
+      if (el.matches(amongst)) {
+        i++;
+      }
+    }
+    return i;
+  };
+  function plugin$3() {
+    var self = this;
+    var orig_keydown = self.onKeyDown;
+    self.hook("instead", "onKeyDown", (evt) => {
+      var index, option, options, optgroup;
+      if (!self.isOpen || !(evt.keyCode === KEY_LEFT || evt.keyCode === KEY_RIGHT)) {
+        return orig_keydown.call(self, evt);
+      }
+      self.ignoreHover = true;
+      optgroup = parentMatch(self.activeOption, "[data-group]");
+      index = nodeIndex(self.activeOption, "[data-selectable]");
+      if (!optgroup) {
+        return;
+      }
+      if (evt.keyCode === KEY_LEFT) {
+        optgroup = optgroup.previousSibling;
+      } else {
+        optgroup = optgroup.nextSibling;
+      }
+      if (!optgroup) {
+        return;
+      }
+      options = optgroup.querySelectorAll("[data-selectable]");
+      option = options[Math.min(options.length - 1, index)];
+      if (option) {
+        self.setActiveOption(option);
+      }
+    });
+  }
+  const escape_html = (str) => {
+    return (str + "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  };
+  const preventDefault = (evt, stop2 = false) => {
+    if (evt) {
+      evt.preventDefault();
+      if (stop2) {
+        evt.stopPropagation();
+      }
+    }
+  };
+  const addEvent = (target, type, callback, options) => {
+    target.addEventListener(type, callback, options);
+  };
+  const getDom = (query) => {
+    if (query.jquery) {
+      return query[0];
+    }
+    if (query instanceof HTMLElement) {
+      return query;
+    }
+    if (isHtmlString(query)) {
+      var tpl = document.createElement("template");
+      tpl.innerHTML = query.trim();
+      return tpl.content.firstChild;
+    }
+    return document.querySelector(query);
+  };
+  const isHtmlString = (arg) => {
+    if (typeof arg === "string" && arg.indexOf("<") > -1) {
+      return true;
+    }
+    return false;
+  };
+  function plugin$2(userOptions) {
     const options = Object.assign({
       label: "&times;",
       title: "Remove",
@@ -7983,7 +8721,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       };
     });
   }
-  function restore_on_backspace(userOptions) {
+  function plugin$1(userOptions) {
     const self = this;
     const options = Object.assign({
       text: (option) => {
@@ -8002,11 +8740,242 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
     });
   }
-  TomSelect.define("caret_position", caret_position);
-  TomSelect.define("dropdown_input", dropdown_input);
-  TomSelect.define("no_backspace_delete", no_backspace_delete);
-  TomSelect.define("remove_button", remove_button);
-  TomSelect.define("restore_on_backspace", restore_on_backspace);
+  const iterate = (object, callback) => {
+    if (Array.isArray(object)) {
+      object.forEach(callback);
+    } else {
+      for (var key in object) {
+        if (object.hasOwnProperty(key)) {
+          callback(object[key], key);
+        }
+      }
+    }
+  };
+  const addClasses = (elmts, ...classes) => {
+    var norm_classes = classesArray(classes);
+    elmts = castAsArray(elmts);
+    elmts.map((el) => {
+      norm_classes.map((cls) => {
+        el.classList.add(cls);
+      });
+    });
+  };
+  const classesArray = (args) => {
+    var classes = [];
+    iterate(args, (_classes) => {
+      if (typeof _classes === "string") {
+        _classes = _classes.trim().split(/[\t\n\f\r\s]/);
+      }
+      if (Array.isArray(_classes)) {
+        classes = classes.concat(_classes);
+      }
+    });
+    return classes.filter(Boolean);
+  };
+  const castAsArray = (arg) => {
+    if (!Array.isArray(arg)) {
+      arg = [arg];
+    }
+    return arg;
+  };
+  function plugin() {
+    const self = this;
+    const orig_canLoad = self.canLoad;
+    const orig_clearActiveOption = self.clearActiveOption;
+    const orig_loadCallback = self.loadCallback;
+    var pagination = {};
+    var dropdown_content;
+    var loading_more = false;
+    var load_more_opt;
+    var default_values = [];
+    if (!self.settings.shouldLoadMore) {
+      self.settings.shouldLoadMore = () => {
+        const scroll_percent = dropdown_content.clientHeight / (dropdown_content.scrollHeight - dropdown_content.scrollTop);
+        if (scroll_percent > 0.9) {
+          return true;
+        }
+        if (self.activeOption) {
+          var selectable = self.selectable();
+          var index = Array.from(selectable).indexOf(self.activeOption);
+          if (index >= selectable.length - 2) {
+            return true;
+          }
+        }
+        return false;
+      };
+    }
+    if (!self.settings.firstUrl) {
+      throw "virtual_scroll plugin requires a firstUrl() method";
+    }
+    self.settings.sortField = [{
+      field: "$order"
+    }, {
+      field: "$score"
+    }];
+    const canLoadMore = (query) => {
+      if (typeof self.settings.maxOptions === "number" && dropdown_content.children.length >= self.settings.maxOptions) {
+        return false;
+      }
+      if (query in pagination && pagination[query]) {
+        return true;
+      }
+      return false;
+    };
+    const clearFilter = (option, value) => {
+      if (self.items.indexOf(value) >= 0 || default_values.indexOf(value) >= 0) {
+        return true;
+      }
+      return false;
+    };
+    self.setNextUrl = (value, next_url) => {
+      pagination[value] = next_url;
+    };
+    self.getUrl = (query) => {
+      if (query in pagination) {
+        const next_url = pagination[query];
+        pagination[query] = false;
+        return next_url;
+      }
+      self.clearPagination();
+      return self.settings.firstUrl.call(self, query);
+    };
+    self.clearPagination = () => {
+      pagination = {};
+    };
+    self.hook("instead", "clearActiveOption", () => {
+      if (loading_more) {
+        return;
+      }
+      return orig_clearActiveOption.call(self);
+    });
+    self.hook("instead", "canLoad", (query) => {
+      if (!(query in pagination)) {
+        return orig_canLoad.call(self, query);
+      }
+      return canLoadMore(query);
+    });
+    self.hook("instead", "loadCallback", (options, optgroups) => {
+      if (!loading_more) {
+        self.clearOptions(clearFilter);
+      } else if (load_more_opt) {
+        const first_option = options[0];
+        if (first_option !== void 0) {
+          load_more_opt.dataset.value = first_option[self.settings.valueField];
+        }
+      }
+      orig_loadCallback.call(self, options, optgroups);
+      loading_more = false;
+    });
+    self.hook("after", "refreshOptions", () => {
+      const query = self.lastValue;
+      var option;
+      if (canLoadMore(query)) {
+        option = self.render("loading_more", {
+          query
+        });
+        if (option) {
+          option.setAttribute("data-selectable", "");
+          load_more_opt = option;
+        }
+      } else if (query in pagination && !dropdown_content.querySelector(".no-results")) {
+        option = self.render("no_more_results", {
+          query
+        });
+      }
+      if (option) {
+        addClasses(option, self.settings.optionClass);
+        dropdown_content.append(option);
+      }
+    });
+    self.on("initialize", () => {
+      default_values = Object.keys(self.options);
+      dropdown_content = self.dropdown_content;
+      self.settings.render = Object.assign({}, {
+        loading_more: () => {
+          return `<div class="loading-more-results">Loading more results ... </div>`;
+        },
+        no_more_results: () => {
+          return `<div class="no-more-results">No more results</div>`;
+        }
+      }, self.settings.render);
+      dropdown_content.addEventListener("scroll", () => {
+        if (!self.settings.shouldLoadMore.call(self)) {
+          return;
+        }
+        if (!canLoadMore(self.lastValue)) {
+          return;
+        }
+        if (loading_more) return;
+        loading_more = true;
+        self.load.call(self, self.lastValue);
+      });
+    });
+  }
+  TomSelect.define("change_listener", plugin$d);
+  TomSelect.define("checkbox_options", plugin$c);
+  TomSelect.define("clear_button", plugin$b);
+  TomSelect.define("drag_drop", plugin$a);
+  TomSelect.define("dropdown_header", plugin$9);
+  TomSelect.define("caret_position", plugin$8);
+  TomSelect.define("dropdown_input", plugin$7);
+  TomSelect.define("input_autogrow", plugin$6);
+  TomSelect.define("no_backspace_delete", plugin$5);
+  TomSelect.define("no_active_items", plugin$4);
+  TomSelect.define("optgroup_columns", plugin$3);
+  TomSelect.define("remove_button", plugin$2);
+  TomSelect.define("restore_on_backspace", plugin$1);
+  TomSelect.define("virtual_scroll", plugin);
+  const tomSelectStyles = document.createElement("style");
+  tomSelectStyles.textContent = `
+	.ts-wrapper.focus .ts-control {
+		border-color: #2271b1;
+		box-shadow: 0 0 0 1px #2271b1;
+	}
+	.ts-dropdown .active {
+		background-color: #2271b1;
+		color: #fff;
+	}
+	.ts-dropdown .active.create {
+		color: #fff;
+	}
+	.ts-wrapper .ts-control .item,
+	.ts-wrapper.multi .ts-control > div,
+	.ts-wrapper.multi .ts-control > div.item {
+		background: #f0f0f1;
+		background-image: none;
+		border: 1px solid #c3c4c7;
+		color: #1d2327;
+		text-shadow: none;
+	}
+	.plugin-remove_button .item .remove {
+		border-left-color: #c3c4c7;
+		color: #50575e;
+	}
+	.plugin-remove_button .item .remove:hover {
+		background: #dcdcde;
+		color: #1d2327;
+	}
+	.plugin-clear_button .clear-button {
+		color: #50575e;
+	}
+	.plugin-clear_button .clear-button:hover {
+		color: #1d2327;
+	}
+`;
+  document.head.appendChild(tomSelectStyles);
+  const TomSelectPopular = TomSelect;
+  const createLogoRender = (imgKey, isFlag = false) => ({
+    option(data2, escape) {
+      const size2 = 20;
+      const imgHtml = isFlag ? `<svg class="fl-flag--rounded anwp-mr-2" width="${size2}" height="${size2}"><use href="${escape(data2[imgKey])}"></use></svg>` : data2[imgKey] ? `<img src="${escape(data2[imgKey])}" class="anwp-mr-2" alt="logo" style="width:${size2}px;height:${size2}px;object-fit:contain;" />` : "";
+      return `<div class="anwp-d-flex anwp-align-items-center">${imgHtml}<span>${escape(data2.text)}</span></div>`;
+    },
+    item(data2, escape) {
+      const size2 = 15;
+      const imgHtml = isFlag ? `<svg class="fl-flag--rounded anwp-mr-2" width="${size2}" height="${size2}"><use href="${escape(data2[imgKey])}"></use></svg>` : data2[imgKey] ? `<img src="${escape(data2[imgKey])}" class="anwp-mr-2" alt="logo" style="width:${size2}px;height:${size2}px;object-fit:contain;" />` : "";
+      return `<div class="anwp-d-flex anwp-align-items-center">${imgHtml}<span>${escape(data2.text)}</span></div>`;
+    }
+  });
   const anwpFLAdminLoaded = () => {
     window.anwpFLAdminHooks = createHooks();
     if (typeof window.anwpflGlobals !== "undefined") {
@@ -8022,7 +8991,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       filters: [],
       s: "",
       date: "",
-      filterValues: [],
+      filterValues: {},
       rows: [],
       columns: [],
       selectedItems: [],
@@ -8060,7 +9029,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           }
         });
         fetch(window.anwpflGlobals.rest_root + "anwpfl/helper/get-selector-data/" + urlParams + "/", {
-          requestSignal,
+          signal: requestSignal,
           credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
@@ -8102,7 +9071,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           if ("seasons" === el.name && ["match", "competition", "stage", "main_stage"].includes(this.context)) {
             this.filters.push({
               context: "seasons",
-              tomSelect: new TomSelect(el, {
+              tomSelect: new TomSelectPopular(el, {
                 plugins: ["dropdown_input"],
                 valueField: "id",
                 placeholder: "- select -",
@@ -8113,7 +9082,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           if ("leagues" === el.name && ["match", "competition", "stage", "main_stage"].includes(this.context)) {
             this.filters.push({
               context: "leagues",
-              tomSelect: new TomSelect(el, {
+              tomSelect: new TomSelectPopular(el, {
                 plugins: ["dropdown_input"],
                 valueField: "id",
                 placeholder: "- select -",
@@ -8124,112 +9093,52 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           if ("countries" === el.name && ["player", "referee", "club"].includes(this.context)) {
             this.filters.push({
               context: "countries",
-              tomSelect: new TomSelect(el, {
+              tomSelect: new TomSelectPopular(el, {
                 plugins: ["dropdown_input"],
                 valueField: "id",
                 placeholder: "- select -",
                 options: window.anwpflGlobals.countries,
                 maxOptions: 300,
-                render: {
-                  option(data2, escape) {
-                    return `
-									<div class="anwp-d-flex anwp-align-items-center">
-										<svg class="fl-flag--rounded anwp-mr-2" width="20" height="20"><use href="${escape(data2.flag)}"></use></svg>
-										<span>${escape(data2.text)}</span>
-									</div>`;
-                  },
-                  item(data2, escape) {
-                    return `
-									<div class="anwp-d-flex anwp-align-items-center">
-										<svg class="fl-flag--rounded anwp-mr-2" width="15" height="15"><use href="${escape(data2.flag)}"></use></svg>
-										<span>${escape(data2.text)}</span>
-									</div>`;
-                  }
-                }
+                render: createLogoRender("flag", true)
               })
             });
           }
           if ("clubs" === el.name && ["player", "staff"].includes(this.context)) {
             this.filters.push({
               context: "clubs",
-              tomSelect: new TomSelect(el, {
+              tomSelect: new TomSelectPopular(el, {
                 plugins: ["dropdown_input"],
                 valueField: "id",
                 placeholder: "- select -",
                 options: window.anwpflGlobals.clubs,
                 maxOptions: 300,
-                render: {
-                  option(data2, escape) {
-                    return `
-									<div class="anwp-d-flex anwp-align-items-center">
-										 ${data2.img ? '<img src="' + escape(data2.img) + '" class="anwp-mr-2" alt="logo" style="width:20px; height:20px; object-fit:contain;" />' : ""}
-										<span>${escape(data2.text)}</span>
-									</div>`;
-                  },
-                  item(data2, escape) {
-                    return `
-									<div class="anwp-d-flex anwp-align-items-center">
-										${data2.img ? '<img src="' + escape(data2.img) + '" class="anwp-mr-2" alt="logo" style="width:15px; height:15px; object-fit:contain;" />' : ""}
-										<span>${escape(data2.text)}</span>
-									</div>`;
-                  }
-                }
+                render: createLogoRender("img")
               })
             });
           }
           if ("club_home" === el.name && ["match"].includes(this.context)) {
             this.filters.push({
               context: "club_home",
-              tomSelect: new TomSelect(el, {
+              tomSelect: new TomSelectPopular(el, {
                 plugins: ["dropdown_input"],
                 valueField: "id",
                 placeholder: "- select -",
                 options: window.anwpflGlobals.clubs,
                 maxOptions: 300,
-                render: {
-                  option(data2, escape) {
-                    return `
-									<div class="anwp-d-flex anwp-align-items-center">
-										 ${data2.img ? '<img src="' + escape(data2.img) + '" class="anwp-mr-2" alt="logo" style="width:20px; height:20px; object-fit:contain;" />' : ""}
-										<span>${escape(data2.text)}</span>
-									</div>`;
-                  },
-                  item(data2, escape) {
-                    return `
-									<div class="anwp-d-flex anwp-align-items-center">
-										${data2.img ? '<img src="' + escape(data2.img) + '" class="anwp-mr-2" alt="logo" style="width:15px; height:15px; object-fit:contain;" />' : ""}
-										<span>${escape(data2.text)}</span>
-									</div>`;
-                  }
-                }
+                render: createLogoRender("img")
               })
             });
           }
           if ("club_away" === el.name && ["match"].includes(this.context)) {
             this.filters.push({
               context: "club_away",
-              tomSelect: new TomSelect(el, {
+              tomSelect: new TomSelectPopular(el, {
                 plugins: ["dropdown_input"],
                 valueField: "id",
                 placeholder: "- select -",
                 options: window.anwpflGlobals.clubs,
                 maxOptions: 300,
-                render: {
-                  option(data2, escape) {
-                    return `
-									<div class="anwp-d-flex anwp-align-items-center">
-										 ${data2.img ? '<img src="' + escape(data2.img) + '" class="anwp-mr-2" alt="logo" style="width:20px; height:20px; object-fit:contain;" />' : ""}
-										<span>${escape(data2.text)}</span>
-									</div>`;
-                  },
-                  item(data2, escape) {
-                    return `
-									<div class="anwp-d-flex anwp-align-items-center">
-										${data2.img ? '<img src="' + escape(data2.img) + '" class="anwp-mr-2" alt="logo" style="width:15px; height:15px; object-fit:contain;" />' : ""}
-										<span>${escape(data2.text)}</span>
-									</div>`;
-                  }
-                }
+                render: createLogoRender("img")
               })
             });
           }
@@ -8286,7 +9195,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         this.rows = [];
         this.columns = [];
         this.selectedItems = [];
-        this.filterValues = [];
+        this.filterValues = {};
         if (!window.anwpflGlobals.optionsLoaded) {
           this.loadGlobalOptions();
         } else {
@@ -8295,7 +9204,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         if (!this.requestController) {
           this.requestController = new AbortController();
         }
-        if (selected.trim()) {
+        if (selected == null ? void 0 : selected.trim()) {
           this.loadInitialSelected(selected);
         }
         this.sendSearchRequest();
@@ -8347,6 +9256,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           this.targetEl.dispatchEvent(newEvent);
         } else {
           this.targetEl.selected = this.selectedItems.map((s) => s.id).join(",");
+          this.targetEl.$root.querySelector("input").value = this.targetEl.selected;
+          window.dispatchEvent(new Event("update-x-fl-outer-wrapper"));
         }
         this.closeModal();
       },
@@ -8363,7 +9274,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         this.libUsed = "";
         this.targetEl = {};
         this.selectedItems = [];
-        this.filterValues = [];
+        this.filterValues = {};
         if (this.isLoadingContent) {
           this.requestController.abort();
         }
@@ -8379,6 +9290,378 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       single,
       openModal() {
         module_default$1.store("selectorModal").openModal(this);
+      }
+    }));
+    module_default$1.data("shortcodeBuilder", (config = {}) => ({
+      // State
+      selectedShortcode: "",
+      formHtml: "",
+      shortcodeString: "",
+      loading: false,
+      tomSelects: [],
+      isModal: config.isModal || false,
+      copiedRecently: false,
+      // Preview state
+      previewUrl: "",
+      previewLoading: false,
+      previewError: "",
+      previewSupported: true,
+      previewWidth: 700,
+      // Parse state
+      parseText: "",
+      parseError: "",
+      parseWarning: "",
+      parsedAttrs: null,
+      showParseModal: false,
+      // Lifecycle
+      destroy() {
+        this.tomSelects.forEach((ts) => ts.destroy());
+        this.tomSelects = [];
+      },
+      // Form Loading
+      async loadForm() {
+        if (!this.selectedShortcode) {
+          this.formHtml = "";
+          this.shortcodeString = "";
+          return;
+        }
+        this.loading = true;
+        this.destroy();
+        try {
+          const response = await fetch(
+            `${window.anwpflGlobals.rest_root}anwpfl/shortcode-form/${this.selectedShortcode}`,
+            {
+              headers: {
+                "X-WP-Nonce": window.anwpflGlobals.rest_nonce
+              }
+            }
+          );
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          const data2 = await response.json();
+          if (data2.success) {
+            this.formHtml = data2.html;
+            this.$nextTick(() => {
+              var _a, _b;
+              if (this.$refs.formWrap) {
+                module_default$1.initTree(this.$refs.formWrap);
+              }
+              (_a = this.$refs.formWrap) == null ? void 0 : _a.querySelectorAll(".anwp-x-selector input").forEach((input) => {
+                input.value = "";
+              });
+              this.initTomSelect();
+              this.buildShortcode();
+              const nameInput = (_b = this.$refs.formWrap) == null ? void 0 : _b.querySelector(".fl-shortcode-name");
+              this.previewSupported = (nameInput == null ? void 0 : nameInput.dataset.supportsPreview) !== "false";
+              this.previewWidth = parseInt((nameInput == null ? void 0 : nameInput.dataset.previewWidth) || "600", 10);
+              this.previewUrl = "";
+              this.previewError = "";
+              document.body.dispatchEvent(
+                new Event("anwp-fl-admin-content-updated")
+              );
+            });
+          }
+        } catch (error2) {
+          console.error("Failed to load shortcode form:", error2);
+        } finally {
+          this.loading = false;
+        }
+      },
+      // Tom-Select Integration
+      initTomSelect() {
+        var _a;
+        const selects = (_a = this.$refs.formWrap) == null ? void 0 : _a.querySelectorAll(".fl-shortcode-tom-select");
+        if (!selects) {
+          return;
+        }
+        selects.forEach((el) => {
+          const plugins = ["remove_button", "clear_button"];
+          if (el.dataset.flSortable === "true") {
+            plugins.push("drag_drop");
+          }
+          const options = {
+            plugins,
+            maxOptions: 300,
+            hideSelected: true,
+            onChange: () => this.buildShortcode()
+          };
+          if (this.isModal) {
+            options.dropdownParent = "body";
+          }
+          const ts = new TomSelect(el, options);
+          this.tomSelects.push(ts);
+        });
+      },
+      // Shortcode Building
+      buildShortcode() {
+        var _a;
+        const wrapper = this.$refs.formWrap;
+        if (!wrapper) {
+          return;
+        }
+        const shortcodeName = ((_a = wrapper.querySelector(".fl-shortcode-name")) == null ? void 0 : _a.value) || "";
+        if (!shortcodeName) {
+          return;
+        }
+        const attrs = [];
+        wrapper.querySelectorAll(".fl-shortcode-attr").forEach((field) => {
+          const name = field.name;
+          if (!name) {
+            return;
+          }
+          let value = "";
+          if (field.tomselect) {
+            const items = field.tomselect.items;
+            value = Array.isArray(items) ? items.join(",") : items || "";
+          } else {
+            value = field.value || "";
+          }
+          attrs.push(`${name}="${value}"`);
+        });
+        this.shortcodeString = `[${shortcodeName} ${attrs.join(" ")}]`;
+      },
+      // Clipboard
+      async copyToClipboard() {
+        if (!this.shortcodeString) {
+          return;
+        }
+        const showCopiedFeedback = () => {
+          this.copiedRecently = true;
+          setTimeout(() => this.copiedRecently = false, 2e3);
+        };
+        try {
+          await navigator.clipboard.writeText(this.shortcodeString);
+          showCopiedFeedback();
+        } catch (err) {
+          const textarea = document.createElement("textarea");
+          textarea.value = this.shortcodeString;
+          textarea.style.cssText = "position:fixed;opacity:0";
+          document.body.appendChild(textarea);
+          textarea.select();
+          try {
+            document.execCommand("copy");
+            showCopiedFeedback();
+          } catch (e) {
+            this.showToast("Failed to copy", "error");
+          } finally {
+            document.body.removeChild(textarea);
+          }
+        }
+      },
+      // Reset form to defaults
+      resetForm() {
+        if (this.selectedShortcode) {
+          this.loadForm();
+        }
+      },
+      // Collect form attributes as object
+      collectAttributes() {
+        const wrapper = this.$refs.formWrap;
+        if (!wrapper) {
+          return {};
+        }
+        const atts = {};
+        wrapper.querySelectorAll(".fl-shortcode-attr").forEach((field) => {
+          const name = field.name;
+          if (!name) {
+            return;
+          }
+          let value = "";
+          if (field.tomselect) {
+            const items = field.tomselect.items;
+            value = Array.isArray(items) ? items.join(",") : items || "";
+          } else {
+            value = field.value || "";
+          }
+          if (value !== "") {
+            atts[name] = value;
+          }
+        });
+        return atts;
+      },
+      // Refresh preview iframe
+      refreshPreview() {
+        if (!this.selectedShortcode || this.isModal) {
+          return;
+        }
+        this.previewLoading = true;
+        this.previewError = "";
+        const atts = this.collectAttributes();
+        const baseUrl = window.anwpflGlobals.rest_root + "anwpfl/shortcode-preview/iframe";
+        const url = new URL(baseUrl, window.location.origin);
+        url.searchParams.set("shortcode", this.selectedShortcode);
+        url.searchParams.set("atts", JSON.stringify(atts));
+        url.searchParams.set("_wpnonce", window.anwpflGlobals.rest_nonce);
+        url.searchParams.set("t", Date.now());
+        this.previewUrl = url.toString();
+      },
+      // Handle iframe load
+      onPreviewLoad() {
+        var _a;
+        this.previewLoading = false;
+        try {
+          const iframe = this.$refs.previewFrame;
+          if ((_a = iframe == null ? void 0 : iframe.contentDocument) == null ? void 0 : _a.body) {
+            const height = iframe.contentDocument.body.scrollHeight;
+            iframe.style.height = Math.max(height + 32, 200) + "px";
+          }
+        } catch (e) {
+        }
+      },
+      // Handle iframe error
+      onPreviewError() {
+        this.previewLoading = false;
+        this.previewError = "Failed to load preview";
+      },
+      // Set preview width (300 or 600)
+      setPreviewWidth(width) {
+        this.previewWidth = width;
+      },
+      // TinyMCE Integration
+      insertToEditor() {
+        if (!this.shortcodeString) {
+          return;
+        }
+        if (typeof window.tinymce !== "undefined" && window.tinymce.activeEditor) {
+          window.tinymce.activeEditor.insertContent(this.shortcodeString);
+          this.$dispatch("shortcode-inserted");
+        }
+      },
+      // Toast notifications (lazy-init Notyf instance)
+      showToast(message, type = "success") {
+        if (typeof Notyf !== "undefined") {
+          this._notyf = this._notyf || new Notyf({ duration: 3e3 });
+          this._notyf[type](message);
+        }
+      },
+      // =====================
+      // Parse Methods
+      // =====================
+      /**
+       * Parse shortcode string and extract attributes.
+       *
+       * @param {string} input Raw shortcode string
+       * @return {Object|null} { tag, attrs }
+       */
+      parseShortcode(input) {
+        var _a, _b, _c;
+        input = input.trim();
+        if (!input.startsWith("[") || !input.includes("]")) {
+          return null;
+        }
+        const tagMatch = input.match(/^\[([a-z0-9-]+)/);
+        if (!tagMatch) {
+          return null;
+        }
+        const tag = tagMatch[1];
+        const attrs = {};
+        const attrRegex = /([a-z_-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s\]]+))/gi;
+        let match;
+        while ((match = attrRegex.exec(input)) !== null) {
+          attrs[match[1]] = (_c = (_b = (_a = match[2]) != null ? _a : match[3]) != null ? _b : match[4]) != null ? _c : "";
+        }
+        return { tag, attrs };
+      },
+      /**
+       * Get the expected shortcode tag for the currently selected shortcode.
+       *
+       * @return {string} Expected tag like "anwpfl-matches" or "anwpfl-premium-live"
+       */
+      getExpectedTag() {
+        const wrapper = this.$refs.formWrap;
+        const nameInput = wrapper == null ? void 0 : wrapper.querySelector(".fl-shortcode-name");
+        return (nameInput == null ? void 0 : nameInput.value) || "";
+      },
+      /**
+       * Parse shortcode text and populate form fields.
+       * Only parses attributes - shortcode must already be selected.
+       *
+       * @param {string} text Raw shortcode string
+       * @param {boolean} force Force parsing even with tag mismatch warning
+       */
+      async parseShortcodeText(text, force = false) {
+        this.parseError = "";
+        const parsed = this.parseShortcode(text);
+        if (!parsed) {
+          this.parseError = "Invalid shortcode format";
+          return;
+        }
+        const expectedTag = this.getExpectedTag();
+        if (expectedTag && parsed.tag !== expectedTag) {
+          if (!force) {
+            this.parseWarning = `Pasted [${parsed.tag}] but [${expectedTag}] is selected. Only matching attributes will be loaded.`;
+            this.parsedAttrs = parsed.attrs;
+            return;
+          }
+        }
+        await this.populateFields(parsed.attrs);
+        this.showParseModal = false;
+        this.parseText = "";
+        this.parseWarning = "";
+        this.parsedAttrs = null;
+        this.buildShortcode();
+      },
+      /**
+       * Confirm parsing after warning - user acknowledged mismatch.
+       */
+      async confirmParse() {
+        if (this.parsedAttrs) {
+          await this.populateFields(this.parsedAttrs);
+          this.showParseModal = false;
+          this.parseText = "";
+          this.parseWarning = "";
+          this.parsedAttrs = null;
+          this.buildShortcode();
+        }
+      },
+      /**
+       * Populate form fields with parsed attribute values.
+       *
+       * @param {Object} attrs Attribute key-value pairs
+       */
+      async populateFields(attrs) {
+        const wrapper = this.$refs.formWrap;
+        if (!wrapper) {
+          return;
+        }
+        for (const [name, value] of Object.entries(attrs)) {
+          const field = wrapper.querySelector(`[name="${name}"].fl-shortcode-attr`);
+          if (!field) {
+            continue;
+          }
+          const selectorWrapper = field.closest(".anwp-x-selector");
+          if (selectorWrapper) {
+            this.populateSelectorField(field, value);
+            continue;
+          }
+          const fieldType = field.dataset.flType || "text";
+          if (fieldType === "tom_select" && field.tomselect) {
+            const values = value.split(",").map((v) => v.trim()).filter(Boolean);
+            field.tomselect.setValue(values, true);
+          } else {
+            field.value = value;
+            field.dispatchEvent(new Event(fieldType === "select" ? "change" : "input", { bubbles: true }));
+          }
+        }
+      },
+      /**
+       * Handle FL Selector fields (Alpine component with hidden input).
+       * Uses fl-x-data prefix (transformed Alpine syntax in this codebase).
+       *
+       * @param {HTMLElement} field The hidden input element
+       * @param {string} value Comma-separated IDs
+       */
+      populateSelectorField(field, value) {
+        const alpineEl = field.closest('[fl-x-data*="selectorItem"]');
+        if (alpineEl) {
+          const data2 = module_default$1.$data(alpineEl);
+          if (data2) {
+            data2.selected = value;
+          }
+        }
+        field.value = value;
+        window.dispatchEvent(new Event("update-x-fl-outer-wrapper"));
       }
     }));
     module_default$1.start();

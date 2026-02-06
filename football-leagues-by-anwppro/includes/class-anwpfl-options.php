@@ -385,27 +385,27 @@ class AnWPFL_Options {
 			<div class="anwp-metabox-tabs d-sm-flex">
 				<div class="anwp-metabox-tabs__controls d-flex flex-sm-column flex-wrap">
 					<div class="p-3 anwp-metabox-tabs__control-item" data-target="#anwp-tabs-general-settings_metabox">
-						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use xlink:href="#icon-gear"></use></svg>
+						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use href="#icon-gear"></use></svg>
 						<span class="d-block"><?php echo esc_html__( 'General', 'anwp-football-leagues' ); ?></span>
 					</div>
 					<div class="p-3 anwp-metabox-tabs__control-item" data-target="#anwp-tabs-display-settings_metabox">
-						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use xlink:href="#icon-eye"></use></svg>
+						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use href="#icon-eye"></use></svg>
 						<span class="d-block"><?php echo esc_html__( 'Display', 'anwp-football-leagues' ); ?></span>
 					</div>
 					<div class="p-3 anwp-metabox-tabs__control-item" data-target="#anwp-tabs-api-settings_metabox">
-						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use xlink:href="#icon-key"></use></svg>
+						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use href="#icon-key"></use></svg>
 						<span class="d-block"><?php echo esc_html__( 'API Keys', 'anwp-football-leagues' ); ?></span>
 					</div>
 					<div class="p-3 anwp-metabox-tabs__control-item" data-target="#anwp-tabs-custom_fields-settings_metabox">
-						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use xlink:href="#icon-server"></use></svg>
+						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use href="#icon-server"></use></svg>
 						<span class="d-block"><?php echo esc_html__( 'Custom Fields', 'anwp-football-leagues' ); ?></span>
 					</div>
 					<div class="p-3 anwp-metabox-tabs__control-item" data-target="#anwp-tabs-text-settings_metabox">
-						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use xlink:href="#icon-text-size"></use></svg>
+						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use href="#icon-text-size"></use></svg>
 						<span class="d-block"><?php echo esc_html__( 'Text Strings', 'anwp-football-leagues' ); ?></span>
 					</div>
 					<div class="p-3 anwp-metabox-tabs__control-item" data-target="#anwp-tabs-service-settings_metabox">
-						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use xlink:href="#icon-tools"></use></svg>
+						<svg class="anwp-icon anwp-icon--octi d-inline-block"><use href="#icon-tools"></use></svg>
 						<span class="d-block"><?php echo esc_html__( 'Service Links', 'anwp-football-leagues' ); ?></span>
 					</div>
 					<?php
@@ -1537,7 +1537,7 @@ class AnWPFL_Options {
 
 		$output = '<div class="anwp-admin-docs-link d-flex align-items-center table-info border p-2 border-info">';
 
-		$output .= '<svg class="anwp-icon anwp-icon--octi"><use xlink:href="#icon-book"></use></svg>';
+		$output .= '<svg class="anwp-icon anwp-icon--octi"><use href="#icon-book"></use></svg>';
 		$output .= '<b class="mx-2">' . esc_html__( 'Documentation', 'anwp-football-leagues' ) . ':</b> ';
 		$output .= '<a target="_blank" href="' . esc_url( $section_link ) . '">' . esc_html( $section_title ) . '</a>';
 		$output .= '</div>';

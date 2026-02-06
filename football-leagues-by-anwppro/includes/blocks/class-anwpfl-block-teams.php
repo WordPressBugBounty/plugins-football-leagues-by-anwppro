@@ -108,7 +108,7 @@ class AnWPFL_Block_Teams {
 					$logo  = 'big' === $attr['include_ids'] && $team_obj->logo_big ? $team_obj->logo_big : $team_obj->logo;
 					$title = 'title' === $attr['team_title'] ? $team_obj->title : $team_obj->abbr;
 					?>
-					<div class="d-flex align-items-center clubs-shortcode__wrapper club-logo position-relative anwp-fl-border-bottom anwp-border-light py-2">
+					<div class="d-flex align-items-center clubs-shortcode__wrapper club-logo position-relative anwp-border-bottom anwp-border-light py-2">
 						<img loading="lazy" class="clubs-shortcode__logo anwp-object-contain mr-2"
 								style="width: <?php echo absint( $attr['width'] ); ?>px; height: <?php echo esc_attr( $attr['width'] ); ?>px;"
 								src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $team_obj->title ); ?>">
@@ -135,7 +135,7 @@ class AnWPFL_Block_Teams {
 						$logo  = 'big' === $attr['logo_size'] && $team_obj->logo_big ? $team_obj->logo_big : $team_obj->logo;
 						$title = 'title' === $attr['team_title'] ? $team_obj->title : $team_obj->abbr;
 						?>
-						<div class="clubs-shortcode__wrapper club-logo position-relative anwp-text-center p-2 m-1 anwp-fl-border anwp-border-light d-flex flex-column">
+						<div class="clubs-shortcode__wrapper club-logo position-relative anwp-text-center p-2 m-1 anwp-border anwp-border-light d-flex flex-column">
 							<img loading="lazy" class="clubs-shortcode__logo anwp-object-contain mx-auto"
 									style="width: <?php echo absint( $attr['width'] ); ?>px; height: <?php echo esc_attr( $attr['width'] ); ?>px;"
 									src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $team_obj->title ); ?>">

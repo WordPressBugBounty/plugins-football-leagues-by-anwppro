@@ -899,7 +899,6 @@ window.AnWPFootballLeagues = window.AnWPFootballLeagues || {};
 	};
 
 	plugin.onPageReady = function() {
-		plugin.initTooltips();
 		plugin.initBtnPublishClick();
 		plugin.initCollapseMenuClick();
 		plugin.initMatchListHelper();
@@ -1108,13 +1107,6 @@ window.AnWPFootballLeagues = window.AnWPFootballLeagues || {};
 			}
 		} );
 
-	};
-
-	plugin.initTooltips = function() {
-		tippy( '[data-anwpfl_tippy]', {
-			arrow: true,
-			size: 'small'
-		} );
 	};
 
 	plugin.initBtnPublishClick = function() {

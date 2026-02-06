@@ -1941,6 +1941,74 @@ class AnWPFL_Customizer {
 				],
 			]
 		);
+
+		//=================================
+		//-- Advanced CSS --
+		//=================================
+		$wp_customize->add_section(
+			'fl_advanced_css',
+			[
+				'title'       => esc_html__( 'Advanced CSS', 'anwp-football-leagues' ),
+				'description' => esc_html__( 'Legacy CSS options for backwards compatibility with older templates.', 'anwp-football-leagues' ),
+				'panel'       => 'anwp_fl_panel',
+			]
+		);
+
+		/*
+		|--------------------------------------------------------------------
+		| load_legacy_bootstrap
+		|--------------------------------------------------------------------
+		*/
+		$wp_customize->add_setting(
+			'anwp-fl-customizer[advanced_css][load_legacy_bootstrap]',
+			[
+				'default' => 'yes',
+				'type'    => 'option',
+			]
+		);
+
+		$wp_customize->add_control(
+			'anwp-fl-customizer[advanced_css][load_legacy_bootstrap]',
+			[
+				'type'        => 'select',
+				'label'       => esc_html__( 'Load Legacy Bootstrap CSS', 'anwp-football-leagues' ),
+				'description' => esc_html__( 'For backwards compatibility with Bootstrap classes (d-flex, m-*, p-*, etc.). Disable if your templates use only ANWP-CSS classes.', 'anwp-football-leagues' ),
+				'section'     => 'fl_advanced_css',
+				'settings'    => 'anwp-fl-customizer[advanced_css][load_legacy_bootstrap]',
+				'choices'     => [
+					'yes' => __( 'Yes (default)', 'anwp-football-leagues' ),
+					'no'  => __( 'No', 'anwp-football-leagues' ),
+				],
+			]
+		);
+
+		/*
+		|--------------------------------------------------------------------
+		| load_legacy_grid
+		|--------------------------------------------------------------------
+		*/
+		$wp_customize->add_setting(
+			'anwp-fl-customizer[advanced_css][load_legacy_grid]',
+			[
+				'default' => 'yes',
+				'type'    => 'option',
+			]
+		);
+
+		$wp_customize->add_control(
+			'anwp-fl-customizer[advanced_css][load_legacy_grid]',
+			[
+				'type'        => 'select',
+				'label'       => esc_html__( 'Load Legacy Grid CSS', 'anwp-football-leagues' ),
+				'description' => esc_html__( 'For backwards compatibility with deprecated grid classes (anwp-row, anwp-col-*). Disable if your templates use flex/grid utilities.', 'anwp-football-leagues' ),
+				'section'     => 'fl_advanced_css',
+				'settings'    => 'anwp-fl-customizer[advanced_css][load_legacy_grid]',
+				'choices'     => [
+					'yes' => __( 'Yes (default)', 'anwp-football-leagues' ),
+					'no'  => __( 'No', 'anwp-football-leagues' ),
+				],
+			]
+		);
 	}
 
 	/**

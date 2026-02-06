@@ -32,9 +32,9 @@ if ( ( empty( $_GET['season'] ) && 'yes' === AnWPFL_Options::get_value( 'all_sea
 
 // Card icons
 $card_icons = [
-	'y'  => '<svg class="icon__card m-0"><use xlink:href="#icon-card_y"></use></svg>',
-	'r'  => '<svg class="icon__card m-0"><use xlink:href="#icon-card_r"></use></svg>',
-	'yr' => '<svg class="icon__card m-0"><use xlink:href="#icon-card_yr"></use></svg>',
+	'y'  => '<svg class="icon__card m-0"><use href="#icon-card_y"></use></svg>',
+	'r'  => '<svg class="icon__card m-0"><use href="#icon-card_r"></use></svg>',
+	'yr' => '<svg class="icon__card m-0"><use href="#icon-card_yr"></use></svg>',
 ];
 
 $series_map = anwp_fl()->data->get_series();

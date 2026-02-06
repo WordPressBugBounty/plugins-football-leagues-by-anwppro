@@ -51,7 +51,7 @@ if ( '___' === mb_substr( $data->country_code, 0, 3 ) ) :
 		data-toggle="anwp-tooltip"
 		data-tippy-content="<?php echo esc_attr( anwp_football_leagues()->data->get_value_by_key( $data->country_code, 'country' ) ); ?>">
 		<svg class="anwp-icon anwp-icon--octi anwp-icon--s<?php echo 32 === absint( $data->size ) ? 36 : 20; ?>">
-			<use xlink:href="#icon-world-flag"></use>
+			<use href="#icon-world-flag"></use>
 		</svg>
 	</div>
 <?php else : ?>

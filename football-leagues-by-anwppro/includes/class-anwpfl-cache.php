@@ -377,6 +377,7 @@ class AnWPFL_Cache {
 		$this->delete( 'FL-COMPETITIONS-DATA' );
 		$this->delete( 'FL-STANDINGS-LIST' );
 		$this->delete( 'FL-PRO-REFEREES-NAME-LIST' );
+		$this->delete( 'FL-PRO-CLUB-HISTORY-ALL' );
 
 		$this->delete( 'FL-LEAGUE-OPTIONS' );
 

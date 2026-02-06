@@ -42,10 +42,10 @@ $is_country_collapsed = 'country_collapsed' === $data->group_by;
 $country_classes      = $is_country_collapsed ? 'anwp-cursor-pointer competition-list__country_collapsed' : '';
 ?>
 <div class="anwp-b-wrap">
-	<div class="competition-list anwp-fl-border-top anwp-border-light anwp-user-select-none">
+	<div class="competition-list anwp-border-top anwp-border-light anwp-user-select-none">
 		<?php foreach ( $competition_list as $country_data ) : ?>
 			<?php if ( $country_data['country_code'] !== $current_country ) : ?>
-				<div class="competition-list__country d-flex align-items-center py-1 px-2 anwp-bg-light anwp-fl-border-bottom anwp-border-light <?php echo esc_html( $country_classes ); ?>"
+				<div class="competition-list__country d-flex align-items-center py-1 px-2 anwp-bg-light anwp-border-bottom anwp-border-light <?php echo esc_html( $country_classes ); ?>"
 					data-anwp-country="<?php echo esc_html( $country_data['country_code'] ); ?>">
 					<?php
 					if ( in_array( $data->show_flag, [ 'big', 'small' ], true ) ) :
@@ -65,7 +65,7 @@ $country_classes      = $is_country_collapsed ? 'anwp-cursor-pointer competition
 					<?php if ( $is_country_collapsed ) : ?>
 						<div class="px-2 mr-n2 mt-1 anwp-leading-1">
 							<svg class="anwp-icon anwp-icon--feather competition-list__country-collapsed-icon">
-								<use xlink:href="#icon-chevron-down"></use>
+								<use href="#icon-chevron-down"></use>
 							</svg>
 						</div>
 					<?php endif; ?>
@@ -73,7 +73,7 @@ $country_classes      = $is_country_collapsed ? 'anwp-cursor-pointer competition
 			<?php endif; ?>
 
 			<?php foreach ( $country_data['items'] as $competition ) : ?>
-				<div class="competition-list__competition d-flex align-items-center py-1 px-2 anwp-fl-border-bottom anwp-border-light position-relative <?php echo esc_html( $is_country_collapsed && $competition['country'] ? 'd-none' : '' ); ?>"
+				<div class="competition-list__competition d-flex align-items-center py-1 px-2 anwp-border-bottom anwp-border-light position-relative <?php echo esc_html( $is_country_collapsed && $competition['country'] ? 'd-none' : '' ); ?>"
 					data-anwp-country="<?php echo esc_html( $competition['country'] ); ?>">
 
 					<?php if ( anwp_football_leagues()->helper->string_to_bool( $data->show_logo ) ) : ?>

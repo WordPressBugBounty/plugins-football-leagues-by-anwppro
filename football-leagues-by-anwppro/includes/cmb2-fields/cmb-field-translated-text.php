@@ -20,12 +20,12 @@ if ( ! function_exists( 'cmb2_render_anwp_fl_text' ) ) {
 	 */
 	function cmb2_render_anwp_fl_text( $field, $value ) {
 		?>
-		<div class="row align-items-center my-n3 anwp-fl-search-data" data-search-origin="<?php echo esc_attr( mb_strtolower( $field->args['name'] ) ); ?>"
+		<div class="anwp-row anwp-items-center anwp-my-n3 anwp-fl-search-data" data-search-origin="<?php echo esc_attr( mb_strtolower( $field->args['name'] ) ); ?>"
 			data-search-modified="<?php echo esc_attr( mb_strtolower( $value ) ); ?>">
-			<div class="col-sm-4"><?php echo esc_html( $field->args['name'] ); ?></div>
-			<div class="col-sm-4">
-				<input class="w-100" name="<?php echo esc_attr( $field->args['id'] ); ?>" type="text" value="<?php echo esc_html( $value ); ?>"></div>
-			<div class="col-sm-4"><?php echo esc_html( $field->args['desc'] ); ?></div>
+			<div class="anwp-col-sm-4"><?php echo esc_html( $field->args['name'] ); ?></div>
+			<div class="anwp-col-sm-4">
+				<input class="anwp-w-100-full" name="<?php echo esc_attr( $field->args['id'] ); ?>" type="text" value="<?php echo esc_attr( $value ); ?>"></div>
+			<div class="anwp-col-sm-4"><?php echo esc_html( $field->args['desc'] ); ?></div>
 		</div>
 		<?php
 	}
