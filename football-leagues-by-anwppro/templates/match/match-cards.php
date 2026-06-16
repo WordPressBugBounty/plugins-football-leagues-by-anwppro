@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.6.1
  *
- * @version       0.16.0
+ * @version       0.18.0
  */
 
 // phpcs:disable WordPress.NamingConventions.ValidVariableName
@@ -84,7 +84,7 @@ do_action( 'anwpfl/tmpl-match/cards_before', $data );
 							<?php echo esc_html( isset( $card_options[ $e->card ] ) ? $card_options[ $e->card ] : '' ); ?>
 						</div>
 						<div class="match__event-player">
-							<?php if ( ! empty( $temp_players ) && 'temp__' === mb_substr( $e->player, 0, 6 ) ) : ?>
+							<?php if ( ! empty( $temp_players ) && str_starts_with( $e->player, 'temp__' ) ) : ?>
 								<span class="match__event-player-name"><?php echo esc_html( isset( $temp_players[ $e->player ] ) ? $temp_players[ $e->player ]->name : '' ); ?></span>
 								<?php
 							elseif ( $e->player && ! empty( $data['players'][ $e->player ] ) ) :
@@ -120,7 +120,7 @@ do_action( 'anwpfl/tmpl-match/cards_before', $data );
 							<?php echo esc_html( isset( $card_options[ $e->card ] ) ? $card_options[ $e->card ] : '' ); ?>
 						</div>
 						<div class="match__event-player">
-							<?php if ( ! empty( $temp_players ) && 'temp__' === mb_substr( $e->player, 0, 6 ) ) : ?>
+							<?php if ( ! empty( $temp_players ) && str_starts_with( $e->player, 'temp__' ) ) : ?>
 								<span class="match__event-player-name"><?php echo esc_html( isset( $temp_players[ $e->player ] ) ? $temp_players[ $e->player ]->name : '' ); ?></span>
 								<?php
 							elseif ( $e->player && ! empty( $data['players'][ $e->player ] ) ) :

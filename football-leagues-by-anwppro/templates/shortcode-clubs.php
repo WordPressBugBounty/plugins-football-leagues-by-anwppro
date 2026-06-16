@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.10.23
  *
- * @version       0.16.18
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -52,8 +52,8 @@ if ( empty( $clubs_array ) ) {
 	return;
 }
 
-// Prepare data
-$clubs = get_posts(
+// Prepare data - get ordered IDs, then use custom table for display data
+$club_ids = get_posts(
 	[
 		'numberposts'      => - 1,
 		'post_type'        => 'anwp_club',
@@ -62,28 +62,41 @@ $clubs = get_posts(
 		'post_status'      => 'publish',
 		'order'            => 'ASC',
 		'orderby'          => 'title',
-		'show_club_name'   => false,
+		'fields'           => 'ids',
 	]
 );
+
+if ( empty( $club_ids ) ) {
+	return;
+}
+
+anwp_football_leagues()->club->warm_clubs( $club_ids );
 
 if ( '' === $data->layout ) : ?>
 	<div class="anwp-b-wrap clubs-shortcode m-n1">
 		<div class="d-flex flex-wrap">
 			<?php
-			foreach ( $clubs as $club ) :
-				$logo = 'small' === $data->logo_size ? $club->_anwpfl_logo : $club->_anwpfl_logo_big;
+			foreach ( $club_ids as $club_id ) :
+				$club_row = anwp_football_leagues()->club->get_club_list_row( $club_id );
+
+				if ( ! $club_row ) {
+					continue;
+				}
+
+				$logo = 'small' === $data->logo_size ? ( $club_row['logo'] ?? '' ) : ( $club_row['logo_big'] ?? '' );
+				$name = $club_row['abbr'] ?: ( $club_row['title'] ?? '' );
 				?>
 				<div class="clubs-shortcode__wrapper club-logo position-relative anwp-text-center p-2 m-1 anwp-border anwp-border-light">
 					<img loading="lazy" class="clubs-shortcode__logo anwp-object-contain mx-auto" style="width: <?php echo esc_attr( $data->logo_width ); ?>; height: <?php echo esc_attr( $data->logo_height ); ?>;"
-						src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $club->_anwpfl_abbr ?: $club->post_title ); ?>">
+						src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $name ); ?>">
 
 					<?php if ( AnWP_Football_Leagues::string_to_bool( $data->show_club_name ) ) : ?>
 						<div class="clubs-shortcode__text anwp-text-center anwp-text-truncate anwp-text-xs" style="width: <?php echo esc_attr( $data->logo_width ); ?>;">
-							<?php echo esc_html( $club->_anwpfl_abbr ?: $club->post_title ); ?>
+							<?php echo esc_html( $name ); ?>
 						</div>
 					<?php endif; ?>
 
-					<a class="anwp-link-without-effects anwp-link-cover" aria-label="<?php echo esc_attr( $club->post_title ); ?>" href="<?php echo esc_url( anwp_football_leagues()->club->get_club_link_by_id( $club->ID ) ); ?>"></a>
+					<a class="anwp-link-without-effects anwp-link-cover" aria-label="<?php echo esc_attr( $club_row['title'] ?? '' ); ?>" href="<?php echo esc_url( anwp_football_leagues()->club->get_club_link_by_id( $club_id ) ); ?>"></a>
 				</div>
 			<?php endforeach; ?>
 		</div>
@@ -99,18 +112,24 @@ if ( '' === $data->layout ) : ?>
 				'6col' => 'anwp-col-2',
 			];
 
-			foreach ( $clubs as $club ) :
-				$logo = 'small' === $data->logo_size ? $club->_anwpfl_logo : $club->_anwpfl_logo_big;
+			foreach ( $club_ids as $club_id ) :
+				$club_row = anwp_football_leagues()->club->get_club_list_row( $club_id );
+
+				if ( ! $club_row ) {
+					continue;
+				}
+
+				$logo = 'small' === $data->logo_size ? ( $club_row['logo'] ?? '' ) : ( $club_row['logo_big'] ?? '' );
 				?>
 				<div class="<?php echo esc_attr( $col_class[ $data->layout ] ); ?> d-flex align-self-stretch">
 					<div class="club-logo club-logo--grid w-100 d-flex flex-column m-1 p-2 anwp-border anwp-border-light">
 						<a class="anwp-link-without-effects d-flex align-items-center justify-content-center w-100 h-100 anwp-club-logo--widget anwp-image-background-contain"
 							style="background-image: url('<?php echo esc_attr( $logo ); ?>')"
-							href="<?php echo esc_url( anwp_football_leagues()->club->get_club_link_by_id( $club->ID ) ); ?>">
+							href="<?php echo esc_url( anwp_football_leagues()->club->get_club_link_by_id( $club_id ) ); ?>">
 							<img src="<?php echo esc_attr( $logo ); ?>" style="visibility: hidden;">
 						</a>
 						<?php if ( AnWP_Football_Leagues::string_to_bool( $data->show_club_name ) ) : ?>
-							<div class="clubs-shortcode__text anwp-text-center anwp-text-truncate anwp-text-xs py-1"><?php echo esc_html( $club->_anwpfl_abbr ? : $club->post_title ); ?></div>
+							<div class="clubs-shortcode__text anwp-text-center anwp-text-truncate anwp-text-xs py-1"><?php echo esc_html( $club_row['abbr'] ?: ( $club_row['title'] ?? '' ) ); ?></div>
 						<?php endif; ?>
 					</div>
 				</div>

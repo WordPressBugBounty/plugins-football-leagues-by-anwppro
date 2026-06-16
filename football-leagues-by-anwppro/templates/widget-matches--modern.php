@@ -11,7 +11,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.4.4
  *
- * @version       0.16.18
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -39,6 +39,9 @@ $matches = anwp_football_leagues()->competition->tmpl_get_competition_matches_ex
 		<?php
 		$group_current = '';
 
+		// Bulk warm competition rows for the stage_title group_by below.
+		anwp_fl()->competition->warm_competitions( array_unique( wp_list_pluck( $matches, 'competition_id' ) ) );
+
 		foreach ( $matches as $m_index => $match ) :
 
 			if ( '' !== $data->group_by ) {
@@ -47,7 +50,7 @@ $matches = anwp_football_leagues()->competition->tmpl_get_competition_matches_ex
 
 				// Check current group by value
 				if ( 'stage' === $data->group_by && $group_current !== $match->competition_id ) {
-					$group_text    = get_post_meta( $match->competition_id, '_anwpfl_stage_title', true );
+					$group_text    = anwp_fl()->competition->get_competition_list_row( (int) $match->competition_id )['stage_title'] ?? '';
 					$group_current = $match->competition_id;
 				} elseif ( 'matchweek' === $data->group_by && $group_current !== $match->match_week && '0' !== $match->match_week ) {
 					$group_text    = anwp_football_leagues()->competition->tmpl_get_matchweek_round_text( $match->match_week, $match->competition_id );

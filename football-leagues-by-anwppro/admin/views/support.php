@@ -87,7 +87,7 @@ if ( ! empty( $database_tables ) && is_array( $database_tables ) ) {
 				</p>
 				<a href="https://anwppro.userecho.com/communities/1-football-leagues"
 				   target="_blank"
-				   class="button button-primary anwp-d-inline-flex anwp-items-center anwp-justify-center">
+				   class="button button-primary fl-btn-icon anwp-d-inline-flex anwp-items-center anwp-justify-center">
 					<span class="dashicons dashicons-external anwp-dashicons-18"></span>
 					<span class="anwp-ml-2"><?php echo esc_html_x( 'Visit Support Forum', 'support page', 'anwp-football-leagues' ); ?></span>
 				</a>
@@ -254,7 +254,7 @@ if ( ! empty( $database_tables ) && is_array( $database_tables ) ) {
 			echo "Site Locale: " . esc_html( get_locale() ) . "\n";
 			echo "Active Plugins: " . esc_html( implode( ', ', $active_plugins_list ) ) . "\n";
 			?></textarea>
-		<button type="button" class="button anwp-mt-2 anwp-d-inline-flex anwp-items-center anwp-justify-center" onclick="document.getElementById('anwp-system-info').select(); document.execCommand('copy'); this.querySelector('.anwp-copy-text').textContent = '<?php esc_attr_e( 'Copied!', 'anwp-football-leagues' ); ?>'; setTimeout(() => this.querySelector('.anwp-copy-text').textContent = '<?php esc_attr_e( 'Copy to Clipboard', 'anwp-football-leagues' ); ?>', 2000);">
+		<button type="button" class="button fl-btn-icon anwp-mt-2 anwp-d-inline-flex anwp-items-center anwp-justify-center" onclick="document.getElementById('anwp-system-info').select(); document.execCommand('copy'); this.querySelector('.anwp-copy-text').textContent = '<?php esc_attr_e( 'Copied!', 'anwp-football-leagues' ); ?>'; setTimeout(() => this.querySelector('.anwp-copy-text').textContent = '<?php esc_attr_e( 'Copy to Clipboard', 'anwp-football-leagues' ); ?>', 2000);">
 			<span class="dashicons dashicons-admin-page anwp-dashicons-18"></span>
 			<span class="anwp-ml-2 anwp-copy-text"><?php esc_html_e( 'Copy to Clipboard', 'anwp-football-leagues' ); ?></span>
 		</button>

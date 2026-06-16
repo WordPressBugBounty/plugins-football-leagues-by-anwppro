@@ -17,6 +17,18 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'anwp-football-leagues' ) );
 }
 
+if ( AnWPFL_Helper::is_db_upgrade_pending() ) {
+	AnWP_Football_Leagues::include_file( 'admin/views/partials/db-upgrade-pending' );
+
+	return;
+}
+
+if ( AnWPFL_Helper::is_data_migration_pending() ) {
+	AnWP_Football_Leagues::include_file( 'admin/views/partials/data-migration-pending' );
+
+	return;
+}
+
 $import_options = anwp_fl()->data->get_import_options();
 
 /*
@@ -1010,21 +1022,21 @@ $columns_subs = [
 		'fl_tool' => 'external_id',
 	],
 	[
-		'name'    => 'player_id',
+		'name'    => 'player_in',
 		'title'   => __( 'Player ID', 'anwp-football-leagues' ),
 		'type'    => 'numeric',
 		'visible' => true,
 	],
 	[
-		'name'  => 'player_external_id',
-		'title' => __( 'Player External ID', 'anwp-football-leagues' ),
+		'name'  => 'player_in_external_id',
+		'title' => __( 'Player In External ID', 'anwp-football-leagues' ),
 	],
 	[
-		'name'  => 'player_temp',
-		'title' => __( 'Temporary Player', 'anwp-football-leagues' ),
+		'name'  => 'player_in_temp',
+		'title' => __( 'Temporary Player In', 'anwp-football-leagues' ),
 	],
 	[
-		'name'    => 'player_out_id',
+		'name'    => 'player_out',
 		'title'   => __( 'Player Out ID', 'anwp-football-leagues' ),
 		'type'    => 'numeric',
 		'visible' => true,

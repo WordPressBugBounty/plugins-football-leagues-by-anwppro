@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.12.4
  *
- * @version       0.16.0
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -47,6 +47,9 @@ $nationality = maybe_unserialize( get_post_meta( $staff->ID, '_anwpfl_nationalit
 $photo_id  = get_post_meta( $staff->ID, '_anwpfl_photo_id', true );
 $club_id   = get_post_meta( $staff->ID, '_anwpfl_current_club', true );
 $job_title = AnWP_Football_Leagues::string_to_bool( $data->show_job ) ? get_post_meta( $staff->ID, '_anwpfl_job_title', true ) : '';
+
+// Warm club cache.
+anwp_fl()->club->warm_clubs( [ $club_id ] );
 ?>
 <div class="anwp-b-wrap">
 	<div class="player-block anwp-border anwp-border-light context--<?php echo esc_attr( $data->context ); ?>">
@@ -113,7 +116,7 @@ $job_title = AnWP_Football_Leagues::string_to_bool( $data->show_job ) ? get_post
 						continue;
 					}
 
-					if ( false === mb_strpos( $staff_option, ':' ) ) {
+					if ( ! str_contains( $staff_option, ':' ) ) {
 						continue;
 					}
 

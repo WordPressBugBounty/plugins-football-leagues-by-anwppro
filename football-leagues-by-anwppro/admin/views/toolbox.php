@@ -41,6 +41,8 @@ $app_options = [
 		<?php AnWP_Football_Leagues::include_file( 'admin/views/toolbox--toolkit' ); ?>
 	<?php elseif ( 'cache' === $active_tab ) : ?>
 		<?php AnWP_Football_Leagues::include_file( 'admin/views/toolbox--cache' ); ?>
+	<?php elseif ( 'cleanup' === $active_tab ) : ?>
+		<?php AnWP_Football_Leagues::include_file( 'admin/views/toolbox--cleanup' ); ?>
 	<?php else : ?>
 		<?php AnWP_Football_Leagues::include_file( 'admin/views/toolbox--updater' ); ?>
 	<?php endif; ?>

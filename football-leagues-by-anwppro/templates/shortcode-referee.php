@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.12.4
  *
- * @version       0.16.18
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -92,7 +92,7 @@ $job_title = AnWP_Football_Leagues::string_to_bool( $data->show_job ) ? get_post
 						continue;
 					}
 
-					if ( false === mb_strpos( $referee_option, ':' ) ) {
+					if ( ! str_contains( $referee_option, ':' ) ) {
 						continue;
 					}
 

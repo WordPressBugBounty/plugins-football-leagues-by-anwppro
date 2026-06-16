@@ -11,7 +11,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.5.0
  *
- * @version       0.16.17
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Check required params
-if ( empty( $data->club_id ) || empty( $data->season_id ) ) {
+if ( empty( $data->club_id ) ) {
 	return;
 }
 
@@ -84,6 +84,33 @@ if ( count( $squad_elements ) ) {
 			'general/header'
 		);
 	}
+
+	/*
+	|--------------------------------------------------------------------
+	| Squad source label ("Active Squad" / "{Season} season")
+	|--------------------------------------------------------------------
+	*/
+	$squad_source = AnWPFL_Club::get_last_squad_source( (int) $data->club_id, (int) $data->season_id );
+	$source_label = '';
+
+	if ( $squad_source ) {
+		if ( in_array( $squad_source['source'], [ 'active', 'active_current_year', 'active_fallback' ], true ) ) {
+			$source_label = AnWPFL_Text::get_value( 'squad__shortcode__active_squad', __( 'Active Squad', 'anwp-football-leagues' ) );
+		} elseif ( in_array( $squad_source['source'], [ 'season', 'stats' ], true ) && $data->season_id ) {
+			$season_term = get_term( (int) $data->season_id, 'anwp_season' );
+
+			if ( $season_term && ! is_wp_error( $season_term ) ) {
+				/* translators: %s: Season name (e.g. "2021-2022") */
+				$source_label = sprintf( __( '%s season', 'anwp-football-leagues' ), $season_term->name );
+			}
+		}
+	}
+
+	if ( $source_label ) :
+		?>
+		<div class="squad__source-label anwp-text-sm anwp-text-gray-700 mt-1 mb-3"><?php echo esc_html( $source_label ); ?></div>
+		<?php
+	endif;
 	?>
 
 	<?php
@@ -159,7 +186,7 @@ if ( count( $squad_elements ) ) {
 						<?php endif; ?>
 					</div>
 					<div class="squad-rows__name d-flex flex-column align-items-start justify-content-center anwp-text-base anwp-text-left anwp-font-semibold">
-						<a href="<?php echo esc_url( get_permalink( $player_id ) ); ?>" class="anwp-link-without-effects">
+						<a href="<?php echo esc_url( $player['link'] ?? '' ); ?>" class="anwp-link-without-effects">
 							<?php
 							$player_name_arr = explode( ' ', $player['name'], 2 );
 							echo '<span class="squad-rows__name-1">' . esc_html( $player_name_arr[0] ) . '</span>';
@@ -294,7 +321,7 @@ if ( count( $squad_elements ) ) {
 					<img loading="lazy" width="60" height="60" class="squad-rows__photo anwp-object-contain m-2 anwp-w-60 anwp-h-60" src="<?php echo esc_url( $staff_member['photo'] ?: $default_photo ); ?>" alt="<?php echo esc_attr( $staff_member['name'] ); ?>">
 				</div>
 				<div class="squad-rows__name d-flex align-items-center justify-content-start anwp-text-base anwp-text-left anwp-font-semibold">
-					<a href="<?php echo esc_url( get_permalink( $staff_id ) ); ?>" class="anwp-link-without-effects">
+					<a href="<?php echo esc_url( $staff_member['link'] ?? '' ); ?>" class="anwp-link-without-effects">
 						<?php
 						$player_name_arr = explode( ' ', $staff_member['name'], 2 );
 						echo '<span class="squad-rows__name-1">' . esc_html( $player_name_arr[0] ) . '</span>';
@@ -421,7 +448,7 @@ if ( count( $squad_elements ) ) {
 					<img loading="lazy" width="60" height="60" class="squad-rows__photo anwp-object-contain m-2 anwp-w-60 anwp-h-60" src="<?php echo esc_url( $staff_group_item['photo'] ?: $default_photo ); ?>"  alt="<?php echo esc_attr( $staff_group_item['name'] ); ?>">
 				</div>
 				<div class="squad-rows__name d-flex align-items-center justify-content-start anwp-text-base anwp-text-left anwp-font-semibold">
-					<a href="<?php echo esc_url( get_permalink( $staff_group_item_id ) ); ?>" class="anwp-link-without-effects">
+					<a href="<?php echo esc_url( $staff_group_item['link'] ?? '' ); ?>" class="anwp-link-without-effects">
 						<?php
 						$player_name_arr = explode( ' ', $staff_group_item['name'], 2 );
 						echo '<span class="squad-rows__name-1">' . esc_html( $player_name_arr[0] ) . '</span>';

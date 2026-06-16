@@ -8,7 +8,7 @@
  * @author        Andrei Strekozov <anwp.pro>
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.3.0
- * @version       0.14.0
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -16,32 +16,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Prepare tmpl data
-$club   = get_post();
-$prefix = '_anwpfl_';
-$data   = [];
+$club    = get_post();
+$club_id = $club->ID;
+$row     = anwp_football_leagues()->club->get_row( $club_id );
+$details = json_decode( $row['club_details'] ?? '', true ) ?: [];
+$social  = json_decode( $row['club_social'] ?? '', true ) ?: [];
 
-$fields = [
-	'logo_big',
-	'description',
-	'city',
-	'nationality',
-	'address',
-	'website',
-	'founded',
-	'stadium',
-	'club_kit',
-	'twitter',
-	'youtube',
-	'facebook',
-	'instagram',
-	'vk',
-	'tiktok',
-	'linkedin',
+$data = [
+	'logo_big'    => $row['logo_big'] ?? '',
+	'description' => $row['description'] ?? '',
+	'city'        => $row['city'] ?? '',
+	'nationality' => $row['nationality'] ?? '',
+	'address'     => $details['address'] ?? '',
+	'website'     => $details['website'] ?? '',
+	'founded'     => $details['founded'] ?? '',
+	'stadium'     => $row['stadium_id'] ?? '',
+	'club_kit'    => $details['club_kit'] ?? '',
+	'twitter'     => $social['twitter'] ?? '',
+	'youtube'     => $social['youtube'] ?? '',
+	'facebook'    => $social['facebook'] ?? '',
+	'instagram'   => $social['instagram'] ?? '',
+	'vk'          => $social['vk'] ?? '',
+	'tiktok'      => $social['tiktok'] ?? '',
+	'linkedin'    => $social['linkedin'] ?? '',
 ];
-
-foreach ( $fields as $field ) {
-	$data[ $field ] = $club->{$prefix . $field};
-}
 
 /**
  * Filter: anwpfl/tmpl-club/data_fields

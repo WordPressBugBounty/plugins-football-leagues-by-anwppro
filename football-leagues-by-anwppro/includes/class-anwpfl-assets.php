@@ -246,16 +246,6 @@ class AnWPFL_Assets {
 
 		/*
 		|--------------------------------------------------------------------------
-		| Modaal
-		|
-		| @license  MIT
-		| @link     https://github.com/humaan/Modaal
-		|--------------------------------------------------------------------------
-		*/
-		wp_enqueue_script( 'modaal', AnWP_Football_Leagues::url( 'vendor/modaal/modaal.min.js' ), [ 'jquery', 'underscore' ], AnWP_Football_Leagues::VERSION, false );
-
-		/*
-		|--------------------------------------------------------------------------
 		| Global JS
 		|--------------------------------------------------------------------------
 		*/
@@ -485,6 +475,11 @@ class AnWPFL_Assets {
 
 			if ( in_array( $current_screen->id, $admin_app_pages, true ) ) {
 				wp_enqueue_script( 'fl-admin-core-app', AnWP_Football_Leagues::url( 'admin/js/admin-core.min.js' ), [ 'wp-color-picker', 'jquery' ], AnWP_Football_Leagues::VERSION, true );
+			}
+
+			// Club editor Vue app.
+			if ( 'anwp_club' === $current_screen->id ) {
+				wp_enqueue_script( 'fl-admin-club-app', AnWP_Football_Leagues::url( 'admin/js/admin-club.min.js' ), [], AnWP_Football_Leagues::VERSION, true );
 			}
 		}
 

@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.14.14
  *
- * @version       0.16.2
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -64,7 +64,7 @@ if ( absint( $data['width'] ) > 10 ) {
 | Parsed country code
 |--------------------------------------------------------------------
 */
-$code_parsed = mb_strtolower( str_replace( '_', '-', $data['country_code'] ) );
+$code_parsed = strtolower( str_replace( '_', '-', $data['country_code'] ) );
 
 if ( in_array( $data['country_code'], [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
 	$code_parsed = '--world';
@@ -77,7 +77,7 @@ if ( in_array( $data['country_code'], [ '__Africa', '__Asia', '__NC_America', '_
 | Render Flag
 |--------------------------------------------------------------------
 */
-if ( '___' === mb_substr( $data['country_code'], 0, 3 ) ) :
+if ( str_starts_with( $data['country_code'], '___' ) ) :
 
 	$custom_country = anwp_football_leagues()->data->get_custom_county_data( $data['country_code'] );
 

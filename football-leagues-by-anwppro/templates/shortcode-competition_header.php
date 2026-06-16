@@ -11,7 +11,7 @@
  * @since         0.5.1
  * @since         0.7.4 Added link wrapper
  *
- * @version       0.16.18
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -43,7 +43,7 @@ $terms = anwp_fl()->competition->tmpl_get_competition_terms( $data['id'] );
 if ( get_the_ID() !== absint( $data['id'] ) ) {
 
 	$competition_data = [
-		'logo'       => get_post_meta( $data['id'], '_anwpfl_logo', true ) ?? '',
+		'logo'       => anwp_fl()->competition->get_competition_list_row( (int) $data['id'] )['logo'] ?? '',
 		'league_id'  => $terms['league_id'],
 		'season_ids' => implode( ',', $terms['season_id'] ),
 		'title'      => get_post()->post_title,
@@ -54,7 +54,7 @@ if ( get_the_ID() !== absint( $data['id'] ) ) {
 	$competition_data = anwp_fl()->competition->get_competition_data( $data['id'] );
 }
 
-$logo = get_post_meta( $data['id'], '_anwpfl_logo_big', true ) ?: $competition_data['logo'];
+$logo = ( anwp_fl()->competition->get_competition_list_row( (int) $data['id'] )['logo_big'] ?? '' ) ?: $competition_data['logo'];
 
 // Prepare seasons text
 $terms['season_title'] = ! empty( $terms['season_title'] ) && is_array( $terms['season_title'] ) ? anwp_fl()->season->combine_season_text( $terms['season_title'] ) : '';
@@ -66,14 +66,15 @@ $terms['season_title'] = ! empty( $terms['season_title'] ) && is_array( $terms['
 */
 if ( $season_selector && absint( $competition_data['league_id'] ) && absint( $competition_data['season_ids'] ) && 1 === count( wp_parse_id_list( $competition_data['season_ids'] ) ) ) {
 
-	$season_all = anwp_fl()->season->get_seasons_options();
+	$season_all   = anwp_fl()->season->get_seasons_options();
+	$league_comps = anwp_fl()->competition->get_league_season_selector( absint( $competition_data['league_id'] ) );
 
-	foreach ( anwp_fl()->competition->get_competitions_data() as $competition_item ) {
-		if ( absint( $competition_data['league_id'] ) === absint( $competition_item['league_id'] ) && 'secondary' !== $competition_item['multistage'] && isset( $season_all[ $competition_item['season_ids'] ] ) ) {
+	foreach ( $league_comps as $comp ) {
+		if ( isset( $season_all[ $comp['season_ids'] ] ) ) {
 			$season_options[] = [
-				'id'        => $competition_item['id'],
-				'season'    => $season_all[ $competition_item['season_ids'] ],
-				'permalink' => get_permalink( $competition_item['id'] ),
+				'id'        => (int) $comp['competition_id'],
+				'season'    => $season_all[ $comp['season_ids'] ],
+				'permalink' => $comp['permalink'],
 			];
 		}
 	}

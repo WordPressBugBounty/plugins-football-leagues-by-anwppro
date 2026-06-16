@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.6.1
  *
- * @version       0.16.0
+ * @version       0.18.0
  */
 
 // phpcs:disable WordPress.NamingConventions.ValidVariableName
@@ -71,7 +71,7 @@ $temp_players = anwp_football_leagues()->match->get_temp_players( $data['match_i
 						</div>
 						<div class="match__event-player">
 							<?php
-							if ( ! empty( $temp_players ) && 'temp__' === mb_substr( $e->player, 0, 6 ) ) :
+							if ( ! empty( $temp_players ) && str_starts_with( $e->player, 'temp__' ) ) :
 								?>
 								<span class="match__event-player-name">
 									<?php echo esc_html( isset( $temp_players[ $e->player ] ) ? $temp_players[ $e->player ]->name : '' ); ?>
@@ -111,7 +111,7 @@ $temp_players = anwp_football_leagues()->match->get_temp_players( $data['match_i
 						</div>
 						<div class="match__event-player">
 							<?php
-							if ( ! empty( $temp_players ) && 'temp__' === mb_substr( $e->player, 0, 6 ) ) :
+							if ( ! empty( $temp_players ) && str_starts_with( $e->player, 'temp__' ) ) :
 								?>
 								<span class="match__event-player-name">
 									<?php echo esc_html( isset( $temp_players[ $e->player ] ) ? $temp_players[ $e->player ]->name : '' ); ?>

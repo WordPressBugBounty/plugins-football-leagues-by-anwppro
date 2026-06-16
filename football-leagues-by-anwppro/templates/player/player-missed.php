@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.11.4
  *
- * @version       0.14.11
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -36,6 +36,28 @@ if ( empty( $missed_games ) ) {
 }
 
 $default_club_logo = anwp_football_leagues()->helper->get_default_club_logo();
+
+/*
+|--------------------------------------------------------------------
+| Pre-warm club rows for every match (home + away) so the per-row
+| get_club() / get_club_logo_by_id() / get_club_title_by_id() calls
+| below hit $list_cache instead of firing one get_row() SELECT each.
+|--------------------------------------------------------------------
+*/
+$club_ids_to_warm = [];
+foreach ( $missed_games as $competition ) {
+	if ( empty( $competition['matches'] ) || ! is_array( $competition['matches'] ) ) {
+		continue;
+	}
+	foreach ( $competition['matches'] as $match ) {
+		$club_ids_to_warm[] = (int) ( $match->home_club ?? 0 );
+		$club_ids_to_warm[] = (int) ( $match->away_club ?? 0 );
+	}
+}
+
+if ( ! empty( $club_ids_to_warm ) ) {
+	anwp_football_leagues()->club->warm_clubs( $club_ids_to_warm );
+}
 ?>
 <div class="player-missed anwp-section">
 
@@ -87,7 +109,7 @@ $default_club_logo = anwp_football_leagues()->helper->get_default_club_logo();
 
 					$club_logo  = anwp_football_leagues()->club->get_club_logo_by_id( $match->club_id );
 					$club_title = anwp_football_leagues()->club->get_club_title_by_id( $match->club_id );
-					$match_link = get_permalink( $match->match_id );
+					$match_link = $match->permalink ?? '';
 
 					// Opponent
 					$opponent_id    = $match->club_id === $match->home_club ? $match->away_club : $match->home_club;

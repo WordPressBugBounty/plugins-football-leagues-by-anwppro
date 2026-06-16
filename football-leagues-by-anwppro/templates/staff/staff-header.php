@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.14.0
  *
- * @version       0.16.0
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -53,6 +53,10 @@ if ( 'hide' === anwp_fl()->customizer->get_value( 'player', 'staff_current_team'
 } elseif ( 'last' === anwp_fl()->customizer->get_value( 'player', 'staff_current_team' ) ) {
 	$club_id = anwp_fl()->staff->get_coach_last_team( $staff_id );
 }
+
+// Warm club cache for primary + additional clubs.
+$club_ids = get_post_meta( $staff_id, '_anwpfl_current_clubs', true );
+anwp_fl()->club->warm_clubs( array_merge( [ $club_id ], is_array( $club_ids ) ? $club_ids : [] ) );
 ?>
 <div class="staff-header anwp-section d-sm-flex anwp-bg-light p-3">
 
@@ -85,9 +89,6 @@ if ( 'hide' === anwp_fl()->customizer->get_value( 'player', 'staff_current_team'
 		<div class="anwp-grid-table staff-header__options anwp-text-base anwp-border-light">
 
 			<?php
-			// Current Club data
-			$club_ids = get_post_meta( $staff_id, '_anwpfl_current_clubs', true );
-
 			if ( $club_id ) :
 				$club_logo = anwp_football_leagues()->club->get_club_logo_by_id( $club_id );
 				$club_name = anwp_football_leagues()->club->get_club_title_by_id( $club_id );

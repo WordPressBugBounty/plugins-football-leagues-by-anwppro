@@ -322,7 +322,7 @@ class AnWPFL_Player extends AnWPFL_DB {
 			<div class="anwp-x-selector anwp-g-float-left" fl-x-data="selectorItem('club',true)" fl-x-cloak>
 				<input fl-x-model.fill="selected" type="text" class="postform anwp-g-admin-list-input anwp-w-120" placeholder="<?php echo esc_attr__( 'Club ID', 'anwp-football-leagues' ); ?>"
 					name="_fl_team_id" value="<?php echo esc_attr( $filter_fl_team_id ); ?>" />
-				<button fl-x-on:click="openModal()" type="button" class="button anwp-mr-2 postform"><span class="dashicons dashicons-search"></span></button>
+				<button fl-x-on:click="openModal()" type="button" class="button fl-btn-icon anwp-mr-2 postform"><span class="dashicons dashicons-search"></span></button>
 			</div>
 			<?php
 			echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -930,13 +930,55 @@ class AnWPFL_Player extends AnWPFL_DB {
 
 		$player_id = absint( $params['player_id'] ?? 0 );
 		$club_id   = absint( $params['club_id'] ?? 0 );
-		$season_id = absint( $params['season_id'] ?? 0 );
 
-		if ( ! $club_id || ! $player_id || ! $season_id ) {
+		if ( ! $club_id || ! $player_id ) {
 			return rest_ensure_response( [ 'result' => false ] );
 		}
 
-		$season_slug = 's:' . $season_id;
+		$new_entry = [
+			'id'       => $player_id,
+			'position' => $this->get_player_data( $player_id )['position'] ?? '',
+			'number'   => '',
+			'status'   => '',
+		];
+
+		/*
+		|--------------------------------------------------------------------
+		| Post-migration: append to anwpfl_clubs.squad (flat active roster).
+		|--------------------------------------------------------------------
+		*/
+		if ( get_option( 'anwpfl_squad_migrated' ) ) {
+			$row   = anwp_fl()->club->get_row( $club_id );
+			$squad = $row ? ( json_decode( $row['squad'] ?? '', true ) ?: [] ) : [];
+
+			// Skip if player already on active roster (idempotent).
+			foreach ( $squad as $entry ) {
+				if ( absint( $entry['id'] ?? 0 ) === $player_id ) {
+					return rest_ensure_response( [ 'result' => true ] );
+				}
+			}
+
+			$squad[] = $new_entry;
+
+			$ok = anwp_fl()->club->upsert(
+				$club_id,
+				[ 'squad' => wp_json_encode( $squad ) ?: '' ],
+				[ 'squad' ]
+			);
+
+			if ( ! $ok ) {
+				return new WP_Error( 'rest_anwp_fl_error', 'Save error', [ 'status' => 400 ] );
+			}
+
+			return rest_ensure_response( [ 'result' => true ] );
+		}
+
+		/*
+		|--------------------------------------------------------------------
+		| Pre-migration fallback: active-season key in legacy postmeta object.
+		|--------------------------------------------------------------------
+		*/
+		$season_slug = 's:' . (int) anwp_fl()->get_active_season();
 		$club_squad  = json_decode( get_post_meta( $club_id, '_anwpfl_squad', true ) );
 
 		if ( ! $club_squad ) {
@@ -949,22 +991,9 @@ class AnWPFL_Player extends AnWPFL_DB {
 			return rest_ensure_response( [ 'result' => true ] );
 		}
 
-		$squad_players[] = (object) [
-			'id'       => $player_id,
-			'position' => $this->get_player_data( $player_id )['position'] ?? '',
-			'number'   => '',
-			'status'   => '',
-		];
-
-		/*
-		|--------------------------------------------------------------------
-		| Save Club Squad
-		|--------------------------------------------------------------------
-		*/
-		// Update club slug with new data
+		$squad_players[]            = (object) $new_entry;
 		$club_squad->{$season_slug} = $squad_players;
 
-		// Save squad
 		if ( ! update_post_meta( $club_id, '_anwpfl_squad', wp_slash( wp_json_encode( $club_squad ) ) ) ) {
 			return new WP_Error( 'rest_anwp_fl_error', 'Save error', [ 'status' => 400 ] );
 		}
@@ -1595,10 +1624,8 @@ class AnWPFL_Player extends AnWPFL_DB {
 			return [];
 		}
 
-		static $players = [];
-
-		if ( ! empty( $players[ $player_id ] ) ) {
-			return $players[ $player_id ];
+		if ( isset( self::$player_data_cache[ $player_id ] ) ) {
+			return self::$player_data_cache[ $player_id ];
 		}
 
 		$player_data = $wpdb->get_row(
@@ -1617,7 +1644,38 @@ class AnWPFL_Player extends AnWPFL_DB {
 			return [];
 		}
 
-		$player_data['link']          = $with_permalink ? get_permalink( $player_id ) : '';
+		$player_data = $this->decorate_player_data_row( $player_data, $with_permalink );
+
+		self::$player_data_cache[ $player_id ] = $player_data;
+
+		return self::$player_data_cache[ $player_id ];
+	}
+
+	/**
+	 * Per-process cache for get_player_data() results.
+	 *
+	 * Class scope (not function-local) so bulk warmers can pre-populate it.
+	 *
+	 * @since 0.18.2
+	 * @var array<int, array>
+	 */
+	private static array $player_data_cache = [];
+
+	/**
+	 * Decorate a raw anwpfl_player_data row with derived fields.
+	 *
+	 * Extracted so both get_player_data() and warm_admin_list_player_data()
+	 * produce identical shapes.
+	 *
+	 * @since 0.18.2
+	 *
+	 * @param array $player_data    Raw row.
+	 * @param bool  $with_permalink Include post permalink in `link`.
+	 *
+	 * @return array
+	 */
+	private function decorate_player_data_row( array $player_data, bool $with_permalink = false ): array {
+		$player_data['link']          = $with_permalink ? get_permalink( (int) $player_data['player_id'] ) : '';
 		$player_data['short_name']    = $this->use_short_name && $player_data['short_name'] ? $player_data['short_name'] : $player_data['name'];
 		$player_data['nationalities'] = empty( $player_data['nationality'] ) ? [] : [ $player_data['nationality'] ];
 
@@ -1625,9 +1683,50 @@ class AnWPFL_Player extends AnWPFL_DB {
 			$player_data['nationalities'] = array_merge( $player_data['nationalities'], explode( '%', trim( $player_data['nationality_extra'], '%' ) ) );
 		}
 
-		$players[ $player_id ] = $player_data;
+		return $player_data;
+	}
 
-		return $players[ $player_id ];
+	/**
+	 * Bulk-warm get_player_data() cache for the admin player list.
+	 *
+	 * One SELECT replaces N per-row queries triggered by has_post_thumbnail()
+	 * cascading through insert_thumbnail_id() for every visible player.
+	 *
+	 * @since 0.18.2
+	 *
+	 * @param int[] $player_ids Player post IDs.
+	 */
+	public function warm_admin_list_player_data( array $player_ids ): void {
+		$player_ids = array_unique( array_filter( array_map( 'absint', $player_ids ) ) );
+
+		if ( empty( $player_ids ) ) {
+			return;
+		}
+
+		$player_ids = array_values( array_diff( $player_ids, array_keys( self::$player_data_cache ) ) );
+
+		if ( empty( $player_ids ) ) {
+			return;
+		}
+
+		global $wpdb;
+
+		$format = implode( ', ', array_fill( 0, count( $player_ids ), '%d' ) );
+
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$wpdb->prefix}anwpfl_player_data WHERE player_id IN ({$format})",
+				$player_ids
+			),
+			ARRAY_A
+		);
+		// phpcs:enable
+
+		foreach ( (array) $rows as $row ) {
+			$player_id                               = (int) $row['player_id'];
+			self::$player_data_cache[ $player_id ]   = $this->decorate_player_data_row( $row, false );
+		}
 	}
 
 	/**
@@ -1811,7 +1910,12 @@ class AnWPFL_Player extends AnWPFL_DB {
 
 		global $wpdb;
 
-		$use_lighter_version = apply_filters( 'anwpfl/player/use_lighter_player_obj_list', false );
+		$use_lighter_version = apply_filters( 'anwpfl/player/use_lighter_player_obj_list', null );
+
+		if ( null === $use_lighter_version ) {
+			$player_count        = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->anwpfl_player_data}" );
+			$use_lighter_version = $player_count > 20000;
+		}
 
 		if ( $use_lighter_version ) {
 			$all_players = $wpdb->get_results(
@@ -1824,6 +1928,10 @@ class AnWPFL_Player extends AnWPFL_DB {
 
 			foreach ( $all_players as $player ) {
 				$player->id = absint( $player->id );
+
+				if ( ! empty( $squad_position_map[ $player->id ] ) && $squad_position_map[ $player->id ] !== $player->position ) {
+					$player->position = $squad_position_map[ $player->id ];
+				}
 			}
 		} else {
 			$all_players = $wpdb->get_results(
@@ -1947,31 +2055,33 @@ class AnWPFL_Player extends AnWPFL_DB {
 			$competition_ids[] = (int) $match->main_stage_id;
 		}
 
-		// Get competition data
-		$competitions = get_posts(
-			[
-				'numberposts'      => - 1,
-				'post_type'        => 'anwp_competition',
-				'suppress_filters' => false,
-				'post_status'      => [ 'publish', 'stage_secondary' ],
-				'include'          => $competition_ids,
-				'orderby'          => 'post__in',
-			]
-		);
+		$competition_ids = array_unique( $competition_ids );
+		anwp_fl()->competition->warm_competitions( $competition_ids );
 
-		/** @var WP_Post $competition */
-		foreach ( $competitions as $competition ) {
+		foreach ( $competition_ids as $competition_id ) {
+			$competition_row = anwp_fl()->competition->get_competition_list_row( $competition_id );
 
-			if ( 'secondary' !== get_post_meta( $competition->ID, '_anwpfl_multistage', true ) ) {
-				$data[ $competition->ID ] = [
-					'title'   => $competition->post_title,
-					'id'      => $competition->ID,
-					'matches' => [],
-					'totals'  => array_fill_keys( [ 'started', 'sub_in', 'minutes', 'card_y', 'card_yr', 'card_r', 'goals', 'assist', 'goals_own', 'goals_penalty', 'goals_conceded', 'clean_sheets' ], 0 ),
-					'logo'    => get_post_meta( $competition->ID, '_anwpfl_logo', true ),
-					'order'   => (int) get_post_meta( $competition->ID, '_anwpfl_competition_order', true ),
-				];
+			if ( ! $competition_row || 'secondary' === ( $competition_row['multistage'] ?? '' ) ) {
+				continue;
 			}
+
+			$data[ $competition_id ] = [
+				'title'   => $competition_row['title'] ?? '',
+				'id'      => $competition_id,
+				'matches' => [],
+				'totals'  => array_fill_keys( [ 'started', 'sub_in', 'minutes', 'card_y', 'card_yr', 'card_r', 'goals', 'assist', 'goals_own', 'goals_penalty', 'goals_conceded', 'clean_sheets' ], 0 ),
+				'logo'    => $competition_row['logo'] ?? '',
+				'order'   => (int) ( $competition_row['competition_order'] ?? 0 ),
+			];
+		}
+
+		// Get player position for clean_sheets check (only GKs get clean sheets).
+		global $wpdb;
+
+		$player_position = '';
+
+		if ( ! empty( $matches[0]->player_id ) ) {
+			$player_position = $wpdb->get_var( $wpdb->prepare( "SELECT position FROM {$wpdb->prefix}anwpfl_player_data WHERE player_id = %d", $matches[0]->player_id ) );
 		}
 
 		// Add matches to competitions
@@ -2000,7 +2110,7 @@ class AnWPFL_Player extends AnWPFL_DB {
 				$data[ $competition_index ]['totals']['goals_penalty']  += (int) $match->goals_penalty;
 				$data[ $competition_index ]['totals']['goals_conceded'] += (int) $match->goals_conceded;
 
-				if ( ( 1 === absint( $match->appearance ) || ( 2 === absint( $match->appearance ) && absint( $match->time_out ) > 59 ) ) && 0 === (int) $match->goals_conceded ) {
+				if ( 'g' === $player_position && ( 1 === absint( $match->appearance ) || ( 2 === absint( $match->appearance ) && absint( $match->time_out ) > 59 ) ) && 0 === (int) $match->goals_conceded ) {
 					$data[ $competition_index ]['totals']['clean_sheets'] ++;
 				}
 
@@ -2037,6 +2147,7 @@ class AnWPFL_Player extends AnWPFL_DB {
 		global $wpdb;
 
 		$player_yr_card_count = AnWPFL_Options::get_value( 'player_yr_card_count', 'yyr' );
+		$yr_card_count        = AnWPFL_Options::get_value( 'yr_card_count', 'r' );
 
 		$options = wp_parse_args(
 			$options,
@@ -2057,8 +2168,14 @@ class AnWPFL_Player extends AnWPFL_DB {
 			]
 		);
 
+		// Determine whether to exclude first yellow from 2YC events
+		// For clubs: use yr_card_count setting ('r' = count 2YC as Red, exclude first yellow)
+		// For players: use player_yr_card_count setting ('yr' = count as Yellow/Red, exclude first yellow)
+		$adjust_yellow = ( 'clubs' === $options['type'] && 'r' === $yr_card_count )
+			|| ( 'clubs' !== $options['type'] && 'yr' === $player_yr_card_count );
+
 		// Prepare countable field
-		if ( 'yr' === $player_yr_card_count && 'clubs' !== $options['type'] ) {
+		if ( $adjust_yellow ) {
 			$countable = ' SUM(CASE WHEN p.card_yr > 0 THEN 0 ELSE p.card_y END) as cards_y, SUM( p.card_yr ) as cards_yr, SUM( p.card_r ) as cards_r, SUM( p.card_r * ' . (int) $options['points_r'] . ' + p.card_yr * ' . (int) $options['points_yr'] . ' + ( CASE WHEN p.card_yr > 0 THEN 0 ELSE p.card_y END ) ) as countable ';
 		} else {
 			$countable = ' SUM( p.card_y ) as cards_y, SUM( p.card_yr ) as cards_yr, SUM( p.card_r ) as cards_r, SUM( p.card_r * ' . (int) $options['points_r'] . ' + p.card_yr * ' . (int) $options['points_yr'] . ' + p.card_y * 1 ) as countable ';

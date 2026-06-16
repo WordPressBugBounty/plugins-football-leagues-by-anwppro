@@ -148,6 +148,7 @@ class AnWPFL_Data {
 			'away_club'                              => esc_html__( 'Away Club', 'anwp-football-leagues' ),
 			'ball_possession'                        => esc_html__( 'Ball Possession', 'anwp-football-leagues' ),
 			'basic_info'                             => esc_html__( 'Basic Info', 'anwp-football-leagues' ),
+			'big_logo'                               => esc_html__( 'Big Logo', 'anwp-football-leagues' ),
 			'card'                                   => esc_html__( 'Card', 'anwp-football-leagues' ),
 			'card_type'                              => esc_html__( 'Card Type', 'anwp-football-leagues' ),
 			'clear'                                  => esc_html__( 'Clear', 'anwp-football-leagues' ),
@@ -168,7 +169,6 @@ class AnWPFL_Data {
 			'competition_logo'                       => esc_html__( 'Competition Logo', 'anwp-football-leagues' ),
 			'competition_order'                      => esc_html__( 'Competition Order', 'anwp-football-leagues' ),
 			'competition_order_hint'                 => esc_html__( 'Used for Knockout matches. For example: order is used on the Player page in the list of latest matches grouped by competition', 'anwp-football-leagues' ),
-			'competition_status'                     => esc_html__( 'Competition Status', 'anwp-football-leagues' ),
 			'competition_title_league_seasons_copy'  => esc_html__( 'Competition Title, League and Seasons have been copied from selected Main Stage.', 'anwp-football-leagues' ),
 			'competition_type'                       => esc_html__( 'Competition Type', 'anwp-football-leagues' ),
 			'confirm_delete'                         => esc_html__( 'Confirm Delete', 'anwp-football-leagues' ),
@@ -181,6 +181,7 @@ class AnWPFL_Data {
 			'current_ranking_rules'                  => esc_html__( 'Current standing ranking rules', 'anwp-football-leagues' ),
 			'custom'                                 => esc_html_x( 'Custom', 'round robin format', 'anwp-football-leagues' ),
 			'custom_player_number'                   => esc_html__( 'Edit Player number', 'anwp-football-leagues' ),
+			'default_option'                         => esc_html__( 'Default', 'anwp-football-leagues' ),
 			'delete_event'                           => esc_html__( 'Delete Event', 'anwp-football-leagues' ),
 			'data_save_error'                        => esc_html__( 'Data Save Error', 'anwp-football-leagues' ),
 			'delete_round'                           => esc_html__( 'Delete Round', 'anwp-football-leagues' ),
@@ -232,6 +233,7 @@ class AnWPFL_Data {
 			'kickoff_time'                           => esc_html__( 'Kick off time', 'anwp-football-leagues' ),
 			'knockout'                               => esc_html__( 'Knockout', 'anwp-football-leagues' ),
 			'knockout_format'                        => esc_html__( 'Knockout Format', 'anwp-football-leagues' ),
+			'layout'                                 => esc_html__( 'Layout', 'anwp-football-leagues' ),
 			'league'                                 => esc_html__( 'League', 'anwp-football-leagues' ),
 			'league_name'                            => esc_html__( 'League Name', 'anwp-football-leagues' ),
 			'leagues_updated'                        => esc_html__( 'Leagues updated', 'anwp-football-leagues' ),
@@ -350,6 +352,7 @@ class AnWPFL_Data {
 			'substitute'                             => esc_html__( 'Substitute', 'anwp-football-leagues' ),
 			'substitutes'                            => esc_html__( 'Substitutes', 'anwp-football-leagues' ),
 			'suspended'                              => esc_html__( 'Suspended', 'anwp-football-leagues' ),
+			'tabs'                                   => esc_html__( 'Tabs', 'anwp-football-leagues' ),
 			'tie'                                    => esc_html__( 'Tie', 'anwp-football-leagues' ),
 			'ties'                                   => esc_html__( 'Ties', 'anwp-football-leagues' ),
 			'tips'                                   => esc_html__( 'Tips', 'anwp-football-leagues' ),
@@ -700,7 +703,7 @@ class AnWPFL_Data {
 
 		static $custom_countries = null;
 
-		$country_code = mb_strtolower( $country_code );
+		$country_code = strtolower( $country_code );
 
 		if ( null === $custom_countries ) {
 			$custom_countries_raw = AnWPFL_Options::get_value( 'custom_countries' );
@@ -709,7 +712,7 @@ class AnWPFL_Data {
 			if ( ! empty( $custom_countries_raw ) && is_array( $custom_countries_raw ) ) {
 				foreach ( $custom_countries_raw as $custom_country ) {
 					if ( ! empty( $custom_country['title'] ) ) {
-						$custom_countries[ '___' . mb_strtolower( $custom_country['title'] ) ] = [
+						$custom_countries[ '___' . strtolower( $custom_country['title'] ) ] = [
 							'title' => $custom_country['title'],
 							'image' => isset( $custom_country['image'] ) ? $custom_country['image'] : '',
 						];
@@ -821,7 +824,7 @@ class AnWPFL_Data {
 			case 'country':
 				$this->init_countries();
 
-				$country_code        = mb_strtolower( $key );
+				$country_code        = strtolower( $key );
 				$available_countries = array_change_key_case( $this->countries );
 
 				return empty( $available_countries[ $country_code ] ) ? '' : $available_countries[ $country_code ];
@@ -1073,7 +1076,7 @@ class AnWPFL_Data {
 	 * @return string
 	 */
 	private function get_special_status_text_by_slug( $slug ) {
-		$slug = mb_strtoupper( trim( $slug ) );
+		$slug = strtoupper( trim( $slug ) );
 
 		if ( empty( $slug ) ) {
 			return '';

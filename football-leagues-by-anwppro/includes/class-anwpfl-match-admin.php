@@ -340,13 +340,13 @@ class AnWPFL_Match_Admin {
 			|--------------------------------------------------------------------
 			*/
 			// phpcs:ignore WordPress.Security.NonceVerification
-			$competition_filter = empty( $_GET['_fl_competition_id'] ) ? '' : (int) $_GET['_fl_competition_id'];
+			$competition_filter = isset( $_GET['_fl_competition_id'] ) && '' !== $_GET['_fl_competition_id'] ? (int) $_GET['_fl_competition_id'] : '';
 			?>
 			<div class="anwp-x-selector anwp-g-float-left" fl-x-data="selectorItem('competition',true)" fl-x-cloak>
 				<input fl-x-model.fill="selected" type="text" class="postform anwp-g-admin-list-input anwp-w-120"
 						placeholder="<?php echo esc_attr__( 'Competition ID', 'anwp-football-leagues' ); ?>"
 						name="_fl_competition_id" value="<?php echo esc_attr( $competition_filter ); ?>" />
-				<button fl-x-on:click="openModal()" type="button" class="button anwp-mr-2 postform">
+				<button fl-x-on:click="openModal()" type="button" class="button fl-btn-icon anwp-mr-2 postform">
 					<span class="dashicons dashicons-search"></span>
 				</button>
 			</div>
@@ -364,7 +364,7 @@ class AnWPFL_Match_Admin {
 				<input fl-x-model.fill="selected" type="text" class="postform anwp-g-admin-list-input anwp-w-120"
 					placeholder="<?php echo esc_attr__( 'League ID', 'anwp-football-leagues' ); ?>"
 					name="_fl_league" value="<?php echo esc_attr( $league_filter ); ?>"/>
-				<button fl-x-on:click="openModal()" type="button" class="button anwp-mr-2 postform">
+				<button fl-x-on:click="openModal()" type="button" class="button fl-btn-icon anwp-mr-2 postform">
 					<span class="dashicons dashicons-search"></span>
 				</button>
 			</div>
@@ -396,7 +396,7 @@ class AnWPFL_Match_Admin {
 			<div class="anwp-x-selector anwp-g-float-left" fl-x-data="selectorItem('club',true)" fl-x-cloak>
 				<input fl-x-model.fill="selected" type="text" class="postform anwp-g-admin-list-input anwp-w-120" placeholder="<?php echo esc_attr__( 'Club ID', 'anwp-football-leagues' ); ?>"
 					name="_fl_team_id" value="<?php echo esc_attr( $current_club_filter ); ?>" />
-				<button fl-x-on:click="openModal()" type="button" class="button anwp-mr-2 postform"><span class="dashicons dashicons-search"></span></button>
+				<button fl-x-on:click="openModal()" type="button" class="button fl-btn-icon anwp-mr-2 postform"><span class="dashicons dashicons-search"></span></button>
 			</div>
 			<?php
 

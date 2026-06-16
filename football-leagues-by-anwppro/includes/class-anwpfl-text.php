@@ -1417,6 +1417,15 @@ class AnWPFL_Text {
 
 		$cmb->add_field(
 			[
+				'name' => esc_html__( 'Active Squad', 'anwp-football-leagues' ),
+				'desc' => 'squad :: shortcode',
+				'id'   => 'squad__shortcode__active_squad',
+				'type' => 'anwp_fl_text',
+			]
+		);
+
+		$cmb->add_field(
+			[
 				'name' => esc_html__( 'No players in the squad', 'anwp-football-leagues' ),
 				'desc' => 'squad :: shortcode',
 				'id'   => 'squad__shortcode__no_players_in_the_squad',

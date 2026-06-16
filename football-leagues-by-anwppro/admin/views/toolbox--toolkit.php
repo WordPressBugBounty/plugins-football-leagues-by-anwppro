@@ -24,6 +24,10 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	<a class="text-decoration-none" href="<?php echo esc_url( self_admin_url( 'admin.php?page=anwpfl-toolbox' ) ); ?>">Database Updater</a>
 	<small class="text-muted mx-2 d-inline-block">|</small>
 	<span class="text-muted">Toolkit</span>
+	<small class="text-muted mx-2 d-inline-block">|</small>
+	<a class="text-decoration-none" href="<?php echo esc_url( self_admin_url( 'admin.php?page=anwpfl-toolbox&tab=cleanup' ) ); ?>">Cleanup</a>
+	<small class="text-muted mx-2 d-inline-block">|</small>
+	<a class="text-decoration-none" href="<?php echo esc_url( self_admin_url( 'admin.php?page=anwpfl-toolbox&tab=cache' ) ); ?>">Caching</a>
 </div>
 
 <hr class="mb-3">

@@ -159,6 +159,10 @@ class AnWPFL_Cache {
 				}
 			}
 		} elseif ( 'v2' === $this->version ) {
+			if ( is_array( $dependent_group ) ) {
+				$dependent_group = reset( $dependent_group );
+			}
+
 			wp_cache_set( $cache_key, $value, 'anwp-fl-' . $dependent_group, $expiration );
 		}
 	}
@@ -173,13 +177,10 @@ class AnWPFL_Cache {
 	protected function get_key_expiration( string $cache_key ): string {
 
 		$expiration_map = [
-			'FL-REFEREES-LIST-SIMPLE'            => WEEK_IN_SECONDS,
 			'FL-REFEREES-LIST'                   => WEEK_IN_SECONDS,
+			'FL-REFEREES-NAMES'                  => WEEK_IN_SECONDS,
 			'FL-STADIUMS-LIST'                   => WEEK_IN_SECONDS,
-			'FL-CLUBS-LIST'                      => WEEK_IN_SECONDS,
 			'FL-STANDINGS-LIST'                  => MONTH_IN_SECONDS,
-			'FL-COMPETITIONS-LIST'               => WEEK_IN_SECONDS,
-			'FL-COMPETITIONS-DATA'               => WEEK_IN_SECONDS,
 			'FL-LEAGUE-OPTIONS'                  => WEEK_IN_SECONDS,
 			'FL-PLAYER_tmpl_get_latest_matches'  => WEEK_IN_SECONDS,
 			'FL-PLAYER_tmpl_get_players_by_type' => WEEK_IN_SECONDS,
@@ -187,7 +188,6 @@ class AnWPFL_Cache {
 			'FL-SHORTCODE_cards'                 => WEEK_IN_SECONDS,
 			'FL-PLAYER_get_birthdays'            => DAY_IN_SECONDS,
 			'FL-PRO-REFEREES-NAME-LIST'          => WEEK_IN_SECONDS,
-			'FL-PRO-REFEREES-NAMES'              => WEEK_IN_SECONDS,
 			'FL-STAFF-PHOTO-MAP'                 => WEEK_IN_SECONDS,
 			'FL-MATCHWEEK-OPTIONS'               => WEEK_IN_SECONDS,
 		];
@@ -275,10 +275,9 @@ class AnWPFL_Cache {
 
 		// On modify REFEREE
 		if ( 'anwp_referee' === $post_type ) {
-			$this->delete( 'FL-REFEREES-LIST-SIMPLE' );
 			$this->delete( 'FL-REFEREES-LIST' );
+			$this->delete( 'FL-REFEREES-NAMES' );
 			$this->delete( 'FL-PRO-REFEREES-NAME-LIST' );
-			$this->delete( 'FL-PRO-REFEREES-NAMES' );
 		}
 
 		// On modify STAFF
@@ -293,13 +292,12 @@ class AnWPFL_Cache {
 
 		// On modify CLUB
 		if ( 'anwp_club' === $post_type ) {
-			$this->delete( 'FL-CLUBS-LIST' );
+			anwp_fl()->club->reset_list_cache();
 		}
 
 		// On modify COMPETITION
 		if ( 'anwp_competition' === $post_type ) {
-			$this->delete( 'FL-COMPETITIONS-LIST' );
-			$this->delete( 'FL-COMPETITIONS-DATA' );
+			anwp_fl()->competition->reset_list_cache();
 		}
 
 		// On modify STANDING
@@ -352,7 +350,8 @@ class AnWPFL_Cache {
 		} elseif ( 'v2' === $this->version && wp_cache_supports( 'flush_group' ) ) {
 			wp_cache_flush_group( 'anwp-fl-' . $dependent_group );
 		} elseif ( 'v2' === $this->version ) {
-			wp_cache_flush();
+			// No flush_group support - dynamic keys expire naturally via TTL (HOUR_IN_SECONDS default).
+			// This is far better than wp_cache_flush() which nukes ALL plugins' data site-wide.
 		}
 	}
 
@@ -369,15 +368,14 @@ class AnWPFL_Cache {
 		| Remove Static Keys
 		|--------------------------------------------------------------------
 		*/
-		$this->delete( 'FL-REFEREES-LIST-SIMPLE' );
 		$this->delete( 'FL-REFEREES-LIST' );
+		$this->delete( 'FL-REFEREES-NAMES' );
 		$this->delete( 'FL-STADIUMS-LIST' );
-		$this->delete( 'FL-CLUBS-LIST' );
-		$this->delete( 'FL-COMPETITIONS-LIST' );
-		$this->delete( 'FL-COMPETITIONS-DATA' );
 		$this->delete( 'FL-STANDINGS-LIST' );
 		$this->delete( 'FL-PRO-REFEREES-NAME-LIST' );
 		$this->delete( 'FL-PRO-CLUB-HISTORY-ALL' );
+		$this->delete( 'FL-STAFF-PHOTO-MAP' );
+		$this->delete( 'FL-MATCHWEEK-OPTIONS' );
 
 		$this->delete( 'FL-LEAGUE-OPTIONS' );
 
@@ -403,7 +401,7 @@ class AnWPFL_Cache {
 	 * @since  0.13.3
 	 */
 	public function permalink_structure_changed() {
-		$this->delete( 'FL-CLUBS-LIST' );
+		// FL-CLUBS-LIST removed in 0.17.3 — club links built from post_name, no cache needed.
 	}
 
 	/*
@@ -424,14 +422,14 @@ class AnWPFL_Cache {
 		| Remove Static Keys
 		|--------------------------------------------------------------------
 		*/
-		delete_transient( 'FL-REFEREES-LIST-SIMPLE' );
 		delete_transient( 'FL-REFEREES-LIST' );
+		delete_transient( 'FL-REFEREES-NAMES' );
 		delete_transient( 'FL-STADIUMS-LIST' );
-		delete_transient( 'FL-CLUBS-LIST' );
-		delete_transient( 'FL-COMPETITIONS-LIST' );
-		delete_transient( 'FL-COMPETITIONS-DATA' );
 		delete_transient( 'FL-STANDINGS-LIST' );
 		delete_transient( 'FL-PRO-REFEREES-NAME-LIST' );
+		delete_transient( 'FL-STAFF-PHOTO-MAP' );
+		delete_transient( 'FL-MATCHWEEK-OPTIONS' );
+		delete_transient( 'FL-LEAGUE-OPTIONS' );
 
 		/*
 		|--------------------------------------------------------------------

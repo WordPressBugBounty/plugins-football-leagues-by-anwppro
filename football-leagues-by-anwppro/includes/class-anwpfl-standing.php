@@ -6,16 +6,12 @@
  * @package AnWP_Football_Leagues
  */
 
-require_once dirname( __FILE__ ) . '/../vendor/cpt-core/CPT_Core.php';
-
 /**
  * AnWP Football Leagues :: Standing post type class.
  *
  * @since 0.2.0
- *
- * @see   https://github.com/WebDevStudios/CPT_Core
  */
-class AnWPFL_Standing extends CPT_Core {
+class AnWPFL_Standing extends AnWPFL_DB {
 
 	/**
 	 * Parent plugin class.
@@ -27,43 +23,348 @@ class AnWPFL_Standing extends CPT_Core {
 
 	/**
 	 * Constructor.
-	 * Register Custom Post Types.
 	 *
-	 * See documentation in CPT_Core, and in wp-includes/post.php.
+	 * @param AnWP_Football_Leagues $plugin Main plugin object.
 	 *
-	 * @since  0.2.0
-	 * @param  AnWP_Football_Leagues $plugin Main plugin object.
+	 * @since 0.2.0
 	 */
 	public function __construct( $plugin ) {
-		$this->plugin = $plugin;
-		$this->hooks();
+		global $wpdb;
 
-		$permalink_structure = $plugin->options->get_permalink_structure();
+		$this->plugin      = $plugin;
+		$this->table_name  = $wpdb->anwpfl_standings;
+		$this->primary_key = 'standing_id';
+
+		$this->hooks();
+	}
+
+	/**
+	 * Register the Standing custom post type.
+	 *
+	 * @since 0.18.0
+	 */
+	public function register_post_type() {
+		$permalink_structure = $this->plugin->options->get_permalink_structure();
 		$permalink_slug      = empty( $permalink_structure['standing'] ) ? 'table' : $permalink_structure['standing'];
 
-		// Register this cpt.
-		parent::__construct(
-			[ // array with Singular, Plural, and Registered name
-				esc_html__( 'Standing Table', 'anwp-football-leagues' ),
-				esc_html__( 'Standing Tables', 'anwp-football-leagues' ),
-				'anwp_standing',
-			],
+		register_post_type(
+			'anwp_standing',
 			[
+				'labels'              => [
+					'name'          => esc_html__( 'Standing Tables', 'anwp-football-leagues' ),
+					'singular_name' => esc_html__( 'Standing Table', 'anwp-football-leagues' ),
+					'all_items'     => esc_html__( 'Standing Tables', 'anwp-football-leagues' ),
+					'add_new'       => esc_html__( 'Add New Standing Table', 'anwp-football-leagues' ),
+					'add_new_item'  => esc_html__( 'Add New Standing Table', 'anwp-football-leagues' ),
+					'edit_item'     => esc_html__( 'Edit Standing Table', 'anwp-football-leagues' ),
+					'new_item'      => esc_html__( 'New Standing Table', 'anwp-football-leagues' ),
+					'view_item'     => esc_html__( 'View Standing Table', 'anwp-football-leagues' ),
+				],
 				'supports'            => [ 'title' ],
 				'rewrite'             => [ 'slug' => $permalink_slug ],
 				'show_in_menu'        => 'edit.php?post_type=anwp_competition',
 				'public'              => true,
 				'exclude_from_search' => 'hide' === AnWPFL_Options::get_value( 'display_front_end_search_standing' ),
-				'labels'              => [
-					'all_items'    => esc_html__( 'Standing Tables', 'anwp-football-leagues' ),
-					'add_new'      => esc_html__( 'Add New Standing Table', 'anwp-football-leagues' ),
-					'add_new_item' => esc_html__( 'Add New Standing Table', 'anwp-football-leagues' ),
-					'edit_item'    => esc_html__( 'Edit Standing Table', 'anwp-football-leagues' ),
-					'new_item'     => esc_html__( 'New Standing Table', 'anwp-football-leagues' ),
-					'view_item'    => esc_html__( 'View Standing Table', 'anwp-football-leagues' ),
-				],
 			]
 		);
+	}
+
+	/**
+	 * Filter post updated messages for the Standing CPT.
+	 *
+	 * @param array $messages Post updated messages.
+	 *
+	 * @return array
+	 * @since 0.18.0
+	 */
+	public function messages( $messages ) {
+		global $post, $post_ID;
+
+		$messages['anwp_standing'] = [
+			0  => '',
+			1  => sprintf( '%s <a href="%s">%s</a>', esc_html__( 'Standing Table updated.', 'anwp-football-leagues' ), esc_url( get_permalink( $post_ID ) ), esc_html__( 'View Standing Table', 'anwp-football-leagues' ) ),
+			2  => esc_html__( 'Custom field updated.', 'anwp-football-leagues' ),
+			3  => esc_html__( 'Custom field deleted.', 'anwp-football-leagues' ),
+			4  => esc_html__( 'Standing Table updated.', 'anwp-football-leagues' ),
+			// translators: %s: revision date
+			5  => isset( $_GET['revision'] ) ? sprintf( esc_html__( 'Standing Table restored to revision from %s', 'anwp-football-leagues' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false, // phpcs:ignore WordPress.Security.NonceVerification
+			6  => sprintf( '%s <a href="%s">%s</a>', esc_html__( 'Standing Table published.', 'anwp-football-leagues' ), esc_url( get_permalink( $post_ID ) ), esc_html__( 'View Standing Table', 'anwp-football-leagues' ) ),
+			7  => esc_html__( 'Standing Table saved.', 'anwp-football-leagues' ),
+			8  => sprintf( '%s <a target="_blank" href="%s">%s</a>', esc_html__( 'Standing Table submitted.', 'anwp-football-leagues' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ), esc_html__( 'Preview Standing Table', 'anwp-football-leagues' ) ),
+			// translators: %1$s: scheduled date
+			9  => sprintf( esc_html__( 'Standing Table scheduled for: %1$s.', 'anwp-football-leagues' ), '<strong>' . date_i18n( esc_html__( 'M j, Y @ G:i', 'anwp-football-leagues' ), strtotime( $post->post_date ) ) . '</strong>' ),
+			10 => sprintf( '%s <a target="_blank" href="%s">%s</a>', esc_html__( 'Standing Table draft updated.', 'anwp-football-leagues' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ), esc_html__( 'Preview Standing Table', 'anwp-football-leagues' ) ),
+		];
+
+		return $messages;
+	}
+
+	/**
+	 * Filter bulk post updated messages for the Standing CPT.
+	 *
+	 * @param array $bulk_messages Bulk updated messages.
+	 * @param array $bulk_counts   Counts of updated posts.
+	 *
+	 * @return array
+	 * @since 0.18.0
+	 */
+	public function bulk_messages( $bulk_messages, $bulk_counts ) {
+		$bulk_messages['anwp_standing'] = [
+			// translators: %s: number of standing tables
+			'updated'   => sprintf( _n( '%s Standing Table updated.', '%s Standing Tables updated.', $bulk_counts['updated'], 'anwp-football-leagues' ), $bulk_counts['updated'] ),
+			// translators: %s: number of standing tables
+			'locked'    => sprintf( _n( '%s Standing Table not updated, somebody is editing it.', '%s Standing Tables not updated, somebody is editing them.', $bulk_counts['locked'], 'anwp-football-leagues' ), $bulk_counts['locked'] ),
+			// translators: %s: number of standing tables
+			'deleted'   => sprintf( _n( '%s Standing Table permanently deleted.', '%s Standing Tables permanently deleted.', $bulk_counts['deleted'], 'anwp-football-leagues' ), $bulk_counts['deleted'] ),
+			// translators: %s: number of standing tables
+			'trashed'   => sprintf( _n( '%s Standing Table moved to the Trash.', '%s Standing Tables moved to the Trash.', $bulk_counts['trashed'], 'anwp-football-leagues' ), $bulk_counts['trashed'] ),
+			// translators: %s: number of standing tables
+			'untrashed' => sprintf( _n( '%s Standing Table restored from the Trash.', '%s Standing Tables restored from the Trash.', $bulk_counts['untrashed'], 'anwp-football-leagues' ), $bulk_counts['untrashed'] ),
+		];
+
+		return $bulk_messages;
+	}
+
+	/**
+	 * Get a single standing config row by standing_id.
+	 *
+	 * Cascades: per-request row cache → anwpfl_standings table → postmeta fallback.
+	 * Postmeta fallback lets the plugin keep working before the migration Toolbox
+	 * task runs. Premium extends the fallback row via the
+	 * `anwpfl/standing/row_from_postmeta` filter.
+	 *
+	 * @since 0.18.0
+	 *
+	 * @param int $id Standing post ID.
+	 *
+	 * @return array|null Row as associative array or null if not a fixed standing.
+	 */
+	public function get_row( int $id ): ?array {
+		if ( $this->has_cached_row( $id ) ) {
+			return $this->get_cached_row( $id );
+		}
+
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM $this->table_name WHERE $this->primary_key = %d",
+				$id
+			),
+			ARRAY_A
+		);
+
+		if ( $row ) {
+			$this->cache_row( $id, $row );
+			return $row;
+		}
+
+		// After migration, the table is authoritative — skip postmeta fallback.
+		if ( get_option( 'anwpfl_standings_migrated' ) ) {
+			$this->cache_row( $id, null );
+			return null;
+		}
+
+		// Fallback: build row from postmeta (pre-migration or mid-migration).
+		$row = $this->get_standing_row_from_postmeta( $id );
+
+		// Cache null result too — prevents re-querying for non-existent IDs
+		// within the same request (admin hooks speculatively call get_row()
+		// for every post ID in the list).
+		$this->cache_row( $id, $row );
+
+		return $row;
+	}
+
+	/**
+	 * Build a standing row array from postmeta.
+	 *
+	 * Migration safety net: returns an array with the same keys as a real
+	 * anwpfl_standings row, so read sites work before the Toolbox migration
+	 * backfills the table.
+	 *
+	 * Premium columns are appended via the `anwpfl/standing/row_from_postmeta`
+	 * filter so premium hook listeners reading `$row['manual_filling']` etc.
+	 * get the correct values on unmigrated standings.
+	 *
+	 * Returns null when the post is not a fixed standing (no `_anwpfl_fixed`
+	 * postmeta value) — matches the table contract where un-fixed standings
+	 * have no row.
+	 *
+	 * @since 0.18.0
+	 *
+	 * @param int $id Standing post ID.
+	 *
+	 * @return array|null
+	 */
+	public function get_standing_row_from_postmeta( int $id, bool $require_fixed = true ): ?array {
+		if ( $id <= 0 ) {
+			return null;
+		}
+
+		// Skip un-fixed standings (no config ever saved) when require_fixed=true.
+		// process_clone_standing() passes false so a cloned draft (no _anwpfl_fixed
+		// postmeta yet) can still get an upsert row with competition_id=0/group_id=0.
+		if ( $require_fixed && 'true' !== get_post_meta( $id, '_anwpfl_fixed', true ) ) {
+			return null;
+		}
+
+		$last_recalc = get_post_meta( $id, '_anwpfl_last_recalc', true );
+
+		$row = [
+			'standing_id'            => $id,
+			'competition_id'         => absint( get_post_meta( $id, '_anwpfl_competition', true ) ),
+			'group_id'               => absint( get_post_meta( $id, '_anwpfl_competition_group', true ) ),
+			'points_win'             => (int) get_post_meta( $id, '_anwpfl_points_win', true ),
+			'points_draw'            => (int) get_post_meta( $id, '_anwpfl_points_draw', true ),
+			'points_loss'            => (int) get_post_meta( $id, '_anwpfl_points_loss', true ),
+			'ranking_rules'          => (string) get_post_meta( $id, '_anwpfl_ranking_rules_current', true ),
+			'manual_ordering'        => (int) ( 'true' === get_post_meta( $id, '_anwpfl_manual_ordering', true ) ),
+			'is_initial_data_active' => (int) get_post_meta( $id, '_anwpfl_is_initial_data_active', true ),
+			'last_recalc'            => $last_recalc ? (string) $last_recalc : null,
+			'last_round'             => (int) get_post_meta( $id, '_anwpfl_table_last_round', true ),
+			'table_notes'            => (string) get_post_meta( $id, '_anwpfl_table_notes', true ),
+			'table_colors'           => (string) get_post_meta( $id, '_anwpfl_table_colors', true ),
+			'points_initial'         => (string) get_post_meta( $id, '_anwpfl_points_initial', true ),
+			'table_initial'          => (string) get_post_meta( $id, '_anwpfl_table_initial', true ),
+			'table_main'             => (string) get_post_meta( $id, '_anwpfl_table_main', true ),
+		];
+
+		/**
+		 * Filter the standing row built from postmeta.
+		 *
+		 * Premium uses this to append its columns so pre-migration reads
+		 * via get_row() return the full row shape. Includes all JSON blob
+		 * columns (table_main_home, table_main_away, etc.) sourced from
+		 * corresponding postmeta keys.
+		 *
+		 * @since 0.18.0
+		 *
+		 * @param array $row Row as associative array keyed by column name.
+		 * @param int   $id  Standing post ID.
+		 */
+		return apply_filters( 'anwpfl/standing/row_from_postmeta', $row, $id );
+	}
+
+	/**
+	 * Get all standing rows (club rows) for a standing, sorted by place.
+	 *
+	 * Decodes the `table_main` JSON blob from the standing row.
+	 * No separate query — reuses the per-request row cache from get_row().
+	 *
+	 * Validates JSON decode to catch the `"null"` string corruption from
+	 * the save_metabox re-encode dance (see Gotcha #10 in PLAN.md).
+	 *
+	 * @since 0.18.0
+	 *
+	 * @param int $id Standing post ID.
+	 *
+	 * @return array List of row arrays (each keyed by column name).
+	 */
+	public function get_standing_rows( int $id ): array {
+		$row = $this->get_row( $id );
+
+		if ( ! $row || empty( $row['table_main'] ) ) {
+			return [];
+		}
+
+		return $this->decode_table_main_json( $row['table_main'], $id, 'table_main' );
+	}
+
+	/**
+	 * Decode a table_main JSON blob with validation.
+	 *
+	 * Shared helper for get_standing_rows(). Returns [] on any decode failure and logs
+	 * a QM warning so corruption is visible during testing.
+	 *
+	 * @since 0.18.0
+	 *
+	 * @param string $json JSON blob to decode.
+	 * @param int    $id   Standing ID (for logging).
+	 * @param string $col  Column name (for logging).
+	 *
+	 * @return array
+	 */
+	protected function decode_table_main_json( string $json, int $id, string $col ): array {
+		if ( '' === $json ) {
+			return [];
+		}
+
+		$decoded = json_decode( $json, true );
+
+		if ( JSON_ERROR_NONE !== json_last_error() || ! is_array( $decoded ) ) {
+			do_action(
+				'qm/warning',
+				'[FL Standing] Invalid {col} JSON for standing {id}',
+				[
+					'col' => $col,
+					'id'  => $id,
+				]
+			);
+			return [];
+		}
+
+		return $decoded;
+	}
+
+	/**
+	 * Validate a JSON string from $_POST before storing it in a JSON-blob column.
+	 *
+	 * Prevents the "null" literal corruption from Gotcha #10: the current
+	 * save_metabox re-encode dance does wp_json_encode( json_decode( $raw ) ),
+	 * which silently persists the 4-char string "null" when $raw is malformed
+	 * (json_decode returns null → json_encode(null) returns the literal "null").
+	 * Once Phase 5 removes the postmeta fallback, that corruption is permanent.
+	 *
+	 * Returns the re-encoded JSON string on success, or null on decode failure
+	 * so the caller can skip the column from its upsert payload.
+	 *
+	 * Pass $shape = 'object' for columns that hold JSON objects ({...}) so an
+	 * empty input re-encodes as '{}' via an explicit (object) cast — json_encode
+	 * otherwise emits '[]' for empty associative arrays (CLAUDE.md "JSON object
+	 * decode gotcha").
+	 *
+	 * @since 0.18.0
+	 *
+	 * @param mixed  $raw   Raw $_POST value (expected: JSON string).
+	 * @param int    $id    Standing ID (for logging).
+	 * @param string $col   Target column name (for logging).
+	 * @param string $shape 'array' (default) or 'object' — controls empty-value shape.
+	 *
+	 * @return string|null Validated JSON string, or null on failure.
+	 */
+	protected function validate_json_column( $raw, int $id, string $col, string $shape = 'array' ): ?string {
+		if ( null === $raw || '' === $raw ) {
+			return '';
+		}
+
+		if ( ! is_string( $raw ) ) {
+			return null;
+		}
+
+		$decoded = json_decode( $raw, true );
+
+		if ( JSON_ERROR_NONE !== json_last_error() ) {
+			do_action(
+				'qm/warning',
+				'[FL Standing] Invalid {col} JSON from POST for standing {id}',
+				[
+					'col' => $col,
+					'id'  => $id,
+				]
+			);
+			return null;
+		}
+
+		// Object-shape columns: cast empty arrays to (object) so wp_json_encode
+		// emits '{}' not '[]'. Non-empty string-keyed arrays already encode as
+		// objects without a cast.
+		if ( 'object' === $shape && is_array( $decoded ) && empty( $decoded ) ) {
+			$decoded = (object) [];
+		}
+
+		return wp_json_encode( $decoded );
 	}
 
 	/**
@@ -76,7 +377,7 @@ class AnWPFL_Standing extends CPT_Core {
 	public function title( $title ) {
 
 		$screen = get_current_screen();
-		if ( isset( $screen->post_type ) && $screen->post_type === $this->post_type ) {
+		if ( isset( $screen->post_type ) && 'anwp_standing' === $screen->post_type ) {
 			return esc_html__( 'Standing Table Title', 'anwp-football-leagues' );
 		}
 
@@ -89,6 +390,15 @@ class AnWPFL_Standing extends CPT_Core {
 	 * @since  0.2.0
 	 */
 	public function hooks() {
+
+		// CPT registration and admin hooks (previously handled by CPT_Core).
+		add_action( 'init', [ $this, 'register_post_type' ] );
+		add_filter( 'post_updated_messages', [ $this, 'messages' ] );
+		add_filter( 'bulk_post_updated_messages', [ $this, 'bulk_messages' ], 10, 2 );
+		add_filter( 'manage_edit-anwp_standing_columns', [ $this, 'columns' ] );
+		add_filter( 'manage_edit-anwp_standing_sortable_columns', [ $this, 'sortable_columns' ] );
+		add_action( 'manage_posts_custom_column', [ $this, 'columns_display' ], 10, 2 );
+		add_filter( 'enter_title_here', [ $this, 'title' ] );
 
 		// Metaboxes
 		add_action( 'load-post.php', [ $this, 'init_metaboxes' ] );
@@ -106,6 +416,7 @@ class AnWPFL_Standing extends CPT_Core {
 
 		add_filter( 'post_row_actions', [ $this, 'modify_quick_actions' ], 10, 2 );
 		add_action( 'post_action_clone-standing', [ $this, 'process_clone_standing' ] );
+		add_action( 'delete_post', [ $this, 'on_standing_delete' ] );
 	}
 
 	/**
@@ -117,7 +428,7 @@ class AnWPFL_Standing extends CPT_Core {
 
 		$post = get_post();
 
-		if ( ! AnWP_Football_Leagues::string_to_bool( get_post_meta( $post->ID, '_anwpfl_fixed', true ) ) ) {
+		if ( ! $post || ! $this->get_row( $post->ID ) ) {
 			remove_meta_box( 'submitdiv', 'anwp_standing', 'side' );
 		}
 	}
@@ -162,45 +473,63 @@ class AnWPFL_Standing extends CPT_Core {
 
 		if ( $standing_id ) {
 
-			$meta_fields_to_clone = [
-				'_anwpfl_points_initial',
-				'_anwpfl_table_colors',
-				'_anwpfl_table_notes',
-				'_anwpfl_points_win',
-				'_anwpfl_points_draw',
-				'_anwpfl_points_loss',
-				'_anwpfl_ranking_rules_current',
-				'_anwpfl_manual_ordering',
-			];
+			/*
+			|--------------------------------------------------------------------
+			| Read source standing config from custom table and upsert into
+			| the new clone. Excludes PK, FK, and computed columns — those
+			| get set when the user runs fixed-setup on the clone.
+			|
+			| Premium columns (columns_config, manual_filling, etc.) are
+			| included when present; upsert() whitelists against real columns,
+			| so missing premium columns are safely ignored.
+			|
+			| The cloned row has competition_id=0/group_id=0 — safe because
+			| the `competition_group` KEY is non-UNIQUE. When the user runs
+			| fixed-setup afterwards, save_metabox()'s first-save branch upserts
+			| the real competition/group IDs over this draft row.
+			|--------------------------------------------------------------------
+			*/
+			$source_row = $this->get_row( (int) $post_id );
 
-			/**
-			 * Filter Standing Data to clone
-			 *
-			 * @param array $meta_fields_to_clone Clone data
-			 * @param int   $post_id              Standing ID
-			 * @param int   $standing_id          New Cloned Standing ID
-			 *
-			 * @since 0.11.2
-			 */
-			$meta_fields_to_clone = apply_filters( 'anwpfl/standing/fields_to_clone', $meta_fields_to_clone, $post_id, $standing_id );
+			if ( $source_row ) {
+				$clonable = [
+					'points_initial', 'table_colors', 'table_notes',
+					'points_win', 'points_draw', 'points_loss',
+					'ranking_rules', 'manual_ordering',
+					// Premium columns (present only if premium dbDelta ran).
+					'manual_filling', 'conferences_support', 'club_conferences',
+					'columns_config', 'h2h_apply_after_all_games',
+					'table_lazy', 'table_date_start', 'table_date_end',
+				];
 
-			foreach ( $meta_fields_to_clone as $meta_key ) {
+				$clone_data = array_intersect_key( $source_row, array_flip( $clonable ) );
 
-				$meta_value = get_post_meta( $post_id, $meta_key, true );
-
-				if ( '' !== $meta_value ) {
-					$meta_value = maybe_unserialize( $meta_value );
-					update_post_meta( $standing_id, $meta_key, wp_slash( $meta_value ) );
+				if ( $clone_data ) {
+					$this->upsert( (int) $standing_id, $clone_data, array_keys( $clone_data ) );
 				}
 			}
-
-			update_post_meta( $standing_id, '_anwpfl_cloned', $post_id );
 
 			// phpcs:ignore WordPress.Security.SafeRedirect
 			if ( wp_redirect( admin_url( 'post.php?post=' . intval( $standing_id ) . '&action=edit' ) ) ) {
 				exit;
 			}
 		}
+	}
+
+	/**
+	 * Remove custom table row when standing post is permanently deleted.
+	 * Trashed/drafted standings keep their row — only permanent deletes remove it.
+	 *
+	 * @since 0.18.0
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	public function on_standing_delete( int $post_id ): void {
+		if ( 'anwp_standing' !== get_post_type( $post_id ) ) {
+			return;
+		}
+
+		$this->delete( $post_id );
 	}
 
 	/**
@@ -229,7 +558,7 @@ class AnWPFL_Standing extends CPT_Core {
 				<input fl-x-model.fill="selected" type="text" class="postform anwp-g-admin-list-input anwp-w-120"
 					placeholder="<?php echo esc_attr__( 'League ID', 'anwp-football-leagues' ); ?>"
 					name="_anwpfl_current_league" value="<?php echo esc_attr( $current_league_filter ); ?>"/>
-				<button fl-x-on:click="openModal()" type="button" class="button anwp-mr-2 postform">
+				<button fl-x-on:click="openModal()" type="button" class="button fl-btn-icon anwp-mr-2 postform">
 					<span class="dashicons dashicons-search"></span>
 				</button>
 			</div>
@@ -285,7 +614,8 @@ class AnWPFL_Standing extends CPT_Core {
 			return;
 		}
 
-		$sub_query = [];
+		$season_competition_ids = null;
+		$league_competition_ids = null;
 
 		/*
 		|--------------------------------------------------------------------
@@ -312,15 +642,6 @@ class AnWPFL_Standing extends CPT_Core {
 			];
 
 			$season_competition_ids = get_posts( $season_args );
-
-			if ( $season_competition_ids ) {
-				$sub_query[] =
-					[
-						'key'     => '_anwpfl_competition',
-						'value'   => $season_competition_ids,
-						'compare' => 'IN',
-					];
-			}
 		}
 
 		/*
@@ -348,28 +669,49 @@ class AnWPFL_Standing extends CPT_Core {
 			];
 
 			$league_competition_ids = get_posts( $league_args );
-
-			if ( $league_competition_ids ) {
-				$sub_query[] =
-					[
-						'key'   => '_anwpfl_competition',
-						'value' => $league_competition_ids,
-					];
-			}
 		}
 
 		/*
 		|--------------------------------------------------------------------
-		| Join All values to main query
+		| Filter standings via custom table instead of postmeta.
+		| When both season AND league filters are active, intersect the
+		| competition ID sets (AND semantics, matching the old meta_query).
 		|--------------------------------------------------------------------
 		*/
-		if ( ! empty( $sub_query ) ) {
-			$query->set(
-				'meta_query',
-				[
-					array_merge( [ 'relation' => 'AND' ], $sub_query ),
-				]
-			);
+		$competition_ids = null;
+
+		if ( null !== $season_competition_ids && null !== $league_competition_ids ) {
+			$competition_ids = array_intersect( $season_competition_ids, $league_competition_ids );
+		} elseif ( null !== $season_competition_ids ) {
+			$competition_ids = $season_competition_ids;
+		} elseif ( null !== $league_competition_ids ) {
+			$competition_ids = $league_competition_ids;
+		}
+
+		if ( null !== $competition_ids ) {
+			if ( ! empty( $competition_ids ) ) {
+				global $wpdb;
+
+				$competition_ids = array_unique( array_map( 'absint', $competition_ids ) );
+				$placeholders    = implode( ',', array_fill( 0, count( $competition_ids ), '%d' ) );
+
+				// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders, WordPress.DB.DirectDatabaseQuery
+				$standing_ids = $wpdb->get_col(
+					$wpdb->prepare(
+						"SELECT standing_id FROM {$wpdb->prefix}anwpfl_standings WHERE competition_id IN ({$placeholders})", // phpcs:ignore WordPress.DB.PreparedSQL
+						$competition_ids
+					)
+				);
+
+				if ( ! empty( $standing_ids ) ) {
+					$query->set( 'post__in', $standing_ids );
+				} else {
+					$query->set( 'post__in', [ 0 ] );
+				}
+			} else {
+				// Intersection is empty — no standings match both filters.
+				$query->set( 'post__in', [ 0 ] );
+			}
 		}
 	}
 
@@ -414,11 +756,10 @@ class AnWPFL_Standing extends CPT_Core {
 			}
 		}
 
-		foreach ( $this->get_standings() as $standing_data ) {
-			if ( absint( $competition_id ) === $standing_data['competition'] && absint( $group_id ) === $standing_data['group'] ) {
-				$this->calculate_standing( $standing_data );
-				break;
-			}
+		$standing_data = $this->get_standing_data_by_competition_group( absint( $competition_id ), absint( $group_id ) );
+
+		if ( $standing_data ) {
+			$this->calculate_standing( $standing_data );
 		}
 	}
 
@@ -435,7 +776,8 @@ class AnWPFL_Standing extends CPT_Core {
 			return;
 		}
 
-		$groups = anwp_football_leagues()->competition->get_competition( $competition_id )->groups;
+		$competition_obj = anwp_football_leagues()->competition->get_competition( $competition_id );
+		$groups          = $competition_obj ? $competition_obj->groups : null;
 
 		if ( empty( $groups ) || ! is_array( $groups ) ) {
 			return;
@@ -443,169 +785,263 @@ class AnWPFL_Standing extends CPT_Core {
 
 		$group_ids = wp_list_pluck( $groups, 'id' );
 
+		$competition_id_int = absint( $competition_id );
+
 		foreach ( $group_ids as $group_id ) {
-			foreach ( $this->get_standings() as $standing_data ) {
-				if ( absint( $competition_id ) === $standing_data['competition'] && absint( $group_id ) === $standing_data['group'] ) {
-					$this->calculate_standing( $standing_data );
-					break;
-				}
+			$standing_data = $this->get_standing_data_by_competition_group( $competition_id_int, absint( $group_id ) );
+
+			if ( $standing_data ) {
+				$this->calculate_standing( $standing_data );
 			}
 		}
 	}
 
 	/**
-	 * Recalculate Standing Table
+	 * Compute a standing table from finished matches.
 	 *
-	 * @param array $data
+	 * Pure computation — no DB writes, no save-pipeline hooks. Returns the ordered
+	 * table plus the raw match rows used to build it. Both core's calculate_standing()
+	 * and premium's calculate_standing_optional() share this method; the home/away
+	 * type and matchweek-range filters live here so premium can call it unmodified.
 	 *
-	 * @since 0.3.0 (2018-01-31)
+	 * Manual-ordering override is NOT handled here — it reads table_main from the
+	 * standings table (a side effect that doesn't belong in pure compute) and is
+	 * applied by the caller after this returns.
+	 *
+	 * Extension hooks fire from inside this method:
+	 *  - filter `anwpfl/standing/row_template`         — empty-row initializer per club
+	 *  - action `anwpfl/standing/accumulate_match_stats` — per-match accumulator (by-ref)
+	 *  - filter `anwpfl/standing/post_compute_table`   — derived/aggregate columns
+	 *
+	 * @since 0.18.0
+	 *
+	 * @param array  $data       Standing config (get_standing()/get_standings() shape).
+	 * @param string $type       'all' (default), 'home', or 'away'.
+	 * @param string $matchweeks '' (all matches), 'N' (single week), or 'N-M' (range).
+	 *
+	 * @return array{table: array, matches: array}
 	 */
-	private function calculate_standing( $data ) {
+	public function compute_standing_table( array $data, string $type = 'all', string $matchweeks = '' ): array {
 
 		global $wpdb;
 
-		/**
-		 * Filter: anwpfl/standing/calculate_standing
-		 *
-		 * @since 0.7.5
-		 *
-		 * @param bool
-		 * @param int $standing_id
-		 * @param int $competition_id
-		 * @param int $group_id
-		 */
-		if ( ! apply_filters( 'anwpfl/standing/calculate_standing', true, $data['id'], $data['competition'], $data['group'] ) ) {
-			return;
-		}
-
-		// Prepare empty table
+		/*
+		|--------------------------------------------------------------------
+		| Initialize empty table (one row per club).
+		|--------------------------------------------------------------------
+		*/
 		$table = [];
 
 		foreach ( $this->plugin->competition->get_competition_clubs( $data['competition'], $data['group'] ) as $club ) {
 
-			if ( (int) $club ) {
-				$table[ $club ] = [
-					'club_id'    => $club,
-					'club_title' => anwp_football_leagues()->club->get_club_title_by_id( $club ),
-					'place'      => 0,
-					'played'     => 0,
-					'won'        => 0,
-					'drawn'      => 0,
-					'lost'       => 0,
-					'gf'         => 0,
-					'ga'         => 0,
-					'gd'         => 0,
-					'points'     => 0,
-					'series'     => '',
-				];
+			if ( ! (int) $club ) {
+				continue;
 			}
+
+			$row = [
+				'club_id'    => $club,
+				'club_title' => anwp_football_leagues()->club->get_club_title_by_id( $club ),
+				'place'      => 0,
+				'played'     => 0,
+				'won'        => 0,
+				'drawn'      => 0,
+				'lost'       => 0,
+				'gf'         => 0,
+				'ga'         => 0,
+				'gd'         => 0,
+				'points'     => 0,
+				'series'     => '',
+			];
+
+			/**
+			 * Filter: anwpfl/standing/row_template
+			 *
+			 * Empty-row initializer for a single club. Lets addons pre-declare
+			 * extra counters (yellow_cards, clean_sheets, bonus_points, home_won,
+			 * etc.) so they appear consistently in every encoded standing row.
+			 *
+			 * @since 0.18.0
+			 *
+			 * @param array $row  Empty row with zero-initialized counters.
+			 * @param int   $club Club ID.
+			 * @param array $data Standing config.
+			 */
+			$table[ $club ] = apply_filters( 'anwpfl/standing/row_template', $row, $club, $data );
 		}
 
-		// Get finished matches
-		$matches = $wpdb->get_results(
-			$wpdb->prepare(
-				"
-				SELECT home_club, away_club, home_goals, away_goals, match_id, match_week, home_cards_y, away_cards_y, home_cards_yr, away_cards_yr, home_cards_r, away_cards_r
-				FROM {$wpdb->prefix}anwpfl_matches
-				WHERE competition_id = %d
-					AND group_id = %d
-					AND finished = 1
-				ORDER BY kickoff
-				",
-				$data['competition'],
-				$data['group']
-			)
+		/*
+		|--------------------------------------------------------------------
+		| Query finished matches (with optional matchweek-range filter).
+		|--------------------------------------------------------------------
+		*/
+		$query = $wpdb->prepare(
+			"
+			SELECT home_club, away_club, home_goals, away_goals, match_id, match_week, home_cards_y, away_cards_y, home_cards_yr, away_cards_yr, home_cards_r, away_cards_r
+			FROM {$wpdb->prefix}anwpfl_matches
+			WHERE competition_id = %d
+				AND group_id = %d
+				AND finished = 1
+			",
+			$data['competition'],
+			$data['group']
 		);
+
+		if ( ! empty( $matchweeks ) ) {
+			$matchweeks_arr = explode( '-', $matchweeks, 2 );
+			$matchweek_from = absint( $matchweeks_arr[0] );
+			$matchweek_to   = isset( $matchweeks_arr[1] ) ? absint( $matchweeks_arr[1] ) : $matchweek_from;
+
+			$query .= $wpdb->prepare( ' AND match_week >= %d AND match_week <= %d ', $matchweek_from, $matchweek_to );
+		}
+
+		$query .= ' ORDER BY kickoff';
+
+		$matches = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		// Get games with custom outcome
 		$custom_outcomes = $this->get_games_with_custom_outcome( $data['competition'], $data['group'] );
 
-		// Populate stats
+		/*
+		|--------------------------------------------------------------------
+		| Populate stats per match.
+		|--------------------------------------------------------------------
+		*/
 		foreach ( $matches as $match ) {
 
-			if ( ! empty( $custom_outcomes ) && in_array( $match->match_id, $custom_outcomes, true ) ) {
+			// Skip matches with clubs not in the competition group (data inconsistency).
+			if ( ! isset( $table[ $match->home_club ] ) || ! isset( $table[ $match->away_club ] ) ) {
+				continue;
+			}
 
-				$home_outcome = get_post_meta( $match->match_id, '_anwpfl_outcome_home', true );
+			$is_custom_outcome = ! empty( $custom_outcomes ) && in_array( $match->match_id, $custom_outcomes, true );
 
-				switch ( $home_outcome ) {
-					case 'won':
-						$table[ $match->home_club ]['won'] ++;
-						$table[ $match->home_club ]['series'] .= 'w';
-						break;
+			if ( $is_custom_outcome ) {
 
-					case 'drawn':
-						$table[ $match->home_club ]['drawn'] ++;
-						$table[ $match->home_club ]['series'] .= 'd';
-						break;
+				if ( 'away' !== $type ) {
+					$home_outcome = get_post_meta( $match->match_id, '_anwpfl_outcome_home', true );
 
-					case 'lost':
-						$table[ $match->home_club ]['lost'] ++;
-						$table[ $match->home_club ]['series'] .= 'l';
-						break;
+					switch ( $home_outcome ) {
+						case 'won':
+							$table[ $match->home_club ]['won'] ++;
+							$table[ $match->home_club ]['series'] .= 'w';
+							break;
+
+						case 'drawn':
+							$table[ $match->home_club ]['drawn'] ++;
+							$table[ $match->home_club ]['series'] .= 'd';
+							break;
+
+						case 'lost':
+							$table[ $match->home_club ]['lost'] ++;
+							$table[ $match->home_club ]['series'] .= 'l';
+							break;
+					}
 				}
 
-				$away_outcome = get_post_meta( $match->match_id, '_anwpfl_outcome_away', true );
+				if ( 'home' !== $type ) {
+					$away_outcome = get_post_meta( $match->match_id, '_anwpfl_outcome_away', true );
 
-				switch ( $away_outcome ) {
-					case 'won':
-						$table[ $match->away_club ]['won'] ++;
-						$table[ $match->away_club ]['series'] .= 'w';
-						break;
+					switch ( $away_outcome ) {
+						case 'won':
+							$table[ $match->away_club ]['won'] ++;
+							$table[ $match->away_club ]['series'] .= 'w';
+							break;
 
-					case 'drawn':
-						$table[ $match->away_club ]['drawn'] ++;
-						$table[ $match->away_club ]['series'] .= 'd';
-						break;
+						case 'drawn':
+							$table[ $match->away_club ]['drawn'] ++;
+							$table[ $match->away_club ]['series'] .= 'd';
+							break;
 
-					case 'lost':
-						$table[ $match->away_club ]['lost'] ++;
-						$table[ $match->away_club ]['series'] .= 'l';
-						break;
+						case 'lost':
+							$table[ $match->away_club ]['lost'] ++;
+							$table[ $match->away_club ]['series'] .= 'l';
+							break;
+					}
 				}
 			} else {
 				if ( $match->home_goals > $match->away_goals ) {
 
-					// Home Club
-					$table[ $match->home_club ]['won'] ++;
-					$table[ $match->home_club ]['series'] .= 'w';
+					if ( 'away' !== $type ) {
+						$table[ $match->home_club ]['won'] ++;
+						$table[ $match->home_club ]['series'] .= 'w';
+					}
 
-					// Away Club
-					$table[ $match->away_club ]['lost'] ++;
-					$table[ $match->away_club ]['series'] .= 'l';
-
+					if ( 'home' !== $type ) {
+						$table[ $match->away_club ]['lost'] ++;
+						$table[ $match->away_club ]['series'] .= 'l';
+					}
 				} elseif ( $match->home_goals === $match->away_goals ) {
 
-					// Home Club
-					$table[ $match->home_club ]['drawn'] ++;
-					$table[ $match->home_club ]['series'] .= 'd';
+					if ( 'away' !== $type ) {
+						$table[ $match->home_club ]['drawn'] ++;
+						$table[ $match->home_club ]['series'] .= 'd';
+					}
 
-					// Away Club
-					$table[ $match->away_club ]['drawn'] ++;
-					$table[ $match->away_club ]['series'] .= 'd';
-
+					if ( 'home' !== $type ) {
+						$table[ $match->away_club ]['drawn'] ++;
+						$table[ $match->away_club ]['series'] .= 'd';
+					}
 				} else {
 
-					// Home Club
-					$table[ $match->home_club ]['lost'] ++;
-					$table[ $match->home_club ]['series'] .= 'l';
+					if ( 'away' !== $type ) {
+						$table[ $match->home_club ]['lost'] ++;
+						$table[ $match->home_club ]['series'] .= 'l';
+					}
 
-					// Away Club
-					$table[ $match->away_club ]['won'] ++;
-					$table[ $match->away_club ]['series'] .= 'w';
+					if ( 'home' !== $type ) {
+						$table[ $match->away_club ]['won'] ++;
+						$table[ $match->away_club ]['series'] .= 'w';
+					}
 				}
 			}
 
-			$table[ $match->home_club ]['gf'] += $match->home_goals;
-			$table[ $match->away_club ]['gf'] += $match->away_goals;
+			if ( 'away' !== $type ) {
+				$table[ $match->home_club ]['gf'] += $match->home_goals;
+				$table[ $match->home_club ]['ga'] += $match->away_goals;
+				$table[ $match->home_club ]['played'] ++;
+			}
 
-			$table[ $match->home_club ]['ga'] += $match->away_goals;
-			$table[ $match->away_club ]['ga'] += $match->home_goals;
+			if ( 'home' !== $type ) {
+				$table[ $match->away_club ]['gf'] += $match->away_goals;
+				$table[ $match->away_club ]['ga'] += $match->home_goals;
+				$table[ $match->away_club ]['played'] ++;
+			}
 
-			$table[ $match->home_club ]['played'] ++;
-			$table[ $match->away_club ]['played'] ++;
+			/**
+			 * Action: anwpfl/standing/accumulate_match_stats
+			 *
+			 * Fires once per match, AFTER core's stats (won/drawn/lost/gf/ga/played/series)
+			 * have been accumulated for both clubs. Receives both club rows by reference
+			 * so listeners can add custom counters (cards, clean sheets, form, bonus
+			 * points, etc.) without forking compute_standing_table().
+			 *
+			 * The $type guard inside compute_standing_table() is NOT applied to this
+			 * action — listeners receive the raw $type and decide for themselves
+			 * whether to mutate $row_home, $row_away, or both.
+			 *
+			 * @since 0.18.0
+			 *
+			 * @param array  $row_home          Home club row (by reference).
+			 * @param array  $row_away          Away club row (by reference).
+			 * @param object $match             Raw match row from anwpfl_matches.
+			 * @param bool   $is_custom_outcome Whether this match has a custom outcome override.
+			 * @param array  $data              Standing config.
+			 * @param string $type              'all' | 'home' | 'away'.
+			 */
+			do_action_ref_array(
+				'anwpfl/standing/accumulate_match_stats',
+				[
+					&$table[ $match->home_club ],
+					&$table[ $match->away_club ],
+					$match,
+					$is_custom_outcome,
+					$data,
+					$type,
+				]
+			);
 		}
 
-		// Calculate others fields
+		// Calculate points + goal difference.
 		foreach ( $table as $club_id => $club ) {
 			$table[ $club_id ]['points'] = $club['won'] * (int) $data['win'] + $club['drawn'] * (int) $data['draw'] + $club['lost'] * (int) $data['loss'];
 			$table[ $club_id ]['gd']     = $club['gf'] - $club['ga'];
@@ -620,45 +1056,51 @@ class AnWPFL_Standing extends CPT_Core {
 			foreach ( $custom_outcomes as $custom_outcome ) {
 				$outcome_game_data = anwp_fl()->match->get_game_data( $custom_outcome );
 
-				$home_club    = $outcome_game_data['home_club'] ?? '';
-				$away_club    = $outcome_game_data['away_club'] ?? '';
-				$home_outcome = get_post_meta( $custom_outcome, '_anwpfl_outcome_home', true );
-				$home_points  = get_post_meta( $custom_outcome, '_anwpfl_outcome_points_home', true );
-				$away_outcome = get_post_meta( $custom_outcome, '_anwpfl_outcome_away', true );
-				$away_points  = get_post_meta( $custom_outcome, '_anwpfl_outcome_points_away', true );
+				$home_club = $outcome_game_data['home_club'] ?? '';
+				$away_club = $outcome_game_data['away_club'] ?? '';
 
-				if ( isset( $table[ $home_club ]['points'] ) ) {
+				if ( 'away' !== $type ) {
+					$home_outcome = get_post_meta( $custom_outcome, '_anwpfl_outcome_home', true );
+					$home_points  = get_post_meta( $custom_outcome, '_anwpfl_outcome_points_home', true );
 
-					$points_added = (int) $data['win'];
+					if ( isset( $table[ $home_club ]['points'] ) ) {
 
-					switch ( $home_outcome ) {
-						case 'drawn':
-							$points_added = (int) $data['draw'];
-							break;
+						$points_added = (int) $data['win'];
 
-						case 'lost':
-							$points_added = (int) $data['loss'];
-							break;
+						switch ( $home_outcome ) {
+							case 'drawn':
+								$points_added = (int) $data['draw'];
+								break;
+
+							case 'lost':
+								$points_added = (int) $data['loss'];
+								break;
+						}
+
+						$table[ $home_club ]['points'] = $table[ $home_club ]['points'] - $points_added + absint( $home_points );
 					}
-
-					$table[ $home_club ]['points'] = $table[ $home_club ]['points'] - $points_added + absint( $home_points );
 				}
 
-				if ( isset( $table[ $away_club ]['points'] ) ) {
+				if ( 'home' !== $type ) {
+					$away_outcome = get_post_meta( $custom_outcome, '_anwpfl_outcome_away', true );
+					$away_points  = get_post_meta( $custom_outcome, '_anwpfl_outcome_points_away', true );
 
-					$points_added = (int) $data['win'];
+					if ( isset( $table[ $away_club ]['points'] ) ) {
 
-					switch ( $away_outcome ) {
-						case 'drawn':
-							$points_added = (int) $data['draw'];
-							break;
+						$points_added = (int) $data['win'];
 
-						case 'lost':
-							$points_added = (int) $data['loss'];
-							break;
+						switch ( $away_outcome ) {
+							case 'drawn':
+								$points_added = (int) $data['draw'];
+								break;
+
+							case 'lost':
+								$points_added = (int) $data['loss'];
+								break;
+						}
+
+						$table[ $away_club ]['points'] = $table[ $away_club ]['points'] - $points_added + absint( $away_points );
 					}
-
-					$table[ $away_club ]['points'] = $table[ $away_club ]['points'] - $points_added + absint( $away_points );
 				}
 			}
 		}
@@ -683,10 +1125,11 @@ class AnWPFL_Standing extends CPT_Core {
 		| Check Initial Table Data
 		|--------------------------------------------------------------------
 		*/
-		$is_initial_data_active = $data['is_initial_data_active'] ?? get_post_meta( $data['id'], '_anwpfl_is_initial_data_active', true );
+		$is_initial_data_active = $data['is_initial_data_active'] ?? ( $this->get_row( (int) $data['id'] )['is_initial_data_active'] ?? '' );
 
 		if ( AnWP_Football_Leagues::string_to_bool( $is_initial_data_active ) ) {
-			$initial_data = json_decode( get_post_meta( $data['id'], '_anwpfl_table_initial', true ) );
+			$standing_row = $this->get_row( (int) $data['id'] );
+			$initial_data = json_decode( $standing_row['table_initial'] ?? '' );
 
 			$table_fields = [
 				'played',
@@ -699,7 +1142,7 @@ class AnWPFL_Standing extends CPT_Core {
 				'points',
 			];
 
-			foreach ( $initial_data as $row_club_id => $data_row ) {
+			foreach ( ( $initial_data ?: [] ) as $row_club_id => $data_row ) {
 				foreach ( $table_fields as $table_field ) {
 					if ( isset( $table[ $row_club_id ][ $table_field ] ) && ! empty( $data_row->{$table_field} ) ) {
 						$table[ $row_club_id ][ $table_field ] += (int) $data_row->{$table_field};
@@ -710,10 +1153,10 @@ class AnWPFL_Standing extends CPT_Core {
 
 		/*
 		|--------------------------------------------------------------------
-		| Ordering
+		| Ordering (non-manual). Manual-ordering override is the caller's job.
 		|--------------------------------------------------------------------
 		*/
-		if ( count( $table ) && 'true' !== $data['manual_ordering'] ) {
+		if ( count( $table ) ) {
 
 			/**
 			 * Filter: anwpfl/standing/custom_position_calculation
@@ -737,6 +1180,12 @@ class AnWPFL_Standing extends CPT_Core {
 				 */
 				$table = apply_filters( 'anwpfl/standing/custom_position_calculation_table', $table, $data, $matches );
 			} else {
+				$points     = [];
+				$won        = [];
+				$gd         = [];
+				$gf         = [];
+				$team_title = [];
+
 				foreach ( $table as $key => $row ) {
 					$points[ $key ]     = $row['points'];
 					$won[ $key ]        = $row['won'];
@@ -775,33 +1224,106 @@ class AnWPFL_Standing extends CPT_Core {
 				$sort_order[] = &$table;
 				call_user_func_array( 'array_multisort', $sort_order );
 			}
-		} else {
+		}
 
-			$table_old = json_decode( get_post_meta( $data['id'], '_anwpfl_table_main', true ) );
+		// Set Place field.
+		$place_counter = 1;
+		foreach ( $table as $index => $row ) {
+			$table[ $index ]['place'] = $place_counter ++;
+		}
+
+		/**
+		 * Filter: anwpfl/standing/post_compute_table
+		 *
+		 * Fires after ordering and place assignment, before the table is returned.
+		 * Lets addons compute derived/aggregate columns that need the final shape
+		 * (form strings, points-per-game, win percentage, etc.).
+		 *
+		 * @since 0.18.0
+		 *
+		 * @param array $table   Ordered standing table.
+		 * @param array $matches Raw match rows used to build the table.
+		 * @param array $data    Standing config.
+		 */
+		$table = apply_filters( 'anwpfl/standing/post_compute_table', $table, $matches, $data );
+
+		return [
+			'table'   => $table,
+			'matches' => $matches,
+		];
+	}
+
+	/**
+	 * Recalculate Standing Table
+	 *
+	 * @param array $data
+	 *
+	 * @since 0.3.0 (2018-01-31)
+	 */
+	private function calculate_standing( $data ) {
+
+		/**
+		 * Filter: anwpfl/standing/calculate_standing
+		 *
+		 * @since 0.7.5
+		 *
+		 * @param bool
+		 * @param int $standing_id
+		 * @param int $competition_id
+		 * @param int $group_id
+		 */
+		if ( ! apply_filters( 'anwpfl/standing/calculate_standing', true, $data['id'], $data['competition'], $data['group'] ) ) {
+			return;
+		}
+
+		$result = $this->compute_standing_table( $data, 'all', '' );
+
+		$table   = $result['table'];
+		$matches = $result['matches'];
+
+		/*
+		|--------------------------------------------------------------------
+		| Manual-ordering override.
+		|
+		| When manual_ordering is enabled, preserve places from the previously
+		| stored table_main. Reads from the standings table — a side effect
+		| that's why this lives here, not in compute_standing_table().
+		|--------------------------------------------------------------------
+		*/
+		if ( count( $table ) && 'true' === $data['manual_ordering'] ) {
+
+			$standing_row = $this->get_row( (int) $data['id'] );
+			$table_old    = json_decode( $standing_row['table_main'] ?? '' );
 
 			if ( is_array( $table_old ) && count( $table_old ) ) {
 
 				$places = [];
 
-				foreach ( $table_old as $row ) {
-					$table[ $row->club_id ]['place'] = $row->place;
+				$table_by_club = [];
+				foreach ( $table as $row ) {
+					$table_by_club[ $row['club_id'] ] = $row;
 				}
+
+				foreach ( $table_old as $row ) {
+					if ( isset( $table_by_club[ $row->club_id ] ) ) {
+						$table_by_club[ $row->club_id ]['place'] = $row->place;
+					}
+				}
+
+				$table = array_values( $table_by_club );
 
 				foreach ( $table as $key => $row ) {
 					$places[ $key ] = $row['place'];
 				}
 
 				array_multisort( $places, SORT_ASC, $table );
-
-			} else {
-				$table = array_values( $table );
 			}
-		}
 
-		// Set Place field
-		$place_counter = 1;
-		foreach ( $table as $index => $row ) {
-			$table[ $index ]['place'] = $place_counter ++;
+			// Re-number place 1..N after manual sort.
+			$place_counter = 1;
+			foreach ( $table as $index => $row ) {
+				$table[ $index ]['place'] = $place_counter ++;
+			}
 		}
 
 		/**
@@ -815,14 +1337,39 @@ class AnWPFL_Standing extends CPT_Core {
 		 */
 		do_action( 'anwpfl/standing-calculating/before_save', $data, $table, $matches );
 
-		// Save to DB
-		update_post_meta( $data['id'], '_anwpfl_table_main', wp_slash( wp_json_encode( $table ) ) );
-		update_post_meta( $data['id'], '_anwpfl_last_recalc', current_time( 'mysql', true ) );
+		/*
+		|--------------------------------------------------------------------
+		| Save table_main / last_recalc / last_round to anwpfl_standings.
+		|
+		| competition_id / group_id are included in the INSERT payload (for
+		| the case where a match save triggers calculate_standing before the
+		| standing itself has been re-saved — without them, the fresh INSERT
+		| gets MySQL column defaults of 0) but NOT in $update_columns, so
+		| existing rows keep their competition binding from save_metabox().
+		|
+		| last_round is included ONLY when $matches is non-empty — an
+		| empty-match recalc must not zero out a previously-stored last_round.
+		|--------------------------------------------------------------------
+		*/
+		$upsert_data = [
+			'competition_id' => (int) $data['competition'],
+			'group_id'       => (int) $data['group'],
+			'table_main'     => wp_json_encode( $table ),
+			'last_recalc'    => current_time( 'mysql', true ),
+		];
 
-		// Save last round
+		$update_columns = [ 'table_main', 'last_recalc' ];
+
 		if ( ! empty( $matches ) && ! empty( $matches[ count( $matches ) - 1 ] ) ) {
-			update_post_meta( $data['id'], '_anwpfl_table_last_round', $matches[ count( $matches ) - 1 ]->match_week );
+			$upsert_data['last_round'] = (int) $matches[ count( $matches ) - 1 ]->match_week;
+			$update_columns[]          = 'last_round';
 		}
+
+		$this->upsert( (int) $data['id'], $upsert_data, $update_columns );
+
+		// Invalidate standings cache. calculate_standing() runs on match save (not standing CPT save),
+		// so the on_modify_post hook never fires for the standing post and FL-STANDINGS-LIST stays stale.
+		anwp_fl()->cache->delete( 'FL-STANDINGS-LIST' );
 
 		// Table recalculated notice
 		$notice_text = sprintf( 'Standing Table "%s" has been successfully recalculated.', get_the_title( $data['id'] ) );
@@ -890,13 +1437,25 @@ class AnWPFL_Standing extends CPT_Core {
 	 */
 	public function render_metabox( WP_Post $post ) {
 
+		// Block render until standings migration is complete (0.18.0).
+		// Even though save_metabox() writes directly to the custom table without a gate,
+		// editing standings while clubs/competitions data still lives in postmeta creates
+		// referential gray zones. Block edits until the full migration completes.
+		if ( ! get_option( 'anwpfl_standings_migrated' ) ) {
+			AnWP_Football_Leagues::print_migration_required_panel(
+				__( 'Standings Data Migration Required', 'anwp-football-leagues' )
+			);
+			return;
+		}
+
 		// Add nonce for security and authentication.
 		wp_nonce_field( 'anwp_save_metabox_' . $post->ID, 'anwp_metabox_nonce' );
 
 		$app_id         = apply_filters( 'anwpfl/standing/vue_app_id', 'fl-app-standing' );
-		$fixed          = 'true' === get_post_meta( $post->ID, '_anwpfl_fixed', true );
-		$competition_id = get_post_meta( $post->ID, '_anwpfl_competition', true );
-		$group_id       = get_post_meta( $post->ID, '_anwpfl_competition_group', true );
+		$row            = $this->get_row( $post->ID );
+		$competition_id = $row ? absint( $row['competition_id'] ) : 0;
+		$fixed          = $competition_id > 0;
+		$group_id       = $fixed ? $row['group_id'] : 0;
 
 		?>
 		<div class="anwp-b-wrap anwpfl-standing-metabox-wrapper">
@@ -905,7 +1464,20 @@ class AnWPFL_Standing extends CPT_Core {
 					<?php
 					$competition_obj = anwp_football_leagues()->competition->get_competition( $competition_id );
 
-					$groups     = $competition_obj->groups;
+					if ( ! $competition_obj ) {
+						echo '<span class="text-danger">' . esc_html__( 'Competition not found', 'anwp-football-leagues' ) . '</span>';
+						return;
+					}
+
+					$groups = $competition_obj->groups;
+
+					// get_competition() bulk-loads stage_groups from the custom table,
+					// which may be empty for competitions not re-saved after migration
+					// (row exists but stage_groups = '[]'). Fall back to postmeta.
+					if ( empty( $groups ) ) {
+						$groups = json_decode( (string) get_post_meta( $competition_id, '_anwpfl_groups', true ) );
+					}
+
 					$group_data = [];
 
 					if ( absint( $group_id ) && ! empty( $groups ) && is_array( $groups ) ) :
@@ -942,11 +1514,11 @@ class AnWPFL_Standing extends CPT_Core {
 					<a target="_blank" href="<?php echo esc_url( admin_url( 'post.php?post=' . $competition_obj->id . '&action=edit' ) ); ?>" class="button button-secondary ml-auto"><?php echo esc_html__( 'Edit Competition', 'anwp-football-leagues' ); ?></a>
 				</div>
 
-				<?php if ( get_post_meta( $post->ID, '_anwpfl_last_recalc', true ) ) : ?>
-					<div class="my-0 text-right">Last Recalculated: <?php echo esc_html( get_post_meta( $post->ID, '_anwpfl_last_recalc', true ) ); ?></div>
+				<?php if ( ! empty( $row['last_recalc'] ) ) : ?>
+					<div class="my-0 text-right">Last Recalculated: <?php echo esc_html( $row['last_recalc'] ); ?></div>
 				<?php endif; ?>
 
-				<?php if ( empty( $group_data['clubs'] ) ) : ?>
+				<?php if ( empty( $group_data['clubs'] ) && empty( $row['table_lazy'] ) ) : ?>
 					<div class="alert alert-warning border-warning d-flex align-items-center" role="alert">
 						<svg class="anwp-icon mr-2 anwp-icon--octi anwp-icon--s16">
 							<use href="#icon-alert"></use>
@@ -955,10 +1527,19 @@ class AnWPFL_Standing extends CPT_Core {
 					</div>
 				<?php else : ?>
 
+					<?php if ( ! empty( $row['table_lazy'] ) ) : ?>
+						<div class="alert alert-info border-info d-flex align-items-center mb-3" role="alert">
+							<svg class="anwp-icon mr-2 anwp-icon--octi anwp-icon--s16">
+								<use href="#icon-info"></use>
+							</svg>
+							<?php echo esc_html__( 'Lazy Import Standing. Data is managed via API import.', 'anwp-football-leagues' ); ?>
+						</div>
+					<?php endif; ?>
+
 					<?php
 					$group_clubs = [];
 
-					foreach ( $group_data['clubs'] as $club_id ) {
+					foreach ( $group_data['clubs'] ?? [] as $club_id ) {
 						$club_obj = anwp_fl()->club->get_club( $club_id );
 
 						$group_clubs[ $club_id ] = [
@@ -1019,19 +1600,19 @@ class AnWPFL_Standing extends CPT_Core {
 					];
 
 					$standing_data = [
-						'manualOrdering'         => AnWP_Football_Leagues::string_to_bool( get_post_meta( $post->ID, '_anwpfl_manual_ordering', true ) ) ? 'yes' : '',
-						'competition'            => get_post_meta( $post->ID, '_anwpfl_competition', true ),
-						'tableNotes'             => get_post_meta( $post->ID, '_anwpfl_table_notes', true ),
-						'competitionGroup'       => get_post_meta( $post->ID, '_anwpfl_competition_group', true ),
-						'pointsWin'              => get_post_meta( $post->ID, '_anwpfl_points_win', true ),
-						'pointsDraw'             => get_post_meta( $post->ID, '_anwpfl_points_draw', true ),
-						'pointsLoss'             => get_post_meta( $post->ID, '_anwpfl_points_loss', true ),
-						'rankingRulesCurrent'    => get_post_meta( $post->ID, '_anwpfl_ranking_rules_current', true ),
-						'pointsInitial'          => get_post_meta( $post->ID, '_anwpfl_points_initial', true ),
-						'tableColors'            => get_post_meta( $post->ID, '_anwpfl_table_colors', true ),
-						'tableMain'              => get_post_meta( $post->ID, '_anwpfl_table_main', true ),
-						'is_initial_data_active' => AnWP_Football_Leagues::string_to_bool( get_post_meta( $post->ID, '_anwpfl_is_initial_data_active', true ) ),
-						'table_initial'          => json_decode( get_post_meta( $post->ID, '_anwpfl_table_initial', true ) ) ?: (object) [],
+						'manualOrdering'         => ! empty( $row['manual_ordering'] ) ? 'yes' : '',
+						'competition'            => $row['competition_id'] ?? '',
+						'tableNotes'             => $row['table_notes'] ?? '',
+						'competitionGroup'       => $row['group_id'] ?? '',
+						'pointsWin'              => $row['points_win'] ?? '',
+						'pointsDraw'             => $row['points_draw'] ?? '',
+						'pointsLoss'             => $row['points_loss'] ?? '',
+						'rankingRulesCurrent'    => $row['ranking_rules'] ?? '',
+						'pointsInitial'          => $row['points_initial'] ?? '',
+						'tableColors'            => $row['table_colors'] ?? '',
+						'tableMain'              => $row['table_main'] ?? '',
+						'is_initial_data_active' => (bool) ( $row['is_initial_data_active'] ?? 0 ),
+						'table_initial'          => json_decode( $row['table_initial'] ?? '' ) ?: (object) [],
 						'l10n'                   => anwp_fl()->helper->entity_decode( $standing_l10n ),
 						'optionStandings'        => $this->get_standing_list(),
 						'standing_id'            => absint( $post->ID ),
@@ -1050,13 +1631,14 @@ class AnWPFL_Standing extends CPT_Core {
 					 */
 					$standing_data = apply_filters( 'anwpfl/standing/data_to_admin_vue', $standing_data, $post->ID );
 					?>
+					<?php if ( empty( $row['table_lazy'] ) ) : ?>
 					<div class="anwp-border anwp-border-gray-500 mb-4">
 						<div class="anwp-border-bottom anwp-border-gray-500 bg-white d-flex align-items-center px-3 py-2 anwp-text-gray-700 anwp-font-semibold">
 							<svg class="anwp-icon anwp-icon--s16 mr-2 anwp-icon--octi anwp-fill-current">
 								<use href="#icon-database"></use>
 							</svg>
 
-							<?php echo esc_html__( 'Clubs', 'anwp-football-leagues' ); ?> (<?php echo count( $group_data['clubs'] ); ?>)
+							<?php echo esc_html__( 'Clubs', 'anwp-football-leagues' ); ?> (<?php echo count( $group_data['clubs'] ?? [] ); ?>)
 						</div>
 
 						<div class="bg-white pt-3 pl-3 d-flex flex-wrap">
@@ -1076,6 +1658,7 @@ class AnWPFL_Standing extends CPT_Core {
 							<?php echo esc_html__( 'You can add or remove clubs only on Competition page', 'anwp-football-leagues' ); ?>
 						</div>
 					</div>
+					<?php endif; ?>
 
 					<script type="text/javascript">
 						window._AnWP_FL_Clubs = <?php echo wp_json_encode( $group_clubs ); ?>;
@@ -1114,15 +1697,9 @@ class AnWPFL_Standing extends CPT_Core {
 						'some_options_will_be_copied_from' => __( 'Some options will be copied from', 'anwp-football-leagues' ),
 					];
 
-					$cloned = get_post_meta( $post->ID, '_anwpfl_cloned', true );
-
-					if ( intval( $cloned ) ) {
-						$cloned = get_the_title( $cloned ) . ' (ID: ' . intval( $cloned ) . ')';
-					}
-
 					$setup_data = [
 						'optionsClub' => $this->plugin->club->get_clubs_list(),
-						'cloned'      => $cloned ?: '',
+						'cloned'      => '',
 						'l10n'        => anwp_fl()->helper->entity_decode( $standing_l10n ),
 					];
 					?>
@@ -1147,6 +1724,12 @@ class AnWPFL_Standing extends CPT_Core {
 	 * @return bool|int
 	 */
 	public function save_metabox( $post_id ) {
+
+		// Block saves until standings migration is complete (0.18.0).
+		// Mirrors the render gate; defensive in case a third-party plugin POSTs to the edit screen.
+		if ( ! get_option( 'anwpfl_standings_migrated' ) ) {
+			return $post_id;
+		}
 
 		/*
 		 * We need to verify this came from the our screen and with proper authorization,
@@ -1202,65 +1785,44 @@ class AnWPFL_Standing extends CPT_Core {
 			$competition_group = isset( $post_data['_anwpfl_competition_group'] ) ? absint( $post_data['_anwpfl_competition_group'] ) : '';
 
 			if ( $competition && $competition_group ) {
-				update_post_meta( $post_id, '_anwpfl_competition', $competition );
-				update_post_meta( $post_id, '_anwpfl_competition_group', $competition_group );
-				update_post_meta( $post_id, '_anwpfl_fixed', 'true' );
-				update_post_meta( $post_id, '_anwpfl_points_win', '3' );
-				update_post_meta( $post_id, '_anwpfl_points_draw', '1' );
-				update_post_meta( $post_id, '_anwpfl_points_loss', '0' );
+				/*
+				|--------------------------------------------------------------------
+				| Fixed-setup: create the standing row in anwpfl_standings.
+				| Row existence IS the "fixed" flag — no postmeta needed.
+				|--------------------------------------------------------------------
+				*/
+				$this->upsert(
+					$post_id,
+					[
+						'competition_id' => $competition,
+						'group_id'       => $competition_group,
+						'points_win'     => 3,
+						'points_draw'    => 1,
+						'points_loss'    => 0,
+					],
+					[ 'competition_id', 'group_id', 'points_win', 'points_draw', 'points_loss' ]
+				);
 			}
 		} elseif ( 'true' === $fixed ) {
 
-			// Prepare data & Encode with some WP sanitization
+			// Re-encode for calculate_standing() call below.
 			$point_initial = wp_json_encode( json_decode( $post_data['_anwpfl_points_initial'] ) );
-			$table_main    = wp_json_encode( json_decode( $post_data['_anwpfl_table_main'] ) );
-			$table_colors  = wp_json_encode( json_decode( $post_data['_anwpfl_table_colors'] ) );
 
 			// phpcs:disable WordPress.NamingConventions
-			if ( $table_main ) {
-				update_post_meta( $post_id, '_anwpfl_table_main', wp_slash( $table_main ) );
-			}
-
-			if ( $point_initial ) {
-				update_post_meta( $post_id, '_anwpfl_points_initial', wp_slash( $point_initial ) );
-			}
-
-			if ( $table_colors ) {
-				update_post_meta( $post_id, '_anwpfl_table_colors', wp_slash( $table_colors ) );
-			}
 
 			/*
 			|--------------------------------------------------------------------
-			| Handle Initial Data
-			| @since 0.11.12
-			|--------------------------------------------------------------------
-			*/
-			if ( isset( $post_data['_anwpfl_is_initial_data_active'] ) && AnWP_Football_Leagues::string_to_bool( $post_data['_anwpfl_is_initial_data_active'] ) ) {
-				update_post_meta( $post_id, '_anwpfl_is_initial_data_active', '1' );
-
-				if ( isset( $post_data['_anwpfl_table_initial'] ) ) {
-					$table_initial = wp_json_encode( json_decode( $post_data['_anwpfl_table_initial'] ) );
-				}
-			} else {
-				update_post_meta( $post_id, '_anwpfl_is_initial_data_active', '0' );
-			}
-
-			if ( ! empty( $table_initial ) ) {
-				update_post_meta( $post_id, '_anwpfl_table_initial', wp_slash( $table_initial ) );
-			} else {
-				delete_post_meta( $post_id, '_anwpfl_table_initial' );
-			}
-
-			/*
-			|--------------------------------------------------------------------
-			| Handle General Data
+			| Handle General Data — build $data array for filter/action hooks.
+			| Competition/group sourced from custom table (set during fixed-setup).
 			|--------------------------------------------------------------------
 			*/
 			$data = [];
 
+			$standing_row = $this->get_row( $post_id );
+
 			$data['_anwpfl_table_notes']       = wp_kses_post( $post_data['_anwpfl_table_notes'] );
-			$data['_anwpfl_competition']       = (int) get_post_meta( $post_id, '_anwpfl_competition', true );
-			$data['_anwpfl_competition_group'] = (int) get_post_meta( $post_id, '_anwpfl_competition_group', true );
+			$data['_anwpfl_competition']       = (int) ( $standing_row['competition_id'] ?? 0 );
+			$data['_anwpfl_competition_group'] = (int) ( $standing_row['group_id'] ?? 0 );
 			$data['_anwpfl_points_win']        = (int) $post_data['_anwpfl_points_win'];
 			$data['_anwpfl_points_draw']       = (int) $post_data['_anwpfl_points_draw'];
 			$data['_anwpfl_points_loss']       = (int) $post_data['_anwpfl_points_loss'];
@@ -1279,10 +1841,6 @@ class AnWPFL_Standing extends CPT_Core {
 			 */
 			$data = apply_filters( 'anwpfl/standing/data_to_save', $data, $post_id, $post_data );
 
-			foreach ( $data as $key => $value ) {
-				update_post_meta( $post_id, $key, $value );
-			}
-
 			/**
 			 * Trigger on save standing data.
 			 *
@@ -1292,6 +1850,68 @@ class AnWPFL_Standing extends CPT_Core {
 			 * @since 0.7.5
 			 */
 			do_action( 'anwpfl/standing/on_save', $data, $post_id );
+
+			/*
+			|--------------------------------------------------------------------
+			| Upsert core columns into anwpfl_standings.
+			|
+			| Placed AFTER the data_to_save filter (so premium has already
+			| appended its keys to $data) and AFTER the on_save action (so
+			| remove_series_on_manual_edit has already run its own upsert of
+			| table_main for manual_filling standings) and BEFORE
+			| calculate_standing() (which has its own upsert of table_main /
+			| last_recalc / last_round for non-manual standings).
+			|
+			| JSON columns are validated via validate_json_column() to catch
+			| the "null" literal corruption from the re-encode dance.
+			|--------------------------------------------------------------------
+			*/
+			$is_initial_active = isset( $post_data['_anwpfl_is_initial_data_active'] )
+				&& AnWP_Football_Leagues::string_to_bool( $post_data['_anwpfl_is_initial_data_active'] );
+
+			$upsert_data = [
+				'competition_id'         => (int) $data['_anwpfl_competition'],
+				'group_id'               => (int) $data['_anwpfl_competition_group'],
+				'points_win'             => (int) $data['_anwpfl_points_win'],
+				'points_draw'            => (int) $data['_anwpfl_points_draw'],
+				'points_loss'            => (int) $data['_anwpfl_points_loss'],
+				'ranking_rules'          => (string) $data['_anwpfl_ranking_rules_current'],
+				'manual_ordering'        => (int) ( 'true' === $data['_anwpfl_manual_ordering'] ),
+				'is_initial_data_active' => (int) $is_initial_active,
+				'table_notes'            => (string) $data['_anwpfl_table_notes'],
+			];
+
+			// JSON blob columns — validate before including so malformed POST
+			// doesn't persist the literal string "null".
+			$json_cols = [
+				'table_colors'   => [ $post_data['_anwpfl_table_colors'] ?? '', 'object' ],
+				'points_initial' => [ $post_data['_anwpfl_points_initial'] ?? '', 'object' ],
+				'table_main'     => [ $post_data['_anwpfl_table_main'] ?? '', 'array' ],
+			];
+
+			foreach ( $json_cols as $col => $config ) {
+				$validated = $this->validate_json_column( $config[0], $post_id, $col, $config[1] );
+				if ( null !== $validated ) {
+					$upsert_data[ $col ] = $validated;
+				}
+			}
+
+			// table_initial is conditional on is_initial_data_active — cleared when inactive.
+			if ( $is_initial_active ) {
+				$table_initial_validated = $this->validate_json_column(
+					$post_data['_anwpfl_table_initial'] ?? '',
+					$post_id,
+					'table_initial',
+					'object'
+				);
+				if ( null !== $table_initial_validated ) {
+					$upsert_data['table_initial'] = $table_initial_validated;
+				}
+			} else {
+				$upsert_data['table_initial'] = '';
+			}
+
+			$this->upsert( $post_id, $upsert_data, array_keys( $upsert_data ) );
 
 			// Recalculate standing
 			$standing_data = [
@@ -1393,39 +2013,62 @@ class AnWPFL_Standing extends CPT_Core {
 	 * @param array   $column   Column currently being rendered.
 	 * @param integer $post_id  ID of post to display column for.
 	 */
+	/**
+	 * Bulk-warm standing rows into the per-request cache.
+	 *
+	 * Replaces N per-row get_row() queries on the admin standing list with
+	 * one SELECT IN. After warming, the columns_display dispatch hits cache.
+	 *
+	 * @since 0.18.2
+	 *
+	 * @param int[] $standing_ids Standing post IDs.
+	 */
+	public function warm_standings_full( array $standing_ids ): void {
+		$standing_ids = array_unique( array_filter( array_map( 'absint', $standing_ids ) ) );
+
+		if ( empty( $standing_ids ) ) {
+			return;
+		}
+
+		$rows = $this->fetch_rows( $standing_ids );
+
+		foreach ( $rows as $row ) {
+			$this->cache_row( (int) $row['standing_id'], $row );
+		}
+	}
+
 	public function columns_display( $column, $post_id ) {
+
+		$standing_row = $this->get_row( $post_id );
 
 		switch ( $column ) {
 			case 'anwpfl_competition':
-				// Get competition id
-				$competition_id = (int) get_post_meta( $post_id, '_anwpfl_competition', true );
+				$competition_id  = (int) ( $standing_row['competition_id'] ?? 0 );
+				$competition_row = $competition_id ? anwp_fl()->competition->get_competition_list_row( $competition_id ) : null;
 
-				// Get competition title
-				$competition = get_post( $competition_id );
+				if ( $competition_row ) {
+					echo esc_html( $competition_row['title'] ?? '' );
 
-				if ( ! empty( $competition->post_title ) ) {
-					echo esc_html( $competition->post_title );
-
-					if ( '' !== $competition->_anwpfl_multistage && $competition->_anwpfl_stage_title ) {
-						echo '<br>' . esc_html( $competition->_anwpfl_stage_title );
+					if ( '' !== ( $competition_row['multistage'] ?? '' ) && ( $competition_row['stage_title'] ?? '' ) ) {
+						echo '<br>' . esc_html( $competition_row['stage_title'] );
 					}
 				}
 
 				break;
 
 			case 'anwpfl_group':
-				// Get competition id
-				$competition_id = (int) get_post_meta( $post_id, '_anwpfl_competition', true );
+				$competition_id = (int) ( $standing_row['competition_id'] ?? 0 );
 
-				$group_id = (int) get_post_meta( $post_id, '_anwpfl_competition_group', true );
+				$group_id = (int) ( $standing_row['group_id'] ?? 0 );
 
 				// Get competition title
-				$groups = json_decode( get_post_meta( $competition_id, '_anwpfl_groups', true ) );
+				$competition_row = $competition_id ? anwp_fl()->competition->get_row( $competition_id ) : null;
+				$groups          = $competition_row ? json_decode( $competition_row['stage_groups'] ?? '' ) : null;
 
 				if ( ! empty( $groups ) && is_array( $groups ) ) {
 					foreach ( $groups as $index => $group ) {
 
-						if ( $group->id === $group_id ) {
+						if ( absint( $group->id ) === $group_id ) {
 							$title = $group->title ? : 'Group #' . ( $index + 1 );
 							echo esc_html( $title );
 						}
@@ -1519,7 +2162,7 @@ class AnWPFL_Standing extends CPT_Core {
 		*/
 		if ( ! empty( $table_colors ) && is_array( $table_colors ) ) {
 			foreach ( $table_colors as $table_color ) {
-				if ( '#' !== mb_substr( $table_color, 0, 1 ) ) {
+				if ( ! str_starts_with( $table_color, '#' ) ) {
 					continue;
 				}
 
@@ -1544,7 +2187,7 @@ class AnWPFL_Standing extends CPT_Core {
 		$first = 0;
 		$last  = 0;
 
-		if ( ! mb_strpos( $partial, '-', 1 ) && absint( $partial ) ) {
+		if ( ! strpos( $partial, '-', 1 ) && absint( $partial ) ) {
 			$club_id = absint( $partial );
 
 			foreach ( $table as $table_row ) {
@@ -1556,7 +2199,7 @@ class AnWPFL_Standing extends CPT_Core {
 					break;
 				}
 			}
-		} elseif ( mb_strpos( $partial, '-', 1 ) ) {
+		} elseif ( strpos( $partial, '-', 1 ) ) {
 			$partial_arr = explode( '-', $partial );
 
 			$first = absint( trim( $partial_arr[0] ) );
@@ -1589,12 +2232,13 @@ class AnWPFL_Standing extends CPT_Core {
 	 */
 	public function generate_title( $standing_id ) {
 
-		// Get competition id
-		$competition_id = absint( get_post_meta( $standing_id, '_anwpfl_competition', true ) );
-		$group_id       = absint( get_post_meta( $standing_id, '_anwpfl_competition_group', true ) );
+		$standing_row   = $this->get_row( $standing_id );
+		$competition_id = absint( $standing_row['competition_id'] ?? 0 );
+		$group_id       = absint( $standing_row['group_id'] ?? 0 );
 
 		// Get competition title
-		$groups = json_decode( get_post_meta( $competition_id, '_anwpfl_groups', true ) );
+		$competition_row = $competition_id ? anwp_fl()->competition->get_row( $competition_id ) : null;
+		$groups          = $competition_row ? json_decode( $competition_row['stage_groups'] ?? '' ) : null;
 
 		$generated_title = get_the_title( $competition_id );
 
@@ -1675,76 +2319,64 @@ class AnWPFL_Standing extends CPT_Core {
 
 			/*
 			|--------------------------------------------------------------------
-			| Get All Standings
+			| Get All Standings from anwpfl_standings custom table.
+			|
+			| Row existence IS the "fixed" flag — no _anwpfl_fixed check needed.
+			| competition_id > 0 excludes draft clones from process_clone_standing().
+			| Explicit column list avoids JSON blob columns (table_main etc.).
 			|--------------------------------------------------------------------
 			*/
 			$output_data = [];
 
-			$meta_keys = apply_filters(
-				'anwpfl/standing/cached_meta_keys',
-				[
-					'_anwpfl_table_notes',
-					'_anwpfl_manual_ordering',
-					'_anwpfl_ranking_rules_current',
-					'_anwpfl_points_initial',
-					'_anwpfl_is_initial_data_active',
-					'_anwpfl_table_colors',
-					'_anwpfl_table_last_round',
-					'_anwpfl_competition',
-					'_anwpfl_competition_group',
-					'_anwpfl_points_win',
-					'_anwpfl_points_draw',
-					'_anwpfl_points_loss',
-					'_anwpfl_fixed',
-				]
-			);
-
-			$all_meta_data = $this->plugin->helper->get_metadata_grouped( $meta_keys );
 			$all_standings = $wpdb->get_results(
 				"
-				SELECT ID, post_title
-				FROM $wpdb->posts
-				WHERE post_status = 'publish' AND post_type = 'anwp_standing'
-				",
+				SELECT s.standing_id, s.competition_id, s.group_id, s.points_win, s.points_draw,
+					s.points_loss, s.ranking_rules, s.manual_ordering, s.is_initial_data_active,
+					s.table_notes, s.table_colors, s.points_initial, s.last_round,
+					s.table_lazy, s.table_date_start, s.table_date_end,
+					p.post_title
+				FROM {$wpdb->prefix}anwpfl_standings s
+				INNER JOIN {$wpdb->posts} p ON s.standing_id = p.ID
+				WHERE p.post_status = 'publish'
+					AND s.competition_id > 0
+				ORDER BY s.standing_id
+				"
 			) ?: [];
 
 			if ( empty( $all_standings ) ) {
 				return [];
 			}
 
-			/** @var WP_Post $standing */
 			foreach ( $all_standings as $standing ) {
-				if ( 'true' !== ( $all_meta_data['_anwpfl_fixed'][ $standing->ID ] ?? '' ) ) {
-					continue;
-				}
+				$standing_id = (int) $standing->standing_id;
 
 				$standing_data = [
-					'id'                     => $standing->ID,
+					'id'                     => $standing_id,
 					'title'                  => $standing->post_title,
-					'table_notes'            => $all_meta_data['_anwpfl_table_notes'][ $standing->ID ] ?? '',
-					'manual_ordering'        => $all_meta_data['_anwpfl_manual_ordering'][ $standing->ID ] ?? '',
-					'ranking_rules'          => $all_meta_data['_anwpfl_ranking_rules_current'][ $standing->ID ] ?? '',
-					'points_initial'         => $all_meta_data['_anwpfl_points_initial'][ $standing->ID ] ?? '',
-					'is_initial_data_active' => $all_meta_data['_anwpfl_is_initial_data_active'][ $standing->ID ] ?? '',
-					'table_colors'           => $all_meta_data['_anwpfl_table_colors'][ $standing->ID ] ?? '',
-					'last_round'             => absint( $all_meta_data['_anwpfl_table_last_round'][ $standing->ID ] ?? 0 ),
-					'competition'            => absint( $all_meta_data['_anwpfl_competition'][ $standing->ID ] ?? 0 ),
-					'group'                  => absint( $all_meta_data['_anwpfl_competition_group'][ $standing->ID ] ?? 0 ),
-					'win'                    => absint( $all_meta_data['_anwpfl_points_win'][ $standing->ID ] ?? 0 ),
-					'draw'                   => absint( $all_meta_data['_anwpfl_points_draw'][ $standing->ID ] ?? 0 ),
-					'loss'                   => absint( $all_meta_data['_anwpfl_points_loss'][ $standing->ID ] ?? 0 ),
+					'table_notes'            => $standing->table_notes ?? '',
+					'manual_ordering'        => ( (int) $standing->manual_ordering ) ? 'true' : '',
+					'ranking_rules'          => $standing->ranking_rules ?? '',
+					'points_initial'         => $standing->points_initial ?? '',
+					'is_initial_data_active' => ( (int) $standing->is_initial_data_active ) ? '1' : '',
+					'table_colors'           => $standing->table_colors ?? '',
+					'last_round'             => absint( $standing->last_round ?? 0 ),
+					'competition'            => absint( $standing->competition_id ?? 0 ),
+					'group'                  => absint( $standing->group_id ?? 0 ),
+					'win'                    => absint( $standing->points_win ?? 0 ),
+					'draw'                   => absint( $standing->points_draw ?? 0 ),
+					'loss'                   => absint( $standing->points_loss ?? 0 ),
 				];
 
 				/**
 				 * Filter Cached Standing Data
 				 *
-				 * @param array   $standing_data
-				 * @param int     $standing_id
-				 * @param WP_Post $standing
+				 * @param array  $standing_data
+				 * @param int    $standing_id
+				 * @param object $standing
 				 *
 				 * @since 0.14.4
 				 */
-				$output_data[ $standing->ID ] = apply_filters( 'anwpfl/standing/data_to_cache', $standing_data, $standing->ID, $standing );
+				$output_data[ $standing_id ] = apply_filters( 'anwpfl/standing/data_to_cache', $standing_data, $standing_id, $standing );
 			}
 
 			/*
@@ -1787,5 +2419,68 @@ class AnWPFL_Standing extends CPT_Core {
 		$standing_obj = array_values( wp_list_filter( $this->get_standings(), [ 'id' => absint( $id ) ] ) );
 
 		return empty( $standing_obj ) ? false : (object) $standing_obj[0];
+	}
+
+	/**
+	 * Find standing config by competition + group via indexed query.
+	 *
+	 * Returns the same shape as get_standings() entries (with 'competition',
+	 * 'group', 'win' etc. keys) so callers can pass the result directly to
+	 * calculate_standing(). Uses the `competition_group` composite index —
+	 * O(1) lookup instead of iterating all standings.
+	 *
+	 * @since 0.18.0
+	 *
+	 * @param int $competition_id Competition post ID.
+	 * @param int $group_id       Group ID.
+	 *
+	 * @return array|null Standing data array (same shape as get_standings() entry), or null.
+	 */
+	public function get_standing_data_by_competition_group( int $competition_id, int $group_id ): ?array {
+
+		if ( ! $competition_id || ! $group_id ) {
+			return null;
+		}
+
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$standing = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT s.standing_id, s.competition_id, s.group_id, s.points_win, s.points_draw,
+					s.points_loss, s.ranking_rules, s.manual_ordering, s.is_initial_data_active,
+					s.table_notes, s.table_colors, s.points_initial, s.last_round,
+					p.post_title
+				FROM {$wpdb->prefix}anwpfl_standings s
+				INNER JOIN {$wpdb->posts} p ON s.standing_id = p.ID
+				WHERE s.competition_id = %d
+					AND s.group_id = %d
+					AND p.post_status = 'publish'
+				LIMIT 1",
+				$competition_id,
+				$group_id
+			)
+		);
+
+		if ( ! $standing ) {
+			return null;
+		}
+
+		return [
+			'id'                     => (int) $standing->standing_id,
+			'title'                  => $standing->post_title,
+			'table_notes'            => $standing->table_notes ?? '',
+			'manual_ordering'        => ( (int) $standing->manual_ordering ) ? 'true' : '',
+			'ranking_rules'          => $standing->ranking_rules ?? '',
+			'points_initial'         => $standing->points_initial ?? '',
+			'is_initial_data_active' => ( (int) $standing->is_initial_data_active ) ? '1' : '',
+			'table_colors'           => $standing->table_colors ?? '',
+			'last_round'             => absint( $standing->last_round ?? 0 ),
+			'competition'            => absint( $standing->competition_id ?? 0 ),
+			'group'                  => absint( $standing->group_id ?? 0 ),
+			'win'                    => absint( $standing->points_win ?? 0 ),
+			'draw'                   => absint( $standing->points_draw ?? 0 ),
+			'loss'                   => absint( $standing->points_loss ?? 0 ),
+		];
 	}
 }

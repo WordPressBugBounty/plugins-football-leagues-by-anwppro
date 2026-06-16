@@ -11,7 +11,7 @@
  * @since         0.4.2 Modified multistage logic
  * @since         0.7.2 Modified logic and structure
  *
- * @version       0.16.18
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -20,13 +20,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Prepare data
 $competition_post_id = get_the_ID();
-$is_multistage       = in_array( get_post_meta( $competition_post_id, '_anwpfl_multistage', true ), [ 'main', 'secondary' ], true );
+$is_multistage       = in_array( anwp_fl()->competition->get_competition_list_row( (int) $competition_post_id )['multistage'] ?? '', [ 'main', 'secondary' ], true );
 
 // Get competition matches ( or all matches from the same league and season - if multistage )
 $matches = anwp_football_leagues()->competition->tmpl_get_competition_matches( $competition_post_id, $is_multistage );
 
 // Get competitions
 $competitions = anwp_football_leagues()->competition->tmpl_get_prepared_competitions( $competition_post_id, $is_multistage, $matches );
+
+// Bulk warm full competition rows (stage_groups + stage_rounds JSON blobs are needed below).
+if ( ! empty( $competitions ) ) {
+	anwp_fl()->competition->warm_competitions_full( wp_list_pluck( $competitions, 'ID' ) );
+}
 
 /**
  * Filter: anwpfl/tmpl-competition/competitions_prepared
@@ -94,10 +99,11 @@ do_action( 'anwpfl/tmpl-competition/before_wrapper', $competition_post_id );
 			?>
 			<div class="anwp-fl-tabs mb-3 competition__tabs d-flex flex-wrap">
 				<?php foreach ( $competitions as $ii => $c ) : ?>
+					<?php $tab_stage_title = anwp_fl()->competition->get_competition_list_row( (int) $c->ID )['stage_title'] ?? ''; ?>
 					<div class="position-relative anwp-text-sm anwp-fl-tabs__item anwp-bg-gray-light anwp-border anwp-border-light anwp-flex-1 d-flex align-items-center justify-content-center"
 						data-target="#anwp_c_id_<?php echo (int) $c->ID; ?>" id="anwp_id_<?php echo (int) $c->ID; ?>-tab">
-						<span><?php echo esc_html( get_post_meta( $c->ID, '_anwpfl_stage_title', true ) ); ?></span>
-						<a class="anwp-link-without-effects anwp-link-cover" href="#" aria-label="<?php echo esc_attr( get_post_meta( $c->ID, '_anwpfl_stage_title', true ) ); ?>"></a>
+						<span><?php echo esc_html( $tab_stage_title ); ?></span>
+						<a class="anwp-link-without-effects anwp-link-cover" href="#" aria-label="<?php echo esc_attr( $tab_stage_title ); ?>"></a>
 					</div>
 				<?php endforeach; ?>
 			</div>
@@ -118,10 +124,11 @@ do_action( 'anwpfl/tmpl-competition/before_wrapper', $competition_post_id );
 					 */
 					do_action( 'anwpfl/tmpl-competition/before_stage', $competition, $competition_post_id );
 
-					$competition_type = get_post_meta( $competition->ID, '_anwpfl_type', true );
+					$competition_row  = anwp_fl()->competition->get_row( (int) $competition->ID ) ?? [];
+					$competition_type = $competition_row['type'] ?? '';
 
 					// Prepare groups
-					$groups = json_decode( get_post_meta( $competition->ID, '_anwpfl_groups', true ) );
+					$groups = json_decode( $competition_row['stage_groups'] ?? '' );
 
 					if ( empty( $groups ) || ! is_array( $groups ) ) {
 						continue;
@@ -146,7 +153,7 @@ do_action( 'anwpfl/tmpl-competition/before_wrapper', $competition_post_id );
 					| @since 0.10.0
 					|--------------------------------------------------------------------
 					*/
-					$rounds = json_decode( get_post_meta( $competition->ID, '_anwpfl_rounds', true ) );
+					$rounds = json_decode( $competition_row['stage_rounds'] ?? '' );
 
 					if ( empty( $rounds ) || ! is_array( $rounds ) ) {
 						$rounds = [

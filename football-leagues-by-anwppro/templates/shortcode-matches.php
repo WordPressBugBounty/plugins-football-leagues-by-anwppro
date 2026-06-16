@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.4.3
  *
- * @version       0.15.0
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -108,6 +108,9 @@ if ( empty( $matches ) ) {
 		<?php
 		$group_current = '';
 
+		// Bulk warm competition rows for the stage_title group_by below.
+		anwp_fl()->competition->warm_competitions( array_unique( wp_list_pluck( $matches, 'competition_id' ) ) );
+
 		foreach ( $matches as $ii => $list_match ) :
 
 			if ( '' !== $args->group_by ) {
@@ -116,7 +119,7 @@ if ( empty( $matches ) ) {
 
 				// Check current group by value
 				if ( 'stage' === $args->group_by && $group_current !== $list_match->competition_id ) {
-					$group_text    = get_post_meta( $list_match->competition_id, '_anwpfl_stage_title', true );
+					$group_text    = anwp_fl()->competition->get_competition_list_row( (int) $list_match->competition_id )['stage_title'] ?? '';
 					$group_current = $list_match->competition_id;
 				} elseif ( 'competition' === $args->group_by && $group_current !== $list_match->competition_id ) {
 					$group_text    = anwp_football_leagues()->competition->get_competition_title( $list_match->competition_id );

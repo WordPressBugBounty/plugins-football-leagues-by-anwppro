@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.5.0
  *
- * @version       0.16.18
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Check required params
-if ( empty( $data->club_id ) || empty( $data->season_id ) ) {
+if ( empty( $data->club_id ) ) {
 	return;
 }
 
@@ -26,11 +26,10 @@ if ( empty( $data->club_id ) || empty( $data->season_id ) ) {
 $data = (object) wp_parse_args(
 	$data,
 	[
-		'season_dropdown' => 'hide',
-		'header'          => true,
-		'club_id'         => '',
-		'season_id'       => '',
-		'class'           => '',
+		'header'    => true,
+		'club_id'   => '',
+		'season_id' => '',
+		'class'     => '',
 	]
 );
 
@@ -75,6 +74,33 @@ $squad_elements = wp_parse_list( anwp_fl()->customizer->get_value( 'squad', 'squ
 			'general/header'
 		);
 	}
+
+	/*
+	|--------------------------------------------------------------------
+	| Squad source label ("Active Squad" / "{Season} season")
+	|--------------------------------------------------------------------
+	*/
+	$squad_source = AnWPFL_Club::get_last_squad_source( (int) $data->club_id, (int) $data->season_id );
+	$source_label = '';
+
+	if ( $squad_source ) {
+		if ( in_array( $squad_source['source'], [ 'active', 'active_current_year', 'active_fallback' ], true ) ) {
+			$source_label = AnWPFL_Text::get_value( 'squad__shortcode__active_squad', __( 'Active Squad', 'anwp-football-leagues' ) );
+		} elseif ( in_array( $squad_source['source'], [ 'season', 'stats' ], true ) && $data->season_id ) {
+			$season_term = get_term( (int) $data->season_id, 'anwp_season' );
+
+			if ( $season_term && ! is_wp_error( $season_term ) ) {
+				/* translators: %s: Season name (e.g. "2021-2022") */
+				$source_label = sprintf( __( '%s season', 'anwp-football-leagues' ), $season_term->name );
+			}
+		}
+	}
+
+	if ( $source_label ) :
+		?>
+		<div class="squad__source-label anwp-text-sm anwp-text-gray-700 mt-1 mb-3"><?php echo esc_html( $source_label ); ?></div>
+		<?php
+	endif;
 	?>
 
 	<?php
@@ -241,7 +267,7 @@ $squad_elements = wp_parse_list( anwp_fl()->customizer->get_value( 'squad', 'squ
 							</div>
 						<?php endif; ?>
 					</div>
-					<a href="<?php echo esc_url( get_permalink( $staff_id ) ); ?>" class="anwp-link-cover" aria-label="<?php echo esc_attr( $staff_member['name'] ); ?>"></a>
+					<a href="<?php echo esc_url( $staff_member['link'] ?? '' ); ?>" class="anwp-link-cover" aria-label="<?php echo esc_attr( $staff_member['name'] ); ?>"></a>
 				</div>
 			<?php endforeach; ?>
 		</div>
@@ -326,7 +352,7 @@ $squad_elements = wp_parse_list( anwp_fl()->customizer->get_value( 'squad', 'squ
 						</div>
 					<?php endif; ?>
 				</div>
-				<a href="<?php echo esc_url( get_permalink( $staff_group_item_id ) ); ?>" class="anwp-link-cover" aria-label="<?php echo esc_attr( $staff_group_item['name'] ); ?>"></a>
+				<a href="<?php echo esc_url( $staff_group_item['link'] ?? '' ); ?>" class="anwp-link-cover" aria-label="<?php echo esc_attr( $staff_group_item['name'] ); ?>"></a>
 			</div>
 		<?php endforeach; ?>
 	</div>

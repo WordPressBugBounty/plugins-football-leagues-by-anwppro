@@ -554,7 +554,7 @@ class AnWPFL_Referee extends CPT_Core {
 		}
 
 		$permalink_slug = $this->plugin->options->get_permalink_structure()['referee'] ?? 'referee';
-		$base_url       = get_site_url( null, '/' . $permalink_slug . '/' );
+		$base_url       = home_url( '/' . $permalink_slug . '/' );
 
 		/*
 		|--------------------------------------------------------------------
@@ -583,11 +583,11 @@ class AnWPFL_Referee extends CPT_Core {
 				$countries = maybe_unserialize( $official->nationality );
 
 				if ( ! empty( $countries ) && is_array( $countries ) && ! empty( $countries[0] ) ) {
-					$official->country = mb_strtolower( $countries[0] );
+					$official->country = strtolower( $countries[0] );
 				}
 
 				if ( ! empty( $countries ) && is_array( $countries ) && ! empty( $countries[1] ) ) {
-					$official->country_2 = mb_strtolower( $countries[1] );
+					$official->country_2 = strtolower( $countries[1] );
 				}
 			}
 
@@ -795,9 +795,9 @@ class AnWPFL_Referee extends CPT_Core {
 		/**==================
 		 * ORDER BY
 		 *================ */
-		if ( 'asc' === mb_strtolower( $options->sort_by_date ) ) {
+		if ( 'asc' === strtolower( $options->sort_by_date ) ) {
 			$query .= 'ORDER BY g.kickoff ASC';
-		} elseif ( 'desc' === mb_strtolower( $options->sort_by_date ) ) {
+		} elseif ( 'desc' === strtolower( $options->sort_by_date ) ) {
 			$query .= 'ORDER BY g.kickoff DESC';
 		}
 
@@ -821,23 +821,32 @@ class AnWPFL_Referee extends CPT_Core {
 			return $ids;
 		}
 
-		// Get match links
-		$matches_posts = [];
+		$links = $this->plugin->helper->get_permalinks_by_ids( $ids, 'anwp_match' );
 
-		$args = [
-			'include'                => $ids,
-			'post_type'              => 'anwp_match',
-			'update_post_meta_cache' => false,
-		];
-
-		/** @var WP_Post $match_post */
-		foreach ( get_posts( $args ) as $match_post ) {
-			$matches_posts[ $match_post->ID ] = $match_post;
+		foreach ( $matches as $match_index => $match ) {
+			$matches[ $match_index ]->permalink = $links[ $match->match_id ] ?? '';
 		}
 
-		// Add extra data to match
-		foreach ( $matches as $match_index => $match ) {
-			$matches[ $match_index ]->permalink = get_permalink( isset( $matches_posts[ $match->match_id ] ) ? $matches_posts[ $match->match_id ] : $match->match_id );
+		// Warm light club + competition caches so prepare_match_data_to_render()
+		// in the template loop hits list_cache instead of firing per-match SELECTs.
+		if ( ! empty( $matches ) ) {
+			anwp_fl()->club->warm_clubs(
+				array_unique(
+					array_merge(
+						wp_list_pluck( $matches, 'home_club' ),
+						wp_list_pluck( $matches, 'away_club' )
+					)
+				)
+			);
+
+			anwp_fl()->competition->warm_competitions(
+				array_unique(
+					array_merge(
+						wp_list_pluck( $matches, 'competition_id' ),
+						wp_list_pluck( $matches, 'main_stage_id' )
+					)
+				)
+			);
 		}
 
 		return $matches;

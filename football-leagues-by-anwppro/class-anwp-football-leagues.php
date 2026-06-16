@@ -59,6 +59,7 @@ spl_autoload_register( 'anwp_football_leagues_autoload_classes' );
  * @property-read AnWPFL_Standing          $standing
  * @property-read AnWPFL_Stadium           $stadium
  * @property-read AnWPFL_Template          $template
+ * @property-read AnWPFL_Template_Status   $template_status
  * @property-read AnWPFL_Text              $text
  * @property-read AnWPFL_Text_Countries    $text_countries
  * @property-read AnWPFL_Toolbox           $toolbox
@@ -74,7 +75,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * @var    string
 	 * @since  0.1.0
 	 */
-	const VERSION = '0.17.2';
+	const VERSION = '0.18.0';
 
 	/**
 	 * Current DB structure version.
@@ -82,7 +83,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * @var    int
 	 * @since  0.3.0
 	 */
-	const DB_VERSION = 42;
+	const DB_VERSION = 49;
 
 	/**
 	 * Menu Icon.
@@ -257,6 +258,16 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	protected $template;
 
 	/**
+	 * @var AnWPFL_Template_Status
+	 */
+	protected $template_status;
+
+	/**
+	 * @var AnWPFL_Sitemap
+	 */
+	protected $sitemap;
+
+	/**
 	 * Plugin Post Types
 	 *
 	 * @since 0.5.5
@@ -326,6 +337,9 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 			'anwpfl_missing_players',
 			'anwpfl_players_manual_stats',
 			'anwpfl_lineups',
+			'anwpfl_clubs',
+			'anwpfl_competitions',
+			'anwpfl_standings',
 		];
 
 		foreach ( $tables as $table ) {
@@ -369,6 +383,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 		$this->helper            = new AnWPFL_Helper( $this );
 		$this->health            = new AnWPFL_Health( $this );
 		$this->template          = new AnWPFL_Template( $this );
+		$this->template_status   = new AnWPFL_Template_Status( $this );
 		$this->text              = new AnWPFL_Text( $this );
 		$this->text_countries    = new AnWPFL_Text_Countries( $this );
 		$this->customizer        = new AnWPFL_Customizer( $this );
@@ -376,6 +391,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 		$this->toolbox           = new AnWPFL_Toolbox( $this );
 
 		$this->upgrade = new AnWPFL_Upgrade( $this );
+		$this->sitemap = new AnWPFL_Sitemap( $this );
 
 		// Shortcodes
 		$this->load_shortcodes();
@@ -608,13 +624,6 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 		add_action( 'admin_notices', [ $this, 'notice_cmb_not_installed' ] );
 
 		/**
-		 * Added CMB2 show_on filter
-		 *
-		 * @since 0.10.0
-		 */
-		add_filter( 'cmb2_show_on', [ $this, 'show_on_fixed_metabox' ], 10, 2 );
-
-		/**
 		 * Filters the post title.
 		 *
 		 * @since 0.10.6
@@ -642,6 +651,13 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 		add_action( 'kadence_before_main_content', [ $this, 'add_kadence_thumbnail_support' ] );
 
 		/**
+		 * Prime entity null-caches on plugin CPT admin list screens.
+		 *
+		 * @since 0.18.2
+		 */
+		add_filter( 'the_posts', [ $this, 'prime_admin_list_null_cache' ], 10, 2 );
+
+		/**
 		 * Fix Divi content duplication
 		 *
 		 * @since 0.10.12
@@ -658,6 +674,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 		// Notices
 		add_action( 'admin_notices', [ $this, 'notice_data_migration_required' ] );
 		add_action( 'admin_notices', [ $this, 'display_admin_pre_remove_notice' ] );
+		add_action( 'admin_notices', [ $this, 'notice_premium_too_old' ] );
 
 		add_action( 'pre_delete_term', [ $this, 'maybe_prevent_delete_term' ], 10, 2 );
 		add_filter( 'pre_delete_post', [ $this, 'maybe_prevent_delete_competition' ], 10, 2 );
@@ -681,6 +698,118 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 		}
 
 		return $bool;
+	}
+
+	/**
+	 * Prime entity null-caches for visible post IDs on plugin admin list screens.
+	 *
+	 * WP core hooks (meta lookups, thumbnail filter, etc.) speculatively probe
+	 * anwp_fl()->{match,club,competition,standing,player}->get_row( $id ) for
+	 * every post row. Post IDs are globally unique across post_types, so IDs
+	 * from one CPT can never legitimately exist as a row in a different
+	 * entity's table. Priming the negative cache with visible post IDs up
+	 * front collapses 150+ wasted SELECTs into zero.
+	 *
+	 * The only entity whose table we skip is the one whose primary key would
+	 * legitimately equal a visible post ID (e.g., skip `anwpfl_matches` on the
+	 * match admin list, since match post IDs ARE match_id values).
+	 *
+	 * @since 0.18.2
+	 *
+	 * @param WP_Post[] $posts Posts returned by the query.
+	 * @param WP_Query  $query Current query.
+	 *
+	 * @return WP_Post[] Unchanged.
+	 */
+	public function prime_admin_list_null_cache( $posts, $query ) {
+		if ( ! is_admin() || empty( $posts ) || ! $query instanceof WP_Query ) {
+			return $posts;
+		}
+
+		if ( ! $query->is_main_query() ) {
+			return $posts;
+		}
+
+		$post_type = $query->get( 'post_type' );
+
+		if ( ! is_string( $post_type ) || 0 !== strpos( $post_type, 'anwp_' ) ) {
+			return $posts;
+		}
+
+		$ids = wp_list_pluck( $posts, 'ID' );
+
+		if ( empty( $ids ) ) {
+			return $posts;
+		}
+
+		// Map each CPT to its own entity table (if any). The listed entity is
+		// SKIPPED during priming because post IDs for that CPT legitimately
+		// appear as rows in its own table.
+		$own_entity = [
+			'anwp_match'       => 'match',
+			'anwp_club'        => 'club',
+			'anwp_competition' => 'competition',
+			'anwp_standing'    => 'standing',
+			'anwp_player'      => 'player',
+		];
+
+		$skip = $own_entity[ $post_type ] ?? '';
+
+		foreach ( [ 'match', 'club', 'competition', 'standing', 'player' ] as $entity ) {
+			if ( $entity === $skip ) {
+				continue;
+			}
+
+			$this->$entity->prime_missing_ids( $ids );
+		}
+
+		// Per-CPT bulk warmers for admin-list columns that would otherwise N+1.
+		if ( 'anwp_club' === $post_type ) {
+			$this->club->warm_clubs_full( $ids );
+			$this->club->warm_admin_list_game_counts( $ids );
+		} elseif ( 'anwp_competition' === $post_type ) {
+			$this->competition->warm_competitions_full( $ids );
+		} elseif ( 'anwp_match' === $post_type ) {
+			$this->match->warm_admin_list_game_data( $ids );
+		} elseif ( 'anwp_player' === $post_type ) {
+			$this->player->warm_admin_list_player_data( $ids );
+
+			// Current-club column reads each player's team_id. Warm those club
+			// rows in one bulk fetch.
+			$club_ids = [];
+
+			foreach ( $ids as $player_id ) {
+				$team_id = (int) ( $this->player->get_player_data( (int) $player_id )['team_id'] ?? 0 );
+
+				if ( $team_id ) {
+					$club_ids[] = $team_id;
+				}
+			}
+
+			if ( ! empty( $club_ids ) ) {
+				$this->club->warm_clubs_full( array_unique( $club_ids ) );
+			}
+		} elseif ( 'anwp_standing' === $post_type ) {
+			$this->standing->warm_standings_full( $ids );
+
+			// Competition column reads each standing's competition_id. Warm
+			// those competition rows in one bulk fetch.
+			$competition_ids = [];
+
+			foreach ( $ids as $standing_id ) {
+				$competition_id = (int) ( $this->standing->get_row( (int) $standing_id )['competition_id'] ?? 0 );
+
+				if ( $competition_id ) {
+					$competition_ids[] = $competition_id;
+				}
+			}
+
+			if ( ! empty( $competition_ids ) ) {
+				$this->competition->warm_competitions_full( array_unique( $competition_ids ) );
+			}
+		}
+
+		return $posts;
 	}
 
 	/**
@@ -716,11 +845,12 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 				break;
 
 			case 'anwp_club':
-				$thumbnail_id = get_post_meta( $object_id, '_anwpfl_logo_id', true );
+				$thumbnail_id = anwp_fl()->club->get_club_list_row( (int) $object_id )['logo_id'] ?? 0;
 				break;
 
 			case 'anwp_competition':
-				$thumbnail_id = get_post_meta( $object_id, '_anwpfl_logo_big_id', true ) ? : get_post_meta( $object_id, '_anwpfl_logo_id', true );
+				$row          = anwp_fl()->competition->get_competition_list_row( (int) $object_id );
+				$thumbnail_id = ( $row['logo_big_id'] ?? 0 ) ?: ( $row['logo_id'] ?? 0 );
 				break;
 
 			case 'anwp_player':
@@ -827,6 +957,11 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 		}
 
 		$classes[] = 'theme--' . wp_get_theme()->get_template();
+
+		// ANWP-CSS v2.0.0 scope class - boosts specificity of spacing/display/text-align utilities (0,2,0) to beat theme selectors like .entry-content p (0,1,1).
+		if ( ! in_array( 'anwp-css-body', $classes, true ) ) {
+			$classes[] = 'anwp-css-body';
+		}
 
 		return $classes;
 	}
@@ -1386,9 +1521,13 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 			'fixed'       => '🟠',
 			'performance' => '🟡',
 			'update'      => '🔵',
+			'improve'     => '🔵',
 			'improved'    => '🔵',
 			'tweak'       => '⚪',
 			'changed'     => '🔵',
+			'new feature' => '🚀',
+			'security'    => '🔒',
+			'note'        => '⚠️',
 		];
 
 		$content  = file_get_contents( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
@@ -1407,8 +1546,8 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 				function ( $line ) use ( $emoji_map ) {
 					$line = preg_replace( '/^\*\s*/', '', $line );
 
-					// Extract prefix (first word before " - " or ": ")
-					if ( preg_match( '/^(\w+)\s*[-:]\s*/', $line, $prefix_match ) ) {
+					// Extract prefix (first word or two words before " - " or ": ")
+					if ( preg_match( '/^([\w ]+?)\s*[-:]\s*/', $line, $prefix_match ) ) {
 						$prefix = strtolower( $prefix_match[1] );
 						$emoji  = $emoji_map[ $prefix ] ?? '';
 
@@ -1546,6 +1685,38 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 		if ( ! get_option( 'anwpfl_flush_rewrite_rules_flag' ) ) {
 			add_option( 'anwpfl_flush_rewrite_rules_flag', true );
 		}
+
+		// Pre-set migration flags on fresh installs (zero FL CPT data).
+		// Catches the fresh-install scenario at activation time, before any admin
+		// page renders, so the migration notices can never fire when there's
+		// nothing to migrate. Reactivation on existing data leaves flags alone.
+		$club_counts = wp_count_posts( 'anwp_club' );
+		$total_clubs = (int) ( $club_counts->publish ?? 0 ) + (int) ( $club_counts->draft ?? 0 ) + (int) ( $club_counts->pending ?? 0 ) + (int) ( $club_counts->private ?? 0 );
+
+		if ( 0 === $total_clubs ) {
+			update_option( 'anwpfl_clubs_migrated', 1, true );
+			update_option( 'anwpfl_squad_migrated', 1, true );
+			update_option( 'anwpfl_competitions_migrated', 1, true );
+			update_option( 'anwpfl_standings_migrated', 1, true );
+
+			// Bypass the pre-0.16 data-schema evaluation entirely. Premium can
+			// register its toolbox-updater filter before Core's version_upgrade()
+			// runs (when premium loads first in active_plugins), and that filter
+			// can flag non-empty tasks against tables init priority 1 has not yet
+			// created - which sets data_schema=15 and triggers the "Data Migration
+			// Required" notice on a fresh install with nothing to migrate.
+			// Pre-seeding anwpfl_version makes version_upgrade() return early at
+			// the saved===current gate.
+			update_option( 'anwpfl_data_schema', 16, true );
+			update_option( 'anwpfl_version', self::VERSION, true );
+
+			// Premium update_db() queues an FL+ competition backfill task whenever
+			// anwpfl_competitions_migrated=1 and prev_db_version<21. Layer 1 trips
+			// the first condition on every fresh install, so the toolbox shows a
+			// no-op backfill task (wizard already writes directly to
+			// anwpfl_competitions). Pre-set the "done" flag so it never queues.
+			update_option( 'anwpfl_competitions_premium_backfilled', 1, true );
+		}
 	}
 
 	/**
@@ -1586,7 +1757,10 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	public function include_selector_modaal() {
 		ob_start();
 		?>
-		<div fl-x-data fl-x-cloak fl-x-show="$store.selectorModal.isOpen" fl-x-trap.inert.noscroll="$store.selectorModal.isOpen" class="anwp-x-modal">
+		<dialog fl-x-data
+			fl-x-effect="(()=>{ try { $store.selectorModal.isOpen ? (!$el.open && $el.showModal()) : ($el.open && $el.close()); } catch(e) {} })()"
+			fl-x-on:close="$store.selectorModal.isOpen && $store.selectorModal.closeModal()"
+			class="anwp-x-modal">
 			<div fl-x-show="$store.selectorModal.isOpen" class="anwp-d-flex--noimp anwp-x-modal__wrapper">
 				<div class="anwp-x-modal__header">
 					<h3 style="margin: 0">FL Selector: <span fl-x-text="$store.selectorModal.contextHeader"></span></h3>
@@ -1760,7 +1934,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 					</button>
 				</div>
 			</div>
-		</div>
+		</dialog>
 		<?php
 		return ob_get_clean();
 	}
@@ -1834,6 +2008,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 			case 'cache':
 			case 'standing':
 			case 'template':
+			case 'template_status':
 			case 'text':
 			case 'text_countries':
 			case 'data':
@@ -1843,6 +2018,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 			case 'assets':
 			case 'upgrade':
 			case 'toolbox':
+			case 'sitemap':
 				return $this->$field;
 			default:
 				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . esc_html( $field ) );
@@ -2171,6 +2347,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 * @since 0.10.0
 	 */
 	public function show_on_fixed_metabox( $display, $meta_box ) {
+		_deprecated_function( __METHOD__, '0.18.0' );
 
 		if ( ! isset( $meta_box['show_on']['key'] ) ) {
 			return $display;
@@ -2180,14 +2357,7 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 			return $display;
 		}
 
-		// If we're showing it based on ID, get the current ID
-		$post_id = get_the_ID();
-
-		if ( ! $post_id ) {
-			return $display;
-		}
-
-		return 'true' === get_post( $post_id )->_anwpfl_fixed;
+		return $display;
 	}
 
 	/**
@@ -2245,7 +2415,8 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 	 */
 	public function notice_data_migration_required() {
 
-		$active_page = $_GET['page'] ?? ''; // phpcs:ignore
+		$active_page     = $_GET['page'] ?? ''; // phpcs:ignore
+		$premium_too_old = self::is_premium_too_old();
 
 		/*
 		|--------------------------------------------------------------------
@@ -2265,6 +2436,223 @@ final class AnWP_Football_Leagues { //phpcs:ignore
 			</div>
 			<?php
 		}
+
+		/*
+		|--------------------------------------------------------------------
+		| Competitions migration required
+		|--------------------------------------------------------------------
+		*/
+		if ( ! get_option( 'anwpfl_competitions_migrated' ) && 'anwpfl-toolbox' !== $active_page ) {
+
+			$competition_counts = wp_count_posts( 'anwp_competition' );
+			$total_competitions = (int) ( $competition_counts->publish ?? 0 ) + (int) ( $competition_counts->draft ?? 0 ) + (int) ( $competition_counts->pending ?? 0 ) + (int) ( $competition_counts->private ?? 0 );
+
+			if ( 0 === $total_competitions ) {
+				update_option( 'anwpfl_competitions_migrated', 1, true );
+			} else {
+				?>
+				<div class="notice anwp-fl-cmb2-notice">
+					<img src="<?php echo esc_url( self::url( 'admin/img/anwp-fl-icon.png' ) ); ?>" alt="fl icon">
+					<h3>Competitions Data Migration Required</h3>
+					<p>Competition editing is disabled until the competitions data migration is complete. Open the Database Updater tool to run the migration.</p>
+					<p>
+						<?php if ( $premium_too_old ) : ?>
+							<button type="button" class="button" disabled><?php echo esc_html__( 'Database Updater', 'anwp-football-leagues' ); ?></button>
+						<?php else : ?>
+							<a href="<?php echo esc_url( self_admin_url( 'admin.php?page=anwpfl-toolbox' ) ); ?>" class="button button-primary"><?php echo esc_html__( 'Database Updater', 'anwp-football-leagues' ); ?></a>
+						<?php endif; ?>
+					</p>
+					<?php if ( $premium_too_old ) : ?>
+						<p><em style="color: #d6601d;"><?php
+							printf(
+								/* translators: %s: required Premium version */
+								esc_html__( 'Update AnWP Football Leagues Premium to %s or higher first.', 'anwp-football-leagues' ),
+								'0.18.0'
+							);
+						?></em></p>
+					<?php endif; ?>
+					<p class="anwp-notice-clear-both"></p>
+				</div>
+				<?php
+			}
+		}
+
+		/*
+		|--------------------------------------------------------------------
+		| Standings migration required
+		|--------------------------------------------------------------------
+		*/
+		if ( ! get_option( 'anwpfl_standings_migrated' ) && 'anwpfl-toolbox' !== $active_page ) {
+
+			$standing_counts = wp_count_posts( 'anwp_standing' );
+			$total_standings = (int) ( $standing_counts->publish ?? 0 ) + (int) ( $standing_counts->draft ?? 0 ) + (int) ( $standing_counts->pending ?? 0 ) + (int) ( $standing_counts->private ?? 0 );
+
+			if ( 0 === $total_standings ) {
+				update_option( 'anwpfl_standings_migrated', 1, true );
+			} else {
+				?>
+				<div class="notice anwp-fl-cmb2-notice">
+					<img src="<?php echo esc_url( self::url( 'admin/img/anwp-fl-icon.png' ) ); ?>" alt="fl icon">
+					<h3>Standings Data Migration Required</h3>
+					<p>Standing editing is disabled until the standings data migration is complete. Open the Database Updater tool to run the migration.</p>
+					<p>
+						<?php if ( $premium_too_old ) : ?>
+							<button type="button" class="button" disabled><?php echo esc_html__( 'Database Updater', 'anwp-football-leagues' ); ?></button>
+						<?php else : ?>
+							<a href="<?php echo esc_url( self_admin_url( 'admin.php?page=anwpfl-toolbox' ) ); ?>" class="button button-primary"><?php echo esc_html__( 'Database Updater', 'anwp-football-leagues' ); ?></a>
+						<?php endif; ?>
+					</p>
+					<?php if ( $premium_too_old ) : ?>
+						<p><em style="color: #d6601d;"><?php
+							printf(
+								/* translators: %s: required Premium version */
+								esc_html__( 'Update AnWP Football Leagues Premium to %s or higher first.', 'anwp-football-leagues' ),
+								'0.18.0'
+							);
+						?></em></p>
+					<?php endif; ?>
+					<p class="anwp-notice-clear-both"></p>
+				</div>
+				<?php
+			}
+		}
+
+		/*
+		|--------------------------------------------------------------------
+		| Clubs migration required
+		|--------------------------------------------------------------------
+		*/
+		if ( ! get_option( 'anwpfl_clubs_migrated' ) && 'anwpfl-toolbox' !== $active_page ) {
+
+			// Auto-mark flag and skip notice when there are no clubs to migrate.
+			// Covers fresh installs (no CPT posts at all) and environments where
+			// the Toolbox updater's table-existence check fails due to MySQL LIKE
+			// underscore handling.
+			$club_counts = wp_count_posts( 'anwp_club' );
+			$total_clubs = (int) ( $club_counts->publish ?? 0 ) + (int) ( $club_counts->draft ?? 0 ) + (int) ( $club_counts->pending ?? 0 ) + (int) ( $club_counts->private ?? 0 );
+
+			if ( 0 === $total_clubs ) {
+				update_option( 'anwpfl_clubs_migrated', 1, true );
+
+				if ( ! get_option( 'anwpfl_squad_migrated' ) ) {
+					update_option( 'anwpfl_squad_migrated', 1, true );
+				}
+			} else {
+				?>
+				<div class="notice anwp-fl-cmb2-notice">
+					<img src="<?php echo esc_url( self::url( 'admin/img/anwp-fl-icon.png' ) ); ?>" alt="fl icon">
+					<h3>Clubs Data Migration Required</h3>
+					<p>Club editing is disabled until the clubs data migration is complete. Open the Database Updater tool to run the migration.</p>
+					<p>
+						<?php if ( $premium_too_old ) : ?>
+							<button type="button" class="button" disabled><?php echo esc_html__( 'Database Updater', 'anwp-football-leagues' ); ?></button>
+						<?php else : ?>
+							<a href="<?php echo esc_url( self_admin_url( 'admin.php?page=anwpfl-toolbox' ) ); ?>" class="button button-primary"><?php echo esc_html__( 'Database Updater', 'anwp-football-leagues' ); ?></a>
+						<?php endif; ?>
+					</p>
+					<?php if ( $premium_too_old ) : ?>
+						<p><em style="color: #d6601d;"><?php
+							printf(
+								/* translators: %s: required Premium version */
+								esc_html__( 'Update AnWP Football Leagues Premium to %s or higher first.', 'anwp-football-leagues' ),
+								'0.18.0'
+							);
+						?></em></p>
+					<?php endif; ?>
+					<p class="anwp-notice-clear-both"></p>
+				</div>
+				<?php
+			}
+		}
+	}
+
+	/**
+	 * Whether the active Premium plugin is below the schema-compatible threshold for Core 0.18.0+.
+	 *
+	 * Returns false when Premium is not installed (or its main file hasn't loaded), so core-only
+	 * sites and core+inactive-premium installs are not gated.
+	 *
+	 * @return bool
+	 */
+	public static function is_premium_too_old() {
+
+		if ( ! defined( 'ANWP_FL_PREMIUM_VERSION' ) ) {
+			return false;
+		}
+
+		return version_compare( ANWP_FL_PREMIUM_VERSION, '0.17.99', '<' );
+	}
+
+	/**
+	 * Renders admin notice when Premium plugin is older than the schema-compatible threshold.
+	 *
+	 * Trips on the 0.18.0 schema cutover when Core is updated before Premium. Notice only - Premium
+	 * still loads (its own guard may bail with its own notice on a future release). The Core-side
+	 * notice is the early signal in the common Core-first update order.
+	 */
+	public function notice_premium_too_old() {
+
+		if ( ! self::is_premium_too_old() ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		?>
+		<div class="notice notice-warning">
+			<p>
+				<strong><?php esc_html_e( 'AnWP Football Leagues', 'anwp-football-leagues' ); ?>:</strong>
+				<?php
+				printf(
+					/* translators: 1: required Premium version, 2: currently installed Premium version */
+					esc_html__( 'recommends updating AnWP Football Leagues Premium to %1$s or higher (currently %2$s) to match the Core schema. Premium features may behave unexpectedly until updated.', 'anwp-football-leagues' ),
+					'<code>0.18.0</code>',
+					'<code>' . esc_html( ANWP_FL_PREMIUM_VERSION ) . '</code>'
+				);
+				?>
+			</p>
+			<p>
+				<a class="button button-primary" href="<?php echo esc_url( self_admin_url( 'plugins.php' ) ); ?>"><?php esc_html_e( 'Open Plugins page', 'anwp-football-leagues' ); ?></a>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render an inline "data migration required" panel for entity edit screens
+	 * where the FL metabox UI must be hidden until the data migration completes.
+	 * Replaces the editor render so users don't see an editable form whose saves silently no-op.
+	 *
+	 * @param string $heading Translated heading text (e.g. "Clubs Data Migration Required").
+	 */
+	public static function print_migration_required_panel( $heading ) {
+
+		$premium_too_old = self::is_premium_too_old();
+		?>
+		<div class="notice notice-warning inline" style="margin: 12px 0; padding: 12px;">
+			<h3 style="margin-top: 0;"><?php echo esc_html( $heading ); ?></h3>
+			<p><?php esc_html_e( 'Editing is disabled until the data migration is complete. Open the Database Updater tool to run the migration.', 'anwp-football-leagues' ); ?></p>
+			<p>
+				<?php if ( $premium_too_old ) : ?>
+					<button type="button" class="button" disabled><?php esc_html_e( 'Database Updater', 'anwp-football-leagues' ); ?></button>
+				<?php else : ?>
+					<a class="button button-primary" href="<?php echo esc_url( self_admin_url( 'admin.php?page=anwpfl-toolbox' ) ); ?>">
+						<?php esc_html_e( 'Database Updater', 'anwp-football-leagues' ); ?>
+					</a>
+				<?php endif; ?>
+			</p>
+			<?php if ( $premium_too_old ) : ?>
+				<p><em style="color: #d6601d;"><?php
+					printf(
+						/* translators: %s: required Premium version */
+						esc_html__( 'Update AnWP Football Leagues Premium to %s or higher first.', 'anwp-football-leagues' ),
+						'0.18.0'
+					);
+				?></em></p>
+			<?php endif; ?>
+		</div>
+		<?php
 	}
 
 	/**

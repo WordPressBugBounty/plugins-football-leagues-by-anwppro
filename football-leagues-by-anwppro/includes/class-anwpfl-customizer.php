@@ -2111,7 +2111,7 @@ class AnWPFL_Customizer {
 			return $default;
 		}
 
-		if ( ']' === mb_substr( $key, -1 ) ) {
+		if ( str_ends_with( $key, ']' ) ) {
 			$array_parsed = explode( '[', trim( $key, ']' ) );
 
 			if ( empty( $customizer_options[ $section ] ) || ! isset( $customizer_options[ $section ][ $array_parsed[0] ] ) || empty( $array_parsed[1] ) || ! isset( $customizer_options[ $section ][ $array_parsed[0] ][ $array_parsed[1] ] ) ) {
@@ -2150,7 +2150,7 @@ class AnWPFL_Customizer {
 			return $default;
 		}
 
-		if ( ']' === mb_substr( $key, -1 ) ) {
+		if ( str_ends_with( $key, ']' ) ) {
 			$array_parsed = explode( '[', trim( $key, ']' ) );
 
 			if ( empty( $customizer_options[ $section ] ) || ! isset( $customizer_options[ $section ][ $array_parsed[0] ] ) || empty( $array_parsed[1] ) || ! isset( $customizer_options[ $section ][ $array_parsed[0] ][ $array_parsed[1] ] ) ) {

@@ -117,24 +117,25 @@ if ( function_exists( 'anwp_football_leagues_premium' ) && method_exists( anwp_f
 				<div class="anwp-border-top anwp-border-gray-500 anwp-px-3 anwp-py-2 anwp-d-flex anwp-align-items-center">
 					<button
 						type="button"
-						class="button button-primary anwp-d-inline-flex anwp-items-center"
+						id="anwp-shortcode-builder__copy"
+						class="button button-primary fl-btn-icon"
 						fl-x-on:click="copyToClipboard()"
 						fl-x-bind:disabled="copiedRecently"
-						style="min-width: 120px; justify-content: center;"
+						style="min-width: 120px;"
 					>
-						<span class="dashicons dashicons-admin-page anwp-dashicons-16" fl-x-show="!copiedRecently"></span>
-						<span class="anwp-ml-1" fl-x-show="!copiedRecently"><?php echo esc_html__( 'Copy Shortcode', 'anwp-football-leagues' ); ?></span>
+						<span class="dashicons dashicons-admin-page" fl-x-show="!copiedRecently"></span>
+						<span fl-x-show="!copiedRecently"><?php echo esc_html__( 'Copy Shortcode', 'anwp-football-leagues' ); ?></span>
 						<span fl-x-show="copiedRecently" fl-x-cloak>✓ <?php echo esc_html__( 'Copied!', 'anwp-football-leagues' ); ?></span>
 					</button>
 
 					<!-- Parse Shortcode button -->
 					<button
 						type="button"
-						class="button anwp-ml-auto anwp-d-inline-flex anwp-items-center"
+						class="button anwp-ml-auto fl-btn-icon"
 						fl-x-on:click="showParseModal = true"
 					>
-						<span class="dashicons dashicons-upload anwp-dashicons-16"></span>
-						<span class="anwp-ml-1"><?php echo esc_html__( 'Parse Shortcode', 'anwp-football-leagues' ); ?></span>
+						<span class="dashicons dashicons-upload"></span>
+						<span><?php echo esc_html__( 'Parse Shortcode', 'anwp-football-leagues' ); ?></span>
 					</button>
 				</div>
 			</div>
@@ -177,25 +178,25 @@ if ( function_exists( 'anwp_football_leagues_premium' ) && method_exists( anwp_f
 
 					<button
 						type="button"
-						class="button button-small anwp-ml-auto"
+						class="button button-small anwp-ml-auto fl-btn-icon"
 						fl-x-on:click="refreshPreview()"
 						fl-x-bind:disabled="previewLoading"
 						fl-x-show="previewSupported"
 					>
-						<span class="dashicons dashicons-update anwp-dashicons-14" fl-x-bind:class="{ 'anwp-spin': previewLoading }"></span>
-						<span class="anwp-ml-1"><?php echo esc_html__( 'Refresh', 'anwp-football-leagues' ); ?></span>
+						<span class="dashicons dashicons-update" fl-x-bind:class="{ 'anwp-spin': previewLoading }"></span>
+						<span><?php echo esc_html__( 'Refresh', 'anwp-football-leagues' ); ?></span>
 					</button>
 				</div>
 
 				<!-- Preview Accuracy Notice -->
-				<div fl-x-show="previewSupported" class="anwp-px-3 anwp-py-2 anwp-bg-blue-50 anwp-border-bottom anwp-border-gray-300 anwp-text-xs anwp-text-gray-600">
-					<span class="dashicons dashicons-info-outline anwp-dashicons-14 anwp-mr-1" style="vertical-align: middle;"></span>
+				<div fl-x-show="previewSupported" class="anwp-px-3 anwp-py-2 anwp-bg-blue-50 anwp-border-bottom anwp-border-gray-300 anwp-text-xs anwp-text-gray-600 anwp-d-flex anwp-items-center">
+					<span class="dashicons dashicons-info-outline anwp-dashicons-16 anwp-mr-1"></span>
 					<?php echo esc_html__( 'Preview may differ from actual output. Some responsive styles and theme styles are not applied.', 'anwp-football-leagues' ); ?>
 				</div>
 
 				<!-- Preview Not Supported Message -->
 				<div fl-x-show="!previewSupported" class="anwp-p-4 anwp-text-center anwp-text-gray-500">
-					<span class="dashicons dashicons-info-outline anwp-text-gray-400" style="font-size: 32px; width: 32px; height: 32px;"></span>
+					<span class="dashicons dashicons-info-outline anwp-dashicons-32 anwp-text-gray-400"></span>
 					<p class="anwp-m-0 anwp-mt-2"><?php echo esc_html__( 'Preview is not available for this shortcode.', 'anwp-football-leagues' ); ?></p>
 					<p class="anwp-m-0 anwp-mt-1 anwp-text-sm"><?php echo esc_html__( 'Copy the shortcode and paste it into a post or page to see the output.', 'anwp-football-leagues' ); ?></p>
 				</div>

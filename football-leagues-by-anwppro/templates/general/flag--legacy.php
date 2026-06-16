@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.14.14
  *
- * @version       0.16.0
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -30,7 +30,7 @@ if ( empty( $data->country_code ) ) {
 	return;
 }
 
-if ( '___' === mb_substr( $data->country_code, 0, 3 ) ) :
+if ( str_starts_with( $data->country_code, '___' ) ) :
 
 	$custom_country = anwp_football_leagues()->data->get_custom_county_data( $data->country_code );
 

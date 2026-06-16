@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.8.0
  *
- * @version       0.16.0
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -102,7 +102,7 @@ if ( empty( $player ) || absint( $player['player_id'] ) !== absint( $data['playe
 						continue;
 					}
 
-					if ( false === mb_strpos( $player_option, ':' ) ) {
+					if ( ! str_contains( $player_option, ':' ) ) {
 						continue;
 					}
 

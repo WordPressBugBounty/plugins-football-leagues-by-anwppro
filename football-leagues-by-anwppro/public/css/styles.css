@@ -159,43 +159,43 @@
 .anwp-cursor-not-allowed{
   cursor:not-allowed;
 }
-.anwp-d-block{
+.anwp-css-body .anwp-d-block, .anwp-d-block{
   display:block;
 }
 
-.anwp-d-inline{
+.anwp-css-body .anwp-d-inline, .anwp-d-inline{
   display:inline;
 }
 
-.anwp-d-inline-block{
+.anwp-css-body .anwp-d-inline-block, .anwp-d-inline-block{
   display:inline-block;
 }
 
-.anwp-d-none{
+.anwp-css-body .anwp-d-none, .anwp-d-none{
   display:none;
 }
 
-.anwp-hidden{
+.anwp-css-body .anwp-hidden, .anwp-hidden{
   visibility:hidden;
 }
 
-.anwp-d-flex{
+.anwp-css-body .anwp-d-flex, .anwp-d-flex{
   display:flex;
 }
 
-.anwp-d-inline-flex{
+.anwp-css-body .anwp-d-inline-flex, .anwp-d-inline-flex{
   display:inline-flex;
 }
 
-.anwp-d-grid{
+.anwp-css-body .anwp-d-grid, .anwp-d-grid{
   display:grid;
 }
 
-.anwp-d-inline-grid{
+.anwp-css-body .anwp-d-inline-grid, .anwp-d-inline-grid{
   display:inline-grid;
 }
 
-.anwp-sr-only{
+.anwp-css-body .anwp-sr-only, .anwp-sr-only{
   clip:rect(0 0 0 0);
   clip-path:inset(50%);
   height:1px;
@@ -927,6 +927,10 @@
 .anwp-rounded-lg{
   border-radius:8px;
 }
+
+.anwp-rounded-full{
+  border-radius:9999px;
+}
 .anwp-w-10{
   width:10px;
 }
@@ -1495,574 +1499,634 @@
     height:100px;
   }
 }
-.anwp-m-0{
+.anwp-css-body .anwp-m-0, .anwp-m-0{
   margin:0;
 }
 
-.anwp-m-1{
+.anwp-css-body .anwp-m-1, .anwp-m-1{
   margin:5px;
 }
 
-.anwp-m-2{
+.anwp-css-body .anwp-m-2, .anwp-m-2{
   margin:10px;
 }
 
-.anwp-m-3{
+.anwp-css-body .anwp-m-3, .anwp-m-3{
   margin:15px;
 }
 
-.anwp-m-4{
+.anwp-css-body .anwp-m-4, .anwp-m-4{
   margin:20px;
 }
 
-.anwp-m-5{
+.anwp-css-body .anwp-m-5, .anwp-m-5{
   margin:25px;
 }
 
-.anwp-m-6{
+.anwp-css-body .anwp-m-6, .anwp-m-6{
   margin:30px;
 }
 
-.anwp-m-7{
+.anwp-css-body .anwp-m-7, .anwp-m-7{
   margin:35px;
 }
 
-.anwp-m-8{
+.anwp-css-body .anwp-m-8, .anwp-m-8{
   margin:40px;
 }
 
-.anwp-mt-0{
+.anwp-css-body .anwp-mt-0, .anwp-mt-0{
   margin-top:0;
 }
 
-.anwp-mt-1{
+.anwp-css-body .anwp-mt-1, .anwp-mt-1{
   margin-top:5px;
 }
 
-.anwp-mt-2{
+.anwp-css-body .anwp-mt-2, .anwp-mt-2{
   margin-top:10px;
 }
 
-.anwp-mt-3{
+.anwp-css-body .anwp-mt-3, .anwp-mt-3{
   margin-top:15px;
 }
 
-.anwp-mt-4{
+.anwp-css-body .anwp-mt-4, .anwp-mt-4{
   margin-top:20px;
 }
 
-.anwp-mt-5{
+.anwp-css-body .anwp-mt-5, .anwp-mt-5{
   margin-top:25px;
 }
 
-.anwp-mt-6{
+.anwp-css-body .anwp-mt-6, .anwp-mt-6{
   margin-top:30px;
 }
 
-.anwp-mt-7{
+.anwp-css-body .anwp-mt-7, .anwp-mt-7{
   margin-top:35px;
 }
 
-.anwp-mt-8{
+.anwp-css-body .anwp-mt-8, .anwp-mt-8{
   margin-top:40px;
 }
 
-.anwp-mr-0{
+.anwp-css-body .anwp-mr-0, .anwp-mr-0{
   margin-right:0;
 }
 
-.anwp-mr-1{
+.anwp-css-body .anwp-mr-1, .anwp-mr-1{
   margin-right:5px;
 }
 
-.anwp-mr-2{
+.anwp-css-body .anwp-mr-2, .anwp-mr-2{
   margin-right:10px;
 }
 
-.anwp-mr-3{
+.anwp-css-body .anwp-mr-3, .anwp-mr-3{
   margin-right:15px;
 }
 
-.anwp-mr-4{
+.anwp-css-body .anwp-mr-4, .anwp-mr-4{
   margin-right:20px;
 }
 
-.anwp-mr-5{
+.anwp-css-body .anwp-mr-5, .anwp-mr-5{
   margin-right:25px;
 }
 
-.anwp-mr-6{
+.anwp-css-body .anwp-mr-6, .anwp-mr-6{
   margin-right:30px;
 }
 
-.anwp-mr-7{
+.anwp-css-body .anwp-mr-7, .anwp-mr-7{
   margin-right:35px;
 }
 
-.anwp-mr-8{
+.anwp-css-body .anwp-mr-8, .anwp-mr-8{
   margin-right:40px;
 }
 
-.anwp-mb-0{
+.anwp-css-body .anwp-mb-0, .anwp-mb-0{
   margin-bottom:0;
 }
 
-.anwp-mb-1{
+.anwp-css-body .anwp-mb-1, .anwp-mb-1{
   margin-bottom:5px;
 }
 
-.anwp-mb-2{
+.anwp-css-body .anwp-mb-2, .anwp-mb-2{
   margin-bottom:10px;
 }
 
-.anwp-mb-3{
+.anwp-css-body .anwp-mb-3, .anwp-mb-3{
   margin-bottom:15px;
 }
 
-.anwp-mb-4{
+.anwp-css-body .anwp-mb-4, .anwp-mb-4{
   margin-bottom:20px;
 }
 
-.anwp-mb-5{
+.anwp-css-body .anwp-mb-5, .anwp-mb-5{
   margin-bottom:25px;
 }
 
-.anwp-mb-6{
+.anwp-css-body .anwp-mb-6, .anwp-mb-6{
   margin-bottom:30px;
 }
 
-.anwp-mb-7{
+.anwp-css-body .anwp-mb-7, .anwp-mb-7{
   margin-bottom:35px;
 }
 
-.anwp-mb-8{
+.anwp-css-body .anwp-mb-8, .anwp-mb-8{
   margin-bottom:40px;
 }
 
-.anwp-ml-0{
+.anwp-css-body .anwp-ml-0, .anwp-ml-0{
   margin-left:0;
 }
 
-.anwp-ml-1{
+.anwp-css-body .anwp-ml-1, .anwp-ml-1{
   margin-left:5px;
 }
 
-.anwp-ml-2{
+.anwp-css-body .anwp-ml-2, .anwp-ml-2{
   margin-left:10px;
 }
 
-.anwp-ml-3{
+.anwp-css-body .anwp-ml-3, .anwp-ml-3{
   margin-left:15px;
 }
 
-.anwp-ml-4{
+.anwp-css-body .anwp-ml-4, .anwp-ml-4{
   margin-left:20px;
 }
 
-.anwp-ml-5{
+.anwp-css-body .anwp-ml-5, .anwp-ml-5{
   margin-left:25px;
 }
 
-.anwp-ml-6{
+.anwp-css-body .anwp-ml-6, .anwp-ml-6{
   margin-left:30px;
 }
 
-.anwp-ml-7{
+.anwp-css-body .anwp-ml-7, .anwp-ml-7{
   margin-left:35px;
 }
 
-.anwp-ml-8{
+.anwp-css-body .anwp-ml-8, .anwp-ml-8{
   margin-left:40px;
 }
 
-.anwp-mx-0{
+.anwp-css-body .anwp-mx-0, .anwp-mx-0{
   margin-left:0;
   margin-right:0;
 }
 
-.anwp-mx-1{
+.anwp-css-body .anwp-mx-1, .anwp-mx-1{
   margin-left:5px;
   margin-right:5px;
 }
 
-.anwp-mx-2{
+.anwp-css-body .anwp-mx-2, .anwp-mx-2{
   margin-left:10px;
   margin-right:10px;
 }
 
-.anwp-mx-3{
+.anwp-css-body .anwp-mx-3, .anwp-mx-3{
   margin-left:15px;
   margin-right:15px;
 }
 
-.anwp-mx-4{
+.anwp-css-body .anwp-mx-4, .anwp-mx-4{
   margin-left:20px;
   margin-right:20px;
 }
 
-.anwp-mx-5{
+.anwp-css-body .anwp-mx-5, .anwp-mx-5{
   margin-left:25px;
   margin-right:25px;
 }
 
-.anwp-mx-6{
+.anwp-css-body .anwp-mx-6, .anwp-mx-6{
   margin-left:30px;
   margin-right:30px;
 }
 
-.anwp-mx-7{
+.anwp-css-body .anwp-mx-7, .anwp-mx-7{
   margin-left:35px;
   margin-right:35px;
 }
 
-.anwp-mx-8{
+.anwp-css-body .anwp-mx-8, .anwp-mx-8{
   margin-left:40px;
   margin-right:40px;
 }
 
-.anwp-my-0{
+.anwp-css-body .anwp-my-0, .anwp-my-0{
   margin-top:0;
   margin-bottom:0;
 }
 
-.anwp-my-1{
+.anwp-css-body .anwp-my-1, .anwp-my-1{
   margin-top:5px;
   margin-bottom:5px;
 }
 
-.anwp-my-2{
+.anwp-css-body .anwp-my-2, .anwp-my-2{
   margin-top:10px;
   margin-bottom:10px;
 }
 
-.anwp-my-3{
+.anwp-css-body .anwp-my-3, .anwp-my-3{
   margin-top:15px;
   margin-bottom:15px;
 }
 
-.anwp-my-4{
+.anwp-css-body .anwp-my-4, .anwp-my-4{
   margin-top:20px;
   margin-bottom:20px;
 }
 
-.anwp-my-5{
+.anwp-css-body .anwp-my-5, .anwp-my-5{
   margin-top:25px;
   margin-bottom:25px;
 }
 
-.anwp-my-6{
+.anwp-css-body .anwp-my-6, .anwp-my-6{
   margin-top:30px;
   margin-bottom:30px;
 }
 
-.anwp-my-7{
+.anwp-css-body .anwp-my-7, .anwp-my-7{
   margin-top:35px;
   margin-bottom:35px;
 }
 
-.anwp-my-8{
+.anwp-css-body .anwp-my-8, .anwp-my-8{
   margin-top:40px;
   margin-bottom:40px;
 }
 
-.anwp-m-auto{
+.anwp-css-body .anwp-m-auto, .anwp-m-auto{
   margin:auto;
 }
 
-.anwp-mt-auto{
+.anwp-css-body .anwp-mt-auto, .anwp-mt-auto{
   margin-top:auto;
 }
 
-.anwp-mr-auto{
+.anwp-css-body .anwp-mr-auto, .anwp-mr-auto{
   margin-right:auto;
 }
 
-.anwp-mb-auto{
+.anwp-css-body .anwp-mb-auto, .anwp-mb-auto{
   margin-bottom:auto;
 }
 
-.anwp-ml-auto{
+.anwp-css-body .anwp-ml-auto, .anwp-ml-auto{
   margin-left:auto;
 }
 
-.anwp-mx-auto{
+.anwp-css-body .anwp-mx-auto, .anwp-mx-auto{
   margin-left:auto;
   margin-right:auto;
 }
 
-.anwp-my-auto{
+.anwp-css-body .anwp-my-auto, .anwp-my-auto{
   margin-top:auto;
   margin-bottom:auto;
 }
 
-.anwp-p-0{
+.anwp-css-body .anwp-p-0, .anwp-p-0{
   padding:0;
 }
 
-.anwp-p-1{
+.anwp-css-body .anwp-p-1, .anwp-p-1{
   padding:5px;
 }
 
-.anwp-p-2{
+.anwp-css-body .anwp-p-2, .anwp-p-2{
   padding:10px;
 }
 
-.anwp-p-3{
+.anwp-css-body .anwp-p-3, .anwp-p-3{
   padding:15px;
 }
 
-.anwp-p-4{
+.anwp-css-body .anwp-p-4, .anwp-p-4{
   padding:20px;
 }
 
-.anwp-p-5{
+.anwp-css-body .anwp-p-5, .anwp-p-5{
   padding:25px;
 }
 
-.anwp-p-6{
+.anwp-css-body .anwp-p-6, .anwp-p-6{
   padding:30px;
 }
 
-.anwp-p-7{
+.anwp-css-body .anwp-p-7, .anwp-p-7{
   padding:35px;
 }
 
-.anwp-p-8{
+.anwp-css-body .anwp-p-8, .anwp-p-8{
   padding:40px;
 }
 
-.anwp-pt-0{
+.anwp-css-body .anwp-pt-0, .anwp-pt-0{
   padding-top:0;
 }
 
-.anwp-pt-1{
+.anwp-css-body .anwp-pt-1, .anwp-pt-1{
   padding-top:5px;
 }
 
-.anwp-pt-2{
+.anwp-css-body .anwp-pt-2, .anwp-pt-2{
   padding-top:10px;
 }
 
-.anwp-pt-3{
+.anwp-css-body .anwp-pt-3, .anwp-pt-3{
   padding-top:15px;
 }
 
-.anwp-pt-4{
+.anwp-css-body .anwp-pt-4, .anwp-pt-4{
   padding-top:20px;
 }
 
-.anwp-pt-5{
+.anwp-css-body .anwp-pt-5, .anwp-pt-5{
   padding-top:25px;
 }
 
-.anwp-pt-6{
+.anwp-css-body .anwp-pt-6, .anwp-pt-6{
   padding-top:30px;
 }
 
-.anwp-pt-7{
+.anwp-css-body .anwp-pt-7, .anwp-pt-7{
   padding-top:35px;
 }
 
-.anwp-pt-8{
+.anwp-css-body .anwp-pt-8, .anwp-pt-8{
   padding-top:40px;
 }
 
-.anwp-pr-0{
+.anwp-css-body .anwp-pr-0, .anwp-pr-0{
   padding-right:0;
 }
 
-.anwp-pr-1{
+.anwp-css-body .anwp-pr-1, .anwp-pr-1{
   padding-right:5px;
 }
 
-.anwp-pr-2{
+.anwp-css-body .anwp-pr-2, .anwp-pr-2{
   padding-right:10px;
 }
 
-.anwp-pr-3{
+.anwp-css-body .anwp-pr-3, .anwp-pr-3{
   padding-right:15px;
 }
 
-.anwp-pr-4{
+.anwp-css-body .anwp-pr-4, .anwp-pr-4{
   padding-right:20px;
 }
 
-.anwp-pr-5{
+.anwp-css-body .anwp-pr-5, .anwp-pr-5{
   padding-right:25px;
 }
 
-.anwp-pr-6{
+.anwp-css-body .anwp-pr-6, .anwp-pr-6{
   padding-right:30px;
 }
 
-.anwp-pr-7{
+.anwp-css-body .anwp-pr-7, .anwp-pr-7{
   padding-right:35px;
 }
 
-.anwp-pr-8{
+.anwp-css-body .anwp-pr-8, .anwp-pr-8{
   padding-right:40px;
 }
 
-.anwp-pb-0{
+.anwp-css-body .anwp-pb-0, .anwp-pb-0{
   padding-bottom:0;
 }
 
-.anwp-pb-1{
+.anwp-css-body .anwp-pb-1, .anwp-pb-1{
   padding-bottom:5px;
 }
 
-.anwp-pb-2{
+.anwp-css-body .anwp-pb-2, .anwp-pb-2{
   padding-bottom:10px;
 }
 
-.anwp-pb-3{
+.anwp-css-body .anwp-pb-3, .anwp-pb-3{
   padding-bottom:15px;
 }
 
-.anwp-pb-4{
+.anwp-css-body .anwp-pb-4, .anwp-pb-4{
   padding-bottom:20px;
 }
 
-.anwp-pb-5{
+.anwp-css-body .anwp-pb-5, .anwp-pb-5{
   padding-bottom:25px;
 }
 
-.anwp-pb-6{
+.anwp-css-body .anwp-pb-6, .anwp-pb-6{
   padding-bottom:30px;
 }
 
-.anwp-pb-7{
+.anwp-css-body .anwp-pb-7, .anwp-pb-7{
   padding-bottom:35px;
 }
 
-.anwp-pb-8{
+.anwp-css-body .anwp-pb-8, .anwp-pb-8{
   padding-bottom:40px;
 }
 
-.anwp-pl-0{
+.anwp-css-body .anwp-pl-0, .anwp-pl-0{
   padding-left:0;
 }
 
-.anwp-pl-1{
+.anwp-css-body .anwp-pl-1, .anwp-pl-1{
   padding-left:5px;
 }
 
-.anwp-pl-2{
+.anwp-css-body .anwp-pl-2, .anwp-pl-2{
   padding-left:10px;
 }
 
-.anwp-pl-3{
+.anwp-css-body .anwp-pl-3, .anwp-pl-3{
   padding-left:15px;
 }
 
-.anwp-pl-4{
+.anwp-css-body .anwp-pl-4, .anwp-pl-4{
   padding-left:20px;
 }
 
-.anwp-pl-5{
+.anwp-css-body .anwp-pl-5, .anwp-pl-5{
   padding-left:25px;
 }
 
-.anwp-pl-6{
+.anwp-css-body .anwp-pl-6, .anwp-pl-6{
   padding-left:30px;
 }
 
-.anwp-pl-7{
+.anwp-css-body .anwp-pl-7, .anwp-pl-7{
   padding-left:35px;
 }
 
-.anwp-pl-8{
+.anwp-css-body .anwp-pl-8, .anwp-pl-8{
   padding-left:40px;
 }
 
-.anwp-px-0{
+.anwp-css-body .anwp-px-0, .anwp-px-0{
   padding-left:0;
   padding-right:0;
 }
 
-.anwp-px-1{
+.anwp-css-body .anwp-px-1, .anwp-px-1{
   padding-left:5px;
   padding-right:5px;
 }
 
-.anwp-px-2{
+.anwp-css-body .anwp-px-2, .anwp-px-2{
   padding-left:10px;
   padding-right:10px;
 }
 
-.anwp-px-3{
+.anwp-css-body .anwp-px-3, .anwp-px-3{
   padding-left:15px;
   padding-right:15px;
 }
 
-.anwp-px-4{
+.anwp-css-body .anwp-px-4, .anwp-px-4{
   padding-left:20px;
   padding-right:20px;
 }
 
-.anwp-px-5{
+.anwp-css-body .anwp-px-5, .anwp-px-5{
   padding-left:25px;
   padding-right:25px;
 }
 
-.anwp-px-6{
+.anwp-css-body .anwp-px-6, .anwp-px-6{
   padding-left:30px;
   padding-right:30px;
 }
 
-.anwp-px-7{
+.anwp-css-body .anwp-px-7, .anwp-px-7{
   padding-left:35px;
   padding-right:35px;
 }
 
-.anwp-px-8{
+.anwp-css-body .anwp-px-8, .anwp-px-8{
   padding-left:40px;
   padding-right:40px;
 }
 
-.anwp-py-0{
+.anwp-css-body .anwp-py-0, .anwp-py-0{
   padding-top:0;
   padding-bottom:0;
 }
 
-.anwp-py-1{
+.anwp-css-body .anwp-py-1, .anwp-py-1{
   padding-top:5px;
   padding-bottom:5px;
 }
 
-.anwp-py-2{
+.anwp-css-body .anwp-py-2, .anwp-py-2{
   padding-top:10px;
   padding-bottom:10px;
 }
 
-.anwp-py-3{
+.anwp-css-body .anwp-py-3, .anwp-py-3{
   padding-top:15px;
   padding-bottom:15px;
 }
 
-.anwp-py-4{
+.anwp-css-body .anwp-py-4, .anwp-py-4{
   padding-top:20px;
   padding-bottom:20px;
 }
 
-.anwp-py-5{
+.anwp-css-body .anwp-py-5, .anwp-py-5{
   padding-top:25px;
   padding-bottom:25px;
 }
 
-.anwp-py-6{
+.anwp-css-body .anwp-py-6, .anwp-py-6{
   padding-top:30px;
   padding-bottom:30px;
 }
 
-.anwp-py-7{
+.anwp-css-body .anwp-py-7, .anwp-py-7{
   padding-top:35px;
   padding-bottom:35px;
 }
 
-.anwp-py-8{
+.anwp-css-body .anwp-py-8, .anwp-py-8{
   padding-top:40px;
   padding-bottom:40px;
+}
+
+.anwp-css-body .anwp-m-0-5, .anwp-m-0-5{
+  margin:2px;
+}
+
+.anwp-css-body .anwp-mt-0-5, .anwp-mt-0-5{
+  margin-top:2px;
+}
+
+.anwp-css-body .anwp-mr-0-5, .anwp-mr-0-5{
+  margin-right:2px;
+}
+
+.anwp-css-body .anwp-mb-0-5, .anwp-mb-0-5{
+  margin-bottom:2px;
+}
+
+.anwp-css-body .anwp-ml-0-5, .anwp-ml-0-5{
+  margin-left:2px;
+}
+
+.anwp-css-body .anwp-mx-0-5, .anwp-mx-0-5{
+  margin-left:2px;
+  margin-right:2px;
+}
+
+.anwp-css-body .anwp-my-0-5, .anwp-my-0-5{
+  margin-top:2px;
+  margin-bottom:2px;
+}
+
+.anwp-css-body .anwp-p-0-5, .anwp-p-0-5{
+  padding:2px;
+}
+
+.anwp-css-body .anwp-pt-0-5, .anwp-pt-0-5{
+  padding-top:2px;
+}
+
+.anwp-css-body .anwp-pr-0-5, .anwp-pr-0-5{
+  padding-right:2px;
+}
+
+.anwp-css-body .anwp-pb-0-5, .anwp-pb-0-5{
+  padding-bottom:2px;
+}
+
+.anwp-css-body .anwp-pl-0-5, .anwp-pl-0-5{
+  padding-left:2px;
+}
+
+.anwp-css-body .anwp-px-0-5, .anwp-px-0-5{
+  padding-left:2px;
+  padding-right:2px;
+}
+
+.anwp-css-body .anwp-py-0-5, .anwp-py-0-5{
+  padding-top:2px;
+  padding-bottom:2px;
 }
 .anwp-fill-current{
   fill:currentColor;
@@ -2154,10 +2218,6 @@
   font-family:SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
-.anwp-text-justify{
-  text-align:justify;
-}
-
 .anwp-text-wrap{
   white-space:normal;
 }
@@ -2166,62 +2226,6 @@
   white-space:nowrap;
 }
 
-.anwp-text-left{
-  text-align:left;
-}
-
-.anwp-text-right{
-  text-align:right;
-}
-
-.anwp-text-center{
-  text-align:center;
-}
-
-@media (min-width: 576px){
-  .anwp-text-sm-left{
-    text-align:left;
-  }
-  .anwp-text-sm-right{
-    text-align:right;
-  }
-  .anwp-text-sm-center{
-    text-align:center;
-  }
-}
-@media (min-width: 768px){
-  .anwp-text-md-left{
-    text-align:left;
-  }
-  .anwp-text-md-right{
-    text-align:right;
-  }
-  .anwp-text-md-center{
-    text-align:center;
-  }
-}
-@media (min-width: 992px){
-  .anwp-text-lg-left{
-    text-align:left;
-  }
-  .anwp-text-lg-right{
-    text-align:right;
-  }
-  .anwp-text-lg-center{
-    text-align:center;
-  }
-}
-@media (min-width: 1200px){
-  .anwp-text-xl-left{
-    text-align:left;
-  }
-  .anwp-text-xl-right{
-    text-align:right;
-  }
-  .anwp-text-xl-center{
-    text-align:center;
-  }
-}
 .anwp-text-lowercase{
   text-transform:lowercase;
 }
@@ -2316,6 +2320,81 @@
   text-decoration:none !important;
   box-shadow:none !important;
   border-bottom:none !important;
+}
+.anwp-css-body .anwp-text-justify, .anwp-text-justify{
+  text-align:justify;
+}
+
+.anwp-css-body .anwp-text-left,
+.anwp-text-left{
+  text-align:left;
+}
+
+.anwp-css-body .anwp-text-right,
+.anwp-text-right{
+  text-align:right;
+}
+
+.anwp-css-body .anwp-text-center,
+.anwp-text-center{
+  text-align:center;
+}
+
+@media (min-width: 576px){
+  .anwp-css-body .anwp-text-sm-left,
+  .anwp-text-sm-left{
+    text-align:left;
+  }
+  .anwp-css-body .anwp-text-sm-right,
+  .anwp-text-sm-right{
+    text-align:right;
+  }
+  .anwp-css-body .anwp-text-sm-center,
+  .anwp-text-sm-center{
+    text-align:center;
+  }
+}
+@media (min-width: 768px){
+  .anwp-css-body .anwp-text-md-left,
+  .anwp-text-md-left{
+    text-align:left;
+  }
+  .anwp-css-body .anwp-text-md-right,
+  .anwp-text-md-right{
+    text-align:right;
+  }
+  .anwp-css-body .anwp-text-md-center,
+  .anwp-text-md-center{
+    text-align:center;
+  }
+}
+@media (min-width: 992px){
+  .anwp-css-body .anwp-text-lg-left,
+  .anwp-text-lg-left{
+    text-align:left;
+  }
+  .anwp-css-body .anwp-text-lg-right,
+  .anwp-text-lg-right{
+    text-align:right;
+  }
+  .anwp-css-body .anwp-text-lg-center,
+  .anwp-text-lg-center{
+    text-align:center;
+  }
+}
+@media (min-width: 1200px){
+  .anwp-css-body .anwp-text-xl-left,
+  .anwp-text-xl-left{
+    text-align:left;
+  }
+  .anwp-css-body .anwp-text-xl-right,
+  .anwp-text-xl-right{
+    text-align:right;
+  }
+  .anwp-css-body .anwp-text-xl-center,
+  .anwp-text-xl-center{
+    text-align:center;
+  }
 }
 .anwp-z-0{
   z-index:0;
@@ -4668,11 +4747,6 @@ use[href="#icon-ball"]{
   background-color:rgba(35, 35, 35, 0);
 }
 
-@media screen and (max-height: 900px){
-  .modaal-video-container{
-    max-height:507px;
-  }
-}
 .anwp-v-videos-yt-modal{
   z-index:1000005 !important;
 }

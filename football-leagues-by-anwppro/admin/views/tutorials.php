@@ -110,34 +110,34 @@ if ( function_exists( 'anwp_fl_pro' ) ) {
 // Tutorials & Articles with badges: 'pro', 'core', 'new', 'updated'
 $tutorials = [
 	[
+		'title'  => __( 'Site Migration', 'anwp-football-leagues' ),
+		'url'    => 'https://anwp.pro/docs/football-leagues/pro-features/site-migration/',
+		'badges' => [ 'pro', 'new' ],
+	],
+	[
+		'title'  => __( 'Public REST API', 'anwp-football-leagues' ),
+		'url'    => 'https://anwp.pro/docs/football-leagues/pro-features/rest-api/',
+		'badges' => [ 'pro', 'new' ],
+	],
+	[
+		'title'  => __( 'Migration Guide v0.18.0 (theme overrides)', 'anwp-football-leagues' ),
+		'url'    => 'https://anwp.pro/docs/football-leagues/developers/migration-v0-18-0/',
+		'badges' => [ 'core', 'new' ],
+	],
+	[
 		'title'  => __( 'User Timezone', 'anwp-football-leagues' ),
 		'url'    => 'https://anwp.pro/docs/football-leagues/pro-features/user-timezone/',
-		'badges' => [ 'pro', 'new' ],
+		'badges' => [ 'pro' ],
 	],
 	[
 		'title'  => __( 'Club History (Historical Logos & Names)', 'anwp-football-leagues' ),
 		'url'    => 'https://anwp.pro/docs/football-leagues/pro-features/club-history-historical-logos-names/',
-		'badges' => [ 'pro', 'new' ],
+		'badges' => [ 'pro' ],
 	],
 	[
 		'title'  => __( 'Entity Links', 'anwp-football-leagues' ),
 		'url'    => 'https://anwp.pro/docs/football-leagues/pro-features/entity-links/',
-		'badges' => [ 'pro', 'new' ],
-	],
-	[
-		'title'  => __( 'AI Writer', 'anwp-football-leagues' ),
-		'url'    => 'https://anwp.pro/docs/football-leagues/pro-features/ai-writer/',
-		'badges' => [ 'pro', 'updated' ],
-	],
-	[
-		'title'  => __( 'Tag Posts Shortcode', 'anwp-football-leagues' ),
-		'url'    => 'https://anwp.pro/docs/football-leagues/pro-features/tag-posts-shortcode/',
-		'badges' => [ 'pro', 'updated' ],
-	],
-	[
-		'title'  => __( 'Shortcode Builder', 'anwp-football-leagues' ),
-		'url'    => 'https://anwp.pro/docs/football-leagues/display/shortcode-builder/',
-		'badges' => [ 'core', 'updated' ],
+		'badges' => [ 'pro' ],
 	],
 ];
 ?>
@@ -284,7 +284,7 @@ $tutorials = [
 					</p>
 				</div>
 				<div class="anwp-shrink-0">
-					<a href="https://anwp.pro/football-leagues-premium/" target="_blank" class="button button-primary anwp-d-flex anwp-items-center anwp-justify-center">
+					<a href="https://anwp.pro/football-leagues-premium/" target="_blank" class="button button-primary fl-btn-icon anwp-d-flex anwp-items-center anwp-justify-center">
 						<span class="dashicons dashicons-cart anwp-dashicons-18"></span>
 						<span class="anwp-ml-2"><?php echo esc_html__( 'Get Premium', 'anwp-football-leagues' ); ?></span>
 					</a>

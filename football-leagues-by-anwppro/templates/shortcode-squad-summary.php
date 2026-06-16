@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.5.0
  *
- * @version       0.16.0
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Check required params
-if ( empty( $data->club_id ) || empty( $data->season_id ) ) {
+if ( empty( $data->club_id ) ) {
 	return;
 }
 
@@ -36,15 +36,22 @@ $data = (object) wp_parse_args(
 try {
 	$squad_data    = [];
 	$squad_display = anwp_football_leagues()->club->get_squad_display_options( $data->club_id, $data->season_id );
-	$subteam_list  = get_post_meta( $data->club_id, '_anwpfl_subteam_list', true );
+	$club_details  = json_decode( anwp_fl()->club->get_row( (int) $data->club_id )['club_details'] ?? '{}', true );
+	$subteam_list  = $club_details['subteam_list'] ?? [];
 
 	if ( ! empty( $subteam_list ) && is_array( $subteam_list ) ) {
 		foreach ( $subteam_list as $subteam_item ) {
+			// Subteam IDs ship in two shapes: legacy 'subteam' key (postmeta era,
+			// pre-0.18.0) and new 'club_id' key (Vue editor + sanitize_subteam_list
+			// since 0.17.3). Read both so site-migrated and legacy data render
+			// without "Undefined array key" warnings.
+			$subteam_id = absint( $subteam_item['club_id'] ?? ( $subteam_item['subteam'] ?? 0 ) );
+
 			$squad_data[] = [
-				'team_id' => $subteam_item['subteam'],
+				'team_id' => $subteam_id,
 				'title'   => $subteam_item['title'],
-				'squad'   => anwp_football_leagues()->club->tmpl_prepare_club_squad( $subteam_item['subteam'], $data->season_id, true ),
-				'staff'   => anwp_football_leagues()->club->tmpl_prepare_club_staff( $subteam_item['subteam'], $data->season_id ),
+				'squad'   => anwp_football_leagues()->club->tmpl_prepare_club_squad( $subteam_id, $data->season_id, true ),
+				'staff'   => anwp_football_leagues()->club->tmpl_prepare_club_staff( $subteam_id, $data->season_id ),
 			];
 		}
 	}
@@ -92,7 +99,7 @@ $positions_l10n = [
 			'general/no-data'
 		);
 	else :
-		$root_team_title = get_post_meta( $data->club_id, '_anwpfl_root_team_title', true );
+		$root_team_title = $club_details['root_team_title'] ?? '';
 		?>
 		<div class="club-subteams pb-3 pt-1 d-flex flex-wrap">
 			<div class="m-1 club-subteams__item club-subteams__squad anwp-fl-btn d-flex align-items-center position-relative py-0 club-subteams__item--active anwp-cursor-default"
@@ -100,8 +107,11 @@ $positions_l10n = [
 				<?php echo esc_html( $root_team_title ); ?>
 			</div>
 
-			<?php foreach ( $subteam_list as $subteam_item ) : ?>
-				<div class="m-1 club-subteams__item club-subteams__squad anwp-fl-btn d-flex align-items-center position-relative py-0" data-filter-value="<?php echo esc_attr( $subteam_item['subteam'] ); ?>">
+			<?php
+			foreach ( $subteam_list as $subteam_item ) :
+				$subteam_id = absint( $subteam_item['club_id'] ?? ( $subteam_item['subteam'] ?? 0 ) );
+				?>
+				<div class="m-1 club-subteams__item club-subteams__squad anwp-fl-btn d-flex align-items-center position-relative py-0" data-filter-value="<?php echo esc_attr( $subteam_id ); ?>">
 					<?php echo esc_html( $subteam_item['title'] ); ?>
 				</div>
 			<?php endforeach; ?>
@@ -155,7 +165,7 @@ $positions_l10n = [
 						</div>
 						<div class="squad-rows__name d-flex flex-column align-items-start justify-content-center anwp-text-base anwp-text-left anwp-font-semibold"
 							data-filter="<?php echo esc_html( $team_squad_data['team_id'] ); ?>">
-							<a href="<?php echo esc_url( get_permalink( $player_id ) ); ?>" class="anwp-link-without-effects">
+							<a href="<?php echo esc_url( $player['link'] ?? '' ); ?>" class="anwp-link-without-effects">
 								<?php
 								$player_name_arr = explode( ' ', $player['name'], 2 );
 								echo '<span class="squad-rows__name-1">' . esc_html( $player_name_arr[0] ) . '</span>';
@@ -262,7 +272,7 @@ $positions_l10n = [
 						<img loading="lazy" width="60" height="60" class="squad-rows__photo anwp-object-contain m-2 anwp-w-60 anwp-h-60" src="<?php echo esc_url( $staff_member['photo'] ?: $default_photo ); ?>" alt="<?php echo esc_attr( $staff_member['name'] ); ?>">
 					</div>
 					<div class="squad-rows__name d-flex flex-column align-items-start justify-content-center anwp-text-base anwp-text-left anwp-font-semibold" data-filter="<?php echo esc_html( $team_squad_data['team_id'] ); ?>">
-						<a href="<?php echo esc_url( get_permalink( $staff_id ) ); ?>" class="anwp-link-without-effects">
+						<a href="<?php echo esc_url( $staff_member['link'] ?? '' ); ?>" class="anwp-link-without-effects">
 							<?php
 							$player_name_arr = explode( ' ', $staff_member['name'], 2 );
 							echo '<span class="squad-rows__name-1">' . esc_html( $player_name_arr[0] ) . '</span>';

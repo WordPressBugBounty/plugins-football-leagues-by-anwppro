@@ -3,176 +3,25 @@
 /**
  * TinyMCE Shortcode Plugin
  *
- * Uses shared Alpine.js shortcodeBuilder component.
+ * Uses shared Alpine.js shortcodeBuilder component with native <dialog>.
  *
  * @since 0.10.8
  * @since 0.17.0 Refactored to use Alpine.js shortcodeBuilder component
+ * @since 0.17.3 Replaced modaal with native <dialog>, dropped jQuery dependency
  */
 
-// Initialize plugin object
-window.FootballLeaguesShortcodeButton = window.FootballLeaguesShortcodeButton || {};
-
-// Localization vars
-window._fl_shortcodes_l10n = window._fl_shortcodes_l10n || {};
-
-( function( window, document, $, plugin ) {
+( function( window, document ) {
 	'use strict';
 
-	var $c = {};
+	var dialog = null;
+	var backdrop = null;
 
-	plugin.init = function() {
-		plugin.cache();
-		plugin.bindEvents();
-
-		tinymce.create( 'tinymce.plugins.football_leagues_button', {
-			init: function( editor ) {
-				editor.addButton( 'football_leagues', {
-					title: _fl_shortcodes_l10n.football_leagues,
-					icon: 'icon anwpfl-button-icon',
-					classes: 'anwpfl-shortcode-modal-bump',
-					onclick: function() {
-						if ( $.fn.modaal && $c.body.hasClass( 'block-editor-page' ) ) {
-							$c.modal.modaal( 'open' );
-						}
-					}
-				} );
-			},
-			createControl: function() {
-				return null;
-			}
-		} );
-
-		tinymce.PluginManager.add( 'football_leagues_button', tinymce.plugins.football_leagues_button );
-	};
-
-	plugin.cache = function() {
-		$c.window = $( window );
-		$c.body = $( document.body );
-		$c.xhr = null;
-	};
-
-	plugin.bindEvents = function() {
-		if ( document.readyState === 'complete' ) {
-			plugin.onPageReady();
-		} else {
-			window.onload = plugin.onPageReady;
-		}
-	};
-
-	plugin.onPageReady = function() {
-		if ( ! $.fn.modaal ) {
-			return;
-		}
-
-		var modalOptions = {};
-
-		if ( $c.body.hasClass( 'block-editor-page' ) ) {
-			$c.body.append( '<a href="#anwpfl-shortcode-modal" id="anwpfl-shortcode-modal-bump"></a><div id="anwpfl-shortcode-modal"></div>' );
-			$c.modal = $( '#anwpfl-shortcode-modal-bump' );
-			$c.modalWrapper = $( '#anwpfl-shortcode-modal' );
-
-			modalOptions = {
-				custom_class: 'anwpfl-shortcode-modal',
-				hide_close: true,
-				animation: 'none',
-				after_open: function() {
-					plugin.initAlpineComponent();
-				},
-				after_close: function() {
-					tinymce.activeEditor.focus();
-					plugin.cleanupAlpineComponent();
-				}
-			};
-		} else {
-			$c.body.append( '<div id="anwpfl-shortcode-modal"></div>' );
-			$c.modal = $( '.mce-anwpfl-shortcode-modal-bump' );
-			$c.modalWrapper = $( '#anwpfl-shortcode-modal' );
-
-			modalOptions = {
-				content_source: '#anwpfl-shortcode-modal',
-				custom_class: 'anwpfl-shortcode-modal',
-				hide_close: true,
-				animation: 'none',
-				after_open: function() {
-					plugin.initAlpineComponent();
-				},
-				after_close: function() {
-					tinymce.activeEditor.focus();
-					plugin.cleanupAlpineComponent();
-				}
-			};
-		}
-
-		// Init modal
-		$c.modal.modaal( modalOptions );
-
-		// Create modal structure with Alpine component
-		plugin.createModalContent();
-	};
-
-	plugin.createModalContent = function() {
-		var shortcodeOptions = plugin.getShortcodeOptionsHtml();
-
-		var modalHtml = `
-			<div
-				class="anwpfl-shortcode-modal-content"
-				fl-x-data="shortcodeBuilder({ isModal: true })"
-				fl-x-on:shortcode-inserted.window="closeShortcodeModal()"
-			>
-				<div class="anwpfl-shortcode-modal__header d-flex align-items-center p-3 border-bottom">
-					<label for="anwpfl-shortcode-modal__selector" class="mr-2">${ _fl_shortcodes_l10n.shortcode || 'Shortcode' }</label>
-					<select
-						id="anwpfl-shortcode-modal__selector"
-						class="flex-grow-1"
-						fl-x-model="selectedShortcode"
-						fl-x-on:change="loadForm()"
-					>
-						<option value="">- ${ _fl_shortcodes_l10n.select || 'select' } -</option>
-						${ shortcodeOptions }
-					</select>
-					<span class="spinner ml-2" fl-x-bind:class="{ 'is-active': loading }"></span>
-				</div>
-
-				<div
-					class="anwpfl-shortcode-modal__content p-3"
-					style="max-height: 400px; overflow-y: auto;"
-					fl-x-ref="formWrap"
-					fl-x-html="formHtml"
-					fl-x-on:input.debounce.150ms="buildShortcode()"
-					fl-x-on:change="buildShortcode()"
-					fl-x-on:update-x-fl-outer-wrapper.window="buildShortcode()"
-				></div>
-
-				<div class="anwpfl-shortcode-modal__footer p-3 border-top">
-					<button
-						type="button"
-						class="button mr-2"
-						onclick="window.closeShortcodeModal()"
-					>${ _fl_shortcodes_l10n.cancel || 'Close' }</button>
-					<button
-						type="button"
-						class="button button-primary"
-						fl-x-on:click="insertToEditor()"
-						fl-x-bind:disabled="!shortcodeString"
-					>${ _fl_shortcodes_l10n.insert || 'Insert Shortcode' }</button>
-				</div>
-			</div>
-		`;
-
-		$c.modalWrapper.html( modalHtml );
-
-		// Store localization data for Alpine component
-		window._fl_shortcode_builder_l10n = window._fl_shortcode_builder_l10n || {
-			nonce: _fl_shortcodes_l10n.nonce,
-			copied_to_clipboard: _fl_shortcodes_l10n.copied_to_clipboard || 'Copied to Clipboard'
-		};
-	};
-
-	plugin.getShortcodeOptionsHtml = function() {
+	function getShortcodeOptionsHtml() {
 		var html = '';
+		var l10n = window._fl_shortcodes_l10n || {};
 
-		// Core options first (already sorted alphabetically from PHP)
-		var coreOptions = _fl_shortcodes_l10n.shortcode_options || {};
+		// Core options (sorted alphabetically)
+		var coreOptions = l10n.shortcode_options || {};
 		var coreKeys = Object.keys( coreOptions ).sort( function( a, b ) {
 			return coreOptions[ a ].localeCompare( coreOptions[ b ] );
 		} );
@@ -181,8 +30,8 @@ window._fl_shortcodes_l10n = window._fl_shortcodes_l10n || {};
 			html += '<option value="' + key + '">' + coreOptions[ key ] + '</option>';
 		} );
 
-		// Premium options after core (already sorted alphabetically from PHP)
-		var premiumOptions = _fl_shortcodes_l10n.shortcode_options_premium || {};
+		// Premium options (sorted alphabetically)
+		var premiumOptions = l10n.shortcode_options_premium || {};
 		var premiumKeys = Object.keys( premiumOptions ).sort( function( a, b ) {
 			return premiumOptions[ a ].localeCompare( premiumOptions[ b ] );
 		} );
@@ -192,41 +41,146 @@ window._fl_shortcodes_l10n = window._fl_shortcodes_l10n || {};
 		} );
 
 		return html;
-	};
+	}
 
-	plugin.initAlpineComponent = function() {
-		// Initialize Alpine on modal content if Alpine is available
-		if ( typeof Alpine !== 'undefined' && $c.modalWrapper.length ) {
-			var el = $c.modalWrapper.find( '.anwpfl-shortcode-modal-content' )[ 0 ];
-			if ( el && ! el._x_dataStack ) {
-				Alpine.initTree( el );
+	function createDialog() {
+		if ( dialog ) {
+			return;
+		}
+
+		var l10n = window._fl_shortcodes_l10n || {};
+
+		dialog = document.createElement( 'dialog' );
+		dialog.id = 'anwpfl-shortcode-dialog';
+
+		dialog.innerHTML =
+			'<div' +
+			' class="anwpfl-shortcode-modal-content"' +
+			' fl-x-data="shortcodeBuilder({ isModal: true })"' +
+			' fl-x-on:shortcode-inserted.window="closeShortcodeDialog()"' +
+			'>' +
+				'<div class="anwpfl-shortcode-dialog__header">' +
+					'<label for="anwpfl-shortcode-dialog__selector">' + ( l10n.shortcode || 'Shortcode' ) + '</label>' +
+					'<select' +
+					' id="anwpfl-shortcode-dialog__selector"' +
+					' fl-x-model="selectedShortcode"' +
+					' fl-x-on:change="loadForm()"' +
+					'>' +
+						'<option value="">- ' + ( l10n.select || 'select' ) + ' -</option>' +
+						getShortcodeOptionsHtml() +
+					'</select>' +
+					'<span class="spinner" fl-x-bind:class="{ \'is-active\': loading }"></span>' +
+				'</div>' +
+				'<div' +
+				' class="anwpfl-shortcode-dialog__content"' +
+				' fl-x-ref="formWrap"' +
+				' fl-x-html="formHtml"' +
+				' fl-x-on:input.debounce.150ms="buildShortcode()"' +
+				' fl-x-on:change="buildShortcode()"' +
+				' fl-x-on:update-x-fl-outer-wrapper.window="buildShortcode()"' +
+				'></div>' +
+				'<div class="anwpfl-shortcode-dialog__footer">' +
+					'<button type="button" class="button" onclick="window.closeShortcodeDialog()">' + ( l10n.cancel || 'Close' ) + '</button>' +
+					'<button' +
+					' type="button"' +
+					' class="button button-primary"' +
+					' fl-x-on:click="insertToEditor()"' +
+					' fl-x-bind:disabled="!shortcodeString"' +
+					'>' + ( l10n.insert || 'Insert Shortcode' ) + '</button>' +
+				'</div>' +
+			'</div>';
+
+		// Manual backdrop (dialog.show() doesn't create one)
+		backdrop = document.createElement( 'div' );
+		backdrop.id = 'anwpfl-shortcode-dialog-backdrop';
+		backdrop.addEventListener( 'click', function() {
+			window.closeShortcodeDialog();
+		} );
+
+		document.body.appendChild( backdrop );
+		document.body.appendChild( dialog );
+
+		// Handle Esc key (dialog.show() doesn't fire cancel event)
+		dialog.addEventListener( 'keydown', function( e ) {
+			if ( e.key === 'Escape' ) {
+				e.preventDefault();
+				window.closeShortcodeDialog();
+			}
+		} );
+
+		// Store localization data for Alpine component
+		window._fl_shortcode_builder_l10n = window._fl_shortcode_builder_l10n || {
+			nonce: l10n.nonce,
+			copied_to_clipboard: l10n.copied_to_clipboard || 'Copied to Clipboard'
+		};
+	}
+
+	/**
+	 * Reset Alpine component state.
+	 *
+	 * Alpine's mutation observer (from the admin-global bundle) auto-initializes
+	 * fl-x-data elements when appended to the DOM - no manual initTree needed.
+	 * Using window.Alpine would hit the wrong instance (public bundle).
+	 */
+	function cleanupAlpineComponent() {
+		if ( ! dialog ) {
+			return;
+		}
+
+		var el = dialog.querySelector( '.anwpfl-shortcode-modal-content' );
+
+		if ( el && el._x_dataStack ) {
+			var data = el._x_dataStack[0];
+
+			if ( data ) {
+				data.destroy();
+				data.selectedShortcode = '';
+				data.formHtml = '';
+				data.shortcodeString = '';
 			}
 		}
-	};
-
-	plugin.cleanupAlpineComponent = function() {
-		// Reset the component state
-		if ( typeof Alpine !== 'undefined' && $c.modalWrapper.length ) {
-			var el = $c.modalWrapper.find( '.anwpfl-shortcode-modal-content' )[ 0 ];
-			if ( el && el._x_dataStack ) {
-				// Get the component data and reset it
-				var data = Alpine.$data( el );
-				if ( data ) {
-					data.destroy();
-					data.selectedShortcode = '';
-					data.formHtml = '';
-					data.shortcodeString = '';
-				}
-			}
-		}
-	};
+	}
 
 	// Global close function
-	window.closeShortcodeModal = function() {
-		if ( $c.modal && $.fn.modaal ) {
-			$c.modal.modaal( 'close' );
+	window.closeShortcodeDialog = function() {
+		if ( dialog && dialog.open ) {
+			dialog.close();
+			backdrop.hidden = true;
+			cleanupAlpineComponent();
+
+			if ( typeof tinymce !== 'undefined' && tinymce.activeEditor ) {
+				tinymce.activeEditor.focus();
+			}
 		}
 	};
 
-	plugin.init();
-}( window, document, jQuery, window.FootballLeaguesShortcodeButton ) );
+	// Global open function (used by TinyMCE onclick)
+	window.openShortcodeDialog = function() {
+		createDialog();
+
+		if ( dialog && ! dialog.open ) {
+			backdrop.hidden = false;
+			dialog.show();
+		}
+	};
+
+	// Register TinyMCE plugin
+	if ( typeof tinymce !== 'undefined' ) {
+		tinymce.create( 'tinymce.plugins.football_leagues_button', {
+			init: function( editor ) {
+				editor.addButton( 'football_leagues', {
+					title: ( window._fl_shortcodes_l10n || {} ).football_leagues || 'Football Leagues',
+					icon: 'icon anwpfl-button-icon',
+					onclick: function() {
+						window.openShortcodeDialog();
+					}
+				} );
+			},
+			createControl: function() {
+				return null;
+			}
+		} );
+
+		tinymce.PluginManager.add( 'football_leagues_button', tinymce.plugins.football_leagues_button );
+	}
+}( window, document ) );

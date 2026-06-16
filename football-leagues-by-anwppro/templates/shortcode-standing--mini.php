@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.3.0
  *
- * @version       0.14.11
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -41,13 +41,19 @@ if ( empty( $data->id ) || 'anwp_standing' !== get_post_type( $data->id ) ) {
 }
 
 // Prepare data
-$standing_id    = (int) $data->id;
-$competition_id = get_post_meta( $standing_id, '_anwpfl_competition', true );
-$group_id       = get_post_meta( $standing_id, '_anwpfl_competition_group', true );
+$standing_id  = (int) $data->id;
+$standing_row = anwp_fl()->standing->get_row( $standing_id );
 
-$table        = json_decode( get_post_meta( $standing_id, '_anwpfl_table_main', true ) );
-$table_colors = json_decode( get_post_meta( $standing_id, '_anwpfl_table_colors', true ) );
-$table_notes  = anwp_football_leagues()->helper->string_to_bool( $data->show_notes ) ? get_post_meta( $standing_id, '_anwpfl_table_notes', true ) : '';
+if ( ! $standing_row ) {
+	return;
+}
+
+$competition_id = $standing_row['competition_id'] ?? 0;
+$group_id       = $standing_row['group_id'] ?? 0;
+
+$table        = json_decode( $standing_row['table_main'] ?? '' );
+$table_colors = json_decode( $standing_row['table_colors'] ?? '' );
+$table_notes  = anwp_football_leagues()->helper->string_to_bool( $data->show_notes ) ? ( $standing_row['table_notes'] ?? '' ) : '';
 
 // Check data is valid
 if ( null === $table ) {
@@ -137,7 +143,7 @@ if ( $data->partial ) {
 			$color_style = '';
 
 			if ( ! empty( $table_colors[ 'p' . $row->place ] ) ) {
-				if ( '#' === mb_substr( $table_colors[ 'p' . $row->place ], 0, 1 ) ) {
+				if ( str_starts_with( $table_colors[ 'p' . $row->place ], '#' ) ) {
 					$color_style = 'background-color: ' . esc_attr( $table_colors[ 'p' . $row->place ] );
 				} else {
 					$color_class = 'anwp-bg-' . $table_colors[ 'p' . $row->place ] . '-light';
@@ -145,7 +151,7 @@ if ( $data->partial ) {
 			}
 
 			if ( ! empty( $table_colors[ 'c' . $row->club_id ] ) ) {
-				if ( '#' === mb_substr( $table_colors[ 'c' . $row->club_id ], 0, 1 ) ) {
+				if ( str_starts_with( $table_colors[ 'c' . $row->club_id ], '#' ) ) {
 					$color_style = 'background-color: ' . esc_attr( $table_colors[ 'c' . $row->club_id ] );
 				} else {
 					$color_class = 'anwp-bg-' . $table_colors[ 'c' . $row->club_id ] . '-light';

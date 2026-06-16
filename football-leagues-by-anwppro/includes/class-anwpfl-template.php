@@ -89,6 +89,12 @@ class AnWPFL_Template extends Gamajo_Template_Loader {
 	/**
 	 * Retrieve a template part.
 	 *
+	 * When WP_ANWPFL_TEMPLATE_DEBUG constant is true (or the
+	 * `anwpfl/template/debug_enabled` filter returns true), each template
+	 * render is wrapped with Query Monitor timer + query-delta instrumentation
+	 * so you can see per-template memory and query cost in QM's Timings + Logs
+	 * panels.
+	 *
 	 * @since 1.0.0
 	 *
 	 * @param string $slug Template slug.
@@ -98,6 +104,14 @@ class AnWPFL_Template extends Gamajo_Template_Loader {
 	 */
 	public function get_template_part( $slug, $name = null, $load = true ) {
 
+		$debug = $this->is_template_debug_enabled();
+		$label = '';
+
+		if ( $debug ) {
+			$label = $this->build_debug_label( $slug, $name );
+			$this->start_debug_frame( $label );
+		}
+
 		// Execute code for this part.
 		do_action( 'get_template_part_' . $slug, $slug, $name );
 		do_action( $this->filter_prefix . '_get_template_part_' . $slug, $slug, $name );
@@ -105,14 +119,136 @@ class AnWPFL_Template extends Gamajo_Template_Loader {
 		// Get files names of templates, for given slug and name.
 		$templates = $this->get_template_file_names( $slug, $name );
 
+		$result = '';
+
 		try {
-			// Return the part that is found.
-			return $this->locate_template( $templates, $load, false );
+			$result = $this->locate_template( $templates, $load, false );
 		} catch ( Throwable $e ) {
 			if ( apply_filters( 'anwpfl/config/log_errors', true ) ) {
 				error_log( $e ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			}
 		}
+
+		if ( $debug ) {
+			$this->stop_debug_frame( $label );
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Whether per-template debug instrumentation is active.
+	 *
+	 * @return bool
+	 */
+	private function is_template_debug_enabled(): bool {
+		static $enabled = null;
+
+		if ( null === $enabled ) {
+			$enabled = ( defined( 'WP_ANWPFL_TEMPLATE_DEBUG' ) && WP_ANWPFL_TEMPLATE_DEBUG )
+				|| apply_filters( 'anwpfl/template/debug_enabled', false );
+		}
+
+		return $enabled;
+	}
+
+	/**
+	 * Build a stable, human-readable label for a template frame.
+	 *
+	 * @param string      $slug Template slug.
+	 * @param string|null $name Optional variation.
+	 *
+	 * @return string
+	 */
+	private function build_debug_label( string $slug, $name ): string {
+		return 'FL:' . $slug . ( $name ? '-' . $name : '' );
+	}
+
+	/**
+	 * Per-request debug frame stack. Parallel arrays keyed by frame label —
+	 * push/pop so nested templates each get their own measurement window.
+	 *
+	 * @var array<string,array<int,array{mem:int,queries:int}>>
+	 */
+	private $debug_frames = [];
+
+	/**
+	 * Begin a debug frame: snapshot memory + query count and fire qm/start.
+	 *
+	 * Nested calls with the same label push onto a stack; stop_debug_frame()
+	 * pops so outer frames see their own deltas.
+	 *
+	 * @param string $label Frame label.
+	 */
+	private function start_debug_frame( string $label ): void {
+		global $wpdb;
+
+		$this->debug_frames[ $label ][] = [
+			'mem'     => memory_get_usage(),
+			'queries' => is_array( $wpdb->queries ?? null ) ? count( $wpdb->queries ) : 0,
+		];
+
+		do_action( 'qm/start', $label );
+	}
+
+	/**
+	 * End a debug frame: emit qm/stop + qm/debug with memory / query deltas.
+	 *
+	 * Optionally suppresses `qm/debug` output for frames that ran zero
+	 * queries (qm/start + qm/stop still fire so the Timings panel stays
+	 * complete). Enable via:
+	 *   - define( 'WP_ANWPFL_TEMPLATE_DEBUG_MIN_QUERIES', 1 )
+	 *   - add_filter( 'anwpfl/template/debug_min_queries', fn() => 1 )
+	 *
+	 * @param string $label Frame label.
+	 */
+	private function stop_debug_frame( string $label ): void {
+		global $wpdb;
+
+		if ( empty( $this->debug_frames[ $label ] ) ) {
+			return;
+		}
+
+		$frame = array_pop( $this->debug_frames[ $label ] );
+
+		do_action( 'qm/stop', $label );
+
+		$mem_delta  = memory_get_usage() - (int) $frame['mem'];
+		$q_now      = is_array( $wpdb->queries ?? null ) ? count( $wpdb->queries ) : 0;
+		$q_delta    = $q_now - (int) $frame['queries'];
+		$mem_kb     = $mem_delta / 1024;
+
+		if ( $q_delta < $this->debug_min_queries_threshold() ) {
+			return;
+		}
+
+		do_action(
+			'qm/debug',
+			sprintf(
+				'%s | %+.2f KB | %+d queries',
+				$label,
+				$mem_kb,
+				$q_delta
+			)
+		);
+	}
+
+	/**
+	 * Minimum query-delta required before a frame is reported to qm/debug.
+	 * Default 0 (log every frame). Set to 1 to hide 0-query templates.
+	 *
+	 * @return int
+	 */
+	private function debug_min_queries_threshold(): int {
+		static $threshold = null;
+
+		if ( null === $threshold ) {
+			$threshold = defined( 'WP_ANWPFL_TEMPLATE_DEBUG_MIN_QUERIES' )
+				? (int) WP_ANWPFL_TEMPLATE_DEBUG_MIN_QUERIES
+				: (int) apply_filters( 'anwpfl/template/debug_min_queries', 0 );
+		}
+
+		return $threshold;
 	}
 
 	/**
@@ -151,8 +287,13 @@ class AnWPFL_Template extends Gamajo_Template_Loader {
 
 		if ( array_product( $template_loading_check ) ) {
 			if ( apply_filters( 'anwpfl/template/load_default_template', true, $post->post_type, $post ) ) {
-				// Prepare layout
-				$layout = get_post_meta( $post->ID, '_anwpfl_tmpl_layout', true );
+				// Prepare layout (tmpl_layout is competition-only; not in light warm cols, use get_row()).
+				$layout = '';
+
+				if ( 'anwp_competition' === $post->post_type ) {
+					$layout = anwp_fl()->competition->get_row( $post->ID )['tmpl_layout'] ?? '';
+				}
+
 				$layout = empty( $layout ) ? '' : ( '-' . sanitize_key( $layout ) );
 
 				$this->get_template_part( 'content-' . str_replace( 'anwp_', '', $post->post_type ), $layout );

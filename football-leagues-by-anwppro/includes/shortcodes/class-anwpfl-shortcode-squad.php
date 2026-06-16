@@ -81,11 +81,12 @@ class AnWPFL_Shortcode_Squad extends AnWPFL_Shortcode_Base {
 	protected function get_form_fields(): array {
 		return [
 			[
-				'name'     => 'season_id',
-				'type'     => 'selector',
-				'entity'   => 'season',
-				'multiple' => false,
-				'label'    => __( 'Season ID', 'anwp-football-leagues' ),
+				'name'        => 'season_id',
+				'type'        => 'selector',
+				'entity'      => 'season',
+				'multiple'    => false,
+				'label'       => __( 'Season ID', 'anwp-football-leagues' ),
+				'description' => __( 'Optional. Leave empty to show the active squad. Set to display a specific season\'s archived squad.', 'anwp-football-leagues' ),
 			],
 			[
 				'name'     => 'club_id',

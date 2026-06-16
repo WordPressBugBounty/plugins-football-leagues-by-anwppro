@@ -252,7 +252,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 			$league = get_term( $game_data['league_id'], 'anwp_league' );
 
 			// Check for a Round title
-			$is_knockout = 'knockout' === get_post_meta( $competition_id, '_anwpfl_type', true );
+			$is_knockout = 'knockout' === ( anwp_fl()->competition->get_competition_list_row( (int) $competition_id )['type'] ?? '' );
 			$matchweek   = $game_data['match_week'] ?: '';
 			$round_title = $is_knockout ? $this->plugin->competition->get_round_title( $competition_id, $matchweek ) : '';
 
@@ -412,7 +412,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 
 						<?php
 						$post_id          = $post->ID;
-						$competition_type = get_post_meta( $competition_id, '_anwpfl_type', true );
+						$competition_type = anwp_fl()->competition->get_competition_list_row( (int) $competition_id )['type'] ?? '';
 
 						/*
 						|--------------------------------------------------------------------
@@ -678,7 +678,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 					$league = get_term( get_post_meta( $post->ID, '_anwpfl_league', true ), 'anwp_league' );
 
 					// Check for a Round title
-					$is_knockout = 'knockout' === get_post_meta( $competition_id, '_anwpfl_type', true );
+					$is_knockout = 'knockout' === ( anwp_fl()->competition->get_competition_list_row( (int) $competition_id )['type'] ?? '' );
 					$matchweek   = $game_data['match_week'] ?: '';
 
 					$round_title = $is_knockout ? $this->plugin->competition->get_round_title( $competition_id, $matchweek ) : '';
@@ -722,7 +722,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 				$competition_id = $game_data['competition_id'] ?? '';
 				$round          = '';
 
-				if ( $competition_id && 'knockout' === get_post_meta( $competition_id, '_anwpfl_type', true ) ) {
+				if ( $competition_id && 'knockout' === ( anwp_fl()->competition->get_competition_list_row( (int) $competition_id )['type'] ?? '' ) ) {
 					$round = $game_data['match_week'] ?: '';
 				}
 
@@ -829,7 +829,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 					if ( empty( $this->get_game_data( $post_id ) ) ) {
 						$data['match_id'] = $post_id;
 
-						if ( 'friendly' === get_post_meta( $data['competition_id'], '_anwpfl_competition_status', true ) ) {
+						if ( ! empty( anwp_fl()->competition->get_competition_list_row( (int) $data['competition_id'] )['is_friendly'] ) ) {
 							$data['game_status'] = 0;
 						}
 
@@ -862,8 +862,10 @@ class AnWPFL_Match extends AnWPFL_DB {
 			$data['special_status'] = $data['finished'] ? '' : sanitize_text_field( $post_data['_anwpfl_special_status'] ?? '' );
 
 			if ( ! $game_data['main_stage_id'] ) {
-				if ( 'secondary' === get_post_meta( $game_data['competition_id'], '_anwpfl_multistage', true ) ) {
-					$data['main_stage_id'] = get_post_meta( $game_data['competition_id'], '_anwpfl_multistage_main', true );
+				$competition_row = anwp_fl()->competition->get_competition_list_row( (int) $game_data['competition_id'] );
+
+				if ( 'secondary' === ( $competition_row['multistage'] ?? '' ) ) {
+					$data['main_stage_id'] = $competition_row['multistage_main'] ?? '';
 				} else {
 					$data['main_stage_id'] = $game_data['competition_id'];
 				}
@@ -875,7 +877,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 			| For Knockout MatchWeek = Round and is saved on match setup step
 			|--------------------------------------------------------------------
 			*/
-			if ( 'round-robin' === get_post_meta( $game_data['competition_id'], '_anwpfl_type', true ) ) {
+			if ( 'round-robin' === ( anwp_fl()->competition->get_competition_list_row( (int) $game_data['competition_id'] )['type'] ?? '' ) ) {
 				$data['match_week'] = sanitize_text_field( $post_data['_anwpfl_matchweek'] ?? '' );
 			}
 
@@ -1459,13 +1461,11 @@ class AnWPFL_Match extends AnWPFL_DB {
 	public function get_game_data( int $game_id ): array {
 		global $wpdb;
 
-		static $games = [];
-
-		if ( ! empty( $games[ $game_id ] ) ) {
-			return $games[ $game_id ];
+		if ( isset( self::$game_data_cache[ $game_id ] ) ) {
+			return self::$game_data_cache[ $game_id ];
 		}
 
-		$games[ $game_id ] = $wpdb->get_row(
+		self::$game_data_cache[ $game_id ] = $wpdb->get_row(
 			$wpdb->prepare(
 				"
 				SELECT a.*, b.home_line_up, b.away_line_up, b.home_subs, b.away_subs, b.custom_numbers, b.captain_home, b.captain_away
@@ -1476,9 +1476,79 @@ class AnWPFL_Match extends AnWPFL_DB {
 				$game_id
 			),
 			ARRAY_A
-		) ? : [];
+		) ?: [];
 
-		return $games[ $game_id ];
+		return self::$game_data_cache[ $game_id ];
+	}
+
+	/**
+	 * Per-process cache for get_game_data() results.
+	 *
+	 * Exposed at class scope (not a function-local static) so bulk warmers
+	 * like warm_admin_list_game_data() can pre-populate it.
+	 *
+	 * @since 0.18.2
+	 * @var array<int, array>
+	 */
+	private static array $game_data_cache = [];
+
+	/**
+	 * Bulk-warm get_game_data() cache for the admin match list.
+	 *
+	 * Replaces 50 per-row get_game_data() queries (each a SELECT + JOIN on
+	 * anwpfl_lineups) with a single SELECT on anwpfl_matches. The admin list
+	 * columns only read scalar fields (competition_id, match_week, finished,
+	 * home/away_goals, home/away_club, kickoff) — no lineup columns — so the
+	 * JOIN is skipped here. Empty strings are seeded for the lineup keys so
+	 * downstream code that reads them gets the same shape.
+	 *
+	 * @since 0.18.2
+	 *
+	 * @param int[] $match_ids Match post IDs.
+	 */
+	public function warm_admin_list_game_data( array $match_ids ): void {
+		$match_ids = array_unique( array_filter( array_map( 'absint', $match_ids ) ) );
+
+		if ( empty( $match_ids ) ) {
+			return;
+		}
+
+		// Skip IDs already in cache.
+		$match_ids = array_values( array_diff( $match_ids, array_keys( self::$game_data_cache ) ) );
+
+		if ( empty( $match_ids ) ) {
+			return;
+		}
+
+		global $wpdb;
+
+		$format = implode( ', ', array_fill( 0, count( $match_ids ), '%d' ) );
+
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$wpdb->prefix}anwpfl_matches WHERE match_id IN ({$format})",
+				$match_ids
+			),
+			ARRAY_A
+		);
+		// phpcs:enable
+
+		$lineup_keys = [
+			'home_line_up'   => '',
+			'away_line_up'   => '',
+			'home_subs'      => '',
+			'away_subs'      => '',
+			'custom_numbers' => '',
+			'captain_home'   => '',
+			'captain_away'   => '',
+		];
+
+		foreach ( (array) $rows as $row ) {
+			$match_id = (int) $row['match_id'];
+
+			self::$game_data_cache[ $match_id ] = array_merge( $lineup_keys, $row );
+		}
 	}
 
 	/**
@@ -1701,15 +1771,15 @@ class AnWPFL_Match extends AnWPFL_DB {
 		// %club_home% - %club_away% - %scores_home% - %scores_away% - %competition% - %kickoff%
 		$match_title = trim( AnWPFL_Options::get_value( 'match_title_generator' ) );
 
-		if ( false !== mb_strpos( $match_title, '%club_home%' ) ) {
+		if ( str_contains( $match_title, '%club_home%' ) ) {
 			$match_title = str_ireplace( '%club_home%', $home_club, $match_title );
 		}
 
-		if ( false !== mb_strpos( $match_title, '%club_away%' ) ) {
+		if ( str_contains( $match_title, '%club_away%' ) ) {
 			$match_title = str_ireplace( '%club_away%', $away_club, $match_title );
 		}
 
-		if ( false !== mb_strpos( $match_title, '%scores_home%' ) || false !== mb_strpos( $match_title, '%scores_away%' ) ) {
+		if ( str_contains( $match_title, '%scores_home%' ) || str_contains( $match_title, '%scores_away%' ) ) {
 			$scores_home = '?';
 			$scores_away = '?';
 
@@ -1722,12 +1792,12 @@ class AnWPFL_Match extends AnWPFL_DB {
 			$match_title = str_ireplace( '%scores_away%', $scores_away, $match_title );
 		}
 
-		if ( false !== mb_strpos( $match_title, '%competition%' ) ) {
+		if ( str_contains( $match_title, '%competition%' ) ) {
 			$competition_title = anwp_fl()->competition->get_competition_data( $data['competition_id'] )['title'];
 			$match_title       = str_ireplace( '%competition%', $competition_title, $match_title );
 		}
 
-		if ( false !== mb_strpos( $match_title, '%kickoff%' ) ) {
+		if ( str_contains( $match_title, '%kickoff%' ) ) {
 			$custom_date_format = anwp_fl()->get_option_value( 'custom_match_date_format' );
 			$match_title        = str_ireplace( '%kickoff%', date_i18n( $custom_date_format ?: 'Y-m-d', get_date_from_gmt( $data['kickoff'], 'U' ) ), $match_title );
 		}
@@ -1985,40 +2055,36 @@ class AnWPFL_Match extends AnWPFL_DB {
 		$competition_ids = [];
 
 		foreach ( $matches as $match ) {
-			$competition_ids[] = $match->main_stage_id;
+			$competition_ids[] = (int) $match->main_stage_id;
 		}
 
-		// Get competition data
-		$competitions = get_posts(
-			[
-				'numberposts'      => - 1,
-				'post_type'        => 'anwp_competition',
-				'suppress_filters' => false,
-				'post_status'      => [ 'publish', 'stage_secondary' ],
-				'include'          => $competition_ids,
-				'orderby'          => 'post__in',
-			]
-		);
+		$competition_ids = array_unique( $competition_ids );
+		anwp_fl()->competition->warm_competitions( $competition_ids );
 
-		/** @var WP_Post $competition */
-		foreach ( $competitions as $competition ) {
+		foreach ( $competition_ids as $competition_id ) {
+			$competition_row = anwp_fl()->competition->get_competition_list_row( $competition_id );
 
-			if ( 'secondary' !== get_post_meta( $competition->ID, '_anwpfl_multistage', true ) ) {
-				$data[ $competition->ID ] = [
-					'title'   => $competition->post_title,
-					'id'      => $competition->ID,
-					'matches' => [],
-					'logo'    => get_post_meta( $competition->ID, '_anwpfl_logo', true ),
-					'order'   => get_post_meta( $competition->ID, '_anwpfl_competition_order', true ),
-				];
+			if ( ! $competition_row || 'secondary' === ( $competition_row['multistage'] ?? '' ) ) {
+				continue;
 			}
+
+			$data[ $competition_id ] = [
+				'title'   => $competition_row['title'] ?? '',
+				'id'      => $competition_id,
+				'matches' => [],
+				'logo'    => $competition_row['logo'] ?? '',
+				'order'   => $competition_row['competition_order'] ?? '',
+			];
 		}
+
+		$link_map = anwp_fl()->helper->get_permalinks_by_ids( wp_list_pluck( $matches, 'match_id' ), 'anwp_match' );
 
 		// Add matches to competitions
 		foreach ( $matches as $match ) {
 			$competition_index = (int) $match->main_stage_id;
 
 			if ( isset( $data[ $competition_index ] ) ) {
+				$match->permalink                        = $link_map[ (int) $match->match_id ] ?? '';
 				$data[ $competition_index ]['matches'][] = $match;
 			}
 		}
@@ -2248,6 +2314,11 @@ class AnWPFL_Match extends AnWPFL_DB {
 
 		$group_current = isset( $args->group ) ? sanitize_text_field( $args->group ) : '';
 
+		// Bulk warm competition rows for the group_by/grouping loop below.
+		if ( ! empty( $games ) ) {
+			anwp_fl()->competition->warm_competitions( array_unique( wp_list_pluck( $games, 'competition_id' ) ) );
+		}
+
 		// Start output
 		ob_start();
 
@@ -2259,7 +2330,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 
 				// Check current group by value
 				if ( 'stage' === $args->group_by && $group_current !== $game->competition_id ) {
-					$group_text    = get_post_meta( $game->competition_id, '_anwpfl_stage_title', true );
+					$group_text    = anwp_fl()->competition->get_competition_list_row( (int) $game->competition_id )['stage_title'] ?? '';
 					$group_current = $game->competition_id;
 				} elseif ( 'competition' === $args->group_by && $group_current !== $game->competition_id ) {
 					$group_text    = anwp_fl()->competition->get_competition_title( $game->competition_id );
@@ -2344,8 +2415,7 @@ class AnWPFL_Match extends AnWPFL_DB {
 			return new WP_Error( 'rest_invalid', esc_html__( 'Incorrect Stage ID', 'anwp-football-leagues' ), [ 'status' => 400 ] );
 		}
 
-		$game_status = get_post_meta( $competition_id, '_anwpfl_competition_status', true );
-		$is_friendly = 'friendly' === $game_status;
+		$is_friendly = ! empty( anwp_fl()->competition->get_competition_list_row( (int) $competition_id )['is_friendly'] );
 
 		$games = $wpdb->get_row(
 			$wpdb->prepare(

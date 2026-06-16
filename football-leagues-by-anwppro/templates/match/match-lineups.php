@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.6.1
  *
- * @version       0.16.0
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -44,6 +44,9 @@ $data = wp_parse_args(
 		'header'          => true,
 	]
 );
+
+// Warm club cache for home and away clubs.
+anwp_fl()->club->warm_clubs( [ $data['home_club'], $data['away_club'] ] );
 
 $events = anwp_football_leagues()->helper->parse_match_events_lineups( $data['events'] );
 
@@ -134,7 +137,7 @@ if ( $home_line_up || $away_line_up ) :
 						$player      = $data['players'][ $player_id ] ?? '';
 						$temp_player = false;
 
-						if ( 'temp__' === mb_substr( $player_id, 0, 6 ) && isset( $temp_players[ $player_id ] ) ) {
+						if ( str_starts_with( $player_id, 'temp__' ) && isset( $temp_players[ $player_id ] ) ) {
 							$temp_player = $temp_players[ $player_id ];
 						}
 
@@ -142,7 +145,7 @@ if ( $home_line_up || $away_line_up ) :
 							continue;
 						}
 
-						$is_captain = $data['captain_home'] && ( ( 'temp__' === mb_substr( $player_id, 0, 6 ) ? $data['captain_home'] === $player_id : absint( $data['captain_home'] ) === absint( $player_id ) ) );
+						$is_captain = $data['captain_home'] && ( ( str_starts_with( $player_id, 'temp__' ) ? $data['captain_home'] === $player_id : absint( $data['captain_home'] ) === absint( $player_id ) ) );
 						?>
 						<div class="match__player-wrapper d-flex flex-wrap align-items-center anwp-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
 							<div class="d-flex align-items-center">
@@ -253,7 +256,7 @@ if ( $home_line_up || $away_line_up ) :
 						$player      = $data['players'][ $player_id ] ?? '';
 						$temp_player = false;
 
-						if ( 'temp__' === mb_substr( $player_id, 0, 6 ) && isset( $temp_players[ $player_id ] ) ) :
+						if ( str_starts_with( $player_id, 'temp__' ) && isset( $temp_players[ $player_id ] ) ) :
 							$temp_player = $temp_players[ $player_id ];
 						endif;
 
@@ -432,7 +435,7 @@ if ( $home_line_up || $away_line_up ) :
 						$player      = $data['players'][ $player_id ] ?? '';
 						$temp_player = false;
 
-						if ( 'temp__' === mb_substr( $player_id, 0, 6 ) && isset( $temp_players[ $player_id ] ) ) :
+						if ( str_starts_with( $player_id, 'temp__' ) && isset( $temp_players[ $player_id ] ) ) :
 							$temp_player = $temp_players[ $player_id ];
 						endif;
 
@@ -440,7 +443,7 @@ if ( $home_line_up || $away_line_up ) :
 							continue;
 						endif;
 
-						$is_captain = $data['captain_away'] && ( ( 'temp__' === mb_substr( $player_id, 0, 6 ) ? $data['captain_away'] === $player_id : absint( $data['captain_away'] ) === absint( $player_id ) ) );
+						$is_captain = $data['captain_away'] && ( ( str_starts_with( $player_id, 'temp__' ) ? $data['captain_away'] === $player_id : absint( $data['captain_away'] ) === absint( $player_id ) ) );
 						?>
 						<div class="match__player-wrapper d-flex flex-wrap align-items-center anwp-border-bottom anwp-border-light anwp-leading-1 anwp-text-base py-1">
 							<div class="d-flex align-items-center">
@@ -551,7 +554,7 @@ if ( $home_line_up || $away_line_up ) :
 						$player      = $data['players'][ $player_id ] ?? '';
 						$temp_player = false;
 
-						if ( 'temp__' === mb_substr( $player_id, 0, 6 ) && isset( $temp_players[ $player_id ] ) ) :
+						if ( str_starts_with( $player_id, 'temp__' ) && isset( $temp_players[ $player_id ] ) ) :
 							$temp_player = $temp_players[ $player_id ];
 						endif;
 

@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.15.0
  *
- * @version       0.16.18
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -25,15 +25,18 @@ $data = (object) wp_parse_args(
 	]
 );
 
-$subteam_status = get_post_meta( $data->club_id, '_anwpfl_subteams', true );
-$root_team_id   = 'root' === $subteam_status ? $data->club_id : get_post_meta( $data->club_id, '_anwpfl_root_team', true );
+$club_row       = anwp_fl()->club->get_row( (int) $data->club_id );
+$subteam_status = $club_row['subteams'] ?? '';
+$root_team_id   = 'root' === $subteam_status ? $data->club_id : ( $club_row['root_team'] ?? 0 );
 
 if ( ! absint( $root_team_id ) ) {
 	return;
 }
 
-$subteam_list    = get_post_meta( $root_team_id, '_anwpfl_subteam_list', true );
-$root_team_title = get_post_meta( $root_team_id, '_anwpfl_root_team_title', true );
+$root_row        = (int) $root_team_id === (int) $data->club_id ? $club_row : anwp_fl()->club->get_row( (int) $root_team_id );
+$root_details    = json_decode( $root_row['club_details'] ?? '{}', true );
+$subteam_list    = $root_details['subteam_list'] ?? [];
+$root_team_title = $root_details['root_team_title'] ?? '';
 
 if ( empty( $subteam_list ) ) {
 	return;
@@ -47,11 +50,18 @@ if ( empty( $subteam_list ) ) {
 		<?php endif; ?>
 	</div>
 
-	<?php foreach ( $subteam_list as $subteam_item ) : ?>
-		<div class="m-1 club-subteams__item anwp-fl-btn d-flex align-items-center position-relative py-0 <?php echo absint( $data->club_id ) === absint( $subteam_item['subteam'] ) ? 'club-subteams__item--active anwp-cursor-default' : ''; ?>">
-			<?php echo esc_html( $subteam_item['title'] ); ?>
-			<?php if ( absint( $data->club_id ) !== absint( $subteam_item['subteam'] ) ) : ?>
-				<a href="<?php echo esc_url( get_permalink( $subteam_item['subteam'] ) ); ?>" class="anwp-link-without-effects text-decoration-none anwp-link-cover" aria-label="<?php echo esc_attr( $subteam_item['title'] ); ?>"></a>
+	<?php
+	foreach ( $subteam_list as $subteam_item ) :
+		// Subteam IDs ship in two shapes: legacy 'subteam' key (postmeta era,
+		// pre-0.18.0) and new 'club_id' key (Vue editor + sanitize_subteam_list
+		// since 0.17.3). Read both so site-migrated and legacy data render
+		// without "Undefined array key" warnings.
+		$subteam_id = absint( $subteam_item['club_id'] ?? ( $subteam_item['subteam'] ?? 0 ) );
+		?>
+		<div class="m-1 club-subteams__item anwp-fl-btn d-flex align-items-center position-relative py-0 <?php echo absint( $data->club_id ) === $subteam_id ? 'club-subteams__item--active anwp-cursor-default' : ''; ?>">
+			<?php echo esc_html( $subteam_item['title'] ?? '' ); ?>
+			<?php if ( absint( $data->club_id ) !== $subteam_id ) : ?>
+				<a href="<?php echo esc_url( get_permalink( $subteam_id ) ); ?>" class="anwp-link-without-effects text-decoration-none anwp-link-cover" aria-label="<?php echo esc_attr( $subteam_item['title'] ?? '' ); ?>"></a>
 			<?php endif; ?>
 		</div>
 	<?php endforeach; ?>

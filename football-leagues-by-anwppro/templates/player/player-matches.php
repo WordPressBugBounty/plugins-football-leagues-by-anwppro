@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.8.3
  *
- * @version       0.16.11
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -167,10 +167,10 @@ $col_span = 'g' === $data->position_code ? 8 : 9;
 					</div>
 					<div class="anwp-grid-table__td player-matches__home-away anwp-font-bold anwp-grid-table__sm-none"
 						data-toggle="anwp-tooltip" data-tippy-content="<?php echo esc_attr( $home_away ); ?>">
-						<?php echo esc_html( mb_substr( $home_away, 0, 1 ) ); ?>
+						<?php echo esc_html( substr( $home_away, 0, 1 ) ); ?>
 					</div>
 					<div class="anwp-grid-table__td anwp-text-nowrap player-matches__result">
-						<span class="anwp-text-white <?php echo esc_attr( $result_class ); ?> d-inline-block anwp-w-40 anwp-text-center mr-2"><?php echo esc_html( mb_strtoupper( $data->series_map[ $result_code ] ) ); ?></span>
+						<span class="anwp-text-white <?php echo esc_attr( $result_class ); ?> d-inline-block anwp-w-40 anwp-text-center mr-2"><?php echo esc_html( strtoupper( $data->series_map[ $result_code ] ) ); ?></span>
 						<span class=""><?php echo (int) $match->home_goals; ?>:<?php echo (int) $match->away_goals; ?></span>
 					</div>
 					<div class="anwp-grid-table__td anwp-text-center player-matches__minutes">

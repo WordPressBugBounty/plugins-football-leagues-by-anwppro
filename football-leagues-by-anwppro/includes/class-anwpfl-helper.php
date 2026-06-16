@@ -686,23 +686,6 @@ class AnWPFL_Helper {
 					$id
 				)
 			);
-
-			/*
-			|--------------------------------------------------------------------
-			| Get club squad slugs
-			|--------------------------------------------------------------------
-			*/
-			$squad_season_ids = anwp_football_leagues()->club->get_club_squad_season_ids( $id );
-
-			if ( ! empty( $squad_season_ids ) ) {
-				foreach ( $squad_season_ids as $squad_season_id ) {
-					$squad_season_slug = anwp_football_leagues()->season->get_season_slug_by_id( $squad_season_id );
-
-					if ( $squad_season_slug && ! in_array( $squad_season_slug, $options[ $type ][ absint( $id ) ], true ) ) {
-						$options[ $type ][ absint( $id ) ][] = $squad_season_slug;
-					}
-				}
-			}
 		} elseif ( 'stadium' === $type ) {
 			$options[ $type ][ absint( $id ) ] = $wpdb->get_col(
 				$wpdb->prepare(
@@ -800,7 +783,7 @@ class AnWPFL_Helper {
 				}
 				?>
 				<span class="my-1 d-inline-block club-form__item px-1 anwp-text-white <?php echo esc_attr( $result_class ); ?>">
-					<?php echo esc_html( mb_strtoupper( $series_map[ $match_result ] ) ); ?>
+					<?php echo esc_html( strtoupper( $series_map[ $match_result ] ) ); ?>
 				</span>
 			<?php endforeach; ?>
 		</div>
@@ -996,22 +979,26 @@ class AnWPFL_Helper {
 		$all_competitions = get_posts( $query_args );
 		$output_data      = [];
 
+		anwp_fl()->competition->warm_competitions( wp_list_pluck( $all_competitions, 'ID' ) );
+
 		/** @var WP_Post $competition */
 		foreach ( $all_competitions as $competition ) {
+
+			$competition_row = anwp_fl()->competition->get_competition_list_row( (int) $competition->ID );
 
 			$obj             = (object) [];
 			$obj->id         = $competition->ID;
 			$obj->title      = $competition->post_title;
 			$obj->season     = '';
-			$obj->multistage = get_post_meta( $competition->ID, '_anwpfl_multistage', true );
+			$obj->multistage = $competition_row['multistage'] ?? '';
 
 			$obj->title_full = $obj->title;
-			$obj->logo       = anwp_fl()->competition->get_competition_data( $competition->ID )['logo'] ?? '';
+			$obj->logo       = $competition_row['logo'] ?? '';
 
 			// Check multistage
 			if ( '' !== $obj->multistage ) {
 
-				$stage_title = get_post_meta( $competition->ID, '_anwpfl_stage_title', true );
+				$stage_title = $competition_row['stage_title'] ?? '';
 
 				if ( $stage_title ) {
 					$obj->title_full .= ' - ' . $stage_title;
@@ -1031,9 +1018,9 @@ class AnWPFL_Helper {
 
 			if ( 'stage_secondary' === $competition->post_status ) {
 				$obj->title_full  = '- ' . $obj->title_full;
-				$obj->stage_order = get_post_meta( $competition->ID, '_anwpfl_stage_order', true );
+				$obj->stage_order = $competition_row['stage_order'] ?? '';
 
-				$secondary_stages[ get_post_meta( $competition->ID, '_anwpfl_multistage_main', true ) ][] = $obj;
+				$secondary_stages[ $competition_row['multistage_main'] ?? '' ][] = $obj;
 			} else {
 				$output_data[] = $obj;
 			}
@@ -1113,7 +1100,7 @@ class AnWPFL_Helper {
 		// Countries
 		$options['countries'] = [];
 		foreach ( anwp_fl()->data->cb_get_countries() as $option_key => $option_text ) {
-			$code_parsed = mb_strtolower( str_replace( '_', '-', $option_key ) );
+			$code_parsed = strtolower( str_replace( '_', '-', $option_key ) );
 
 			if ( in_array( $option_key, [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
 				$code_parsed = '--world';
@@ -1314,13 +1301,16 @@ class AnWPFL_Helper {
 			return [];
 		}
 
-		$output = [];
+		$output   = [];
+		$club_ids = wp_list_pluck( $results, 'ID' );
+		anwp_fl()->club->warm_clubs( $club_ids );
 
 		foreach ( $results as $result_item ) {
+			$club_row = anwp_fl()->club->get_club_list_row( $result_item->ID );
 			$output[] = [
 				'id'    => $result_item->ID,
 				'title' => $result_item->post_title,
-				'img'   => esc_html( get_post_meta( $result_item->ID, '_anwpfl_logo', true ) ) ?: '',
+				'img'   => esc_html( $club_row['logo'] ?? '' ) ?: '',
 			];
 		}
 
@@ -1426,7 +1416,7 @@ class AnWPFL_Helper {
 			$code_parsed  = '';
 
 			if ( $country_code ) {
-				$code_parsed = mb_strtolower( str_replace( '_', '-', $country_code ) );
+				$code_parsed = strtolower( str_replace( '_', '-', $country_code ) );
 
 				if ( in_array( $country_code, [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
 					$code_parsed = '--world';
@@ -1512,7 +1502,7 @@ class AnWPFL_Helper {
 			$code_parsed  = '';
 
 			if ( $country_code ) {
-				$code_parsed = mb_strtolower( str_replace( '_', '-', $country_code ) );
+				$code_parsed = strtolower( str_replace( '_', '-', $country_code ) );
 
 				if ( in_array( $country_code, [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
 					$code_parsed = '--world';
@@ -1594,7 +1584,7 @@ class AnWPFL_Helper {
 			$code_parsed  = '';
 
 			if ( $country_code ) {
-				$code_parsed = mb_strtolower( str_replace( '_', '-', $country_code ) );
+				$code_parsed = strtolower( str_replace( '_', '-', $country_code ) );
 
 				if ( in_array( $country_code, [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
 					$code_parsed = '--world';
@@ -1647,6 +1637,10 @@ class AnWPFL_Helper {
 
 		$clubs = get_posts( $query_args );
 
+		// Warm club cache for all results.
+		$club_ids = wp_list_pluck( $clubs, 'ID' );
+		anwp_fl()->club->warm_clubs( $club_ids );
+
 		$output = [
 			'columns' => [
 				[
@@ -1675,11 +1669,12 @@ class AnWPFL_Helper {
 
 		/** @var WP_Post $club */
 		foreach ( $clubs as $club ) {
-			$country_code = get_post_meta( $club->ID, '_anwpfl_nationality', true );
+			$club_row     = anwp_fl()->club->get_club_list_row( $club->ID );
+			$country_code = $club_row['nationality'] ?? '';
 			$code_parsed  = '';
 
 			if ( $country_code ) {
-				$code_parsed = mb_strtolower( str_replace( '_', '-', $country_code ) );
+				$code_parsed = strtolower( str_replace( '_', '-', $country_code ) );
 
 				if ( in_array( $country_code, [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
 					$code_parsed = '--world';
@@ -1691,10 +1686,10 @@ class AnWPFL_Helper {
 			$output['rows'][] = [
 				'title'   => $club->post_title,
 				'id'      => $club->ID,
-				'city'    => esc_html( get_post_meta( $club->ID, '_anwpfl_city', true ) ),
+				'city'    => esc_html( $club_row['city'] ?? '' ),
 				'flag'    => $country_code ? ( AnWP_Football_Leagues::url( 'public/img/flags-v3.svg' ) . '#fl-flag--' . $code_parsed ) : '',
 				'country' => $country_code ? ( anwp_fl()->data->get_value_by_key( $country_code, 'country' ) ) : '',
-				'img'     => esc_html( get_post_meta( $club->ID, '_anwpfl_logo', true ) ) ?: '',
+				'img'     => esc_html( $club_row['logo'] ?? '' ) ?: '',
 			];
 		}
 
@@ -1977,7 +1972,7 @@ class AnWPFL_Helper {
 			$code_parsed  = '';
 
 			if ( $country_code ) {
-				$code_parsed = mb_strtolower( str_replace( '_', '-', $country_code ) );
+				$code_parsed = strtolower( str_replace( '_', '-', $country_code ) );
 
 				if ( in_array( $country_code, [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
 					$code_parsed = '--world';
@@ -2076,7 +2071,7 @@ class AnWPFL_Helper {
 			$code_parsed  = '';
 
 			if ( $country_code ) {
-				$code_parsed = mb_strtolower( str_replace( '_', '-', $country_code ) );
+				$code_parsed = strtolower( str_replace( '_', '-', $country_code ) );
 
 				if ( in_array( $country_code, [ '__Africa', '__Asia', '__NC_America', '__Oceania', '__South_America' ], true ) ) {
 					$code_parsed = '--world';
@@ -2180,7 +2175,7 @@ class AnWPFL_Helper {
 	 */
 	public function get_youtube_id( $url ) {
 
-		if ( mb_strlen( $url ) <= 11 ) {
+		if ( strlen( $url ) <= 11 ) {
 			return $url;
 		}
 
@@ -2404,7 +2399,7 @@ class AnWPFL_Helper {
 			<svg class="anwp-icon anwp-icon--octi anwp-icon--s16">
 				<use href="#icon-book"></use>
 			</svg>
-			<b class="mx-2"><?php echo esc_html__( 'Documentation', 'anwp-football-leagues' ); ?>:</b>
+			<b><?php echo esc_html__( 'Documentation', 'anwp-football-leagues' ); ?>:</b>
 			<a target="_blank" href="<?php echo esc_url( $shortcode_link ); ?>"><?php echo esc_html( $shortcode_title ); ?></a>
 		</div>
 		<?php
@@ -2434,7 +2429,7 @@ class AnWPFL_Helper {
 			$post_type_short = sanitize_key( str_replace( 'anwp_', '', $post_type ) );
 
 			$permalink_slug = $this->plugin->options->get_permalink_structure()[ $post_type_short ] ?? $post_type_short;
-			$base_url       = get_site_url( null, '/' . $permalink_slug . '/' );
+			$base_url       = home_url( '/' . $permalink_slug . '/' );
 
 			$query = $wpdb->prepare( "SELECT post_name, ID FROM $wpdb->posts WHERE post_status = 'publish' AND post_type = %s", $post_type );
 
@@ -2510,8 +2505,9 @@ class AnWPFL_Helper {
 			wp_send_json_error( 'Invalid Data' );
 		}
 
-		$competition_id  = get_post_meta( $standing_to, '_anwpfl_competition', true );
-		$group_id        = get_post_meta( $standing_to, '_anwpfl_competition_group', true );
+		$standing_to_row = anwp_fl()->standing->get_row( $standing_to );
+		$competition_id  = $standing_to_row['competition_id'] ?? 0;
+		$group_id        = $standing_to_row['group_id'] ?? 0;
 		$competition_obj = anwp_football_leagues()->competition->get_competition( $competition_id );
 
 		$group_clubs = [];
@@ -2529,12 +2525,12 @@ class AnWPFL_Helper {
 			wp_send_json_error( 'Invalid Clubs' );
 		}
 
-		$standing_from_data = json_decode( get_post_meta( $standing_from, '_anwpfl_table_main', true ) );
+		$standing_from_data = anwp_fl()->standing->get_standing_rows( $standing_from );
 		$output_data        = [];
 
 		foreach ( $group_clubs as $group_club ) {
 
-			$table_row = array_values( wp_list_filter( $standing_from_data, [ 'club_id' => absint( $group_club ) ] ) )[0];
+			$table_row = array_values( wp_list_filter( $standing_from_data, [ 'club_id' => absint( $group_club ) ] ) )[0] ?? [];
 
 			if ( empty( $table_row ) ) {
 				$output_data[ $group_club ] = [
@@ -2549,14 +2545,14 @@ class AnWPFL_Helper {
 				];
 			} else {
 				$output_data[ $group_club ] = [
-					'played' => $table_row->played,
-					'won'    => $table_row->won,
-					'drawn'  => $table_row->drawn,
-					'lost'   => $table_row->lost,
-					'gf'     => $table_row->gf,
-					'ga'     => $table_row->ga,
-					'gd'     => $table_row->gd,
-					'points' => $table_row->points,
+					'played' => $table_row['played'],
+					'won'    => $table_row['won'],
+					'drawn'  => $table_row['drawn'],
+					'lost'   => $table_row['lost'],
+					'gf'     => $table_row['gf'],
+					'ga'     => $table_row['ga'],
+					'gd'     => $table_row['gd'],
+					'points' => $table_row['points'],
 				];
 			}
 		}
@@ -2658,5 +2654,101 @@ class AnWPFL_Helper {
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Whether the v0.18+ database upgrade is still pending.
+	 *
+	 * Used by the import-related admin pages and REST endpoints to block writes
+	 * before the schema is in place. Import paths assume the new schema and call
+	 * upsert() directly with no postmeta fallback.
+	 *
+	 * @param bool $check_premium Also check the premium DB version.
+	 *
+	 * @return bool
+	 */
+	public static function is_db_upgrade_pending( bool $check_premium = false ): bool {
+
+		if ( (int) get_option( 'anwpfl_db_version' ) < AnWP_Football_Leagues::DB_VERSION ) {
+			return true;
+		}
+
+		if ( $check_premium
+			&& class_exists( 'AnWPFL_Premium_Upgrade' )
+			&& (int) get_option( 'anwpfl_premium_db_version' ) < AnWPFL_Premium_Upgrade::DB_VERSION
+		) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * REST gate for import endpoints - returns WP_Error 409 when the DB upgrade
+	 * is pending, otherwise null. Defends stale browser tabs / old bookmarks.
+	 *
+	 * @param bool $check_premium Also check the premium DB version.
+	 *
+	 * @return WP_Error|null
+	 */
+	public static function check_db_upgrade_pending( bool $check_premium = false ) {
+
+		if ( self::is_db_upgrade_pending( $check_premium ) ) {
+			return new WP_Error(
+				'anwpfl_db_upgrade_pending',
+				__( 'Database upgrade pending. Reload the admin page to complete it.', 'anwp-football-leagues' ),
+				[ 'status' => 409 ]
+			);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Whether any of the v0.18 data migrations (clubs / competitions / standings)
+	 * is still pending. Schema upgrade (dbDelta) and data migration (postmeta to
+	 * custom tables, run from the Toolbox) are separate steps - this check covers
+	 * the second.
+	 *
+	 * Used by import-related admin pages and REST endpoints. Importers write directly
+	 * to custom tables and assume the migration has populated existing rows. Running
+	 * imports before the data migration produces orphan rows / referential gaps.
+	 *
+	 * @return bool
+	 */
+	public static function is_data_migration_pending(): bool {
+
+		if ( ! get_option( 'anwpfl_clubs_migrated' ) ) {
+			return true;
+		}
+
+		if ( ! get_option( 'anwpfl_competitions_migrated' ) ) {
+			return true;
+		}
+
+		if ( ! get_option( 'anwpfl_standings_migrated' ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * REST gate for import endpoints - returns WP_Error 409 when any data migration
+	 * is pending, otherwise null. Mirrors check_db_upgrade_pending() shape.
+	 *
+	 * @return WP_Error|null
+	 */
+	public static function check_data_migration_pending() {
+
+		if ( self::is_data_migration_pending() ) {
+			return new WP_Error(
+				'anwpfl_data_migration_pending',
+				__( 'Data migration pending. Run the Database Updater migrations before importing data.', 'anwp-football-leagues' ),
+				[ 'status' => 409 ]
+			);
+		}
+
+		return null;
 	}
 }

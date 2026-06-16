@@ -674,6 +674,44 @@ class AnWPFL_Staff extends CPT_Core {
 
 		global $wpdb;
 
+		$use_lighter_version = apply_filters( 'anwpfl/staff/use_lighter_staff_list', null );
+
+		if ( null === $use_lighter_version ) {
+			$staff_count         = (int) $wpdb->get_var(
+				"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_status = 'publish' AND post_type = 'anwp_staff'"
+			);
+			$use_lighter_version = $staff_count > 20000;
+		}
+
+		if ( $use_lighter_version ) {
+			$all_staff = $wpdb->get_results(
+				"
+				SELECT p.ID id, p.post_title name, pm.meta_value as club_id
+				FROM $wpdb->posts p
+				LEFT JOIN $wpdb->postmeta pm ON ( pm.post_id = p.ID AND pm.meta_key = '_anwpfl_current_club' )
+				WHERE p.post_status = 'publish' AND p.post_type = 'anwp_staff'
+				ORDER BY p.post_title
+				"
+			);
+
+			if ( empty( $all_staff ) ) {
+				$all_staff = [];
+				return $all_staff;
+			}
+
+			foreach ( $all_staff as $staff ) {
+				$staff->id        = absint( $staff->id );
+				$staff->club_id   = absint( $staff->club_id );
+				$staff->country   = '';
+				$staff->country2  = '';
+				$staff->birthdate = '';
+				$staff->job       = '';
+				$staff->photo     = '';
+			}
+
+			return $all_staff;
+		}
+
 		$all_staff = $wpdb->get_results(
 			"
 			SELECT p.ID id, p.post_title name,
@@ -691,7 +729,8 @@ class AnWPFL_Staff extends CPT_Core {
 		);
 
 		if ( empty( $all_staff ) ) {
-			return [];
+			$all_staff = [];
+			return $all_staff;
 		}
 
 		foreach ( $all_staff as $staff ) {
@@ -709,11 +748,11 @@ class AnWPFL_Staff extends CPT_Core {
 				$countries = maybe_unserialize( $staff->nationality );
 
 				if ( ! empty( $countries ) && is_array( $countries ) && ! empty( $countries[0] ) ) {
-					$staff->country = mb_strtolower( $countries[0] );
+					$staff->country = strtolower( $countries[0] );
 				}
 
 				if ( ! empty( $countries ) && is_array( $countries ) && ! empty( $countries[1] ) ) {
-					$staff->country2 = mb_strtolower( $countries[1] );
+					$staff->country2 = strtolower( $countries[1] );
 				}
 			}
 

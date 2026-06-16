@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.8.4
  *
- * @version       0.16.4
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -42,7 +42,8 @@ $data = (object) wp_parse_args(
 	]
 );
 
-$club = get_post( $data->club_id );
+$club     = get_post( $data->club_id );
+$club_row = anwp_football_leagues()->club->get_row( (int) $data->club_id );
 
 /**
  * Hook: anwpfl/tmpl-club/before_header
@@ -56,7 +57,7 @@ do_action( 'anwpfl/tmpl-club/before_header', $data );
 <div class="club-header anwp-section d-sm-flex anwp-bg-light p-3">
 	<?php if ( $data->logo_big ) : ?>
 		<div class="club-header__logo-wrapper anwp-flex-sm-none anwp-text-center mb-3 mb-sm-0">
-			<img loading="lazy" width="120" height="120" class="anwp-object-contain mr-sm-4 club-header__logo anwp-w-120 anwp-h-120" src="<?php echo esc_attr( $data->logo_big ); ?>" alt="<?php echo get_post_meta( $club->_anwpfl_logo_big_id, '_wp_attachment_image_alt', true ) ?: 'club logo'; ?>">
+			<img loading="lazy" width="120" height="120" class="anwp-object-contain mr-sm-4 club-header__logo anwp-w-120 anwp-h-120" src="<?php echo esc_attr( $data->logo_big ); ?>" alt="<?php echo get_post_meta( $club_row['logo_big_id'] ?? 0, '_wp_attachment_image_alt', true ) ?: 'club logo'; ?>">
 		</div>
 	<?php endif; ?>
 
@@ -132,11 +133,13 @@ do_action( 'anwpfl/tmpl-club/before_header', $data );
 			<?php endif; ?>
 
 			<?php
-			// Rendering custom fields
+			// Rendering custom fields from club_custom JSON
+			$club_custom = json_decode( $club_row['club_custom'] ?? '', true ) ?: [];
+
 			for ( $ii = 1; $ii <= 3; $ii ++ ) :
 
-				$custom_title = get_post_meta( $data->club_id, '_anwpfl_custom_title_' . $ii, true );
-				$custom_value = get_post_meta( $data->club_id, '_anwpfl_custom_value_' . $ii, true );
+				$custom_title = $club_custom[ 'custom_title_' . $ii ] ?? '';
+				$custom_value = $club_custom[ 'custom_value_' . $ii ] ?? '';
 
 				if ( $custom_title && $custom_value ) :
 					?>
@@ -148,9 +151,9 @@ do_action( 'anwpfl/tmpl-club/before_header', $data );
 			endfor;
 
 			// Rendering dynamic custom fields - @since v0.10.17
-			$custom_fields = get_post_meta( $data->club_id, '_anwpfl_custom_fields', true );
+			$custom_fields = (array) ( $club_custom['custom_fields'] ?? [] );
 
-			if ( ! empty( $custom_fields ) && is_array( $custom_fields ) ) {
+			if ( ! empty( $custom_fields ) ) {
 				foreach ( $custom_fields as $field_title => $field_text ) {
 					if ( empty( $field_text ) ) {
 						continue;
@@ -234,7 +237,7 @@ do_action( 'anwpfl/tmpl-club/before_header', $data );
 	</div>
 </div>
 <?php
-if ( get_post_meta( $data->club_id, '_anwpfl_subteams', true ) ) {
+if ( ! empty( $club_row['subteams'] ) ) {
 	anwp_football_leagues()->load_partial(
 		[
 			'club_id' => $data->club_id,

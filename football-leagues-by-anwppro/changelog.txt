@@ -1,5 +1,20 @@
 == Changelog ==
 
+= 0.18.0 - 2026-05-27 =
+* Performance - Clubs, competitions, standings, and squads moved from postmeta to dedicated database tables for faster page loads and better long-term maintainability
+* Fix - Shortcode spacing, display, and text alignment utilities now reliably override theme styles (notably Kadence's `.entry-content` rules)
+* Fix - Club, referee, and entity links built via the simple link building fast path now resolve correctly on WordPress installs in a subdirectory
+* Performance - Faster sitemap generation for large sites with many matches and players
+* Fix - Shortcode modal in Classic Editor missing styles
+* Fix - Substitution batch import column mapping for player in/out fields
+* Fix - Club card statistics counting extra yellow cards from second-yellow-to-red events
+* New Feature - Active Roster - clubs now have ONE current squad you can edit without picking a season. Historical seasons live in a separate Season Squad Archive (append, replace, or clear past rosters from the same screen). [anwpfl-squad] without `season_id` renders the active roster; with `season_id` renders that season's archive.
+* Add - Cleanup tab in Toolbox to remove old club and squad postmeta after migration to the new clubs table
+* Update - Club season dropdown filter now derives seasons purely from match data - clubs with squad-only season data (no matches yet) will drop from the filter, add a match or assign the club to the filter manually
+* Add - Custom title and value fields in club CSV import (Data Import tool)
+* Fix - WordPress 7.0 admin compatibility - button icon alignment and modal dialog stacking (Shortcode Builder, FL Selector)
+* Update - Tested with WordPress 7.0.
+
 = 0.17.2 - 2026-02-06 =
 * Fix - Import tool now correctly maps pasted team/country/position names to IDs
 

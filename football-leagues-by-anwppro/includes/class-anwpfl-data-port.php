@@ -392,6 +392,18 @@ class AnWPFL_Data_Port {
 	 */
 	public function save_import_data( WP_REST_Request $request ) {
 
+		$gate_error = AnWPFL_Helper::check_db_upgrade_pending();
+
+		if ( $gate_error ) {
+			return $gate_error;
+		}
+
+		$gate_error = AnWPFL_Helper::check_data_migration_pending();
+
+		if ( $gate_error ) {
+			return $gate_error;
+		}
+
 		$params = $request->get_params();
 
 		$import_status = [
@@ -589,14 +601,14 @@ class AnWPFL_Data_Port {
 		$table_game_data['finished'] = 'yes' === ( $row_data['finished'] ?? '' ) ? 1 : 0;
 
 		if ( ! empty( $row_data['kickoff'] ) ) {
-			$match_date = DateTime::createFromFormat( 'Y-m-d H:i', sanitize_text_field( $row_data['kickoff'] . ( mb_strpos( $row_data['kickoff'], ':' ) ? '' : ' 00:00' ) ) );
+			$match_date = DateTime::createFromFormat( 'Y-m-d H:i', sanitize_text_field( $row_data['kickoff'] . ( str_contains( $row_data['kickoff'], ':' ) ? '' : ' 00:00' ) ) );
 
 			if ( $match_date && anwp_fl()->helper->validate_date( $match_date->format( 'Y-m-d H:i:s' ) ) ) {
 				$table_game_data['kickoff'] = $match_date->format( 'Y-m-d H:i:s' );
 			}
 		}
 
-		if ( 'friendly' === get_post_meta( $table_game_data['competition_id'], '_anwpfl_competition_status', true ) ) {
+		if ( ! empty( anwp_fl()->competition->get_competition_list_row( (int) $table_game_data['competition_id'] )['is_friendly'] ) ) {
 			$table_game_data['game_status'] = 0;
 		}
 
@@ -749,7 +761,7 @@ class AnWPFL_Data_Port {
 		}
 
 		if ( ! empty( $row_data['kickoff'] ) ) {
-			$match_date = DateTime::createFromFormat( 'Y-m-d H:i', sanitize_text_field( $row_data['kickoff'] . ( mb_strpos( $row_data['kickoff'], ':' ) ? '' : ' 00:00' ) ) );
+			$match_date = DateTime::createFromFormat( 'Y-m-d H:i', sanitize_text_field( $row_data['kickoff'] . ( str_contains( $row_data['kickoff'], ':' ) ? '' : ' 00:00' ) ) );
 
 			if ( $match_date && anwp_fl()->helper->validate_date( $match_date->format( 'Y-m-d H:i:s' ) ) ) {
 				$table_game_data['kickoff'] = $match_date->format( 'Y-m-d H:i:s' );
@@ -840,8 +852,6 @@ class AnWPFL_Data_Port {
 		$row_data    = $params['row_data'];
 		$insert_mode = 'insert' === $params['mode'];
 
-		$custom_fields_data = [];
-
 		if ( $insert_mode ) {
 			$club_data = [
 				'post_title'   => '',
@@ -887,6 +897,18 @@ class AnWPFL_Data_Port {
 			}
 		}
 
+		// Build the direct upsert payload from the CSV row. 6 of 15 fields land
+		// on top-level columns; address/website/founded go inside the
+		// club_details JSON; custom_title_*/custom_value_*/cf__* go inside the
+		// club_custom JSON. The two JSON blobs need read-modify-write so we
+		// don't wipe sibling keys (club_kit, gallery, custom_fields, etc.) that
+		// other writers populate.
+		$table_data        = [];
+		$update_columns    = [];
+		$details_overlay   = [];
+		$custom_overlay    = [];
+		$custom_fields_new = [];
+
 		foreach ( $row_data as $slug => $value ) {
 			if ( empty( $value ) || in_array( $slug, [ 'import_info', 'import_status' ], true ) ) {
 				continue;
@@ -898,73 +920,117 @@ class AnWPFL_Data_Port {
 					break;
 
 				case 'abbreviation':
-					$club_data['meta_input']['_anwpfl_abbr'] = sanitize_text_field( $value );
+					$table_data['abbr'] = sanitize_text_field( $value );
+					$update_columns[]   = 'abbr';
 					break;
 
 				case 'city':
-					$club_data['meta_input']['_anwpfl_city'] = sanitize_text_field( $value );
-					break;
-
-				case 'address':
-					$club_data['meta_input']['_anwpfl_address'] = sanitize_text_field( $value );
-					break;
-
-				case 'website':
-					$club_data['meta_input']['_anwpfl_website'] = sanitize_text_field( $value );
-					break;
-
-				case 'founded':
-					$club_data['meta_input']['_anwpfl_founded'] = sanitize_text_field( $value );
+					$table_data['city'] = sanitize_text_field( $value );
+					$update_columns[]   = 'city';
 					break;
 
 				case 'country':
-					// Resolve country name to code if not already a valid code
-					$club_data['meta_input']['_anwpfl_nationality'] = anwp_fl()->data->get_country_code_by_name( sanitize_text_field( $value ) );
+					$table_data['nationality'] = anwp_fl()->data->get_country_code_by_name( sanitize_text_field( $value ) );
+					$update_columns[]          = 'nationality';
 					break;
 
 				case 'is_national_team':
-					$club_data['meta_input']['_anwpfl_is_national_team'] = 'yes' === sanitize_text_field( $value ) ? 'yes' : '';
+					$table_data['is_national_team'] = 'yes' === sanitize_text_field( $value ) ? 1 : 0;
+					$update_columns[]               = 'is_national_team';
 					break;
 
 				case 'club_external_id':
-					$club_data['meta_input']['_anwpfl_club_external_id'] = sanitize_text_field( $value );
+					$table_data['club_external_id'] = sanitize_text_field( $value );
+					$update_columns[]               = 'club_external_id';
+					break;
+
+				case 'address':
+				case 'website':
+				case 'founded':
+					$details_overlay[ $slug ] = sanitize_text_field( $value );
+					break;
+
+				case 'custom_title_1':
+				case 'custom_title_2':
+				case 'custom_title_3':
+				case 'custom_value_1':
+				case 'custom_value_2':
+				case 'custom_value_3':
+					$custom_overlay[ $slug ] = sanitize_text_field( $value );
 					break;
 
 				default:
-					if ( 0 === mb_strpos( $slug, 'cf__' ) ) {
-
-						$maybe_custom_field = mb_substr( $slug, 4 );
+					if ( str_starts_with( $slug, 'cf__' ) ) {
+						$maybe_custom_field = substr( $slug, 4 );
 
 						if ( ! empty( $maybe_custom_field ) ) {
-							$custom_fields_data[ $maybe_custom_field ] = sanitize_text_field( $value );
+							$custom_fields_new[ $maybe_custom_field ] = sanitize_text_field( $value );
 						}
 					}
 			}
 		}
 
-		// Custom Fields
-		if ( ! empty( $custom_fields_data ) ) {
-			$custom_fields_old = get_post_meta( $club_data['ID'], '_anwpfl_custom_fields', true );
-
-			if ( ! empty( $custom_fields_old ) && is_array( $custom_fields_old ) ) {
-				$custom_fields_data = array_merge( $custom_fields_old, $custom_fields_data );
-			}
-		}
-
-		if ( ! empty( $custom_fields_data ) ) {
-			$club_data['meta_input']['_anwpfl_custom_fields'] = $custom_fields_data;
-		}
+		// Suppress sync_club_to_table()'s postmeta-fallback ELSE branch, so it
+		// only updates title/post_name when save_post_anwp_club fires from
+		// wp_*_post below. We then write the full row ourselves via upsert().
+		anwp_fl()->club->flag_external_save_handled();
 
 		$post_id = $insert_mode ? wp_insert_post( $club_data ) : wp_update_post( $club_data );
 
-		if ( absint( $post_id ) ) {
-			$post_obj = get_post( $post_id );
-
-			$import_status['result']     = 'success';
-			$import_status['post_title'] = $post_obj->post_title;
-			$import_status['post_url']   = get_permalink( $post_obj );
-			$import_status['post_edit']  = get_edit_post_link( $post_obj );
+		if ( ! absint( $post_id ) ) {
+			return $import_status;
 		}
+
+		$post_id = absint( $post_id );
+
+		// Read-modify-write on the JSON columns. INSERT mode starts with empty
+		// arrays; UPDATE mode reads the row sync_club_to_table() just primed
+		// (title/post_name only) so the JSON blobs reflect any prior writes.
+		$existing_details = [];
+		$existing_custom  = [];
+
+		if ( ! $insert_mode ) {
+			$existing_row = anwp_fl()->club->get_row( $post_id );
+
+			if ( $existing_row ) {
+				$details_decoded  = json_decode( $existing_row['club_details'] ?? '', true );
+				$custom_decoded   = json_decode( $existing_row['club_custom'] ?? '', true );
+				$existing_details = is_array( $details_decoded ) ? $details_decoded : [];
+				$existing_custom  = is_array( $custom_decoded ) ? $custom_decoded : [];
+			}
+		}
+
+		if ( ! empty( $details_overlay ) ) {
+			$merged_details             = array_merge( $existing_details, $details_overlay );
+			$table_data['club_details'] = wp_json_encode( (object) $merged_details );
+			$update_columns[]           = 'club_details';
+		}
+
+		if ( ! empty( $custom_overlay ) || ! empty( $custom_fields_new ) ) {
+			$merged_custom = array_merge( $existing_custom, $custom_overlay );
+
+			if ( ! empty( $custom_fields_new ) ) {
+				$existing_fields                = isset( $merged_custom['custom_fields'] ) ? (array) $merged_custom['custom_fields'] : [];
+				$merged_custom['custom_fields'] = (object) array_merge( $existing_fields, $custom_fields_new );
+			} elseif ( isset( $merged_custom['custom_fields'] ) ) {
+				// Re-cast preserved custom_fields so wp_json_encode emits {} not [].
+				$merged_custom['custom_fields'] = (object) (array) $merged_custom['custom_fields'];
+			}
+
+			$table_data['club_custom'] = wp_json_encode( (object) $merged_custom );
+			$update_columns[]          = 'club_custom';
+		}
+
+		if ( ! empty( $update_columns ) ) {
+			anwp_fl()->club->upsert( $post_id, $table_data, $update_columns );
+		}
+
+		$post_obj = get_post( $post_id );
+
+		$import_status['result']     = 'success';
+		$import_status['post_title'] = $post_obj->post_title;
+		$import_status['post_url']   = get_permalink( $post_obj );
+		$import_status['post_edit']  = get_edit_post_link( $post_obj );
 
 		return $import_status;
 	}
@@ -1099,9 +1165,9 @@ class AnWPFL_Data_Port {
 					break;
 
 				default:
-					if ( 0 === mb_strpos( $slug, 'cf__' ) ) {
+					if ( str_starts_with( $slug, 'cf__' ) ) {
 
-						$maybe_custom_field = mb_substr( $slug, 4 );
+						$maybe_custom_field = substr( $slug, 4 );
 
 						if ( ! empty( $maybe_custom_field ) ) {
 							$custom_fields_data[ $maybe_custom_field ] = sanitize_text_field( $value );
@@ -1280,9 +1346,9 @@ class AnWPFL_Data_Port {
 					break;
 
 				default:
-					if ( 0 === mb_strpos( $slug, 'cf__' ) ) {
+					if ( str_starts_with( $slug, 'cf__' ) ) {
 
-						$maybe_custom_field = mb_substr( $slug, 4 );
+						$maybe_custom_field = substr( $slug, 4 );
 
 						if ( ! empty( $maybe_custom_field ) ) {
 							$custom_fields_data[ $maybe_custom_field ] = sanitize_text_field( $value );
@@ -1441,8 +1507,8 @@ class AnWPFL_Data_Port {
 					break;
 
 				default:
-					if ( 0 === mb_strpos( $slug, 'cf__' ) ) {
-						$maybe_custom_field = mb_substr( $slug, 4 );
+					if ( str_starts_with( $slug, 'cf__' ) ) {
+						$maybe_custom_field = substr( $slug, 4 );
 
 						if ( ! empty( $maybe_custom_field ) ) {
 							$custom_fields_data[ $maybe_custom_field ] = sanitize_text_field( $value );
@@ -1617,9 +1683,9 @@ class AnWPFL_Data_Port {
 					break;
 
 				default:
-					if ( 0 === mb_strpos( $slug, 'cf__' ) ) {
+					if ( str_starts_with( $slug, 'cf__' ) ) {
 
-						$maybe_custom_field = mb_substr( $slug, 4 );
+						$maybe_custom_field = substr( $slug, 4 );
 
 						if ( ! empty( $maybe_custom_field ) ) {
 							$custom_fields_data[ $maybe_custom_field ] = sanitize_text_field( $value );
@@ -1711,6 +1777,25 @@ class AnWPFL_Data_Port {
 	 * @return WP_REST_Response
 	 */
 	public function save_import_batch( WP_REST_Request $request ): WP_REST_Response {
+
+		$gate_error = AnWPFL_Helper::check_db_upgrade_pending();
+
+		if ( $gate_error ) {
+			return new WP_REST_Response(
+				[ 'error' => $gate_error->get_error_message() ],
+				409
+			);
+		}
+
+		$gate_error = AnWPFL_Helper::check_data_migration_pending();
+
+		if ( $gate_error ) {
+			return new WP_REST_Response(
+				[ 'error' => $gate_error->get_error_message() ],
+				409
+			);
+		}
+
 		$type     = $request->get_param( 'type' );
 		$match_id = $request->get_param( 'match_id' );
 		$ext_id   = $request->get_param( 'match_external_id' );
@@ -1822,7 +1907,7 @@ class AnWPFL_Data_Port {
 			if ( ! empty( $temp_players ) ) {
 				$last_item = end( $temp_players );
 				if ( isset( $last_item['id'] ) ) {
-					$last_temp_id = (int) mb_substr( $last_item['id'], 6 );
+					$last_temp_id = (int) substr( $last_item['id'], 6 );
 				}
 			}
 
@@ -1908,7 +1993,7 @@ class AnWPFL_Data_Port {
 				if ( ! empty( $temp_players ) ) {
 					$last_item = end( $temp_players );
 					if ( isset( $last_item['id'] ) ) {
-						$last_temp_id = (int) mb_substr( $last_item['id'], 6 );
+						$last_temp_id = (int) substr( $last_item['id'], 6 );
 					}
 				}
 
@@ -2147,7 +2232,7 @@ class AnWPFL_Data_Port {
 				if ( ! empty( $temp_players ) ) {
 					$last_item = end( $temp_players );
 					if ( isset( $last_item['id'] ) ) {
-						$last_temp_id = (int) mb_substr( $last_item['id'], 6 );
+						$last_temp_id = (int) substr( $last_item['id'], 6 );
 					}
 				}
 
@@ -2179,7 +2264,7 @@ class AnWPFL_Data_Port {
 				if ( ! empty( $temp_players ) ) {
 					$last_item = end( $temp_players );
 					if ( isset( $last_item['id'] ) ) {
-						$last_temp_id = (int) mb_substr( $last_item['id'], 6 );
+						$last_temp_id = (int) substr( $last_item['id'], 6 );
 					}
 				}
 

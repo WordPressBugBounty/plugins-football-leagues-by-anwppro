@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.8.3
  *
- * @version       0.16.14
+ * @version       0.18.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -91,9 +91,9 @@ $current_team_option = anwp_fl()->customizer->get_value( 'player', 'current_team
 if ( 'hide' === $current_team_option ) {
 	$player['club_id'] = '';
 } elseif ( 'last' === $current_team_option ) {
-	$player['club_id'] = anwp_fl()->player->get_player_last_team( $player['player_id'] );
+	$player['club_id'] = anwp_fl()->player->get_player_last_team( (int) $player['player_id'] );
 } elseif ( 'last_update' === $current_team_option ) {
-	$last_team = anwp_fl()->player->get_player_last_team( $player['player_id'] );
+	$last_team = anwp_fl()->player->get_player_last_team( (int) $player['player_id'] );
 
 	if ( absint( $last_team ) && absint( $last_team ) !== absint( $player['club_id'] ) ) {
 		anwp_fl()->player->update( $player['player_id'], [ 'team_id' => absint( $last_team ) ] );
@@ -101,6 +101,9 @@ if ( 'hide' === $current_team_option ) {
 
 	$player['club_id'] = $last_team;
 }
+
+// Warm club cache for current club and national team.
+anwp_fl()->club->warm_clubs( [ $player['club_id'], $player['national_team'] ] );
 ?>
 <div class="player-header anwp-section d-sm-flex anwp-bg-light p-3">
 

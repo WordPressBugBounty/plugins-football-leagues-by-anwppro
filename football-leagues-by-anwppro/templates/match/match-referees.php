@@ -12,7 +12,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @since         0.7.3
  *
- * @version       0.16.0
+ * @version       0.18.0
  */
 
 // phpcs:disable WordPress.NamingConventions.ValidVariableName
@@ -150,15 +150,15 @@ $referee_keys = [
 	<?php if ( ! empty( $additional_referees ) ) : ?>
 		<div class="py-2 d-flex flex-wrap anwp-border-bottom anwp-border-light anwp-text-base">
 			<?php foreach ( $additional_referees as $additional_referee ) : ?>
-				<?php if ( ! empty( $additional_referee['_anwpfl_referee'] ) && ( absint( $additional_referee['_anwpfl_referee'] ) || 'temp__' === mb_substr( $additional_referee['_anwpfl_referee'], 0, 6 ) ) ) : ?>
+				<?php if ( ! empty( $additional_referee['_anwpfl_referee'] ) && ( absint( $additional_referee['_anwpfl_referee'] ) || str_starts_with( $additional_referee['_anwpfl_referee'], 'temp__' ) ) ) : ?>
 					<div class="match__referee-wrapper d-flex align-items-center mr-4">
 						<?php if ( ! empty( $additional_referee['role'] ) ) : ?>
 							<span class="match__referee-job anwp-text-sm anwp-opacity-80 mr-2"><?php echo esc_html( $additional_referee['role'] ); ?>:</span>
 						<?php endif; ?>
 
 						<?php
-						$referee_data = 'temp__' === mb_substr( $additional_referee['_anwpfl_referee'], 0, 6 ) ? (object) wp_parse_args(
-							$temp_referees['additional_referees'][ mb_substr( $additional_referee['_anwpfl_referee'], 6 ) ],
+						$referee_data = str_starts_with( $additional_referee['_anwpfl_referee'], 'temp__' ) ? (object) wp_parse_args(
+							$temp_referees['additional_referees'][ substr( $additional_referee['_anwpfl_referee'], 6 ) ],
 							[
 								'country' => '',
 								'name'    => '',
@@ -189,7 +189,7 @@ $referee_keys = [
 							);
 						endif;
 
-						if ( 'temp__' === mb_substr( $additional_referee['_anwpfl_referee'], 0, 6 ) ) :
+						if ( str_starts_with( $additional_referee['_anwpfl_referee'], 'temp__' ) ) :
 							echo '<span class="match__referee-name">' . esc_html( $referee_data->name ) . '</span>';
 						elseif ( anwp_football_leagues()->referee->get_referee( $additional_referee['_anwpfl_referee'] ) ) :
 							?>

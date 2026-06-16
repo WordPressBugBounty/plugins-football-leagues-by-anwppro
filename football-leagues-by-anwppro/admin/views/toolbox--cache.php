@@ -24,6 +24,8 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	<small class="text-muted mx-2 d-inline-block">|</small>
 	<a class="text-decoration-none" href="<?php echo esc_url( self_admin_url( 'admin.php?page=anwpfl-toolbox&tab=toolkit' ) ); ?>">Toolkit</a>
 	<small class="text-muted mx-2 d-inline-block">|</small>
+	<a class="text-decoration-none" href="<?php echo esc_url( self_admin_url( 'admin.php?page=anwpfl-toolbox&tab=cleanup' ) ); ?>">Cleanup</a>
+	<small class="text-muted mx-2 d-inline-block">|</small>
 	<span class="text-muted">Caching</span>
 </div>
 
@@ -51,23 +53,26 @@ if ( ! current_user_can( 'manage_options' ) ) {
 
 	$cached_vars = [];
 	$root_vars   = [
-		'FL-REFEREES-LIST-SIMPLE',
 		'FL-REFEREES-LIST',
+		'FL-REFEREES-NAMES',
 		'FL-STADIUMS-LIST',
-		'FL-CLUBS-LIST',
 		'FL-STANDINGS-LIST',
-		'FL-COMPETITIONS-DATA',
 		'FL-PRO-REFEREES-NAME-LIST',
-		'FL-PRO-REFEREES-NAMES',
 		'FL-STAFF-PHOTO-MAP',
 		'FL-LEAGUE-OPTIONS',
 		'FL-MATCHWEEK-OPTIONS',
 	];
 
 	foreach ( $root_vars as $fl_key ) {
+		$cached_value = anwp_fl()->cache->get( $fl_key );
+		$bytes        = strlen( maybe_serialize( $cached_value ) );
+		$size_display = $bytes < 1024
+			? $bytes . ' B'
+			: number_format( $bytes / 1024, 1 ) . ' KB';
+
 		$cached_vars[] = [
-			'size'  => number_format( round( strlen( maybe_serialize( anwp_fl()->cache->get( $fl_key ) ) ) / 1024 ) ) . ' KB',
-			'count' => number_format( count( anwp_fl()->cache->get( $fl_key ) ) ),
+			'size'  => $size_display,
+			'count' => number_format( is_array( $cached_value ) ? count( $cached_value ) : 0 ),
 			'key'   => preg_replace( '/^.*?(FL-)/', '$1', $fl_key ),
 		];
 	}

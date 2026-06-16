@@ -299,25 +299,48 @@ class AnWPFL_Health {
 		*/
 		$missing_ids = array_diff( $competition_games_ids, $all_competition_ids );
 		$fix_links   = [];
+		$output_text = [];
 
-		if ( ! empty( $missing_ids ) && count( $missing_ids ) ) {
-			$output_text = '<span class="anwp-text-red-500">You have some Games with invalid Competition ID (' . count( $missing_ids ) . ')</span>';
+		if ( ! empty( $missing_ids ) ) {
 
+			// Games with competition_id = 0 (no competition assigned).
+			if ( in_array( 0, $missing_ids, true ) ) {
+				$games_without_competition = absint(
+					$wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}anwpfl_matches WHERE competition_id = 0" )
+				);
+
+				if ( $games_without_competition ) {
+					$output_text[] = '<span class="anwp-text-red-500">You have ' . $games_without_competition . ' Games without any Competition assigned</span>';
+					$fix_links[]   = [
+						'text' => 'Show Games',
+						'link' => admin_url( 'edit.php?post_status=all&post_type=anwp_match&_fl_competition_id=0' ),
+					];
+				}
+
+				$missing_ids = array_diff( $missing_ids, [ 0 ] );
+			}
+
+			// Games with non-existent competition IDs.
 			foreach ( $missing_ids as $missing_id ) {
-				$fix_links[] = [
+				$output_text[] = '<span class="anwp-text-red-500">You have Games with invalid Competition ID: ' . absint( $missing_id ) . '</span>';
+				$fix_links[]   = [
 					'text' => 'Fix ID ' . absint( $missing_id ),
-					'link' => admin_url( 'edit.php?s&post_status=all&post_type=anwp_match&action=-1&filter_action=Filter&_fl_competition_id=' . absint( $missing_id ) ),
+					'link' => admin_url( 'edit.php?post_status=all&post_type=anwp_match&_fl_competition_id=' . absint( $missing_id ) ),
 				];
 			}
-		} else {
-			$output_text = '<span class="anwp-text-green-500">No Games with invalid Competition ID - OK</span>';
 		}
+
+		if ( empty( $output_text ) ) {
+			$output_text[] = '<span class="anwp-text-green-500">No Games with invalid Competition ID - OK</span>';
+		}
+
+		$has_problems = count( $fix_links ) || str_contains( implode( '', $output_text ), 'anwp-text-red' );
 
 		return rest_ensure_response(
 			[
-				'status'   => count( $missing_ids ) ? 'problems' : 'ok',
+				'status'   => $has_problems ? 'problems' : 'ok',
 				'fix_data' => [
-					'text'      => $output_text,
+					'text'      => implode( '<br>', $output_text ),
 					'link_type' => 'link',
 					'links'     => $fix_links,
 				],
@@ -339,15 +362,15 @@ class AnWPFL_Health {
 		$fix_links = [];
 
 		if ( $incorrect_games ) {
-			$output_text[] = '<span class="anwp-text-red-500">You have Games with incorrect Main Stage ID (' . absint( $incorrect_games ) . ')</span>';
-			$fix_links[]   = [
+			$output_text = '<span class="anwp-text-red-500">You have Games with incorrect Main Stage ID (' . absint( $incorrect_games ) . ')</span>';
+			$fix_links[] = [
 				'text'      => 'Fix Games',
 				'context'   => 'games',
 				'link_type' => 'action',
 				'data'      => '',
 			];
 		} else {
-			$output_text[] = '<span class="anwp-text-green-500">Games with incorrect Main Stage ID - OK</span>';
+			$output_text = '<span class="anwp-text-green-500">Games with incorrect Main Stage ID - OK</span>';
 		}
 
 		return rest_ensure_response(

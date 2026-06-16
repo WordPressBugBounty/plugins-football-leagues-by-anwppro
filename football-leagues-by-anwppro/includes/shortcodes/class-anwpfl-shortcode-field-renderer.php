@@ -59,7 +59,7 @@ class AnWPFL_Shortcode_Field_Renderer {
 		}
 
 		// Vue match edit pattern: vertical stack (label + input) that flows inline with siblings
-		echo '<div class="fl-field anwp-d-flex anwp-flex-col anwp-mb-4 anwp-m-2">';
+		echo '<div class="fl-field">';
 		$this->render_label( $field );
 		$this->$method( $field );
 		echo '</div>';
@@ -140,7 +140,7 @@ class AnWPFL_Shortcode_Field_Renderer {
 			return;
 		}
 
-		echo '<div class="fl-section-descriptions w-100 anwp-mt-3 anwp-pt-3 px-2 anwp-border-top anwp-border-gray-400">';
+		echo '<div class="fl-section-descriptions">';
 
 		foreach ( $this->section_descriptions as $item ) {
 			printf(
@@ -182,17 +182,17 @@ class AnWPFL_Shortcode_Field_Renderer {
 
 		// Header bar (clickable) - border/background in CSS for TinyMCE compatibility.
 		printf(
-			'<button type="button" class="fl-section-card__header d-flex align-items-center px-3 py-2 anwp-cursor-pointer" fl-x-on:click="collapsed = !collapsed">
-				<span class="dashicons %s anwp-dashicons-16 mr-2"></span>
+			'<button type="button" class="fl-section-card__header" fl-x-on:click="collapsed = !collapsed">
+				<span class="dashicons %s fl-section-card__icon"></span>
 				<span>%s</span>
-				<span class="dashicons anwp-dashicons-14 ml-auto" fl-x-bind:class="collapsed ? \'dashicons-arrow-down-alt2\' : \'dashicons-arrow-up-alt2\'"></span>
+				<span class="dashicons fl-section-card__toggle" fl-x-bind:class="collapsed ? \'dashicons-arrow-down-alt2\' : \'dashicons-arrow-up-alt2\'"></span>
 			</button>',
 			esc_attr( $icon ),
 			esc_html( $label )
 		);
 
 		// Content area with flex-wrap for fluid field layout.
-		echo '<div class="fl-section-card__content anwp-d-flex--noimp anwp-flex-wrap--noimp anwp-items-start--noimp" fl-x-show="!collapsed">';
+		echo '<div class="fl-section-card__content" fl-x-show="!collapsed">';
 
 		$this->section_open = true;
 	}
@@ -427,7 +427,7 @@ class AnWPFL_Shortcode_Field_Renderer {
 			esc_attr( $field['name'] )
 		);
 
-		echo '<button fl-x-on:click="openModal()" type="button" class="button anwp-ml-1 postform">';
+		echo '<button fl-x-on:click="openModal()" type="button" class="button fl-field__selector-btn postform">';
 		echo '<span class="dashicons dashicons-search"></span>';
 		echo '</button></div>';
 	}

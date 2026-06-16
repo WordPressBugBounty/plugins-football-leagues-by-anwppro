@@ -10,7 +10,7 @@
  * @package       AnWP-Football-Leagues/Templates
  * @var object $data - Object with args.
  *
- * @version       0.16.11
+ * @version       0.18.0
  */
 // phpcs:disable WordPress.NamingConventions.ValidVariableName
 
@@ -52,15 +52,17 @@ $data = wp_parse_args(
 	]
 );
 
-$color_home = get_post_meta( $data['home_club'], '_anwpfl_main_color', true );
-$color_away = get_post_meta( $data['away_club'], '_anwpfl_main_color', true );
+anwp_fl()->club->warm_clubs( [ (int) $data['home_club'], (int) $data['away_club'] ] );
+
+$color_home = anwp_fl()->club->get_club_list_row( (int) $data['home_club'] )['main_color'] ?? '';
+$color_away = anwp_fl()->club->get_club_list_row( (int) $data['away_club'] )['main_color'] ?? '';
 
 if ( empty( $color_home ) ) {
 	$color_home = anwp_fl()->customizer->get_value( 'club', 'default_home_color', '#0085ba' );
 }
 
 if ( empty( $color_away ) ) {
-	$color_home = anwp_fl()->customizer->get_value( 'club', 'default_away_color', '#dc3545' );
+	$color_away = anwp_fl()->customizer->get_value( 'club', 'default_away_color', '#dc3545' );
 }
 
 /**

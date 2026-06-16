@@ -678,9 +678,9 @@ class AnWPFL_Stadium extends CPT_Core {
 			return '';
 		}
 
-		$stadium_id = get_post_meta( $club_id, '_anwpfl_stadium', true );
+		$club_row = anwp_fl()->club->get_club_list_row( (int) $club_id );
 
-		return absint( $stadium_id ) ? absint( $stadium_id ) : '';
+		return ! empty( $club_row['stadium_id'] ) ? (int) $club_row['stadium_id'] : '';
 	}
 
 	/**

@@ -17,6 +17,47 @@
 	display: flex;
 }
 
+/*
+ * <dialog> overrides for the FL Selector.
+ *
+ * The element is a <dialog> opened via .showModal() so it enters the browser's
+ * top-layer and stacks correctly when nested above other modal dialogs (Edit
+ * Block dialog → Shortcode Builder dialog → FL Selector dialog).
+ *
+ * The browser auto-manages: focus on open, inert background, Escape to close,
+ * and the ::backdrop pseudo-element. No fl-x-trap needed.
+ *
+ * Browser UA stylesheet adds these defaults to any open <dialog>:
+ *   position: absolute; margin: auto; width: fit-content; height: fit-content;
+ *   border: solid; padding: 1em; background-color: Canvas; color: CanvasText;
+ * We neutralize them so the modal keeps its full-viewport flex layout.
+ *
+ * For `display`, normal author rules outrank normal UA rules regardless of
+ * specificity - the UA's `dialog:not([open]) { display: none }` LOSES to our
+ * `.anwp-x-modal { display: flex }`. We add an explicit author rule below.
+ */
+.anwp-x-modal[open] {
+	position: fixed;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	max-width: none;
+	max-height: none;
+	margin: 0;
+	border: 0;
+	padding: 50px 0 0 0;
+	color: inherit;
+}
+
+.anwp-x-modal:not([open]) {
+	display: none;
+}
+
+/* Hide the dialog's auto-backdrop - the dialog itself has the dark+blur bg. */
+.anwp-x-modal::backdrop {
+	background: transparent;
+}
+
 .anwp-x-modal__wrapper {
 	max-width: 800px;
 	width: 100%;
@@ -304,13 +345,6 @@ body > .vs__dropdown-menu {
 	margin-top: 0.5rem;
 }
 
-.anwpfl-shortcode-modal__select2-dropdown {
-	z-index: 10000065 !important;
-}
-
-.anwpfl-shortcode-modal__select2-dropdown .select2-search__field {
-	line-height: 1;
-}
 
 .anwp-d-flex {
 	display: flex !important;
@@ -374,9 +408,6 @@ body > .vs__dropdown-menu {
 	margin-top: 3px;
 }
 
-.anwp-search-is-active.anwpfl-shortcode-modal__content {
-	padding: 40px !important;
-}
 
 .anwp-alert-warning {
 	color: #856404;
@@ -461,14 +492,6 @@ body > .vs__dropdown-menu {
 	margin-top: 11px;
 }
 
-.anwp-modaal-wrapper.anwp-modaal-wrapper--top .modaal-inner-wrapper {
-	vertical-align: top;
-	padding-top: 50px;
-}
-
-.anwp-modaal-wrapper.anwp-modaal-wrapper--top .anwp-admin-modal__content {
-	max-height: calc(100vh - 200px) !important;
-}
 
 .anwp-line-height-1 {
 	line-height: 1 !important;
@@ -665,8 +688,6 @@ body.wp-admin.widgets-php div.widget[id*="_anwpfl-widget-premium-"] .widget-titl
 /*--------------------------------------------------------------
 # Select2
 --------------------------------------------------------------*/
-.anwpfl-shortcode-modal .select2-container--default.select2-container--focus .select2-selection--multiple, .anwpfl-shortcode-modal .select2-container--default .select2-selection--multiple,
-.anwpfl-shortcode-modal .select2-container--default.select2-container--focus .select2-selection--single, .anwpfl-shortcode-modal .select2-container--default .select2-selection--single,
 .anwp-b-wrap .select2-container--default.select2-container--focus .select2-selection--multiple, .anwp-b-wrap .select2-container--default .select2-selection--multiple,
 .anwp-b-wrap .select2-container--default.select2-container--focus .select2-selection--single, .anwp-b-wrap .select2-container--default .select2-selection--single {
 	background-color: #fff;
@@ -676,77 +697,101 @@ body.wp-admin.widgets-php div.widget[id*="_anwpfl-widget-premium-"] .widget-titl
 	margin-bottom: 0;
 }
 
-.modaal-content-container .select2-container.select2-container--default .select2-selection--multiple {
-	border-radius: 3px;
-	border-color: #7e8993;
-	min-height: 30px;
-}
-
-.modaal-content-container .select2-container .select2-search__field {
-	min-height: 30px;
-	line-height: 1px !important;
-}
-
-.modaal-content-container .select2-container .select2-selection--multiple .select2-search__field {
-	min-height: 18px;
-}
-
-.modaal-content-container .select2-container--default .select2-selection--single {
-	border-color: #7e8993;
-	box-shadow: none;
-	border-radius: 3px;
-	min-height: 30px;
-}
-
-.modaal-content-container .select2-container--default .select2-selection--multiple .select2-selection__choice {
-	margin-top: 4px;
-}
-/*--------------------------------------------------------------
-# Modaal
---------------------------------------------------------------*/
-#anwpfl-shortcode-modal {
-	display: none !important;
-}
-
-.anwpfl-shortcode-modal, .modaal-wrapper {
-	z-index: 100060 !important;
-}
-
-/* Tom-Select dropdown appended to body for modal z-index fix */
+/* Tom-Select dropdown appended to body for z-index fix */
 body > .ts-dropdown {
 	z-index: 100110 !important;
 }
 
-.modaal-overlay {
-	z-index: 100050 !important;
+/*--------------------------------------------------------------
+# Shortcode Dialog (native <dialog> with manual backdrop)
+--------------------------------------------------------------*/
+#anwpfl-shortcode-dialog-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 100040;
+	background: rgba(0, 0, 0, 0.5);
 }
 
-.anwpfl-shortcode-modal .modaal-content-container {
+#anwpfl-shortcode-dialog-backdrop[hidden] {
+	display: none;
+}
+
+#anwpfl-shortcode-dialog {
+	position: fixed;
+	inset: 0;
+	margin: auto;
+	z-index: 100050;
+	max-width: 700px;
+	width: 90vw;
+	max-height: 80vh;
+	height: fit-content;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
 	padding: 0;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-.anwpfl-shortcode-modal .modaal-container {
-	max-width: 600px;
-}
-
-.anwpfl-shortcode-modal .anwpfl-shortcode-modal__header {
+.anwpfl-shortcode-dialog__header {
+	display: flex;
+	align-items: center;
 	padding: 15px 20px;
 	border-bottom: 1px solid #ddd;
 	background-color: #f5f5f5;
 }
 
-.anwpfl-shortcode-modal .anwpfl-shortcode-modal__content {
-	padding: 10px 20px;
+.anwpfl-shortcode-dialog__header label {
+	margin-left: 8px;
+	white-space: nowrap;
 }
 
-.anwpfl-shortcode-modal .anwpfl-shortcode-modal__footer {
+.anwpfl-shortcode-dialog__header select {
+	flex-grow: 1;
+}
+
+.anwpfl-shortcode-dialog__header .spinner {
+	margin-right: 8px;
+}
+
+.anwpfl-shortcode-dialog__content {
+	padding: 10px 20px;
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+.anwpfl-shortcode-dialog__footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.5rem;
 	padding: 15px 20px;
 	background-color: #f5f5f5;
 	border-top: 1px solid #ddd;
 }
 
-#anwpfl-shortcode-modal__selector, #anwpfl-shortcode-modal__insert {
-	margin-right: 5px;
+/*--------------------------------------------------------------
+# Competition Clone Dialog
+--------------------------------------------------------------*/
+#anwp-fl-competition-clone-dialog {
+	max-width: 500px;
+	width: 90vw;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 0;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+#anwp-fl-competition-clone-dialog::backdrop,
+#anwp-fl-builder-shortcode-dialog::backdrop {
+	background: rgba(0, 0, 0, 0.5);
+}
+
+#anwp-fl-builder-shortcode-dialog {
+	max-width: 700px;
+	width: 90vw;
+	max-height: 80vh;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 0;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .anwp-shortcode-docs-link {
@@ -777,796 +822,6 @@ body > .ts-dropdown {
 	stroke-width: 0;
 	stroke: none;
 	fill: #2563eb;
-}
-
-.anwpfl-shortcode-modal .select2-container .select2-selection--single .select2-selection__rendered {
-	white-space: normal;
-}
-
-.anwpfl-shortcode-modal .select2-selection {
-	overflow: hidden;
-}
-
-/*!
-	Modaal - accessible modals - v0.4.4
-	by Humaan, for all humans.
-	http://humaan.com
- */
-
-.modaal-noscroll {
-	overflow: hidden;
-}
-
-.modaal-accessible-hide {
-	position: absolute !important;
-	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
-	clip: rect(1px, 1px, 1px, 1px);
-	padding: 0 !important;
-	border: 0 !important;
-	height: 1px !important;
-	width: 1px !important;
-	overflow: hidden;
-}
-
-.modaal-overlay {
-	position: fixed;
-	top: 0;
-	right: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 999;
-	opacity: 0;
-}
-
-.modaal-wrapper {
-	display: block;
-	position: fixed;
-	top: 0;
-	right: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 9999;
-	overflow: auto;
-	opacity: 1;
-	box-sizing: border-box;
-	-webkit-overflow-scrolling: touch;
-	-webkit-transition: all 0.3s ease-in-out;
-	transition: all 0.3s ease-in-out;
-}
-
-.modaal-wrapper * {
-	box-sizing: border-box;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-backface-visibility: hidden;
-}
-
-.modaal-wrapper .modaal-close {
-	border: none;
-	background: transparent;
-	padding: 0;
-	-webkit-appearance: none;
-}
-
-.modaal-wrapper.modaal-start_none {
-	display: none;
-	opacity: 1;
-}
-
-.modaal-wrapper.modaal-start_fade {
-	opacity: 0;
-}
-
-.modaal-wrapper *[tabindex="0"] {
-	outline: none !important;
-}
-
-.modaal-wrapper.modaal-fullscreen {
-	overflow: hidden;
-}
-
-.modaal-outer-wrapper {
-	display: table;
-	position: relative;
-	width: 100%;
-	height: 100%;
-}
-
-.modaal-fullscreen .modaal-outer-wrapper {
-	display: block;
-}
-
-.modaal-inner-wrapper {
-	display: table-cell;
-	width: 100%;
-	height: 100%;
-	position: relative;
-	vertical-align: middle;
-	text-align: center;
-	padding: 80px 25px;
-}
-
-.modaal-fullscreen .modaal-inner-wrapper {
-	padding: 0;
-	display: block;
-	vertical-align: top;
-}
-
-.modaal-container {
-	position: relative;
-	display: inline-block;
-	width: 100%;
-	margin: auto;
-	text-align: right;
-	color: #000;
-	max-width: 1000px;
-	border-radius: 0px;
-	background: #fff;
-	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-	cursor: auto;
-}
-
-.modaal-container.is_loading {
-	height: 100px;
-	width: 100px;
-	overflow: hidden;
-}
-
-.modaal-fullscreen .modaal-container {
-	max-width: none;
-	height: 100%;
-	overflow: auto;
-}
-
-.modaal-close {
-	position: fixed;
-	left: 20px;
-	top: 20px;
-	color: #fff;
-	cursor: pointer;
-	opacity: 1;
-	width: 50px;
-	height: 50px;
-	background: rgba(0, 0, 0, 0);
-	border-radius: 100%;
-	-webkit-transition: all 0.2s ease-in-out;
-	transition: all 0.2s ease-in-out;
-}
-
-.modaal-close:focus,
-.modaal-close:hover {
-	outline: none;
-	background: #fff;
-}
-
-.modaal-close:focus:before,
-.modaal-close:focus:after,
-.modaal-close:hover:before,
-.modaal-close:hover:after {
-	background: #b93d0c;
-}
-
-.modaal-close span {
-	position: absolute !important;
-	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
-	clip: rect(1px, 1px, 1px, 1px);
-	padding: 0 !important;
-	border: 0 !important;
-	height: 1px !important;
-	width: 1px !important;
-	overflow: hidden;
-}
-
-.modaal-close:before,
-.modaal-close:after {
-	display: block;
-	content: " ";
-	position: absolute;
-	top: 14px;
-	right: 23px;
-	width: 4px;
-	height: 22px;
-	border-radius: 4px;
-	background: #fff;
-	-webkit-transition: background 0.2s ease-in-out;
-	transition: background 0.2s ease-in-out;
-}
-
-.modaal-close:before {
-	-webkit-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	transform: rotate(45deg);
-}
-
-.modaal-close:after {
-	-webkit-transform: rotate(-45deg);
-	-ms-transform: rotate(-45deg);
-	transform: rotate(-45deg);
-}
-
-.modaal-fullscreen .modaal-close {
-	background: #afb7bc;
-	left: 10px;
-	top: 10px;
-}
-
-.modaal-content-container {
-	padding: 30px;
-}
-
-.modaal-confirm-wrap {
-	padding: 30px 0 0;
-	text-align: center;
-	font-size: 0;
-}
-
-.modaal-confirm-btn {
-	font-size: 14px;
-	display: inline-block;
-	margin: 0 10px;
-	vertical-align: middle;
-	cursor: pointer;
-	border: none;
-	background: transparent;
-}
-
-.modaal-confirm-btn.modaal-ok {
-	padding: 10px 15px;
-	color: #fff;
-	background: #555;
-	border-radius: 3px;
-	-webkit-transition: background 0.2s ease-in-out;
-	transition: background 0.2s ease-in-out;
-}
-
-.modaal-confirm-btn.modaal-ok:hover {
-	background: #2f2f2f;
-}
-
-.modaal-confirm-btn.modaal-cancel {
-	text-decoration: underline;
-}
-
-.modaal-confirm-btn.modaal-cancel:hover {
-	text-decoration: none;
-	color: #2f2f2f;
-}
-
-.modaal-instagram .modaal-container {
-	width: auto;
-	background: transparent;
-	box-shadow: none !important;
-}
-
-.modaal-instagram .modaal-content-container {
-	padding: 0;
-	background: transparent;
-}
-
-.modaal-instagram .modaal-content-container > blockquote {
-	width: 1px !important;
-	height: 1px !important;
-	opacity: 0 !important;
-}
-
-.modaal-instagram iframe {
-	opacity: 0;
-	margin: -6px !important;
-	border-radius: 0 !important;
-	width: 1000px !important;
-	max-width: 800px !important;
-	box-shadow: none !important;
-	-webkit-animation: instaReveal 1s linear forwards;
-	animation: instaReveal 1s linear forwards;
-}
-
-.modaal-image .modaal-inner-wrapper {
-	padding-right: 140px;
-	padding-left: 140px;
-}
-
-.modaal-image .modaal-container {
-	width: auto;
-	max-width: 100%;
-}
-
-.modaal-gallery-wrap {
-	position: relative;
-	color: #fff;
-}
-
-.modaal-gallery-item {
-	display: none;
-}
-
-.modaal-gallery-item img {
-	display: block;
-}
-
-.modaal-gallery-item.is_active {
-	display: block;
-}
-
-.modaal-gallery-label {
-	position: absolute;
-	right: 0;
-	width: 100%;
-	margin: 20px 0 0;
-	font-size: 18px;
-	text-align: center;
-	color: #fff;
-}
-
-.modaal-gallery-label:focus {
-	outline: none;
-}
-
-.modaal-gallery-control {
-	position: absolute;
-	top: 50%;
-	-webkit-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
-	opacity: 1;
-	cursor: pointer;
-	color: #fff;
-	width: 50px;
-	height: 50px;
-	background: rgba(0, 0, 0, 0);
-	border: none;
-	border-radius: 100%;
-	-webkit-transition: all 0.2s ease-in-out;
-	transition: all 0.2s ease-in-out;
-}
-
-.modaal-gallery-control.is_hidden {
-	opacity: 0;
-	cursor: default;
-}
-
-.modaal-gallery-control:focus,
-.modaal-gallery-control:hover {
-	outline: none;
-	background: #fff;
-}
-
-.modaal-gallery-control:focus:before,
-.modaal-gallery-control:focus:after,
-.modaal-gallery-control:hover:before,
-.modaal-gallery-control:hover:after {
-	background: #afb7bc;
-}
-
-.modaal-gallery-control span {
-	position: absolute !important;
-	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
-	clip: rect(1px, 1px, 1px, 1px);
-	padding: 0 !important;
-	border: 0 !important;
-	height: 1px !important;
-	width: 1px !important;
-	overflow: hidden;
-}
-
-.modaal-gallery-control:before,
-.modaal-gallery-control:after {
-	display: block;
-	content: " ";
-	position: absolute;
-	top: 16px;
-	right: 25px;
-	width: 4px;
-	height: 18px;
-	border-radius: 4px;
-	background: #fff;
-	-webkit-transition: background 0.2s ease-in-out;
-	transition: background 0.2s ease-in-out;
-}
-
-.modaal-gallery-control:before {
-	margin: -5px 0 0;
-	-webkit-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	transform: rotate(45deg);
-}
-
-.modaal-gallery-control:after {
-	margin: 5px 0 0;
-	-webkit-transform: rotate(-45deg);
-	-ms-transform: rotate(-45deg);
-	transform: rotate(-45deg);
-}
-
-.modaal-gallery-next-inner {
-	right: 100%;
-	margin-right: 40px;
-}
-
-.modaal-gallery-next-outer {
-	left: 45px;
-}
-
-.modaal-gallery-prev:before,
-.modaal-gallery-prev:after {
-	right: 22px;
-}
-
-.modaal-gallery-prev:before {
-	margin: 5px 0 0;
-	-webkit-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	transform: rotate(45deg);
-}
-
-.modaal-gallery-prev:after {
-	margin: -5px 0 0;
-	-webkit-transform: rotate(-45deg);
-	-ms-transform: rotate(-45deg);
-	transform: rotate(-45deg);
-}
-
-.modaal-gallery-prev-inner {
-	left: 100%;
-	margin-left: 40px;
-}
-
-.modaal-gallery-prev-outer {
-	right: 45px;
-}
-
-.modaal-video-wrap {
-	margin: auto 50px;
-	position: relative;
-}
-
-.modaal-video-container {
-	position: relative;
-	padding-bottom: 56.25%;
-	height: 0;
-	overflow: hidden;
-	max-width: 100%;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-	background: #000;
-	max-width: 1300px;
-	margin-right: auto;
-	margin-left: auto;
-}
-
-.modaal-video-container iframe,
-.modaal-video-container object,
-.modaal-video-container embed {
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 100%;
-	height: 100%;
-}
-
-.modaal-iframe .modaal-content {
-	width: 100%;
-	height: 100%;
-}
-
-.modaal-iframe-elem {
-	width: 100%;
-	height: 100%;
-	display: block;
-}
-
-.modaal-loading-spinner {
-	background: none;
-	position: absolute;
-	width: 200px;
-	height: 200px;
-	top: 50%;
-	right: 50%;
-	margin: -100px -100px 0 0;
-	-webkit-transform: scale(0.25);
-	-ms-transform: scale(0.25);
-	transform: scale(0.25);
-}
-
-.modaal-loading-spinner > div {
-	width: 24px;
-	height: 24px;
-	margin-right: 4px;
-	margin-top: 4px;
-	position: absolute;
-}
-
-.modaal-loading-spinner > div > div {
-	width: 100%;
-	height: 100%;
-	border-radius: 15px;
-	background: #fff;
-}
-
-.modaal-loading-spinner > div:nth-of-type(1) > div {
-	-webkit-animation: modaal-loading-spinner 1s linear infinite;
-	animation: modaal-loading-spinner 1s linear infinite;
-	-webkit-animation-delay: 0s;
-	animation-delay: 0s;
-}
-
-.modaal-loading-spinner > div:nth-of-type(2) > div,
-.modaal-loading-spinner > div:nth-of-type(3) > div {
-	-ms-animation: modaal-loading-spinner 1s linear infinite;
-	-moz-animation: modaal-loading-spinner 1s linear infinite;
-	-webkit-animation: modaal-loading-spinner 1s linear infinite;
-	-o-animation: modaal-loading-spinner 1s linear infinite;
-}
-
-.modaal-loading-spinner > div:nth-of-type(1) {
-	-ms-transform: translate(-84px, 84px) rotate(-45deg) translate(-70px, 0);
-	-webkit-transform: translate(-84px, 84px) rotate(-45deg) translate(-70px, 0);
-	transform: translate(-84px, 84px) rotate(-45deg) translate(-70px, 0);
-}
-
-.modaal-loading-spinner > div:nth-of-type(2) > div {
-	-webkit-animation: modaal-loading-spinner 1s linear infinite;
-	animation: modaal-loading-spinner 1s linear infinite;
-	-webkit-animation-delay: .12s;
-	animation-delay: .12s;
-}
-
-.modaal-loading-spinner > div:nth-of-type(2) {
-	-ms-transform: translate(-84px, 84px) rotate(-90deg) translate(-70px, 0);
-	-webkit-transform: translate(-84px, 84px) rotate(-90deg) translate(-70px, 0);
-	transform: translate(-84px, 84px) rotate(-90deg) translate(-70px, 0);
-}
-
-.modaal-loading-spinner > div:nth-of-type(3) > div {
-	-webkit-animation: modaal-loading-spinner 1s linear infinite;
-	animation: modaal-loading-spinner 1s linear infinite;
-	-webkit-animation-delay: .25s;
-	animation-delay: .25s;
-}
-
-.modaal-loading-spinner > div:nth-of-type(4) > div,
-.modaal-loading-spinner > div:nth-of-type(5) > div {
-	-ms-animation: modaal-loading-spinner 1s linear infinite;
-	-moz-animation: modaal-loading-spinner 1s linear infinite;
-	-webkit-animation: modaal-loading-spinner 1s linear infinite;
-	-o-animation: modaal-loading-spinner 1s linear infinite;
-}
-
-.modaal-loading-spinner > div:nth-of-type(3) {
-	-ms-transform: translate(-84px, 84px) rotate(-135deg) translate(-70px, 0);
-	-webkit-transform: translate(-84px, 84px) rotate(-135deg) translate(-70px, 0);
-	transform: translate(-84px, 84px) rotate(-135deg) translate(-70px, 0);
-}
-
-.modaal-loading-spinner > div:nth-of-type(4) > div {
-	-webkit-animation: modaal-loading-spinner 1s linear infinite;
-	animation: modaal-loading-spinner 1s linear infinite;
-	-webkit-animation-delay: .37s;
-	animation-delay: .37s;
-}
-
-.modaal-loading-spinner > div:nth-of-type(4) {
-	-ms-transform: translate(-84px, 84px) rotate(-180deg) translate(-70px, 0);
-	-webkit-transform: translate(-84px, 84px) rotate(-180deg) translate(-70px, 0);
-	transform: translate(-84px, 84px) rotate(-180deg) translate(-70px, 0);
-}
-
-.modaal-loading-spinner > div:nth-of-type(5) > div {
-	-webkit-animation: modaal-loading-spinner 1s linear infinite;
-	animation: modaal-loading-spinner 1s linear infinite;
-	-webkit-animation-delay: .5s;
-	animation-delay: .5s;
-}
-
-.modaal-loading-spinner > div:nth-of-type(6) > div,
-.modaal-loading-spinner > div:nth-of-type(7) > div {
-	-ms-animation: modaal-loading-spinner 1s linear infinite;
-	-moz-animation: modaal-loading-spinner 1s linear infinite;
-	-webkit-animation: modaal-loading-spinner 1s linear infinite;
-	-o-animation: modaal-loading-spinner 1s linear infinite;
-}
-
-.modaal-loading-spinner > div:nth-of-type(5) {
-	-ms-transform: translate(-84px, 84px) rotate(-225deg) translate(-70px, 0);
-	-webkit-transform: translate(-84px, 84px) rotate(-225deg) translate(-70px, 0);
-	transform: translate(-84px, 84px) rotate(-225deg) translate(-70px, 0);
-}
-
-.modaal-loading-spinner > div:nth-of-type(6) > div {
-	-webkit-animation: modaal-loading-spinner 1s linear infinite;
-	animation: modaal-loading-spinner 1s linear infinite;
-	-webkit-animation-delay: .62s;
-	animation-delay: .62s;
-}
-
-.modaal-loading-spinner > div:nth-of-type(6) {
-	-ms-transform: translate(-84px, 84px) rotate(-270deg) translate(-70px, 0);
-	-webkit-transform: translate(-84px, 84px) rotate(-270deg) translate(-70px, 0);
-	transform: translate(-84px, 84px) rotate(-270deg) translate(-70px, 0);
-}
-
-.modaal-loading-spinner > div:nth-of-type(7) > div {
-	-webkit-animation: modaal-loading-spinner 1s linear infinite;
-	animation: modaal-loading-spinner 1s linear infinite;
-	-webkit-animation-delay: .75s;
-	animation-delay: .75s;
-}
-
-.modaal-loading-spinner > div:nth-of-type(7) {
-	-ms-transform: translate(-84px, 84px) rotate(-315deg) translate(-70px, 0);
-	-webkit-transform: translate(-84px, 84px) rotate(-315deg) translate(-70px, 0);
-	transform: translate(-84px, 84px) rotate(-315deg) translate(-70px, 0);
-}
-
-.modaal-loading-spinner > div:nth-of-type(8) > div {
-	-webkit-animation: modaal-loading-spinner 1s linear infinite;
-	animation: modaal-loading-spinner 1s linear infinite;
-	-webkit-animation-delay: .87s;
-	animation-delay: .87s;
-}
-
-.modaal-loading-spinner > div:nth-of-type(8) {
-	-ms-transform: translate(-84px, 84px) rotate(-360deg) translate(-70px, 0);
-	-webkit-transform: translate(-84px, 84px) rotate(-360deg) translate(-70px, 0);
-	transform: translate(-84px, 84px) rotate(-360deg) translate(-70px, 0);
-}
-
-@media only screen and (min-width: 1400px) {
-
-	.modaal-video-container {
-		padding-bottom: 0;
-		height: 731px;
-	}
-
-}
-
-@media only screen and (max-width: 1140px) {
-
-	.modaal-image .modaal-inner-wrapper {
-		padding-right: 25px;
-		padding-left: 25px;
-	}
-
-	.modaal-gallery-control {
-		top: auto;
-		bottom: 20px;
-		-webkit-transform: none;
-		-ms-transform: none;
-		transform: none;
-		background: rgba(0, 0, 0, 0.7);
-	}
-
-	.modaal-gallery-control:before,
-	.modaal-gallery-control:after {
-		background: #fff;
-	}
-
-	.modaal-gallery-next {
-		right: auto;
-		left: 20px;
-	}
-
-	.modaal-gallery-prev {
-		right: 20px;
-		left: auto;
-	}
-
-}
-
-@media screen and (max-width: 900px) {
-
-	.modaal-instagram iframe {
-		width: 500px !important;
-	}
-
-}
-
-@media only screen and (max-width: 600px) {
-
-	.modaal-instagram iframe {
-		width: 280px !important;
-	}
-
-}
-
-@media screen and (max-height: 1100px) {
-
-	.modaal-instagram iframe {
-		width: 700px !important;
-	}
-
-}
-
-@media screen and (max-height: 1000px) {
-
-	.modaal-inner-wrapper {
-		padding-top: 60px;
-		padding-bottom: 60px;
-	}
-
-	.modaal-instagram iframe {
-		width: 600px !important;
-	}
-
-}
-
-@media screen and (max-height: 900px) {
-
-	.modaal-instagram iframe {
-		width: 500px !important;
-	}
-
-	.modaal-video-container {
-		max-width: 900px;
-		max-height: 510px;
-	}
-
-}
-
-@media only screen and (max-height: 820px) {
-
-	.modaal-gallery-label {
-		display: none;
-	}
-
-}
-
-@keyframes instaReveal {
-
-	0% {
-		opacity: 0;
-	}
-
-	100% {
-		opacity: 1;
-	}
-
-}
-
-@-webkit-keyframes instaReveal {
-
-	0% {
-		opacity: 0;
-	}
-
-	100% {
-		opacity: 1;
-	}
-
-}
-
-@-webkit-keyframes modaal-loading-spinner {
-
-	0% {
-		opacity: 1;
-		-ms-transform: scale(1.5);
-		-webkit-transform: scale(1.5);
-		transform: scale(1.5);
-	}
-
-	100% {
-		opacity: .1;
-		-ms-transform: scale(1);
-		-webkit-transform: scale(1);
-		transform: scale(1);
-	}
-
-}
-
-@keyframes modaal-loading-spinner {
-
-	0% {
-		opacity: 1;
-		-ms-transform: scale(1.5);
-		-webkit-transform: scale(1.5);
-		transform: scale(1.5);
-	}
-
-	100% {
-		opacity: .1;
-		-ms-transform: scale(1);
-		-webkit-transform: scale(1);
-		transform: scale(1);
-	}
-
 }
 
 /*--------------------------------------------------------------
@@ -1641,8 +896,12 @@ body > .ts-dropdown {
 	border: 1px solid #9ca3af;
 }
 
-/* Header button reset */
+/* Header button reset + layout */
 .fl-section-card__header {
+	display: flex;
+	align-items: center;
+	padding: 0.5rem 0.75rem;
+	cursor: pointer;
 	border: none;
 	border-bottom: 1px solid #9ca3af;
 	text-align: right;
@@ -1652,11 +911,31 @@ body > .ts-dropdown {
 	transition: background-color 0.15s ease;
 }
 
+/* Section icon (dashicon in header) */
+.fl-section-card__icon {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	margin-left: 0.5rem;
+	color: #9ca3af;
+}
+
+/* Collapse toggle arrow (dashicon in header) */
+.fl-section-card__toggle {
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+	margin-right: auto;
+}
+
 .fl-section-card__header:hover {
 	background-color: #f0f6fc !important;
 }
 
 .fl-section-card__content {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
 	background: #fff;
 	padding: 1rem 0.5rem;
 }
@@ -1666,8 +945,12 @@ body > .ts-dropdown {
 	box-shadow: inset 0 0 0 1px #2271b1;
 }
 
-/* Field wrapper - constrain width, align to bottom of row */
+/* Field wrapper - vertical stack, constrain width, align to bottom of row */
 .fl-shortcode-fields .fl-field {
+	display: flex;
+	flex-direction: column;
+	margin: 0.5rem;
+	margin-bottom: 1rem;
 	max-width: 220px !important;
 	align-self: flex-end;
 }
@@ -1694,6 +977,52 @@ body > .ts-dropdown {
 	width: 400px !important;
 }
 
+/*
+ * Icon-in-button helpers (CPT screens, TinyMCE shortcode dialog, list-table filters).
+ *
+ * Mirrors the .fl-btn-icon rule in scss/core/admin/modules/_buttons.scss
+ * but lives here so it's available on every admin screen (global.css loads
+ * everywhere, styles.css only on plugin pages).
+ *
+ * WP 7.0 background:
+ *   wp-includes/css/buttons.css ships per-size dashicon line-heights:
+ *     .wp-core-ui .button .dashicons          { line-height: 1.9; vertical-align: top; }
+ *     .wp-core-ui .button.button-small .dashicons { line-height: 1.1; }
+ *   To beat that with inline-flex centering we prefix with .wp-core-ui .button
+ *   (specificity 0,4,0 = matches WP, source order wins) and explicitly reset
+ *   line-height / vertical-align on the dashicon span.
+ */
+.wp-core-ui .button.fl-btn-icon,
+.wp-core-ui .button.fl-field__selector-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	line-height: 1;
+}
+
+.wp-core-ui .button.fl-btn-icon .dashicons,
+.wp-core-ui .button.fl-field__selector-btn .dashicons {
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+	line-height: 1;
+	vertical-align: baseline;
+}
+
+/* .button-small is 24px tall in WP 7.0 - drop icon to 16px */
+.wp-core-ui .button.fl-btn-icon.button-small .dashicons,
+.wp-core-ui .button.fl-field__selector-btn.button-small .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+/* Selector open button */
+.fl-field__selector-btn {
+	margin-right: 0.25rem;
+}
+
 /* Field wrapper override for wide inputs */
 .fl-shortcode-fields .fl-field:has(.fl-shortcode-attr--multiselect),
 .fl-shortcode-fields .fl-field:has(.fl-shortcode-attr--wide) {
@@ -1702,6 +1031,7 @@ body > .ts-dropdown {
 
 /* Field label - compact with 2-line limit */
 .fl-shortcode-fields .fl-field label {
+	margin-bottom: 4px;
 	line-height: 1;
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
@@ -1711,6 +1041,10 @@ body > .ts-dropdown {
 
 /* Section descriptions footer */
 .fl-section-descriptions {
+	width: 100%;
+	margin-top: 0.75rem;
+	padding: 0.75rem 0.5rem 0;
+	border-top: 1px solid #9ca3af;
 	font-size: 12px;
 	line-height: 1.4;
 	color: #6b7280;
@@ -1761,6 +1095,19 @@ body > .ts-dropdown {
 		position: static;
 		max-height: none;
 	}
+}
+
+/* Builder dialog: dialog is max-width 700px, two-column layout doesn't fit.
+   Force stacking regardless of viewport width. */
+#anwp-fl-builder-shortcode-dialog .fl-shortcode-builder {
+	flex-direction: column;
+}
+#anwp-fl-builder-shortcode-dialog .fl-shortcode-builder__preview {
+	width: 100% !important; /* Override Alpine binding */
+}
+#anwp-fl-builder-shortcode-dialog .fl-preview-panel {
+	position: static;
+	max-height: none;
 }
 
 /*--------------------------------------------------------------

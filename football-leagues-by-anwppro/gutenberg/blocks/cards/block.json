@@ -47,7 +47,7 @@
       "type": "number",
       "default": 5
     },
-    "points_yr": {
+     "points_yr": {
       "type": "number",
       "default": 2
     },
